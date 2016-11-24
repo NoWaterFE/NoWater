@@ -2,10 +2,10 @@
   "name": "no_water_fe",
   "version": "1.0.0",
   "description": "This is a online shopping project.",
-  "homepage": "http://index.html",
+  "homepage": "index.html",
   "repository": {
     "type": "git",
-    "url": ""
+    "url": "https://github.com/NoWaterProject/NoWaterFE.git"
   },
   "author": "",
   "license": "ISC",

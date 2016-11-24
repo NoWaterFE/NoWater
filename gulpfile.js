@@ -21,22 +21,14 @@ var sass = require('gulp-sass'), //sass->css
 var app = "app"
 
 var paths = {
-    js: "app/js/**/*.js",
-    sass: "app/style/**/*.scss",
-    imgs: "app/imgs/**/*",
-    html: "app/html/**/*.html"
+    scripts: "app/**/js/**/*.js",
+    sass: "app/**/style/**/*.scss",
+    imgs: "app/**/imgs/**/*",
+    html: "app/**/*.html"
 };
 
 /*构建的文件夹*/
 var deployed = "deployed";
-
-/*构建的路径*/
-var dest = {
-    js: deployed + "/js",
-    css: deployed + "/style",
-    imgs: deployed + "/imgs",
-    html: deployed + "/html"
-};
 
 /*删除构建的文件*/
 gulp.task("clean", function() {
@@ -54,42 +46,42 @@ gulp.task("connect", function() {
     //connect.serverClose();
 });
 
-gulp.task("sass", ["sprite"], function() {
-    return gulp.src(paths.sass)
+gulp.task("sass", function() {
+    return gulp.src(paths.sass, { base: app })
         .pipe(plumber())
         .pipe(changed("dist"))
         .pipe(sass().on('error', sass.logError))
         .pipe(autoprefixer())
         //.pipe(minicss())
-        .pipe(gulp.dest(dest.css))
+        .pipe(gulp.dest(deployed))
         .pipe(connect.reload());
 });
 
-gulp.task("js", function() {
-    return gulp.src(paths.js)
+gulp.task("scripts", function() {
+    return gulp.src(paths.scripts, { base: app })
         .pipe(plumber())
         .pipe(changed("dist"))
         //.pipe(uglify())
-        .pipe(gulp.dest(dest.js))
+        .pipe(gulp.dest(deployed))
         .pipe(connect.reload());
 });
 
 gulp.task("imgs", function() {
-    return gulp.src([paths.imgs, "!app/imgs/emoji/**"])
+    return gulp.src(paths.imgs, { base: app })
         .pipe(plumber())
         .pipe(changed("dist"))
-        .pipe(imagemin({
+        /*.pipe(imagemin({
             optimizationLevel: 5, //类型：Number  默认：3 取值范围：0-7（优化等级）
             progressive: true, //类型：Boolean 默认：false 无损压缩jpg图片
             interlaced: true, //类型：Boolean 默认：false 隔行扫描gif进行渲染
             multipass: true //类型：Boolean 默认：false 多次优化svg直到完全优化
-        }))
-        .pipe(gulp.dest(dest.imgs))
+        }))*/
+        .pipe(gulp.dest(deployed))
         .pipe(connect.reload());
 });
 
 gulp.task("html", function() {
-    return gulp.src(paths.html)
+    return gulp.src(paths.html, { base: app })
         .pipe(plumber())
         .pipe(changed("dist"))
         /*.pipe(htmlmin({
@@ -102,34 +94,33 @@ gulp.task("html", function() {
             minifyJS: true, //压缩页面JS
             minifyCSS: true //压缩页面CSS
         }))*/
-        .pipe(gulp.dest(dest.html))
+        .pipe(gulp.dest(deployed))
         .pipe(connect.reload());
 });
 
-gulp.task('sprite', function(){
-    var spriteData =  gulp.src("app/imgs/emoji/*.png")
+gulp.task('sprite', function() {
+    var spriteData = gulp.src("app/admin/imgs/emoji/*")
         .pipe(spritesmith({
-            imgName: "sprite.png",
-            cssName: "_sprite.scss"
+            imgName: "emoji.png",
+            cssName: "_emoji.scss"
         }));
     var imgStream = spriteData.img
-        .pipe(gulp.dest("app/imgs/"));
+        .pipe(gulp.dest("app/admin/imgs/"));
 
-    var cssStrem =  spriteData.css
-        .pipe(gulp.dest("app/style/"));
-
+    var cssStrem = spriteData.css
+        .pipe(gulp.dest("app/admin/style/"));
     return merge(imgStream, cssStrem);
 });
 
 
 gulp.task("watch", function() {
-    var js = gulp.watch(paths.js, ["js"]);
+    var scripts = gulp.watch(paths.scripts, ["scripts"]);
     var sass = gulp.watch(paths.sass, ["sass"]);
-    var imgs = gulp.watch(paths.imgs, ["imgs", "sprite"]);
+    var imgs = gulp.watch(paths.imgs, ["imgs"]);
     var html = gulp.watch(paths.html, ["html"]);
 
     /*删除文件则删除对应构建的文件*/
-    js.on("change", function(event) {
+    scripts.on("change", function(event) {
         if (event.type === "deleted") {
             var p = event.path.replace(app, deployed);
             del([p]);
@@ -159,4 +150,4 @@ gulp.task("watch", function() {
     });
 });
 
-gulp.task("default", sequence("clean", ["sass", "js", "imgs", "html"], "watch", "connect"));
+gulp.task("default", sequence("clean", ["sass", "scripts", "imgs", "html"], "watch", "connect"));

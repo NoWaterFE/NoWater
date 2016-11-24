@@ -1,4 +1,4 @@
-@import "sprite";
+@import "emoji";
 
 @keyframes move {
 	0%{
@@ -30,7 +30,7 @@ $list: $e_01, $e_02, $e_03, $e_04, $e_05, $e_06, $e_07, $e_08, $e_09, $e_10, $e_
 	@for $i from 1 through 11 {
 		&:nth-child(#{$i}){
 			@include sprite(nth($list, $i));
-			background-image: url(../imgs/sprite.png);
+			background-image: url(../imgs/emoji.png);
 		}
 	}
 	list-style: none;
