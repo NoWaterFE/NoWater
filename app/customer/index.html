@@ -1,11 +1,299 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
-	<meta charset="UTF-8">
-	<title>Document</title>
-	<link rel="stylesheet" type="text/css" href="/style/test.css">
+    <meta charset="UTF-8">
+    <title>Document</title>
+    <link rel="stylesheet" type="text/css" href="style/index.css">
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 </head>
+
 <body>
-	<div class="demo">Hello word</div>
+	<header>
+		<div class="header">
+			<div class="menu" id="headMenu">
+                <i></i><span>PRODUCT</span>
+                <ul class="menuList">
+                    <li>TV & Home Theater</li>
+                    <li>Computers & Tablets</li>
+                    <li>Cell Phones</li>
+                    <li>Cameras & Camcorders</li>
+                    <li>Audio</li>
+                    <li>Car Electronics & GPS</li>
+                    <li>Video, Games, Movies & Music</li>
+                    <li>Health, Fitness & Sports</li>
+                    <li>Home & Office</li>
+                </ul>
+            </div>
+			<div class="logo"><a href="index.html"></a></div>
+			<div class="search">
+                <form novalidate="novalidate">
+                    <div class="search-input">
+                        <input type="text" placeholder="Search your goods here">
+                        <span>Search</span>
+                    </div>
+                </form>       
+            </div>
+			<ul class="quick-menu">
+				<li class="seller-center">
+                    <a href="#">
+                        <i></i><span>SELLER CENTER</span>
+                    </a>
+                </li>
+				<li class="account">
+                    <a href="#">
+                        <i></i><span>ACCOUNT</span>
+                    </a>
+                </li>
+				<li class="favorites">
+                    <a href="#">
+                        <i></i><span>FAVORITES</span>
+                    </a>
+                </li>
+				<li class="my-cart">
+                    <a href="#">
+                        <i></i><span>MY CART</span>
+                    </a>
+                </li>
+			</ul>
+		</div>
+	</header>
+    <div class="ad-store" id="adStore">
+        <div class="prev"></div>
+        <ul class="carousel">
+            <li class="active"><img src=""></li>
+            <li><img src=""></li>
+            <li><img src=""></li>
+            <li><img src=""></li>
+            <li><img src=""></li>
+        </ul>
+        <ul class="spot">
+            <li class="active"></li>
+            <li></li>
+            <li></li>
+            <li></li>
+            <li></li>
+        </ul>
+        <div class="next"></div>
+    </div>
+    <ul class="ad-goods clearfix" id="adGoods">
+        <li class="good-item">
+            <div class="item-detail">
+                <div class="item-image">
+                    <img src="">
+                </div>
+                <div class="item-name">
+                    MOOGOO MILK SHAMPOO - SCALP FRIENDLY
+                </div>
+            </div>
+            <div class="item-prices">
+                HK$998.00
+            </div>
+            <div class="item-operate">
+                <div class="add-to-cart">
+                    <i></i><span>ADD TO CART</span>
+                </div>
+                <div class="add-to-favorites">
+                    <i></i><span>ADD TO FAVORITES</span>
+                </div>
+            </div>
+        </li>
+        <li class="good-item">
+            <div class="item-detail">
+                <div class="item-image">
+                    <img src="">
+                </div>
+                <div class="item-name">
+                    MOOGOO MILK SHAMPOO - SCALP FRIENDLY
+                </div>
+            </div>
+            <div class="item-prices">
+                HK$998.00
+            </div>
+            <div class="item-operate">
+                <div class="add-to-cart">
+                    <i></i><span>ADD TO CART</span>
+                </div>
+                <div class="add-to-favorites">
+                    <i></i><span>ADD TO FAVORITES</span>
+                </div>
+            </div>
+        </li>
+        <li class="good-item">
+            <div class="item-detail">
+                <div class="item-image">
+                    <img src="">
+                </div>
+                <div class="item-name">
+                    MOOGOO MILK SHAMPOO - SCALP FRIENDLY
+                </div>
+            </div>
+            <div class="item-prices">
+                HK$998.00
+            </div>
+            <div class="item-operate">
+                <div class="add-to-cart">
+                    <i></i><span>ADD TO CART</span>
+                </div>
+                <div class="add-to-favorites">
+                    <i></i><span>ADD TO FAVORITES</span>
+                </div>
+            </div>
+        </li>
+        <li class="good-item">
+            <div class="item-detail">
+                <div class="item-image">
+                    <img src="">
+                </div>
+                <div class="item-name">
+                    MOOGOO MILK SHAMPOO - SCALP FRIENDLY
+                </div>
+            </div>
+            <div class="item-prices">
+                HK$998.00
+            </div>
+            <div class="item-operate">
+                <div class="add-to-cart">
+                    <i></i><span>ADD TO CART</span>
+                </div>
+                <div class="add-to-favorites">
+                    <i></i><span>ADD TO FAVORITES</span>
+                </div>
+            </div>
+        </li>
+        <li class="good-item">
+            <div class="item-detail">
+                <div class="item-image">
+                    <img src="">
+                </div>
+                <div class="item-name">
+                    MOOGOO MILK SHAMPOO - SCALP FRIENDLY
+                </div>
+            </div>
+            <div class="item-prices">
+                HK$998.00
+            </div>
+            <div class="item-operate">
+                <div class="add-to-cart">
+                    <i></i><span>ADD TO CART</span>
+                </div>
+                <div class="add-to-favorites">
+                    <i></i><span>ADD TO FAVORITES</span>
+                </div>
+            </div>
+        </li>
+        <li class="good-item">
+            <div class="item-detail">
+                <div class="item-image">
+                    <img src="">
+                </div>
+                <div class="item-name">
+                    MOOGOO MILK SHAMPOO - SCALP FRIENDLY
+                </div>
+            </div>
+            <div class="item-prices">
+                HK$998.00
+            </div>
+            <div class="item-operate">
+                <div class="add-to-cart">
+                    <i></i><span>ADD TO CART</span>
+                </div>
+                <div class="add-to-favorites">
+                    <i></i><span>ADD TO FAVORITES</span>
+                </div>
+            </div>
+        </li>
+        <li class="good-item">
+            <div class="item-detail">
+                <div class="item-image">
+                    <img src="">
+                </div>
+                <div class="item-name">
+                    MOOGOO MILK SHAMPOO - SCALP FRIENDLY
+                </div>
+            </div>
+            <div class="item-prices">
+                HK$998.00
+            </div>
+            <div class="item-operate">
+                <div class="add-to-cart">
+                    <i></i><span>ADD TO CART</span>
+                </div>
+                <div class="add-to-favorites">
+                    <i></i><span>ADD TO FAVORITES</span>
+                </div>
+            </div>
+        </li>
+        <li class="good-item">
+            <div class="item-detail">
+                <div class="item-image">
+                    <img src="">
+                </div>
+                <div class="item-name">
+                    MOOGOO MILK SHAMPOO - SCALP FRIENDLY
+                </div>
+            </div>
+            <div class="item-prices">
+                HK$998.00
+            </div>
+            <div class="item-operate">
+                <div class="add-to-cart">
+                    <i></i><span>ADD TO CART</span>
+                </div>
+                <div class="add-to-favorites">
+                    <i></i><span>ADD TO FAVORITES</span>
+                </div>
+            </div>
+        </li>
+        <li class="good-item">
+            <div class="item-detail">
+                <div class="item-image">
+                    <img src="">
+                </div>
+                <div class="item-name">
+                    MOOGOO MILK SHAMPOO - SCALP FRIENDLY
+                </div>
+            </div>
+            <div class="item-prices">
+                HK$998.00
+            </div>
+            <div class="item-operate">
+                <div class="add-to-cart">
+                    <i></i><span>ADD TO CART</span>
+                </div>
+                <div class="add-to-favorites">
+                    <i></i><span>ADD TO FAVORITES</span>
+                </div>
+            </div>
+        </li>
+        <li class="good-item">
+            <div class="item-detail">
+                <div class="item-image">
+                    <img src="imgs/product01a.jpg">
+                </div>
+                <div class="item-name">
+                    MOOGOO MILK SHAMPOO - SCALP FRIENDLY
+                </div>
+            </div>
+            <div class="item-prices">
+                HK$998.00
+            </div>
+            <div class="item-operate">
+                <div class="add-to-cart">
+                    <i></i><span>ADD TO CART</span>
+                </div>
+                <div class="add-to-favorites">
+                    <i></i><span>ADD TO FAVORITES</span>
+                </div>
+            </div>
+        </li>
+    </ul>
+    <footer>
+        <div class="footer">
+            © Copyright NoWaterFE
+        </div>
+    </footer>
+    <script type="text/javascript" src="js/index.js"></script>
 </body>
+
 </html>
