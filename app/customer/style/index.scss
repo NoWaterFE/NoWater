@@ -27,14 +27,14 @@ header {
 		position: relative;
 		i {
 			display: block;
-			height: 35px;
-			margin-top: 26px;
+			height: 30px;
+			margin-top: 24px;
 			background: url("../imgs/head_icon/hamburger.png") no-repeat center;
 			background-size: contain;
 		}
 		span {
 			display: block;
-			padding-top: 14px;
+			padding-top: 12px;
 			font-size: 12px;
 			text-align: center;
 		}
@@ -101,19 +101,21 @@ header {
 	.quick-menu {
 		float: right;
 		font-size: 12px;
-		li {
+		&>li {
 			float: left;
 			width: 75px;
-			a {
+			&>a {
 				color: #fff;
+                display: block;
+                height: 76px;
+                padding-top: 24px;
 			}
 			i{
 				display: block;
-				height: 40px;
+				height: 30px;
 				background-size: contain;
 				background-repeat: no-repeat;
 				background-position: center;
-				margin-top: 22px;
 			}
 			span {
 				display: block;
@@ -123,9 +125,11 @@ header {
 		}
 		.seller-center {
 			width: 90px;
+            a {
+                padding-top: 18px;
+            }
 			i{
-				height: 50px;
-				margin-top: 16px;
+				height: 40px;
 				background-image: url("../imgs/head_icon/sellercenter.png");
 			}
 			span {
@@ -133,9 +137,37 @@ header {
 			}
 		}
 		.account {
+			position: relative;
 			i{
 				background-image: url("../imgs/head_icon/account.png");
 			}
+            .accountOperate {
+                position: absolute;
+                display: none;
+                width: 115px;
+                top: 100px;
+                left: 0;
+                padding: 10px 0;
+                background: rgba(#292d84, 0.9);
+                a {
+                    display: block;
+                    color: #fff;
+                    font-size: 14px;
+                    line-height: 32px;
+                    padding: 0 10px;
+                }
+                li:hover {
+                    a{
+                        background: #fff;
+                        color: #292d84;
+                    }
+                }
+            }
+            &:hover {
+                .accountOperate.active {
+                    display: block;
+                }
+            }
 		}
 		.favorites {
 			i {
@@ -243,7 +275,7 @@ header {
 	width: 1200px;
 	height: 730px;
 	margin: 40px auto;
-	.good-item {
+	.goods-item {
 		float: left;
 		width: 220px;
 		height: 340px;
