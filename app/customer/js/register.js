@@ -40,11 +40,39 @@ dsy.add("0_2",["Cheung Sha Wan", "Choi Wan", "Diamond Hill", "Ho Man Tin", "Hung
 dsy.add("0",["HongkongIsland(HK)","NT_Island(NT)","Kowloon(KLN)"]);
 
 
-var s=["area","district"];//三个select的name
-var opt0 = ["---Please choose your area---","---Please choose your district---"];//初始值
-function _init_area(){  //初始化函数
+var s=["area","district"];
+var opt0 = ["---Please choose your area---","---Please choose your district---"];
+function _init_area(){  
 	for(i=0;i<s.length-1;i++){
 	  document.getElementById(s[i]).onchange=new Function("change("+(i+1)+")");
 	}
 	change(0);
+}
+
+function getUserName() {
+
+}
+
+function getPassword() {
+
+}
+
+function confirmPassword() {
+
+}
+
+function getTelephone() {
+
+}
+
+function getArea() {
+
+}
+
+function getDistrict() {
+
+}
+
+function getAddress() {
+
 }
