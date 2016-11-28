@@ -2,10 +2,106 @@
 <html lang="en">
 <head>
 	<meta charset="UTF-8">
-	<title>Document</title>
-	<link rel="stylesheet" type="text/css" href="style/test.css">
+	<title>PARKnSHOP</title>
+	<link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
+	<link rel="icon" type="image/x-icon" href="../favicon.ico" >
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="js/userInfo.js"></script>
+	<link rel="stylesheet" type="text/css" href="style/index.css">
 </head>
 <body>
-	<div class="demo">Hello word11111111111</div>
+	<header>
+		<div class="header">
+			<div class="logo">
+				<a href="index.html">
+					<img src="imgs/head_icon/logo.png" alt="logo">
+				</a>
+			</div>
+		</div>
+	</header>
+	<div class="content clearfix">
+		<div class="nav">
+			<ul>
+                <li class="category">
+					<h2 class="title">Product list</h2>
+					<ul>
+						<li class="navList">
+							<a href="#">Browse products</a>
+						</li>
+						<li class="navList">
+							<a href="#">Add product</a>
+						</li>
+					</ul>
+				</li>
+                <li class="category">
+					<h2 class="title">Advertising management</h2>
+					<ul>
+						<li class="navList">
+							<a href="#">Application for advertising</a>
+						</li>
+						<li class="navList">
+							<a href="#">Modify ad</a>
+						</li>
+					</ul>
+				</li>
+                <li class="category">
+					<h2 class="title">Order management</h2>
+					<ul>
+						<li class="navList">
+							<a href="#">Incomplete order</a>
+						</li>
+						<li class="navList">
+							<a href="#">Completed order</a>
+						</li>
+					</ul>
+				</li>
+                <li class="category">
+                    <h2 class="title">Logistics management</h2>
+                    <ul>
+                        <li class="navList">
+                            <a href="#">Logistics service</a>
+                        </li>
+                    </ul>
+                </li>
+                <li class="category">
+                    <h2 class="title">Shop management</h2>
+                    <ul>
+                        <li class="navList">
+                            <a href="#">Modify shop information</a>
+                        </li>
+                    </ul>
+                </li>
+			</ul>
+		</div>
+		<div class="page">
+            <form>
+                <h2 class="title">Your Shop Information</h2>
+                <div class="shopName shopInfo">
+                    <label for="shopName" class="redStar">Shop name</label>
+                    <input type="text" name="shopName" id="shopName" maxlength="50" class="disabled" value="Cookie Shop" disabled required>
+                </div>
+                <div class="shopEmail shopInfo">
+                    <label for="shopEmail" class="redStar">Email</label>
+                    <input type="email" name="shopEmail" id="shopEmail" value="1562510684@qq.com">
+                </div>
+                <div class="shopTel shopInfo">
+                    <label for="shopTel" class="redStar">Telephone</label>
+                    <input type="tel" name="shopTel" id="shopTel" value="18789427353">
+                </div>
+                <div class="shopContacts shopInfo">
+                    <label for="shopContacts">Shop contacts</label>
+                    <textarea name="shopContacts" id="shopContacts" rows="4"></textarea>
+                </div>
+                <div class="submit">
+                    <input type="submit" value="SAVE">
+                </div>
+            </form>
+		</div>
+	</div>
+	<footer>
+		<div class="footer">
+			© Copyright NoWaterFE
+		</div>
+	</footer>
 </body>
 </html>

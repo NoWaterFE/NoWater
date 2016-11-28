@@ -1,0 +1,170 @@
+@import "reset";
+
+body {
+    padding-top: 100px;
+}
+
+input.disabled {
+    cursor: not-allowed !important;
+}
+
+.redStar {
+    position: relative;
+    &:before {
+        content: "*";
+        color: red;
+        position: absolute;
+        left: -0.8em;
+    }
+}
+
+// 头部
+header {
+    position: fixed;
+    width: 100%;
+    height: 100px;
+    top: 0;
+    background-color: #292d84;
+    color: #fff;
+    z-index: 9999;
+}
+
+.header {
+    width: 1200px;
+    height: 100px;
+    margin: 0 auto;
+    .logo{
+        float: left;
+        a {
+            display: block;
+            line-height: 100px;
+            font-size: 0;
+        }
+        img {
+            width: 278px;
+            vertical-align: middle;
+        }
+    }
+}
+
+.content {
+    width: 1200px;
+    margin: 20px auto;
+    .nav {
+        width: 180px;
+        border: 1px solid #E0E0E0;
+        float: left;
+        margin-right: 10px;
+        box-shadow: 2px 2px 5px #E0E0E0;
+        border-radius: 2px;
+        padding: 0 10px;
+        .category {
+            padding: 10px 0;
+            &:not(:last-child) {
+                border-bottom: 1px solid #E0E0E0;
+            }
+        }
+        .title {
+            font-size: 14px;
+            text-align: center;
+            line-height: 20px;
+            font-weight: bold;
+        }
+        .navList {
+            font-size: 12px;
+            line-height: 26px;
+        }
+        a {
+            color: #444;
+        }
+        a:hover, a:active, a:visited {
+            text-decoration: underline;
+        }
+    }
+    .page {
+        margin-left: 212px;
+        border: 1px solid #E0E0E0;
+        padding: 40px;
+        border-radius: 4px;
+        .title {
+            border-bottom: 1px solid #E0E0E0;
+            font-size: 24px;
+            line-height: 34px;
+        }
+        .shopInfo {
+            margin: 20px 0;
+            label {
+                display: inline-block;
+                width: 120px;
+                font-size: 14px;
+            }
+            input {
+                width: 230px;
+                height: 30px;
+                font-size: 14px;
+                padding: 0 5px;
+                border: 1px solid #cecece;
+                &:focus {
+                    border-color: #4349C5;
+                    box-shadow: 0 0 10px #4349C5;
+                }
+            }
+        }
+        .shopContacts {
+            textarea {
+                width: 230px;
+                padding: 5px 5px;
+                font-size: 14px;
+                border: 1px solid #cecece;
+                resize: none;
+                &:focus {
+                    border-color: #4349C5;
+                    box-shadow: 0 0 10px #4349C5;
+                }
+            }
+        }
+        .submit {
+            padding-left: 180px;
+            margin-top: 40px;
+            input[type=submit] {
+                width: 120px;
+                height: 40px;
+                border: none;
+                cursor: pointer;
+                border-radius: 5px;
+                background: #292d84;
+                color: #fff;
+            }
+        }
+    }
+}
+
+footer {
+    border-top: 5px solid #292d84;
+    height: 70px;
+    .footer {
+        width: 1200px;
+        line-height: 70px;
+        margin: 0 auto;
+        text-align: center;
+        color: #999;
+    }
+}
+
+//loading 样式
+@keyframes loading {
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(360deg);
+    }
+}
+
+.loadingImg {
+    background: url("../imgs/loading.png");
+    width: 40px;
+    height: 40px;
+    position: absolute;
+    animation: loading 1s linear infinite;
+}
