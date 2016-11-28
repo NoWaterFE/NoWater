@@ -1,9 +1,13 @@
 <!DOCTYPE html>
-<html lang="en"><head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-    
+<html lang="en">
+
+<head><meta http-equiv="Content-Type" content="text/html; charset=UTF-8">   
     <title>login</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" >
     <link rel="stylesheet" type="text/css" href="style/login.css">
 </head>
+
 <body>
 <header>
     <div class="header">
@@ -14,20 +18,22 @@
         </div>
     </div>
 </header>
+
 <div class="content clearfix" style="float:inherit">
-<div style="float:left ;  width:50%;  height:100%;">
-<img src="imgs/adv.jpg" width="800" height="400" /> 
-</div>
+    <div style="float:left ;  width:50%;  height:100%;">
+    <img src="imgs/adv.jpg" width="800" height="400" /> 
+    </div>
+
     <div style="float:right ;  width:50%;  height:100%;">
     <form class="apply" id="applyForm">
         <h2 class="title">LOGIN</h2>
-        <div class="shopName">
-            <label for="shopName" class="redStar">Username</label>
-            <input type="text" name="userName" id="shopName" maxlength="50" required="">
+        <div class="userName">
+            <label for="userName" class="redStar">Username</label>
+            <input type="email" name="userName" id="userName" maxlength="50">
         </div>
-        <div class="shopEmail">
-            <label for="shopEmail" class="redStar">Password</label>
-            <input type="password" name="Password" id="shopEmail">
+        <div class="password">
+            <label for="password" class="redStar">Password</label>
+            <input type="password" name="Password" id="password">
         </div>
         <div class="submit">
             <input type="submit" value="login">
@@ -36,16 +42,19 @@
              <a href="register.html"><font style="font-size:12px">Register</font></a>
              </div>
         </div>
-        </div>
-        
+        </div>     
     </form>
 	</div>
+
 </div>
+
 <footer>
     <div class="footer">
-        © Copyright 项目三不划水战斗小组
+        © Copyright NoWaterFE
     </div>
 </footer>
+
 <script type="text/javascript" src="./PARKnSHOP_files/apply.js.下载"></script>
 
-</body></html>
+</body>
+</html>

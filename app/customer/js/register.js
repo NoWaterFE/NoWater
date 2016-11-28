@@ -39,7 +39,6 @@ dsy.add("0_1",["Chek Lap Kok", "Chinese University", "Clear Water Bay", "Discove
 dsy.add("0_2",["Cheung Sha Wan", "Choi Wan", "Diamond Hill", "Ho Man Tin", "Hung Hom", "Jordan", "Jordan Road", "Kowloon Bay", "Kowloon City", "Kowloon Tong", "Kwun Tong", "La Salle Road", "Lai Chi Kok", "Lam Tin", "Lok Fu", "Ma Tau Wai", "Mei Foo", "Mong Kok", "Ngau Chi Wan", "Ngau Tau Kok", "Rainbow Village", "San Po Kong", "Sau Mau Ping", "Sham Shui Po", "Shek Kip Mei", "Tai Kok Tsui", "To Kwa Wan", "Tsim Sha Tsui", "Tsz Wan Shan", "Wong Tai Sin", "Yau Ma Tei", "Yau Tong"]);
 dsy.add("0",["HongkongIsland(HK)","NT_Island(NT)","Kowloon(KLN)"]);
 
-
 var s=["area","district"];
 var opt0 = ["---Please choose your area---","---Please choose your district---"];
 function _init_area(){  
@@ -49,30 +48,11 @@ function _init_area(){
 	change(0);
 }
 
-function getUserName() {
+_init_area();
 
+var Gid  = document.getElementById ;
+var showArea = function(){
+	Gid('show').innerHTML =  Gid('area').value +  	
+	Gid('district').value + "</h3>"
 }
-
-function getPassword() {
-
-}
-
-function confirmPassword() {
-
-}
-
-function getTelephone() {
-
-}
-
-function getArea() {
-
-}
-
-function getDistrict() {
-
-}
-
-function getAddress() {
-
-}
+Gid('area').setAttribute('onchange','showArea()');
