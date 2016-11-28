@@ -83,10 +83,10 @@ var host="http://123.206.100.98:16120";
     var $adGoods = $("#adGoods");
     var getGoodsAd = $.ajax({
         type: "post",
-        url: "",
+        url: host+"/customer/product/ad",
         dataType: "json"
     });
-    getGoodsAd.done(function (data) {
+    getGoodsAd.done(function (result) {
         console.log(result);
         if(result.status==200){
             var adLi = $adGoods.find(".goods-item");
