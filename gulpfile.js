@@ -24,7 +24,8 @@ var paths = {
     scripts: "app/**/js/**/*.js",
     sass: "app/**/style/**/*.scss",
     imgs: "app/**/imgs/**/*",
-    html: "app/**/*.html"
+    html: "app/**/*.html",
+    icon: "app/favicon.ico"
 };
 
 /*构建的文件夹*/
@@ -112,12 +113,18 @@ gulp.task('sprite', function() {
     return merge(imgStream, cssStrem);
 });
 
+gulp.task("icon", function(){
+    return gulp.src(paths.icon, { base: app })
+        .pipe(gulp.dest(deployed));
+});
+
 
 gulp.task("watch", function() {
     var scripts = gulp.watch(paths.scripts, ["scripts"]);
     var sass = gulp.watch(paths.sass, ["sass"]);
     var imgs = gulp.watch(paths.imgs, ["imgs"]);
     var html = gulp.watch(paths.html, ["html"]);
+    var icon = gulp.watch(paths.icon, ["icon"]);
 
     /*删除文件则删除对应构建的文件*/
     scripts.on("change", function(event) {
@@ -148,6 +155,13 @@ gulp.task("watch", function() {
             del([p]);
         }
     });
+
+    icon.on("change", function(event) {
+        if (event.type === "deleted") {
+            var p = event.path.replace(app, deployed);
+            del([p]);
+        }
+    });
 });
 
-gulp.task("default", sequence("clean", ["sass", "scripts", "imgs", "html"], "watch", "connect"));
+gulp.task("default", sequence("clean", ["sass", "scripts", "imgs", "html", "icon"], "watch", "connect"));

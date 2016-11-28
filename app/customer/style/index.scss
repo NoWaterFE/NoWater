@@ -177,6 +177,19 @@ header {
 		.my-cart {
 			i {
 				background-image: url("../imgs/head_icon/CART.png");
+                position: relative;
+				.count {
+					position: absolute;
+					background: red;
+					display: block;
+					padding: 0 5px;
+                    line-height: 14px;
+					border-radius: 7px;
+                    text-align: center;
+                    right: 10px;
+                    top: -6px;
+                    font-size: 10px;
+				}
 			}
 		}
 	}

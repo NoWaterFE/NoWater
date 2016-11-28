@@ -1,5 +1,4 @@
-var host="http://123.206.100.98:16120",
-    userInfo=null;
+var host="http://123.206.100.98:16120";
 (function () {
     $.ajax({
         type: "post",
@@ -7,18 +6,24 @@ var host="http://123.206.100.98:16120",
         dataType: "json"
     }).done(function (result) {
         if(result.status==200){
-            userInfo = result.userInformation;
+            var userInfo = result.userInformation[0];
+            var quickMenu = $("#quickMenu");
+            quickMenu.find(".accountOperate").toggleClass("active");
+            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
         }
     }).fail(function (result) {
         result = {
             status: 200,
-            userInformation: {
+            userInformation: [{
                 name: "gdh",
                 cartNum: 33
-            }
+            }]
         };
         if(result.status==200){
-            userInfo = result.userInformation;
+            var userInfo = result.userInformation[0];
+            var quickMenu = $("#quickMenu");
+            quickMenu.find(".accountOperate").toggleClass("active");
+            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
         }
     });
     var $adStore = $("#adStore");

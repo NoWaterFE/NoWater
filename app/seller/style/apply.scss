@@ -48,6 +48,65 @@ header {
             vertical-align: middle;
         }
     }
+    .quick-menu {
+        float: right;
+        font-size: 12px;
+        &>li {
+            float: left;
+            width: 75px;
+            &>a {
+                color: #fff;
+                display: block;
+                height: 76px;
+                padding-top: 24px;
+            }
+            i{
+                display: block;
+                height: 30px;
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+            span {
+                display: block;
+                padding-top: 12px;
+                text-align: center;
+            }
+        }
+        .account {
+            position: relative;
+            i{
+                background-image: url("../imgs/head_icon/account.png");
+            }
+            .accountOperate {
+                position: absolute;
+                display: none;
+                width: 115px;
+                top: 100px;
+                left: 0;
+                padding: 10px 0;
+                background: rgba(#292d84, 0.9);
+                a {
+                    display: block;
+                    color: #fff;
+                    font-size: 14px;
+                    line-height: 32px;
+                    padding: 0 10px;
+                }
+                li:hover {
+                    a{
+                        background: #fff;
+                        color: #292d84;
+                    }
+                }
+            }
+            &:hover {
+                .accountOperate.active {
+                    display: block;
+                }
+            }
+        }
+    }
 }
 
 .content {

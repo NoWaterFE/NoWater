@@ -4,6 +4,8 @@
 <head>
     <meta charset="UTF-8">
     <title>PARKnSHOP</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" >
     <link rel="stylesheet" type="text/css" href="style/index.css">
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 </head>
@@ -34,9 +36,9 @@
                     </div>
                 </form>       
             </div>
-			<ul class="quick-menu">
+			<ul class="quick-menu" id="quickMenu">
 				<li class="seller-center">
-                    <a href="#">
+                    <a href="../seller">
                         <i></i><span>SELLER CENTER</span>
                     </a>
                 </li>
@@ -44,11 +46,11 @@
                     <a href="#">
                         <i></i><span>ACCOUNT</span>
                     </a>
-                    <ul class="accountOperate active">
+                    <ul class="accountOperate noLogin active">
                         <li><a href="register.html">Register</a></li>
                         <li><a href="login.html">Login</a></li>
                     </ul>
-                    <ul class="accountOperate">
+                    <ul class="accountOperate hasLogin">
                         <li><a href="userCenter.html">Account Info</a></li>
                         <li><a href="javascript:;">Logout</a></li>
                     </ul>
@@ -60,7 +62,7 @@
                 </li>
 				<li class="my-cart">
                     <a href="#">
-                        <i></i><span>MY CART</span>
+                        <i><em class="count">0</em></i><span>MY CART</span>
                     </a>
                 </li>
 			</ul>
