@@ -1,0 +1,204 @@
+@import "reset";
+
+html, body, div, span, applet, object, iframe,
+h1, h2, h3, h4, h5, h6, p, blockquote, pre,
+a, abbr, acronym, address, big, cite, code,
+del, dfn, em, img, ins, kbd, q, s, samp,
+small, strike, strong, sub, sup, tt, var,
+b, u, i, center,
+dl, dt, dd, ol, ul, li,
+fieldset, form, label, legend,
+table, caption, tbody, tfoot, thead, tr, th, td,
+article, aside, canvas, details, embed,
+figure, figcaption, footer, header, hgroup,
+menu, nav, output, ruby, section, summary,
+time, mark, audio, video {
+  margin: 0;
+  padding: 0;
+  border: 0;
+  font: inherit;
+  font-size: 100%;
+  vertical-align: baseline; }
+
+html {
+  line-height: 1; }
+
+ol, ul {
+  list-style: none; }
+
+table {
+  border-collapse: collapse;
+  border-spacing: 0; }
+
+caption, th, td {
+  text-align: left;
+  font-weight: normal;
+  vertical-align: middle; }
+
+q, blockquote {
+  quotes: none; }
+
+q:before, q:after, blockquote:before, blockquote:after {
+  content: "";
+  content: none; }
+
+a img {
+  border: none; }
+
+article, aside, details, figcaption, figure, footer, header, hgroup, main, menu, nav, section, summary {
+  display: block; }
+
+.clearfix {
+  *zoom: 1; }
+
+.clearfix:after {
+  content: "";
+  display: table;
+  clear: both; }
+
+a {
+  text-decoration: none; }
+
+input, textarea {
+  outline: none;
+  font-family: "Microsoft YaHei", "Arial", sans-serif;
+  word-wrap: break-word; }
+
+html {
+  font-family: "Microsoft YaHei", "Arial", sans-serif;
+  height: 100%;
+  overflow-x: hidden; }
+
+body {
+  padding: 100px 0 75px;
+  min-height: 100%;
+  box-sizing: border-box;
+  position: relative; }
+
+input.disabled {
+  cursor: not-allowed !important; }
+
+.redStar {
+  position: relative; }
+  .redStar:before {
+    content: "*";
+    color: red;
+    position: absolute;
+    left: -0.8em; }
+
+header {
+  position: fixed;
+  width: 100%;
+  height: 100px;
+  top: 0;
+  background-color: #292d84;
+  color: #fff;
+  z-index: 9999; }
+
+.header {
+  width: 1200px;
+  height: 100px;
+  margin: 0 auto; }
+  .header .logo {
+    float: left; }
+    .header .logo a {
+      display: block;
+      line-height: 100px;
+      font-size: 0; }
+    .header .logo img {
+      width: 278px;
+      vertical-align: middle; }
+
+.content {
+  width: 1200px;
+  margin: 20px auto; }
+  .content .apply {
+    margin-left: 240px;
+    margin-top: 50px;
+    width: 500px; }
+    .content .apply .title {
+      border-bottom: 1px solid #E0E0E0;
+      font-size: 24px;
+      line-height: 34px; }
+    .content .apply .reg {
+      margin: 20px 0; }
+      .content .apply .reg label {
+        display: inline-block;
+        width: 120px;
+        font-size: 14px; }
+      .content .apply .reg input {
+        width: 230px;
+        height: 30px;
+        font-size: 14px;
+        padding: 0 5px; }
+	  .content .apply .reg select {
+        width: 245px;
+        height: 30px;
+        font-size: 14px;
+        padding: 0 5px; }
+    .content .apply .submit {
+      padding-left: 180px;
+      margin: 40px 0; }
+      .content .apply .submit input[type=submit] {
+        width: 120px;
+        height: 40px;
+        border: none;
+        cursor: pointer;
+        border-radius: 5px;
+        background: #292d84;
+        color: #fff; }
+        .content .apply .submit input[type=submit].disabled {
+          background: #DCDEE3;
+          color: #999; }
+    .content .apply .applying {
+      color: red;
+      font-size: 16px;
+      line-height: 24px;
+      text-align: center; }
+
+footer {
+  border-top: 5px solid #292d84;
+  height: 70px;
+  position: absolute;
+  bottom: 0;
+  width: 100%; }
+  footer .footer {
+    width: 1200px;
+    line-height: 70px;
+    margin: 0 auto;
+    text-align: center;
+    color: #999; }
+
+@-webkit-keyframes loading {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg); }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg); } }
+
+@keyframes loading {
+  from {
+    -webkit-transform: rotate(0deg);
+            transform: rotate(0deg); }
+  to {
+    -webkit-transform: rotate(360deg);
+            transform: rotate(360deg); } }
+
+.loadingImg {
+  background: url("../imgs/loading.png");
+  width: 40px;
+  height: 40px;
+  position: absolute;
+  -webkit-animation: loading 1s linear infinite;
+          animation: loading 1s linear infinite; }
+
+.help {
+  font-size: 14px;
+  position: absolute;
+  left: 600px;
+}
+
+font {
+  font-size: 18px;
+}
