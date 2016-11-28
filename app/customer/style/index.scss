@@ -286,12 +286,12 @@ header {
 //商品广告
 .ad-goods {
 	width: 1200px;
-	height: 730px;
+	height: 770px;
 	margin: 40px auto;
 	.goods-item {
 		float: left;
 		width: 220px;
-		height: 340px;
+		height: 360px;
 		padding: 9px;
 		display: block;
 		border-radius: 5px;
@@ -320,7 +320,15 @@ header {
 		height: 40px;
 		line-height: 20px;
 		overflow: hidden;
+        text-overflow: ellipsis;
 	}
+    .item-size {
+        font-size: 12px;
+        line-height: 20px;
+        text-align: center;
+        color: #999;
+        text-overflow: ellipsis;
+    }
 	.item-prices {
 		font-size: 18px;
 		color: red;

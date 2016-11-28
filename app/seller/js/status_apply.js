@@ -21,7 +21,6 @@ $.ajax({
         })
     }
 }).fail(function (result) {
-    console.log(result);
     result = {
         status: 200
     };
