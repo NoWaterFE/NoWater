@@ -56,3 +56,82 @@ var showArea = function(){
 	Gid('district').value + "</h3>"
 }
 Gid('area').setAttribute('onchange','showArea()');
+
+var host="http://123.206.100.98:16120";
+//var emailReg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/i;
+var registerForm = $("#registerForm");
+registerForm.on("submit", function (e) {
+    var _this = $(this);
+    e = window.event || e;
+    if (e && e.preventDefault) {
+        e.preventDefault();
+    } else {
+        e.returnValue = false;
+    }
+    var name = this.userName.value,	//userName
+        password = this.password.value,
+        confirm = this.confirm.value,
+        telephone = this.phone.value,
+        address1 = this.area.value,	//area
+        address2 = this.district.value,	//district
+        address3 = this.address.value;	//address from input
+    // if(!emailReg.test(name)){
+    //     _this.find(".register").text("error email!");
+    //     return;
+    // }
+    if (confirm != password) {
+    	_this.find(".register").text("Please input the same password!");
+    	return;
+    }
+    // var tips = showLoading(_this);
+    $.ajax({
+        type: "post",
+        url: host+"customer/register",
+        dataType: "json",
+        data: _this.serialize()
+    }).done(function(result){
+        if(tips) tips.remove();
+        if(result.status==200){
+            _this.find(".register").text("register successful.");
+        } else if(result.status==300){
+            _this.find(".register").text("user name has been used!");
+        } else if(result.status==400) {
+        	_this.find(".register").text("illegal telephone number!");
+        } else if (result.status==500) {
+        	_this.find(".register").text("illegal address!");
+        }
+    }).fail(function(result) {
+        if(tips) tips.remove();
+        result = {
+            status: 200
+        };
+       if(result.status==200){
+        	_this.find("input").addClass("disabled").attr("disabled", true);
+            _this.find(".register").text("register successful.");
+        } else if(result.status==300){
+            _this.find(".register").text("user name has been used!");
+        } else if(result.status==400) {
+        	_this.find(".register").text("illegal telephone number!");
+        } else if (result.status==500) {
+        	_this.find(".register").text("illegal address!");
+        }
+    });
+
+});
+
+// function showLoading($relative) {
+//     var $tips=$relative.siblings(".loadingImg");
+//     if($tips.length>0) $tips.remove();
+//     $tips= $("<div class='loadingImg'></div>");
+//     $tips.appendTo($relative.parent())
+//         .ready(function () {
+//             $tips.css({
+//                 "top": $relative.offset().top-$(window).scrollTop()+$relative.outerHeight()/2,
+//                 "left": $relative.offset().left-$(window).scrollLeft()+$relative.outerWidth()/2,
+//                 "margin-left": -$tips.outerWidth()/2,
+//                 "margin-top": -$tips.outerHeight()/2,
+//                 "visibility": "visible"
+//             });
+//         });
+//     return $tips;
+// }

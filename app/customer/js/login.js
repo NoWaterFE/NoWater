@@ -1,0 +1,67 @@
+var host="http://123.206.100.98:16120";
+var emailReg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/i;
+var loginForm = $("#loginForm");
+loginForm.on("submit", function (e) {
+    var _this = $(this);
+    e = window.event || e;
+    if (e && e.preventDefault) {
+        e.preventDefault();
+    } else {
+        e.returnValue = false;
+    }
+    var name = this.userName.value, 
+        password = this.password.value; //username & password
+    if(!name){
+        _this.find(".login").text("user name can't be empty!");
+        return;
+    }
+    if(!emailReg.test(name)){
+        _this.find(".login").text("error email!");
+        return;
+    }
+    //var tips = showLoading(_this);
+    $.ajax({
+        type: "post",
+        url: host+"customer/login",
+        dataType: "json",
+        data: _this.serialize()     //序列化
+    }).done(function(result){
+        if(tips) tips.remove();
+        if(result.status==300){
+            _this.find(".login").text("No user or wrong password.");
+        } else if(result.status==200){
+            _this.find(".login").text("Login successfully.");
+            self.location = "index.html";
+        }
+    }).fail(function(result) {
+        if(tips) tips.remove();
+        result = {
+            status: 200
+        };
+       if(result.status==300){
+           _this.find(".login").text("No user or wrong password.");
+       } else if(result.status==200){
+           _this.find("input").addClass("disabled").attr("disabled", true);
+           _this.find(".login").text("Login successfully.");
+           self.location = "index.html";
+       }
+    });
+
+});
+
+// function showLoading($relative) {
+//     var $tips=$relative.siblings(".loadingImg");
+//     if($tips.length>0) $tips.remove();
+//     $tips= $("<div class='loadingImg'></div>");
+//     $tips.appendTo($relative.parent())
+//         .ready(function () {
+//             $tips.css({
+//                 "top": $relative.offset().top-$(window).scrollTop()+$relative.outerHeight()/2,
+//                 "left": $relative.offset().left-$(window).scrollLeft()+$relative.outerWidth()/2,
+//                 "margin-left": -$tips.outerWidth()/2,
+//                 "margin-top": -$tips.outerHeight()/2,
+//                 "visibility": "visible"
+//             });
+//         });
+//     return $tips;
+// }
