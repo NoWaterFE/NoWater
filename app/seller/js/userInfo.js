@@ -4,6 +4,9 @@ $.ajax({
     type: "post",
     url: host+"/shop-owner/status",
     dataType: "json",
+    xhrFields: {
+        withCredentials: true
+    },
     async: false
 }).done(function (result) {
     if(result.status==300){

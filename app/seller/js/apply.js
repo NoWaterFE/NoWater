@@ -24,6 +24,9 @@ applyForm.on("submit", function (e) {
         type: "post",
         url: host+"shop-owner/apply",
         dataType: "json",
+        xhrFields: {
+            withCredentials: true
+        },
         data: _this.serialize()
     }).done(function(result){
         if(tips) tips.remove();

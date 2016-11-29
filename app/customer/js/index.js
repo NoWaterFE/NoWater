@@ -3,6 +3,9 @@ var host="http://123.206.100.98:16120";
     $.ajax({
         type: "post",
         url: host+"/customer/isLogin",
+        xhrFields: {
+            withCredentials: true
+        },
         dataType: "json"
     }).done(function (result) {
         if(result.status==200){
@@ -30,6 +33,9 @@ var host="http://123.206.100.98:16120";
     var getStoreAd = $.ajax({
         type: "post",
         url: host+"/customer/shop/ad",
+        xhrFields: {
+            withCredentials: true
+        },
         dataType: "json"
     });
     getStoreAd.done(function (result) {
@@ -82,6 +88,9 @@ var host="http://123.206.100.98:16120";
     var getGoodsAd = $.ajax({
         type: "post",
         url: host+"/customer/product/ad",
+        xhrFields: {
+            withCredentials: true
+        },
         dataType: "json"
     });
     getGoodsAd.done(function (result) {
