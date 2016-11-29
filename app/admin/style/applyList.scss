@@ -1,0 +1,37 @@
+@import "reset";
+
+.applyTitle {
+    font-size: 30px;
+    text-align: center;
+    margin: 50px 0 0;
+}
+.applyListSet {
+    text-align: center;
+    .applyList {
+        margin: 20px auto;
+        display: inline-block;
+        table, td, th {
+            border: 1px solid #aaa;
+            border-collapse: collapse;
+            text-align: center;
+            word-wrap: break-word;
+        }
+        td, th {
+            padding: 10px 10px;
+            width: 100px;
+            max-width: 100px;
+        }
+        .big {
+            width: 160px;
+            max-width: 160px;
+        }
+        .approve, .reject {
+            background: #292d84;
+            color: #fff;
+            cursor: pointer;
+            &:hover {
+                background: darkblue;
+            }
+        }
+    }
+}
