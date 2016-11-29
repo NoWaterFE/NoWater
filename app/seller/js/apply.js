@@ -77,12 +77,12 @@ applyForm.on("submit", function (e) {
 function delCookie(name){
     var t = new Date();
     t.setTime(t.getTime()-1);
-    document.cookie= name + "=;expires="+t.toGMTString();
+    document.cookie= name + "=null;path=/;expires="+t.toGMTString();
 }
 
 var quickMenu = $("#quickMenu");
 
-quickMenu.on("click", function () {
+quickMenu.on("click", ".logout", function () {
     var _this = $(this);
     $.ajax({
         type: "post",
