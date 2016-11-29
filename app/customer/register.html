@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<head><meta charset="UTF-8">
+    <title>Register</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" >
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style/register.css">   
+</head>
+
+<body>
+<header>
+    <div class="header">
+        <div class="logo">
+            <a href="../customer/index.html">
+                <img src="imgs/head_icon/logo.png" alt="logo">
+            </a>
+        </div>
+    </div>
+</header>
+
+<div class="content clearfix">
+    <form class="apply" id="registerForm">
+        <h2 class="title">Register New User <font>or <a href="login.html">login</a></font></h2>
+        <div class="reg">
+            <label for="userName" class="redStar">Username</label>
+            <input type="text" name="name" id="name" maxlength="50" required><br><br>           
+            <label for="password" class="redStar">Password</label>
+            <input type="password" name="password" id="password" maxlength="50" required><br><br> 
+            <label for="confirm" class="redStar">Confirm</label>
+            <input type="password" name="confirm" id="confirm" maxlength="50" required><br><br>    
+            <label for="telephone" class="redStar">Telephone</label>
+            <input type="tel" name="telephone" id="telephone" maxlength="50" required><br><br>
+            
+            <div class="info">
+			<div>			
+			<label for="area" class="redStar">Area</label>		
+			<select id="area" name="address1" ></select><br><br>  		
+            <label for="district" class="redStar">District</label>		
+    		<select id="district" name="address2" ></select><br><br>
+    		</div>
+    		<div id="show"></div>
+			</div>
+        
+        	<label for="address" class="redStar">Address</label>
+            <input type="text" name="address3" id="address" maxlength="50" required><br><br>
+
+        </div>
+        <div class="submit">
+            <input type="submit" value="REGISTER">
+        </div>
+        <div class="register">
+
+        </div>
+    </form>
+</div>
+
+<footer>
+    <div class="footer">
+        © Copyright NoWaterFE
+    </div>
+</footer>
+
+<script type="text/javascript" src="js/jQuery.md5.js"></script>
+<script type="text/javascript" src="js/register.js"></script>
+
+</body>
+</html>
