@@ -9,6 +9,8 @@ loginForm.on("submit", function (e) {
     } else {
         e.returnValue = false;
     }
+
+    _this.find(".login").text("");
     var name = this.name.value, 
         password = this.password.value; //username & password;
     if(!name){
