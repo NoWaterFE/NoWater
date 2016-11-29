@@ -88,7 +88,7 @@ registerForm.on("submit", function (e) {
            if(url) {
             location.href = decodeURIComponent(url);
            } else {
-            location.href = "index.html";
+            location.href = "login.html";
            }
         } else if(result.status==300){
             _this.find(".register").text("user name has been used!");
@@ -116,6 +116,11 @@ registerForm.on("submit", function (e) {
 
 });
 
+function getUrlParam(name) {
+   var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+   var r = window.location.search.substr(1).match(reg); //匹配目标参数
+   if (r != null) return r[2]; return null; //返回参数值
+  }
 function showLoading($relative) {
     var $tips=$relative.siblings(".loadingImg");
     if($tips.length>0) $tips.remove();
