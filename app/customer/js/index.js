@@ -3,6 +3,9 @@ var host="http://123.206.100.98:16120";
     $.ajax({
         type: "post",
         url: host+"/customer/isLogin",
+        xhrFields: {
+            withCredentials: true
+        },
         dataType: "json"
     }).done(function (result) {
         if(result.status==200){
@@ -12,7 +15,8 @@ var host="http://123.206.100.98:16120";
             quickMenu.find(".my-cart .count").text(userInfo.cartNum);
         }
     }).fail(function (result) {
-        result = {
+        console.log(result.statusText);
+        /*result = {
             status: 200,
             userInformation: [{
                 name: "gdh",
@@ -24,12 +28,15 @@ var host="http://123.206.100.98:16120";
             var quickMenu = $("#quickMenu");
             quickMenu.find(".accountOperate").toggleClass("active");
             quickMenu.find(".my-cart .count").text(userInfo.cartNum);
-        }
+        }*/
     });
     var $adStore = $("#adStore");
     var getStoreAd = $.ajax({
         type: "post",
         url: host+"/customer/shop/ad",
+        xhrFields: {
+            withCredentials: true
+        },
         dataType: "json"
     });
     getStoreAd.done(function (result) {
@@ -43,7 +50,8 @@ var host="http://123.206.100.98:16120";
         $adStore = null;
     })
         .fail(function(result){
-            result = {
+            console.log(result.statusText);
+            /*result = {
                 status: 200,
                 data: [
                     {
@@ -75,13 +83,16 @@ var host="http://123.206.100.98:16120";
                     adLi.eq(i).find("img").attr({src: result.data[i].adPhotoUrl});
                 }
             }
-            $adStore = null;
+            $adStore = null;*/
         });
 
     var $adGoods = $("#adGoods");
     var getGoodsAd = $.ajax({
         type: "post",
         url: host+"/customer/product/ad",
+        xhrFields: {
+            withCredentials: true
+        },
         dataType: "json"
     });
     getGoodsAd.done(function (result) {
@@ -99,7 +110,8 @@ var host="http://123.206.100.98:16120";
         $adGoods = null;
     })
         .fail(function(result){
-            result = {
+            console.log(result.statusText);
+            /*result = {
                 status: 200,
                 data: [
                     {
@@ -195,7 +207,7 @@ var host="http://123.206.100.98:16120";
                     li.find(".item-prices").text("HK$"+result.data[i].price);
                 }
             }
-            $adGoods = null;
+            $adGoods = null;*/
         });
 })();
 

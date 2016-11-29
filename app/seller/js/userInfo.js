@@ -4,11 +4,14 @@ $.ajax({
     type: "post",
     url: host+"/shop-owner/status",
     dataType: "json",
+    xhrFields: {
+        withCredentials: true
+    },
     async: false
 }).done(function (result) {
     if(result.status==300){
         location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
-    } else if(result.status==400 || result.status==500){
+    } else if(result.status==400 || result.status==500 || result.status==600){
         location.href="apply.html";
     } else if(result.status==200){
         userInfo = result.userInformation;
