@@ -84,6 +84,12 @@ registerForm.on("submit", function (e) {
         if(tips) tips.remove();
         if(result.status==200){
             _this.find(".register").text("register successful.");
+            var url = getUrlParam("redirectUrl");
+           if(url) {
+            location.href = decodeURIComponent(url);
+           } else {
+            location.href = "index.html";
+           }
         } else if(result.status==300){
             _this.find(".register").text("user name has been used!");
         } else if(result.status==400) {
