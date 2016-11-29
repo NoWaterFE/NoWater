@@ -6,6 +6,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
     <link rel="icon" type="image/x-icon" href="../favicon.ico" >
     <link rel="stylesheet" type="text/css" href="style/login.css">
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 </head>
 
 <body>
@@ -29,11 +30,12 @@
         <h2 class="title">LOGIN</h2>
         <div class="userName">
             <label for="userName" class="redStar">Username</label>
-            <input type="email" name="userName" id="userName" maxlength="50">
+            <input type="text" name="name" id="name" maxlength="50" required="">
         </div>
         <div class="password">
             <label for="password" class="redStar">Password</label>
-            <input type="password" name="password" id="password">
+            <input type="password" name="password" id="password"
+            required="">
         </div>
         <div class="submit">
             <input type="submit" value="login">
@@ -56,8 +58,8 @@
         © Copyright NoWaterFE
     </div>
 </footer>
-
-<script type="text/javascript" src=".js/login.js"></script>
+<script type="text/javascript" src="js/jQuery.md5.js"></script>
+<script type="text/javascript" src="js/login.js"></script>
 
 </body>
 </html>
