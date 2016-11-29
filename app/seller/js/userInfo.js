@@ -9,26 +9,32 @@ $.ajax({
     },
     async: false
 }).done(function (result) {
-    if(result.status==300){
+    if(result.status==200) { //已注册
+        userInfo = result.data[0];
+    } else if(result.status==300){
         location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
-    } else if(result.status==400 || result.status==500 || result.status==600){
-        location.href="apply.html";
-    } else if(result.status==200){
-        userInfo = result.userInformation;
+    } else {
+        location.href = "apply.html";
     }
 }).fail(function (result) {
-    result = {
+    alert("server error");
+    location.href = "../customer";
+    /*result = {
         status: 200,
-        userInformation: {
-            name: "gdh",
-            cartNum: 33
-        }
+        data: [{
+            "shopName": "test2",
+            "telephone": "62526523",
+            "shopId": 1,
+            "ownerId": 1,
+            "email": "wk@qq.com",
+            "status": 1
+        }]
     };
-    if(result.status==300){
+    if(result.status==200) { //已注册
+        userInfo = result.data[0];
+    } else if(result.status==300){
         location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
-    } else if(result.status==400 || result.status==500){
-        location.href="apply.html";
-    } else if(result.status==200){
-        userInfo = result.userInformation;
-    }
+    } else {
+        location.href = "apply.html";
+    }*/
 });
