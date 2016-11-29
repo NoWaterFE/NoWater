@@ -32,7 +32,7 @@ loginForm.on("submit", function (e) {
            _this.find(".login").text("Login successfully.");
            var url = getUrlParam("redirectUrl");
            if(url) {
-            location.href = url;
+            location.href = decodeURIComponent(url);
            } else {
             location.href = "index.html";
            }
@@ -60,7 +60,7 @@ loginForm.on("submit", function (e) {
 function getUrlParam(name) {
    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
    var r = window.location.search.substr(1).match(reg); //匹配目标参数
-   if (r != null) return unescape(r[2]); return null; //返回参数值
+   if (r != null) return r[2]; return null; //返回参数值
   }
 function showLoading($relative) {
     var $tips=$relative.siblings(".loadingImg");

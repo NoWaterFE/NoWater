@@ -1,5 +1,6 @@
 var host = "http://123.206.100.98:16120";
-var emailReg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/i;
+var emailReg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/i,
+    telReg = /^\d{8}$/;
 var applyForm = $("#applyForm");
 applyForm.on("submit", function (e) {
     var _this = $(this);
@@ -10,13 +11,21 @@ applyForm.on("submit", function (e) {
         e.returnValue = false;
     }
     var shopName = this.shopName.value,
-        shopEmail = this.shopEmail.value;
+        shopEmail = this.shopEmail.value,
+        telephone = this.telephone.value;
+
+    var msg = _this.find(".applying");
+    msg.text("");
     if (!shopName) {
-        _this.find(".applying").text("shop name can't be empty!");
+        msg.text("shop name can't be empty!");
         return;
     }
     if (!emailReg.test(shopEmail)) {
-        _this.find(".applying").text("error email!");
+        msg.text("error email!");
+        return;
+    }
+    if (!telReg.test(telephone)) {
+        msg.text("error telephone!");
         return;
     }
     var tips = showLoading(_this);
@@ -30,18 +39,17 @@ applyForm.on("submit", function (e) {
         data: _this.serialize()
     }).done(function (result) {
         if (tips) tips.remove();
-        var msg = _this.find(".applying");
         if (result.status == 300) {
             location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
         } else if (result.status == 500) {
-            msg.text("shop name is occupied");
+            msg.text("shop name is occupied!");
         } else if (result.status == 800) {
-            msg.text("error email")
+            msg.text("error email!")
         } else if (result.status == 900) {
-            msg.text("error telephone")
+            msg.text("error telephone!")
         } else if (result.status == 200) {
             _this.find("input").addClass("disabled").attr("disabled", true);
-            _this.find(".applying").text("Successful operation, please wait for the administrator to approve");
+            msg.text("Successful operation, please wait for the administrator to approve.");
         }
     }).fail(function () {
         if (tips) tips.remove();
@@ -50,7 +58,6 @@ applyForm.on("submit", function (e) {
         /*result = {
             status: 200
         };
-        var msg = _this.find(".applying");
         if (result.status == 300) {
             location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
         } else if (result.status == 500) {
@@ -61,7 +68,7 @@ applyForm.on("submit", function (e) {
             msg.text("error telephone")
         } else if (result.status == 200) {
             _this.find("input").addClass("disabled").attr("disabled", true);
-            _this.find(".applying").text("Successful operation, please wait for the administrator to approve");
+            msg.text("Successful operation, please wait for the administrator to approve");
         }*/
     });
 
