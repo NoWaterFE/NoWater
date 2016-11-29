@@ -76,6 +76,9 @@ registerForm.on("submit", function (e) {
         type: "post",
         url: host+"/customer/register",
         dataType: "json",
+        xhrFields: {
+            withCredentials: true
+        },
         data: data
     }).done(function(result){
         if(tips) tips.remove();

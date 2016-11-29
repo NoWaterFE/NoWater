@@ -20,6 +20,9 @@ loginForm.on("submit", function (e) {
         type: "post",
         url: host+"/customer/login",
         dataType: "json",
+        xhrFields: {
+            withCredentials: true
+        },
         data: data     //序列化
     }).done(function(result){
         if(tips) tips.remove();
