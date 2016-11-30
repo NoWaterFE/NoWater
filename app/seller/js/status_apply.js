@@ -12,12 +12,15 @@ $.ajax({
         location.href = "index.html";
     } else if(result.status==300){
         location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
-    } else if(result.status==500){
+    } else if(result.status==600){
         $(document).ready(function(){
             var applyForm = $("#applyForm");
+            applyForm.find("#shopName").val(result.data[0].shopName);
+            applyForm.find("#shopEmail").val(result.data[0].email);
+            applyForm.find("#shopTel").val(result.data[0].telephone);
             applyForm.find(".applying").text("Sorry, your application is rejected by the administrator and you can apply again");
         })
-    } else if(result.status==600){
+    } else if(result.status==500){
         $(document).ready(function(){
             var applyForm = $("#applyForm");
             applyForm.find("#shopName").val(result.data[0].shopName);
@@ -45,12 +48,12 @@ $.ajax({
         location.href = "index.html";
     } else if(result.status==300){
         location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
-    } else if(result.status==500){
+    } else if(result.status==600){
         $(document).ready(function(){
             var applyForm = $("#applyForm");
             applyForm.find(".applying").text("Sorry, your application is rejected by the administrator and you can apply again");
         })
-    } else if(result.status==600){
+    } else if(result.status==500){
         $(document).ready(function(){
             var applyForm = $("#applyForm");
             applyForm.find("#shopName").val(result.data[0].shopName);
