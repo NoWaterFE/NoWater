@@ -13,7 +13,7 @@
 	<header>
 		<div class="header">
 			<div class="logo">
-				<a href="index.html">
+				<a href="../customer">
 					<img src="imgs/head_icon/logo.png" alt="logo">
 				</a>
 			</div>
@@ -74,19 +74,19 @@
 			</ul>
 		</div>
 		<div class="page">
-            <form>
+            <form id="infoForm">
                 <h2 class="title">Your Shop Information</h2>
                 <div class="shopName shopInfo">
                     <label for="shopName" class="redStar">Shop name</label>
-                    <input type="text" name="shopName" id="shopName" maxlength="50" class="disabled" value="Cookie Shop" disabled required>
+                    <input type="text" name="shopName" id="shopName" maxlength="50" class="disabled" disabled>
                 </div>
                 <div class="shopEmail shopInfo">
                     <label for="shopEmail" class="redStar">Email</label>
-                    <input type="email" name="shopEmail" id="shopEmail" value="1562510684@qq.com">
+                    <input type="email" name="email" id="shopEmail" required >
                 </div>
                 <div class="shopTel shopInfo">
                     <label for="shopTel" class="redStar">Telephone</label>
-                    <input type="tel" name="shopTel" id="shopTel" value="18789427353">
+                    <input type="tel" name="telephone" id="shopTel" value="18789427353" required>
                 </div>
                 <div class="shopContacts shopInfo">
                     <label for="shopContacts">Shop contacts</label>
@@ -103,5 +103,6 @@
 			© Copyright NoWaterFE
 		</div>
 	</footer>
+	<script type="text/javascript" src="js/index.js"></script>
 </body>
 </html>
