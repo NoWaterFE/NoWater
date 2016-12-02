@@ -227,6 +227,14 @@ var host="http://123.206.100.98:16120";
     $headMenu = null;
 })();
 
+//header随浏览器滚动而滚动
+$(window).on("scroll", function(){
+   var header = $("header"),
+       _this = $(this);
+    header.css("left", -_this.scrollLeft());
+});
+
+
 function delCookie(name){
     var t = new Date();
     t.setTime(t.getTime()-1);

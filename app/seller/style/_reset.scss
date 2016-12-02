@@ -67,14 +67,18 @@ a {
   text-decoration: none;
 }
 
-input, textarea {
+input {
   outline: none;
-  font-family: "Microsoft YaHei", "Arial", sans-serif;
-  word-wrap: break-word;
 }
 
 html {
-  font-family: "Microsoft YaHei", "Arial", sans-serif;
+  font-family: "lucida grande", "lucida sans unicode", lucida, helvetica, "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
   height: 100%;
-  overflow-x: hidden;
+  overflow-x: visible;
+}
+
+input, textarea {
+  outline: none;
+  font-family: "lucida grande", "lucida sans unicode", lucida, helvetica, "Hiragino Sans GB", "Microsoft YaHei", "WenQuanYi Micro Hei", sans-serif;
+  word-wrap: break-word;
 }

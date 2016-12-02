@@ -2,6 +2,7 @@
 
 body {
 	padding-top: 100px;
+	min-width: 1200px;
 }
 
 // 头部
@@ -13,6 +14,7 @@ header {
 	background-color: #292d84;
 	color: #fff;
 	z-index: 9999;
+	min-width: 1200px;
 }
 
 .header {
