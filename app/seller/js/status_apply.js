@@ -31,9 +31,9 @@ $.ajax({
         });
     }
 }).fail(function () {
-    alert("server error");
-    location.href = "../customer";
-    /*result = {
+    /*alert("server error");
+    location.href = "../customer";*/
+    result = {
         status: 400,
         data: [{
             "shopName": "test2",
@@ -62,5 +62,5 @@ $.ajax({
             applyForm.find("input").addClass("disabled").attr("disabled", true);
             applyForm.find(".applying").text("You are applying for a shop, please wait for the administrator to approve.");
         });
-    }*/
+    }
 });
