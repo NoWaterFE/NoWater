@@ -80,3 +80,9 @@ function showLoading($relative) {
         });
     return $tips;
 }
+
+$(window).on("scroll", function(){
+   var header = $("header"),
+       _this = $(this);
+    header.css("left", -_this.scrollLeft());
+});
