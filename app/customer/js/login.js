@@ -16,6 +16,10 @@ loginForm.on("submit", function (e) {
         _this.find(".login").text("User name can't be empty!");
         return;
     }
+    if(!password){
+        _this.find(".login").text("Password can't be empty!");
+        return;
+    }
     var data = "name=" + name + "&password=" + $.md5(password);
 
     var tips = showLoading(_this);
