@@ -147,6 +147,6 @@ input, textarea {
   background: url("../imgs/loading.png");
   width: 40px;
   height: 40px;
-  position: absolute;
+  position: fixed;
   animation: loading 1s linear infinite;
 }
