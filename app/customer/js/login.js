@@ -1,8 +1,7 @@
 var host="http://123.206.100.98:16120";
 var loginForm = $("#loginForm");
 loginForm.on("submit", function (e) {
-    var _this = $(this);
-    var tips = showLoading(_this);
+    var _this = $(this); 
     e = window.event || e;
     if (e && e.preventDefault) {
         e.preventDefault();
@@ -14,10 +13,13 @@ loginForm.on("submit", function (e) {
     var name = this.name.value, 
         password = this.password.value; //username & password;
     if(!name){
-        _this.find(".login").text("user name can't be empty!");
+        _this.find(".login").text("User name can't be empty!");
         return;
     }
     var data = "name=" + name + "&password=" + $.md5(password);
+
+    var tips = showLoading(_this);
+
     $.ajax({
         type: "post",
         url: host+"/customer/login",
