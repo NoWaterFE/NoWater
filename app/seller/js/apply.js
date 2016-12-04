@@ -1,6 +1,15 @@
 var host = "http://123.206.100.98:16120";
 var emailReg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/i,
     telReg = /^\d{8}$/;
+//输入错误提示
+function addError(item, msg){
+    item.addClass("error")
+        .find("input")
+        .focus()
+        .end()
+        .find(".tips")
+        .text(msg);
+}
 var $applyForm = $("#applyForm");
 $applyForm.on("submit", function (e) {
     var _this = $(this);
@@ -14,30 +23,15 @@ $applyForm.on("submit", function (e) {
         $shopEmail = _this.find(".shopEmail");
         $shopTel = _this.find(".shopTel");
     if (!this.shopName.value) {
-        $shopName.addClass("error")
-            .find("input")
-            .focus()
-            .end()
-            .find(".tips")
-            .text("shop name can't be empty!");
+        addError($shopName, "shop name can't be empty!");
         return;
     }
     if (!emailReg.test(this.email.value)) {
-        $shopEmail.addClass("error")
-            .find("input")
-            .focus()
-            .end()
-            .find(".tips")
-            .text("error email!");
+        addError($shopEmail, "error email!");
         return;
     }
     if (!telReg.test(this.telephone.value)) {
-        $shopTel.addClass("error")
-            .find("input")
-            .focus()
-            .end()
-            .find(".tips")
-            .text("error telephone!");
+        addError($shopTel, "error telephone!");
         return;
     }
     var loading = showLoading(_this);
@@ -54,59 +48,29 @@ $applyForm.on("submit", function (e) {
         if (result.status == 300) {
             location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
         } else if (result.status == 500) {
-            $shopName.addClass("error")
-                .find("input")
-                .focus()
-                .end()
-                .find(".tips")
-                .text("shop name is occupied!");
+            addError($shopName, "shop name is occupied!");
         } else if (result.status == 800) {
-            $shopEmail.addClass("error")
-                .find("input")
-                .focus()
-                .end()
-                .find(".tips")
-                .text("error email!");
+            addError($shopEmail, "error email!");
         } else if (result.status == 900) {
-            $shopTel.addClass("error")
-                .find("input")
-                .focus()
-                .end()
-                .find(".tips")
-                .text("error telephone!");
+            $addError($shopTel, "error telephone!");
         } else if (result.status == 200) {
             _this.find("input").addClass("disabled").attr("disabled", true);
             _this.find(".applying").text("Successful operation, please wait for the administrator to approve.");
         }
     }).fail(function () {
         if (loading) loading.remove();
-        tipsAlert("server error");
+        //tipsAlert("server error");
         result = {
             status: 500
         };
         if (result.status == 300) {
             location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
         } else if (result.status == 500) {
-            $shopName.addClass("error")
-                .find("input")
-                .focus()
-                .end()
-                .find(".tips")
-                .text("shop name is occupied!");
+            addError($shopName, "shop name is occupied!");
         } else if (result.status == 800) {
-            $shopEmail.addClass("error")
-                .find("input")
-                .focus()
-                .end()
-                .find(".tips")
-                .text("error email!");
+            addError($shopEmail, "error email!");
         } else if (result.status == 900) {
-            $shopTel.addClass("error")
-                .find("input")
-                .focus()
-                .end()
-                .find(".tips")
-                .text("error telephone!");
+            $addError($shopTel, "error telephone!");
         } else if (result.status == 200) {
             _this.find("input").addClass("disabled").attr("disabled", true);
             _this.find(".applying").text("Successful operation, please wait for the administrator to approve.");
