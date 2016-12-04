@@ -47,16 +47,31 @@ function _init_area(){
 _init_area();
 
 var host="http://123.206.100.98:16120";
+var telReg = /^\d{8}$/;
+
+function addError(item, msg){
+    item.addClass("error")
+        .find("input")
+        .focus()
+        .end()
+        .find(".tips")
+        .text(msg);
+}
+
 var registerForm = $("#registerForm");
 registerForm.on("submit", function (e) {
     var _this = $(this);
-    var tips = showLoading(_this);
     e = window.event || e;
     if (e && e.preventDefault) {
         e.preventDefault();
     } else {
         e.returnValue = false;
     }
+    var $confirm = _this.find(".confirm"),
+        $name = _this.find(".name"),
+        $address = _this.find(".address"),
+        $telephone = _this.find(".telephone");
+
     var name = this.name.value,	//userName
         password = this.password.value,
         confirm = this.confirm.value,
@@ -64,13 +79,24 @@ registerForm.on("submit", function (e) {
         address1 = this.area.value,	//area
         address2 = this.district.value,	//district
         address3 = this.address.value;	//address from input
+
     if (confirm != password) {
-    	_this.find(".register").text("Please input the same password!");
+    	addError($confirm, "Please input the same password!");
     	return;
+    }
+    if (!name) {
+        addError($name, "user name can't be empty!");
+        return;
+    }
+    if (!telReg.test(telephone)) {
+        addError($shopTel, "error telephone!");
+        return;
     }
 
     var data = "name=" + name + "&password=" + $.md5(password) +"&telephone=" + telephone 
     + "&address1=" + address1 +"&address2=" + address2 +"&address3=" + address3;
+
+    var tips = showLoading(_this);
  
     $.ajax({
         type: "post",
@@ -91,29 +117,33 @@ registerForm.on("submit", function (e) {
             location.href = "login.html";
            }
         } else if(result.status==300){
-            _this.find(".register").text("user name has been used!");
+            addError($name, "user name has been used!");
         } else if(result.status==400) {
-        	_this.find(".register").text("illegal telephone number!");
+        	addError($telephone, "illegal telephone number!");
         } else if (result.status==500) {
-        	_this.find(".register").text("illegal address!");
+        	addError($address, "illegal address!");
         }
     }).fail(function(result) {
         if(tips) tips.remove();
-       //  result = {
-       //      status: 200
-       //  };
-       // if(result.status==200){
-       //  	_this[0].reset();
-       //      _this.find(".register").text("register successful.");
-       //  } else if(result.status==300){
-       //      _this.find(".register").text("user name has been used!");
-       //  } else if(result.status==400) {
-       //  	_this.find(".register").text("illegal telephone number!");
-       //  } else if (result.status==500) {
-       //  	_this.find(".register").text("illegal address!");
-       //  }
+        result = {
+            status: 400
+        };
+       if(result.status==200){
+            _this.find(".register").text("register successful.");
+        } else if(result.status==300){
+            addError($name, "user name has been used!");
+        } else if(result.status==400) {
+          addError($telephone, "illegal telephone number!");
+        } else if (result.status==500) {
+          addError($address, "illegal address!");
+        }
     });
 
+});
+
+registerForm.on("input", ".input-item input", function () {
+   var _this = $(this);
+   _this.parent().removeClass('error');
 });
 
 function getUrlParam(name) {
