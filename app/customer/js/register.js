@@ -89,7 +89,7 @@ registerForm.on("submit", function (e) {
         return;
     }
     if (!telReg.test(telephone)) {
-        addError($shopTel, "error telephone!");
+        addError($telephone, "error telephone!");
         return;
     }
 
@@ -125,18 +125,18 @@ registerForm.on("submit", function (e) {
         }
     }).fail(function(result) {
         if(tips) tips.remove();
-        result = {
-            status: 400
-        };
-       if(result.status==200){
-            _this.find(".register").text("register successful.");
-        } else if(result.status==300){
-            addError($name, "user name has been used!");
-        } else if(result.status==400) {
-          addError($telephone, "illegal telephone number!");
-        } else if (result.status==500) {
-          addError($address, "illegal address!");
-        }
+       //  result = {
+       //      status: 200
+       //  };
+       // if(result.status==200){
+       //      _this.find(".register").text("register successful.");
+       //  } else if(result.status==300){
+       //      addError($name, "user name has been used!");
+       //  } else if(result.status==400) {
+       //    addError($telephone, "illegal telephone number!");
+       //  } else if (result.status==500) {
+       //    addError($address, "illegal address!");
+       //  }
     });
 
 });
