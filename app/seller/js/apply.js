@@ -1,6 +1,14 @@
 var host = "http://123.206.100.98:16120";
 var emailReg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/i,
     telReg = /^\d{8}$/;
+
+//header随浏览器滚动而滚动
+$(window).on("scroll", function(){
+    var header = $("header"),
+        _this = $(this);
+    header.css("left", -_this.scrollLeft());
+});
+
 //输入错误提示
 function addError(item, msg){
     item.addClass("error")
