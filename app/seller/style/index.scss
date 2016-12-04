@@ -150,21 +150,3 @@ footer {
         color: #999;
     }
 }
-
-//loading 样式
-@keyframes loading {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-.loadingImg {
-    background: url("../imgs/loading.png");
-    width: 40px;
-    height: 40px;
-    position: absolute;
-    animation: loading 1s linear infinite;
-}

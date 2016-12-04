@@ -113,15 +113,14 @@ header {
     width: 1200px;
     margin: 20px auto;
     .apply {
-        margin-left: 240px;
-        margin-top: 50px;
-        width: 500px;
+        margin: 50px 120px 0 240px;
+        display: block;
         .title {
             border-bottom: 1px solid #E0E0E0;
             font-size: 24px;
             line-height: 34px;
         }
-        .shopName, .shopEmail, .shopTel {
+        .input-item {
             margin: 20px 0;
             label {
                 display: inline-block;
@@ -133,6 +132,20 @@ header {
                 height: 30px;
                 font-size: 14px;
                 padding: 0 5px;
+                border: 1px solid #aaa;
+            }
+            .tips {
+                font-size: 14px;
+                color: red;
+                display: none;
+            }
+            &.error {
+                input {
+                    border-color: red;
+                }
+                .tips {
+                    display: inline-block;
+                }
             }
         }
         .submit {
@@ -156,7 +169,6 @@ header {
             color: red;
             font-size: 16px;
             line-height: 24px;
-            text-align: center;
         }
     }
 }
@@ -167,6 +179,7 @@ footer {
     position: absolute;
     bottom: 0;
     width: 100%;
+    min-width: 1200px;
     .footer {
         width: 1200px;
         line-height: 70px;
@@ -174,22 +187,4 @@ footer {
         text-align: center;
         color: #999;
     }
-}
-
-//loading 样式
-@keyframes loading {
-    from {
-        transform: rotate(0deg);
-    }
-    to {
-        transform: rotate(360deg);
-    }
-}
-
-.loadingImg {
-    background: url("../imgs/loading.png");
-    width: 40px;
-    height: 40px;
-    position: absolute;
-    animation: loading 1s linear infinite;
 }
