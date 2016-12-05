@@ -5,6 +5,7 @@ body {
     min-height: 100%;
     box-sizing: border-box;
     position: relative;
+    min-width: 1200px;
 }
 
 input.disabled {
@@ -181,7 +182,6 @@ footer {
     position: absolute;
     bottom: 0;
     width: 100%;
-    min-width: 1200px;
     .footer {
         width: 1200px;
         line-height: 70px;
