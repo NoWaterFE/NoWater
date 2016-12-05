@@ -73,30 +73,31 @@ header {
 	.search {
 		float: left;
 		height: 100px;
-		margin-left: 5px;
+		margin-left: 40px;
 		font-size: 18px;
 		.search-input{
 			height: 40px;
-			width: 480px;
+			width: 400px;
 			border-radius: 20px;
 			padding-left: 20px;
 			margin-top: 30px;
 			background: #fff;
 			input {
-				font-size: 18px;
+				font-size: 16px;
 				border: none;
 				height: 100%;
-				width: 400px;
+				width: 340px;
 				padding: 0;
 				float: left;
 			}
 			span {
 				float: left;
 				color: #292d84;
-				width: 70px;
-				padding-left: 10px;
-				line-height: 40px;
+				width: 60px;;
+				height: 100%;
 				cursor: pointer;
+				background: url(../imgs/head_icon/search.png) center no-repeat;
+				background-size: 20px 20px;
 			}
 		}
 	}
@@ -327,6 +328,7 @@ header {
     .item-size {
         font-size: 12px;
         line-height: 20px;
+		height: 20px;
         text-align: center;
         color: #999;
         text-overflow: ellipsis;
@@ -336,6 +338,7 @@ header {
 		color: red;
 		text-align: center;
 		line-height: 40px;
+		height: 40px;
 		overflow: hidden;
 	}
 	.add-to-cart, .add-to-favorites {
