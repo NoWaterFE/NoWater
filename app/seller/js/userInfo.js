@@ -17,9 +17,9 @@ $.ajax({
         location.href = "apply.html";
     }
 }).fail(function (result) {
-    alert("server error");
-    location.href = "../customer";
-    /*result = {
+    /*alert("server error");
+    location.href = "../customer/index.html";*/
+    result = {
         status: 200,
         data: [{
             "shopName": "test2",
@@ -36,5 +36,5 @@ $.ajax({
         location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
     } else {
         location.href = "apply.html";
-    }*/
+    }
 });
