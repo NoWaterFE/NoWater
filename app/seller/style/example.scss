@@ -128,56 +128,6 @@ header {
         border: 1px solid #E0E0E0;
         padding: 40px;
         border-radius: 4px;
-        .title {
-            border-bottom: 1px solid #E0E0E0;
-            font-size: 24px;
-            line-height: 34px;
-        }
-        .shopInfo {
-            margin: 20px 0;
-            label {
-                display: inline-block;
-                width: 120px;
-                font-size: 14px;
-            }
-            input {
-                width: 230px;
-                height: 30px;
-                font-size: 14px;
-                padding: 0 5px;
-                border: 1px solid #cecece;
-                &:focus {
-                    border-color: #4349C5;
-                    box-shadow: 0 0 10px #4349C5;
-                }
-            }
-        }
-        .shopContacts {
-            textarea {
-                width: 230px;
-                padding: 5px 5px;
-                font-size: 14px;
-                border: 1px solid #cecece;
-                resize: none;
-                &:focus {
-                    border-color: #4349C5;
-                    box-shadow: 0 0 10px #4349C5;
-                }
-            }
-        }
-        .submit {
-            padding-left: 180px;
-            margin-top: 40px;
-            input[type=submit] {
-                width: 120px;
-                height: 40px;
-                border: none;
-                cursor: pointer;
-                border-radius: 5px;
-                background: #292d84;
-                color: #fff;
-            }
-        }
     }
 }
 
