@@ -63,11 +63,13 @@ header {
 	.logo{
 		float: left;
 		a {
-			display: inline-block;
-			height: 100px;
+			display: block;
+			line-height: 100px;
+			font-size: 0;
+		}
+		img {
 			width: 278px;
-			background: url("../imgs/head_icon/logo.png") no-repeat center;
-			background-size: contain;
+			vertical-align: middle;
 		}
 	}
 	.search {
@@ -198,6 +200,9 @@ header {
 	}
 }
 
+.content {
+	min-height: 400px;
+}
 
 //店铺广告
 .ad-store {
