@@ -1,4 +1,10 @@
 $(function () {
+    $(window).on("scroll", function(){
+       var header = $("header"), _this = $(this);
+       header.css("left", -_this.scrollLeft());
+    });
+
+
 	var host = "http://123.206.100.98:16120";
     var login = $("#login");
 
