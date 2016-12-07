@@ -46,8 +46,8 @@ $.ajax({
     }
 }).fail(function (result) {
     alert("server error");
-    location.href = "login.html";
-    /*result = {"status":200,"data":[{"shopName":"wukai-SHOP","telephone":"65204525","shopId":3,"ownerId":7,"email":"123@qq.com","status":0},{"shopName":"nolon","telephone":"96666666","shopId":5,"ownerId":16,"email":"964886469@qq.com","status":0},{"shopName":"takeashower","telephone":"96488888","shopId":6,"ownerId":18,"email":"964886469@qq.com","status":0}]};
+    //location.href = "login.html";
+    result = {"status":200,"data":[{"shopName":"wukai-SHOP","telephone":"65204525","shopId":3,"ownerId":7,"email":"123@qq.com","status":0},{"shopName":"nolon","telephone":"96666666","shopId":5,"ownerId":16,"email":"964886469@qq.com","status":0},{"shopName":"takeashower","telephone":"96488888","shopId":6,"ownerId":18,"email":"964886469@qq.com","status":0}]};
     if(result.status==200){
         var list = result.data;
         for(var len = list.length, i=0; i<len; i++ ){
@@ -55,7 +55,7 @@ $.ajax({
         }
     } else if(result.status==300){
         location.href = "login.html";
-    }*/
+    }
 
 });
 
