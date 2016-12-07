@@ -85,7 +85,7 @@ input, textarea {
     word-wrap: break-word;
 }
 
-.alert {
+.alert, .confirm {
     position: fixed;
     left: 0;
     top: 0;
@@ -131,6 +131,34 @@ input, textarea {
             bottom: 0;
             width: 100%;
             text-align: center;
+        }
+        .btn2 {
+            position: absolute;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            text-align: center;
+            background: #fff;
+            .ok, .cancel {
+                float: left;
+                line-height: 38px;
+                width: 50%;
+                cursor: pointer;
+                background: #fff;
+                color: #292d84;
+                border: 1px solid #292d84;
+                margin-left: -1px;
+                &:hover {
+                    background: #292d84;
+                    color: #fff;
+                }
+            }
+            .cancel {
+                border-left: none;
+            }
+            .ok {
+                border-right: none;
+            }
         }
     }
 }
