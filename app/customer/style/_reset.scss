@@ -149,7 +149,8 @@ input, textarea {
     background: url("../imgs/loading.png");
     width: 40px;
     height: 40px;
-    position: fixed;
+    position: absolute;
     animation: loading 1s linear infinite;
     visibility: hidden;
+    z-index: 99;
 }

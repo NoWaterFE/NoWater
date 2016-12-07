@@ -21,7 +21,6 @@ function addError(item, msg){
 var $applyForm = $("#applyForm");
 $applyForm.on("submit", function (e) {
     var _this = $(this);
-    e = window.event || e;
     if (e && e.preventDefault) {
         e.preventDefault();
     } else {
@@ -41,7 +40,9 @@ $applyForm.on("submit", function (e) {
     if (!telReg.test(this.telephone.value)) {
         addError($shopTel, "error telephone!");
         return;
-    }
+    };
+    if(_this.data("submit")) return ;
+    _this.data("submit", true);
     var loading = showLoading(_this);
     $.ajax({
         type: "post",
@@ -53,6 +54,7 @@ $applyForm.on("submit", function (e) {
         data: _this.serialize()
     }).done(function (result) {
         if (loading) loading.remove();
+        _this.data("submit", false);
         if (result.status == 300) {
             location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
         } else if (result.status == 500) {
@@ -67,6 +69,7 @@ $applyForm.on("submit", function (e) {
         }
     }).fail(function () {
         if (loading) loading.remove();
+        _this.data("submit", false);
         //tipsAlert("server error");
         result = {
             status: 500
@@ -124,8 +127,8 @@ function showLoading($relative) {
     $tips.appendTo($relative.parent())
         .ready(function () {
             $tips.css({
-                "top": $relative.offset().top - $(window).scrollTop() + $relative.outerHeight() / 2,
-                "left": $relative.offset().left - $(window).scrollLeft() + $relative.outerWidth() / 2,
+                "top": $relative.offset().top + $relative.outerHeight() / 2,
+                "left": $relative.offset().left + $relative.outerWidth() / 2,
                 "margin-left": -$tips.outerWidth() / 2,
                 "margin-top": -$tips.outerHeight() / 2,
                 "visibility": "visible"

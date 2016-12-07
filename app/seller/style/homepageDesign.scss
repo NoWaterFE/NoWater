@@ -64,7 +64,7 @@ header {
                 display: none;
                 width: 115px;
                 top: 100px;
-                right: 0;
+                left: 0;
                 padding: 10px 0;
                 background: rgba(#292d84, 0.9);
                 a {
@@ -129,6 +129,11 @@ header {
         border: 1px solid #E0E0E0;
         padding: 40px;
         border-radius: 4px;
+        .title {
+            border-bottom: 1px solid #E0E0E0;
+            font-size: 24px;
+            line-height: 34px;
+        }
     }
 }
 
