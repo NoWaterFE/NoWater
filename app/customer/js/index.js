@@ -58,31 +58,24 @@ var host="http://123.206.100.98:16120";
         });
 
     var $adGoods = $("#adGoods");
-    var getGoodsAd = $.ajax({
+    $.ajax({
         type: "post",
         url: host+"/customer/product/ad",
         xhrFields: {
             withCredentials: true
         },
         dataType: "json"
-    });
-    getGoodsAd.done(function (result) {
+    }).done(function (result) {
         if(result.status==200){
-            var adLi = $adGoods.find(".goods-item");
             for(var i=result.data.length-1; i>=0; i--){
-                var li = adLi.eq(i);
-                li.data("goodsId", result.data[i].productId);
-                li.find(".item-image img").attr("src", result.data[i].photoIdUrl);
-                li.find(".item-name").text(result.data[i].productName);
-                li.find(".item-size").text(result.data[i].size);
-                li.find(".item-prices").text("HK$"+result.data[i].price);
+                var goodItem = createGoodsItem(result.data[i]);
+                $adGoods.append(goodItem);
             }
         }
         $adGoods = null;
     })
         .fail(function(result){
-            console.log(result.statusText);
-            /*result = {
+            result = {
                 status: 200,
                 data: [
                     {
@@ -168,19 +161,38 @@ var host="http://123.206.100.98:16120";
                 ]
             };
             if(result.status==200){
-                var adLi = $adGoods.find(".goods-item");
                 for(var i=result.data.length-1; i>=0; i--){
-                    var li = adLi.eq(i);
-                    li.data("goodsId", result.data[i].productId);
-                    li.find(".item-image img").attr("src", result.data[i].photoIdUrl);
-                    li.find(".item-name").text(result.data[i].productName);
-                    li.find(".item-size").text(result.data[i].size);
-                    li.find(".item-prices").text("HK$"+result.data[i].price);
+                    var goodItem = createGoodsItem(result.data[i]);
+                    $adGoods.append(goodItem);
                 }
             }
-            $adGoods = null;*/
+            $adGoods = null;
         });
 })();
+
+function createGoodsItem(data) {
+    return $('<li class="goods-item"> ' +
+        '<div class="item-detail"> ' +
+            '<div class="item-image"> ' +
+                '<img src="'+data.photoIdUrl+'"> ' +
+            '</div> ' +
+            '<div class="item-name"> ' +
+                data.productName +
+            '</div> ' +
+        '</div> ' +
+        '<div class="item-prices"> HK$' +
+            data.price +
+        '</div> ' +
+        '<div class="item-operate"> ' +
+            '<div class="add-to-cart"> ' +
+                '<i></i><span>ADD TO CART</span> ' +
+            '</div> ' +
+            '<div class="add-to-favorites"> ' +
+            '<i></i><span>ADD TO FAVORITES</span> ' +
+            '</div> ' +
+        '</div> ' +
+        '</li>').data("goodId", data.productId);
+}
 
 
 // header添加事件
