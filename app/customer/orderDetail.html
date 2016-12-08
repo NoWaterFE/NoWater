@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>PARKnSHOP</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="stylesheet" type="text/css" href="style/orderDetail.css">
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+</head>
+
+<body>
+<header>
+    <div class="header">
+        <div class="menu" id="headMenu">
+            <i></i><span>PRODUCT</span>
+            <ul class="menuList">
+                <li data-pt="1">TV & Home Theater</li>
+                <li data-pt="2">Computers & Tablets</li>
+                <li data-pt="3">Cell Phones</li>
+                <li data-pt="4">Cameras & Camcorders</li>
+                <li data-pt="5">Audio</li>
+                <li data-pt="6">Car Electronics & GPS</li>
+                <li data-pt="7">Video, Games, Movies & Music</li>
+                <li data-pt="8">Health, Fitness & Sports</li>
+                <li data-pt="9">Home & Office</li>
+            </ul>
+        </div>
+        <div class="logo">
+            <a href="index.html">
+                <img src="imgs/head_icon/logo.png" alt="logo">
+            </a>
+        </div>
+        <div class="search">
+            <form novalidate="novalidate">
+                <div class="search-input">
+                    <input type="text" placeholder="Search your goods here">
+                    <span></span>
+                </div>
+            </form>
+        </div>
+        <ul class="quick-menu" id="quickMenu">
+            <li class="seller-center">
+                <a href="../seller">
+                    <i></i><span>SELLER CENTER</span>
+                </a>
+            </li>
+            <li class="account">
+                <a href="javascript:;">
+                    <i></i><span>ACCOUNT</span>
+                </a>
+                <ul class="accountOperate noLogin active">
+                    <li><a href="register.html">Register</a></li>
+                    <li><a href="login.html">Login</a></li>
+                </ul>
+                <ul class="accountOperate hasLogin">
+                    <li><a href="userCenter.html">Account Info</a></li>
+                    <li><a href="javascript:;" class="logout">Logout</a></li>
+                </ul>
+            </li>
+            <li class="favorites">
+                <a href="favorites.html">
+                    <i></i><span>FAVORITES</span>
+                </a>
+            </li>
+            <li class="my-cart">
+                <a href="cart.html">
+                    <i><em class="count">0</em></i><span>MY CART</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</header>
+<div class="content">
+    <!--页面写在这-->
+    <div class="orderDetail">
+        <h2 class="title">Order Detail</h2>
+        <div class="orderInfo">
+            <h2 class="orderInfoTitle">
+                Order Information
+            </h2>
+            <div class="info">
+                <div class="orderInfoItem receiver">
+                    <span class="key">Receiver:</span>
+                    <span class="value">Dhgan, 18789427353, HongkongIsland(HK) Chai Wan Wanli</span>
+                </div>
+                <div class="orderInfoItem orderTime">
+                    <span class="key">Order time:</span>
+                    <span class="value">2016-09-27 14:32:44</span>
+                </div>
+                <div class="orderInfoItem orderId">
+                    <span class="key">Order id:</span>
+                    <span class="value">2386034203179118</span>
+                </div>
+                <div class="orderInfoItem shopName">
+                    <span class="key">Shop name:</span>
+                    <span class="value">MONEYBACK REWARD</span>
+                </div>
+                <div class="orderInfoItem shopTel">
+                    <span class="key">Shop tel:</span>
+                    <span class="value">68723874</span>
+                </div>
+                <div class="orderInfoItem shopEmail">
+                    <span class="key">Shop email:</span>
+                    <span class="value">23332@nowater.com</span>
+                </div>
+            </div>
+        </div>
+        <div class="orderList" id="orderList">
+            <table class="orderTable">
+                <colgroup>
+                    <col class="col1">
+                    <col class="col2">
+                    <col class="col3">
+                    <col class="col4">
+                    <col class="col5">
+                    <col class="col6">
+                </colgroup>
+                <tbody class="orderTh">
+                <tr>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Amount</th>
+                    <th>Total Price</th>
+                    <th>Status</th>
+                    <th>Operate</th>
+                </tr>
+                </tbody>
+            </table>
+            <div class="more">
+                <div class="showMore hidden">
+                    <span>SHOW MORE</span>
+                    <span class="down"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    <div class="footer">
+        © Copyright NoWaterFE
+    </div>
+</footer>
+<script type="text/javascript" src="js/orderDetail.js"></script>
+</body>
+
+</html>
