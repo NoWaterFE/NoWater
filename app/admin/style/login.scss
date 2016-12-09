@@ -5,6 +5,7 @@ body {
     min-height: 100%;
     box-sizing: border-box;
     position: relative;
+    min-width: 1200px
 }
 
 input.disabled {
@@ -30,6 +31,7 @@ header {
     background-color: #292d84;
     color: #fff;
     z-index: 9999;
+    min-width: 1200px
 }
 
 .header {
