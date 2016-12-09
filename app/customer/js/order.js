@@ -85,6 +85,23 @@ var host="http://123.206.100.98:16120";
             location.reload();
         });
     });
+
+    var $searchForm = $("#searchForm");
+    $searchForm.on("submit", function(e){
+        if (e && e.preventDefault) {
+            e.preventDefault();
+        } else {
+            e.returnValue = false;
+        }
+        var keyWord = this.keyWord.value;
+        if(keyWord!=""){
+            location.href = "search.html?keyWord="+ encodeURIComponent(keyWord);
+        }
+    });
+    $searchForm.on("click", ".searchBtn", function(e){
+        $searchForm.trigger("submit");
+    });
+
 })();
 
 
