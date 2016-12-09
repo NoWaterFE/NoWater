@@ -67,7 +67,8 @@ var host="http://123.206.100.98:16120";
         dataType: "json"
     }).done(function (result) {
         if(result.status==200){
-            for(var i=result.data.length-1; i>=0; i--){
+            var len  = result.data.length;
+            for(var i=0; i<len; i++){
                 var goodItem = createGoodsItem(result.data[i]);
                 $adGoods.append(goodItem);
             }
@@ -161,7 +162,8 @@ var host="http://123.206.100.98:16120";
                 ]
             };
             if(result.status==200){
-                for(var i=result.data.length-1; i>=0; i--){
+                var len  = result.data.length;
+                for(var i=0; i<len; i++){
                     var goodItem = createGoodsItem(result.data[i]);
                     $adGoods.append(goodItem);
                 }

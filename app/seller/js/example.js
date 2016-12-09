@@ -12,7 +12,7 @@ var host = "http://123.206.100.98:16120";
     quickMenu.on("click", ".logout", function () {
         var _this = $(this);
         $.ajax({
-            type: "post",
+            method: "post",
             url: host+"/customer/loginout",
             xhrFields: {
                 withCredentials: true

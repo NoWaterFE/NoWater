@@ -5,7 +5,7 @@ var host="http://123.206.100.98:16120";
 (function () {
     //获取登录信息可能不需要
     /*$.ajax({
-        type: "post",
+        method: "post",
         url: host+"/customer/isLogin",
         xhrFields: {
             withCredentials: true
