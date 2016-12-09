@@ -1,14 +1,11 @@
 var host="http://123.206.100.98:16120";
-var value = "Results for ";
+var value = "Products about ";
 var startId = -1;
 
-$("#error").hide();
-$("#noResult").hide();
 $("#showMoreButton").click(showMore);
-
 $(document).ready(function() {
     setText();
-    $("#showMoreButton").hide();
+    $("#showMore").hide();
     getResult(GetQueryString("keyWord"));
 });
 
@@ -32,6 +29,24 @@ $(document).ready(function() {
         location.href = "search.html?pt=" + pt;
     });
     $headMenu = null;
+    //storeMenu
+    var $storeMenu = $("#menuBar");
+    var navTimer;
+    $storeMenu.on("mouseover", function () {
+        if (navTimer) clearTimeout(navTimer);
+        $(this).find(".menuList").show();
+    });
+    $storeMenu.on("mouseout", function () {
+        var _this = $(this);
+        navTimer = setTimeout(function () {
+            _this.find(".menuList").hide();
+        }, 400);
+    });
+    $storeMenu.on("click", ".menuList li", function () {
+        var pt = $(this).data("pt");
+        location.href = "search.html?pt=" + pt;
+    });
+    $storeMenu = null;
 
     //header随浏览器滚动而滚动
     $(window).on("scroll", function(){
@@ -80,7 +95,31 @@ $(document).ready(function() {
     $searchForm.on("click", ".searchBtn", function(e){
         $searchForm.trigger("submit");
     });
+
 })();
+
+function enter() {
+    var e= window.event;
+    if (e.keyCode == 13) {
+        search();
+    }
+}
+
+$("#searchInStore").click(function(e){
+    if (e && e.preventDefault) {
+        e.preventDefault();
+    } else {
+        e.returnValue = false;
+    }
+    search();
+});
+
+function search() {
+    var keyWord = $("#keyWordInStore").val();
+    if(keyWord!=""){
+        location.href = "search.html?keyWord="+ encodeURIComponent(keyWord);
+    }
+}
 
 function getResult(keyWord) {
     var $adGoods = $("#adGoods");
@@ -97,23 +136,10 @@ function getResult(keyWord) {
         data: sendData
     }).done(function (result) {
         if(result.status==200){
-            startId = result.startId;
-            if (result.actualCount == 0) {
-                $("#noResult").show();
-                $("#adGoods").hide();
-                return;
-            }
-            for(var i=0; i<result.actualCount; i++){
+            for(var i=result.data.length-1; i>=0; i--){
                 var goodItem = createGoodsItem(result.data[i]);
                 $adGoods.append(goodItem);
             }
-            if(startId != -1) {
-                $("#showMoreButton").show();
-            }
-        }
-        if(result.status==300){
-            $("#error").show();
-            $("#adGoods").hide();
         }
         $adGoods = null;
     })
@@ -207,22 +233,18 @@ function getResult(keyWord) {
             };
             if(result.status==200){
                 startId = result.startId;
-                if (result.actualCount == 0) {
-                    $("#noResult").show();
-                    $("#adGoods").hide();
-                    return;
-                }
                 for(var i=0; i<result.actualCount; i++){
                     var goodItem = createGoodsItem(result.data[i]);
                     $adGoods.append(goodItem);
                 }
                 if(startId != -1) {
-                    $("#showMoreButton").show();
+                    $("#showMore").show();
                 }
             }
             if(result.status==300){
                 $("#error").show();
                 $("#adGoods").hide();
+                $("#showMore").hide();
             }
             $adGoods = null;
         });
@@ -244,13 +266,9 @@ function showMore() {
         data: sendData
     }).done(function (result) {
         if(result.status==200){
-            startId = result.startId;
-            for(var i=0; i<result.actualCount; i++){
+            for(var i=result.data.length-1; i>=0; i--){
                 var goodItem = createGoodsItem(result.data[i]);
                 $adGoods.append(goodItem);
-            }
-            if(startId == -1) {
-                $("#showMoreButton").hide();
             }
         }
         $adGoods = null;
@@ -350,7 +368,7 @@ function showMore() {
                     $adGoods.append(goodItem);
                 }
                 if(startId == -1) {
-                    $("#showMoreButton").hide();
+                    $("#showMore").hide();
                 }
             }
             $adGoods = null;
@@ -359,8 +377,11 @@ function showMore() {
 
 function setText() {
     var valueFromInput = GetQueryString("keyWord");
-    $("#tips").text(value+"\'"+valueFromInput+"\'");
-    $("#keyWord").val(valueFromInput);
+    if (valueFromInput) {
+        $("#tips").text(value+"\'"+valueFromInput+"\'");
+    } else {
+        $("#tips").text("ALL PRODUCTS");
+    }
 }
 
 //get parameter from URL

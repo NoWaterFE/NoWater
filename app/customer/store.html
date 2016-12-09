@@ -6,7 +6,7 @@
     <title>Search Result</title>
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
     <link rel="icon" type="image/x-icon" href="../favicon.ico" >
-    <link rel="stylesheet" type="text/css" href="style/search.css">
+    <link rel="stylesheet" type="text/css" href="style/store.css">
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 </head>
 
@@ -35,7 +35,7 @@
         <div class="search">
             <form novalidate="novalidate" id="searchForm">
                 <div class="search-input">
-                    <input type="text" name="keyWord" id="keyWord" placeholder="Search your goods here">
+                    <input type="text" name="keyWord" placeholder="Search your goods here">
                     <span class="searchBtn"></span>
                 </div>
             </form>
@@ -74,14 +74,33 @@
 </header>
 
 <div class="content">
-    <div class="error" id="error">
-        Please login first!
-        <a href="login.html">Click here to login.</a>
-    </div>
-    <div class="noResult" id="noResult">
-        No result found,please try another search key.
-    </div>
+    <div class="storeHeader" id="storeHeader">
+        <div class="storeInfo" id="storeInfo">
+            Store Information
+        </div>
 
+        <div class="storeSearch" id="storeSearch">
+            <input type="text" name="keyWordInStore" id="keyWordInStore" placeholder="Search goods in this store" onkeypress="enter()">
+            <span name="searchInStore" id="searchInStore"></span>
+        </div>
+
+    </div>
+    <div class="storeMenu" id="storeMenu">
+        <div class="menuBar" id="menuBar">
+            <span>ALL CATALOGUE</span>
+            <ul class="menuList">
+                <li data-pt="1">TV & Home Theater</li>
+                <li data-pt="2">Computers & Tablets</li>
+                <li data-pt="3">Cell Phones</li>
+                <li data-pt="4">Cameras & Camcorders</li>
+                <li data-pt="5">Audio</li>
+                <li data-pt="6">Car Electronics & GPS</li>
+                <li data-pt="7">Video, Games, Movies & Music</li>
+                <li data-pt="8">Health, Fitness & Sports</li>
+                <li data-pt="9">Home & Office</li>
+            </ul>
+        </div>
+    </div>
     <ul class="ad-goods clearfix" id="adGoods">
         <div class="tips" id="tips">
         </div><br>
@@ -99,7 +118,7 @@
     </div>
 </footer>
 
-<script type="text/javascript" src="js/search.js"></script>
+<script type="text/javascript" src="js/store.js"></script>
 </body>
 
 </html>
