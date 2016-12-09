@@ -158,8 +158,8 @@ function showLoading($relative) {
     $tips.appendTo($relative.parent())
         .ready(function () {
             $tips.css({
-                "top": $relative.offset().top-$(window).scrollTop()+$relative.outerHeight()/2,
-                "left": $relative.offset().left-$(window).scrollLeft()+$relative.outerWidth()/2,
+                "top": $relative.offset().top+$relative.outerHeight()/2,
+                "left": $relative.offset().left+$relative.outerWidth()/2,
                 "margin-left": -190,
                 "margin-top": -$tips.outerHeight()/2,
                 "visibility": "visible"

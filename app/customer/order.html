@@ -6,7 +6,7 @@
     <title>PARKnSHOP</title>
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
     <link rel="icon" type="image/x-icon" href="../favicon.ico" >
-    <link rel="stylesheet" type="text/css" href="style/example.css">
+    <link rel="stylesheet" type="text/css" href="style/order.css">
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 </head>
 
@@ -74,13 +74,50 @@
 </header>
 <div class="content">
     <!--页面写在这-->
+    <div class="orderDiv">
+        <ul class="orderMain clearfix" id="orderMain">
+            <li class="orderTab active">All Order</li>
+            <li class="orderTab">Pending payment</li>
+            <li class="orderTab">To be delivered</li>
+            <li class="orderTab">To be received</li>
+            <li class="orderTab">To be commented</li>
+        </ul>
+        <div class="orderList" id="orderList">
+            <table class="orderTable">
+                <colgroup>
+                    <col class="col1">
+                    <col class="col2">
+                    <col class="col3">
+                    <col class="col4">
+                    <col class="col5">
+                    <col class="col6">
+                </colgroup>
+                <tbody class="orderTh">
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Amount</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                        <th>Operate</th>
+                    </tr>
+                </tbody>
+            </table>
+            <div class="more">
+                <div class="showMore hidden">
+                    <span>SHOW MORE</span>
+                    <span class="down"></span>
+                </div>
+            </div>
+        </div>
+    </div>
 </div>
 <footer>
     <div class="footer">
         © Copyright NoWaterFE
     </div>
 </footer>
-<script type="text/javascript" src="js/example.js"></script>
+<script type="text/javascript" src="js/order.js"></script>
 </body>
 
 </html>

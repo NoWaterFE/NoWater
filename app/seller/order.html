@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PARKnSHOP</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+    <link rel="stylesheet" type="text/css" href="style/order.css">
+</head>
+<body>
+<header>
+    <div class="header">
+        <div class="logo">
+            <a href="../customer/index.html">
+                <img src="imgs/head_icon/logo.png" alt="logo">
+            </a>
+        </div>
+        <ul class="quick-menu" id="quickMenu">
+            <li class="account">
+                <a href="javascript:;">
+                    <i></i><span>ACCOUNT</span>
+                </a>
+                <ul class="accountOperate noLogin">
+                    <li><a href="register.html">Register</a></li>
+                    <li><a href="login.html">Login</a></li>
+                </ul>
+                <ul class="accountOperate hasLogin active">
+                    <li><a href="userCenter.html">Account Info</a></li>
+                    <li><a href="javascript:;" class="logout">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</header>
+<div class="content clearfix">
+    <div class="nav">
+        <ul>
+            <li class="category">
+                <h2 class="title">Products Management</h2>
+                <ul>
+                    <li class="navList">
+                        <a href="#">Products List</a>
+                    </li>
+                    <li class="navList">
+                        <a href="#">Add Product</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="category">
+                <h2 class="title">Advertising Management</h2>
+                <ul>
+                    <li class="navList">
+                        <a href="#">Apply Advertisement</a>
+                    </li>
+                    <li class="navList">
+                        <a href="#">Homepage Design</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="category">
+                <h2 class="title">Order management</h2>
+                <ul>
+                    <li class="navList">
+                        <a href="#">Incomplete Order</a>
+                    </li>
+                    <li class="navList">
+                        <a href="#">Completed Order</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="category">
+                <h2 class="title">Shop management</h2>
+                <ul>
+                    <li class="navList">
+                        <a href="#">Modify shop information</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="page">
+        <div class="orderDiv">
+            <ul class="orderMain clearfix" id="orderMain">
+                <li class="orderTab active">All Order</li>
+                <li class="orderTab">Pending payment</li>
+                <li class="orderTab">Already paid</li>
+                <li class="orderTab">To be received</li>
+                <li class="orderTab">To be commented</li>
+            </ul>
+            <div class="orderList" id="orderList">
+                <table class="orderTable">
+                    <colgroup>
+                        <col class="col1">
+                        <col class="col2">
+                        <col class="col3">
+                        <col class="col4">
+                        <col class="col5">
+                        <col class="col6">
+                    </colgroup>
+                    <tbody class="orderTh">
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Amount</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                        <th>Operate</th>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="more">
+                    <div class="showMore hidden">
+                        <span>SHOW MORE</span>
+                        <span class="down"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    <div class="footer">
+        © Copyright NoWaterFE
+    </div>
+</footer>
+<script type="text/javascript" src="js/order.js"></script>
+</body>
+</html>

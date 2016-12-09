@@ -1,0 +1,366 @@
+@import "reset";
+
+body {
+    min-width: 1200px;
+}
+
+// 头部
+header {
+    height: 100px;
+    background-color: #292d84;
+    color: #fff;
+    z-index: 9999;
+    position: relative;
+}
+
+.header {
+    width: 1200px;
+    height: 100px;
+    margin: 0 auto;
+    .logo{
+        float: left;
+        a {
+            display: block;
+            line-height: 100px;
+            font-size: 0;
+        }
+        img {
+            width: 278px;
+            vertical-align: middle;
+        }
+    }
+    .quick-menu {
+        float: right;
+        font-size: 12px;
+        &>li {
+            float: left;
+            width: 75px;
+            &>a {
+                color: #fff;
+                display: block;
+                height: 76px;
+                padding-top: 24px;
+            }
+            i{
+                display: block;
+                height: 30px;
+                background-size: contain;
+                background-repeat: no-repeat;
+                background-position: center;
+            }
+            span {
+                display: block;
+                padding-top: 12px;
+                text-align: center;
+            }
+        }
+        .account {
+            position: relative;
+            i{
+                background-image: url("../imgs/head_icon/account.png");
+            }
+            .accountOperate {
+                position: absolute;
+                display: none;
+                width: 115px;
+                top: 100px;
+                right: 0;
+                padding: 10px 0;
+                background: rgba(#292d84, 0.9);
+                a {
+                    display: block;
+                    color: #fff;
+                    font-size: 14px;
+                    line-height: 32px;
+                    padding: 0 10px;
+                }
+                li:hover {
+                    a{
+                        background: #fff;
+                        color: #292d84;
+                    }
+                }
+            }
+            &:hover {
+                .accountOperate.active {
+                    display: block;
+                }
+            }
+        }
+    }
+}
+
+.content {
+    width: 1200px;
+    margin: 20px auto;
+    .nav {
+        width: 180px;
+        border: 1px solid #E0E0E0;
+        float: left;
+        margin-right: 10px;
+        box-shadow: 2px 2px 5px #E0E0E0;
+        border-radius: 2px;
+        padding: 0 10px;
+        .category {
+            padding: 10px 0;
+            &:not(:last-child) {
+                border-bottom: 1px solid #E0E0E0;
+            }
+        }
+        .title {
+            font-size: 14px;
+            line-height: 20px;
+            font-weight: bold;
+        }
+        .navList {
+            font-size: 12px;
+            line-height: 26px;
+        }
+        a {
+            color: #444;
+            font-size: 13px;
+        }
+        a:hover, a:active, a:visited {
+            text-decoration: underline;
+        }
+    }
+    .page {
+        margin-left: 212px;
+        border: 1px solid #E0E0E0;
+        padding: 40px 40px 20px;
+        border-radius: 4px;
+        &>.orderDetail {
+            width: 906px;
+            .title {
+                border-bottom: 1px solid #E0E0E0;
+                font-size: 24px;
+                line-height: 34px;
+            }
+            .orderInfo {
+                margin: 20px 0;
+                font-size: 14px;
+                border: 1px solid #ddd;
+                padding-bottom: 20px;
+                .orderInfoTitle {
+                    background: #F3F3F3;
+                    line-height: 30px;
+                    color: #333;
+                    font-weight: bold;
+                    padding-left: 20px;
+                    border-bottom: 1px solid #ddd;
+                }
+                .orderInfoItem {
+                    margin: 10px 8px 0 20px;
+                    color: #666;
+                    .key {
+                        display: inline-block;
+                        width: 100px;
+                        float: left;
+                        font-weight: 700;
+                    }
+                    .value {
+                        display: inline-block;
+                        width: 770px;
+                    }
+                }
+            }
+            .orderList {
+                margin: 20px 0;
+                color: #3c3c3c;
+                .orderTable {
+                    width: 100%;
+                    th {
+                        text-align: center;
+                        background: #f5f5f5;
+                        padding: 5px 0;
+                    }
+                    colgroup {
+                        .col1 {
+                            width: 36%;
+                        }
+                        .col2 {
+                            width: 12%;
+                        }
+                        .col3 {
+                            width: 8%;
+                        }
+                        .col4 {
+                            width: 14%;
+                        }
+                        .col5 {
+                            width: 16%;
+                        }
+                        .col6 {
+                            width: 14%;
+                        }
+                    }
+                    .orderTh {
+                        border: 1px solid #e5e5e5;
+                    }
+                    .orderItem {
+                        border: 1px solid #e5e5e5;
+                        .mr20 {
+                            height: 20px;
+                        }
+                        .orderHeader {
+                            font-size: 14px;
+                            background: #f5f5f5;
+                            line-height: 36px;
+                            height: 36px;
+                            &>td>span {
+                                float: left;
+                            }
+                            .orderTime {
+                                padding: 0 14px;
+                                color: #000;
+                            }
+                            .orderId {
+                                margin-right: 20px;
+                                width: 220px;
+                                display: inline-block;
+                            }
+                            .shopName {
+                                a {
+                                    display: block;
+                                    width: 200px;
+                                    color: #3c3c3c;
+                                    overflow: hidden;
+                                    text-overflow: ellipsis;
+                                    white-space: nowrap;
+                                    &:hover {
+                                        color: blue;
+                                        text-decoration: underline;
+                                    }
+                                }
+                            }
+                        }
+                        .orderData {
+                            font-size: 14px;
+                            margin: 20px 0;
+                            td {
+                                padding: 10px 0;
+                                text-align: center;
+                                vertical-align: top;
+                            }
+                            .product {
+                                text-align: left;
+                                font-size: 12px;
+                                border-bottom: 1px solid #e5e5e5;
+                                .productLink {
+                                    display: block;
+                                    margin-left: 96px;
+                                    color: #3c3c3c;
+                                    &:hover {
+                                        color: blue;
+                                        text-decoration: underline;
+                                    }
+                                    img {
+                                        margin-left: -86px;
+                                        float: left;
+                                        width: 80px;
+                                        height: 80px;
+                                    }
+                                }
+                            }
+                            .price {
+                                border-bottom: 1px solid #e5e5e5;
+                            }
+                            .amount {
+                                border-right: 1px solid #e5e5e5;
+                                border-bottom: 1px solid #e5e5e5;
+                            }
+                            .totalPrice {
+                                color: red;
+                                border-right: 1px solid #e5e5e5;
+                            }
+                            .status {
+                                border-right: 1px solid #e5e5e5;
+                                &>div {
+                                    line-height: 30px;
+                                }
+                                .orderDetail {
+                                    a{
+                                        color: #3c3c3c;
+                                        &:hover {
+                                            color: blue;
+                                            text-decoration: underline;
+                                        }
+                                    }
+                                }
+                            }
+                            .operate{
+                                &>div {
+                                    margin: 10px;
+                                    cursor: pointer;
+                                    line-height: 22px;
+                                    color: #3c3c3c;
+                                    &:hover {
+                                        color: blue;
+                                    }
+                                }
+                                .comment {
+                                    &:hover {
+                                        text-decoration: underline;
+                                    }
+                                }
+                                .payNow, .confirmR, .alreadyDelivered {
+                                    color: #292d84;
+                                    line-height: 30px;
+                                    border: 1px solid #292d84;
+                                    border-radius: 4px;
+                                    &:hover {
+                                        background: #292d84;
+                                        color: #fff;
+                                    }
+                                }
+                                .confirmR, .alreadyDelivered {
+                                    line-height: 18px;
+                                    padding: 4px 0;
+                                }
+                            }
+                        }
+                    }
+                }
+                .more {
+                    text-align: center;
+                    margin-top: 10px;
+                    height: 40px;
+                    position: relative;
+                    .showMore{
+                        cursor: pointer;
+                        display: inline-block;
+                        padding: 10px 40px;
+                        font-size: 14px;
+                        text-align: center;
+                        border: 1px solid #ddd;
+                        border-radius: 4px;
+                        &.hidden {
+                            display: none;
+                        }
+                        .down {
+                            border: 1px solid #000;
+                            border-top-color: transparent;
+                            border-right-color: transparent;
+                            width: 10px;
+                            height: 10px;
+                            display: inline-block;
+                            transform: rotate(-45deg) translate(6px, 2px);
+                        }
+                    }
+                }
+            }
+        }
+    }
+}
+
+footer {
+    border-top: 5px solid #292d84;
+    height: 70px;
+    .footer {
+        width: 1200px;
+        line-height: 70px;
+        margin: 0 auto;
+        text-align: center;
+        color: #999;
+    }
+}

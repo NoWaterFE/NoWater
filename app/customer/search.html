@@ -3,10 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>PARKnSHOP</title>
+    <title>Search Result</title>
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
     <link rel="icon" type="image/x-icon" href="../favicon.ico" >
-    <link rel="stylesheet" type="text/css" href="style/example.css">
+    <link rel="stylesheet" type="text/css" href="style/search.css">
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 </head>
 
@@ -33,10 +33,10 @@
             </a>
         </div>
         <div class="search">
-            <form novalidate="novalidate" id="searchForm">
+            <form novalidate="novalidate">
                 <div class="search-input">
-                    <input type="text" name="keyWord" placeholder="Search your goods here">
-                    <span class="searchBtn"></span>
+                    <input type="text" name="keyWord" id="keyWord" placeholder="Search your goods here">
+                    <span name="search" id="search"></span>
                 </div>
             </form>
         </div>
@@ -72,15 +72,30 @@
         </ul>
     </div>
 </header>
+
 <div class="content">
-    <!--页面写在这-->
+    <div class="error" id="error">
+        Please login first!
+        <a href="login.html">Click here to login.</a>
+    </div>
+    <ul class="ad-goods clearfix" id="adGoods">
+        <div class="tips" id="tips">
+        </div><br>
+        <div class="hr"></div><br>
+
+    </ul>
+    <div class="showMore" id="showMore">
+        <input type="button" value="SHOW MORE&nbsp;&#8595;" name="showMoreButton" id="showMoreButton">
+    </div>
 </div>
+
 <footer>
     <div class="footer">
         © Copyright NoWaterFE
     </div>
 </footer>
-<script type="text/javascript" src="js/example.js"></script>
+
+<script type="text/javascript" src="js/search.js"></script>
 </body>
 
 </html>

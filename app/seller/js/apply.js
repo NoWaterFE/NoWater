@@ -21,7 +21,6 @@ function addError(item, msg){
 var $applyForm = $("#applyForm");
 $applyForm.on("submit", function (e) {
     var _this = $(this);
-    e = window.event || e;
     if (e && e.preventDefault) {
         e.preventDefault();
     } else {
@@ -41,7 +40,9 @@ $applyForm.on("submit", function (e) {
     if (!telReg.test(this.telephone.value)) {
         addError($shopTel, "error telephone!");
         return;
-    }
+    };
+    if(_this.data("submit")) return ;
+    _this.data("submit", true);
     var loading = showLoading(_this);
     $.ajax({
         type: "post",
@@ -53,6 +54,7 @@ $applyForm.on("submit", function (e) {
         data: _this.serialize()
     }).done(function (result) {
         if (loading) loading.remove();
+        _this.data("submit", false);
         if (result.status == 300) {
             location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
         } else if (result.status == 500) {
@@ -67,6 +69,7 @@ $applyForm.on("submit", function (e) {
         }
     }).fail(function () {
         if (loading) loading.remove();
+        _this.data("submit", false);
         //tipsAlert("server error");
         result = {
             status: 500
@@ -124,8 +127,8 @@ function showLoading($relative) {
     $tips.appendTo($relative.parent())
         .ready(function () {
             $tips.css({
-                "top": $relative.offset().top - $(window).scrollTop() + $relative.outerHeight() / 2,
-                "left": $relative.offset().left - $(window).scrollLeft() + $relative.outerWidth() / 2,
+                "top": $relative.offset().top + $relative.outerHeight() / 2,
+                "left": $relative.offset().left + $relative.outerWidth() / 2,
                 "margin-left": -$tips.outerWidth() / 2,
                 "margin-top": -$tips.outerHeight() / 2,
                 "visibility": "visible"
@@ -135,19 +138,43 @@ function showLoading($relative) {
 }
 
 function tipsAlert(msg, callback){
-    var $alert = $(".alert");
+    var $alert = $(".tipsAlert");
     if ($alert.length > 0) $alert.remove();
-    $alert = $("<div class='alert'></div>");
+    $alert = $("<div class='tipsAlert'></div>");
     var $shadow = $("<div class='shadow'></div>");
     var $content = $("<div class='content'></div>");
     var $msg = $("<div class='msg'>"+ msg +"</div>");
     var $btn = $("<div class='btn'>OK</div>");
     $btn.on("click", function () {
-        $(this).parents(".alert").remove();
+        $(this).parents(".tipsAlert").remove();
         if(callback) callback();
     });
     $content.append($msg).append($btn);
     $alert.append($shadow);
     $alert.append($content);
     $alert.appendTo($("body"));
+}
+
+function tipsConfirm(msg, callback){
+    var $confirm = $(".tipsConfirm");
+    if ($confirm.length > 0) $confirm.remove();
+    $confirm = $("<div class='tipsConfirm'></div>");
+    var $shadow = $("<div class='shadow'></div>");
+    var $content = $("<div class='content'></div>");
+    var $msg = $("<div class='msg'>"+ msg +"</div>");
+    var $btn = $('<div class="btn2"> ' +
+        '<div class="cancel">Cancel</div> ' +
+        '<div class="ok">Ok</div> </div>');
+
+    $btn.on("click", ".cancel", function () {
+        $(this).parents(".tipsConfirm").remove();
+    });
+    $btn.on("click", ".ok", function () {
+        $(this).parents(".tipsConfirm").remove();
+        if(callback) callback();
+    });
+    $content.append($msg).append($btn);
+    $confirm.append($shadow)
+        .append($content)
+        .appendTo($("body"));
 }
