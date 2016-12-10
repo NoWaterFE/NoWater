@@ -82,10 +82,14 @@ $(document).ready(function() {
     });
 })();
 
-function getResult(keyWord) {
+function getResult(keyWord,shopId) {
+    var shopId = arguments[1] ? arguments[1] : null;
     var $adGoods = $("#adGoods");
     var count = 40;
     var sendData = "keyWord=" + keyWord + "&count=" + count;
+    if (shopId) {
+        sendData += "&shopId=" + shopId;
+    }
 
     $.ajax({
         type: "post",
@@ -231,8 +235,12 @@ function getResult(keyWord) {
 function showMore() {
     var $adGoods = $("#adGoods");
     var keyWord = GetQueryString("keyWord");
+    var shopId = GetQueryString("shopId");
     var count = 20;
     var sendData = "keyWord=" + keyWord + "&count=" + count +"&startId=" + startId;
+    if (shopId) {
+        sendData += "&shopId=" + shopId;
+    }
 
     $.ajax({
         type: "post",
