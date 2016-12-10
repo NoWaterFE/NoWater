@@ -85,6 +85,17 @@ input, textarea {
     word-wrap: break-word;
 }
 
+
+.redStar {
+    position: relative;
+    &:before {
+        content: "*";
+        color: red;
+        position: absolute;
+        left: -0.8em;
+    }
+}
+
 .tipsAlert, .tipsConfirm {
     position: fixed;
     left: 0;
