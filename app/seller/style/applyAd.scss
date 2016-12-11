@@ -57,7 +57,7 @@ header {
         .account {
             position: relative;
             i{
-                background-image: url('../imgs/head_icon/account.png');
+                background-image: url("../imgs/head_icon/account.png");
             }
             .accountOperate {
                 position: absolute;
@@ -93,32 +93,76 @@ header {
 .content {
     width: 1200px;
     margin: 20px auto;
-    .apply {
-        padding: 50px 0 0 240px;
-        margin-right: 240px;
-        display: block;
+    min-height: 420px;
+    .nav {
+        width: 180px;
+        border: 1px solid #E0E0E0;
+        float: left;
+        margin-right: 10px;
+        box-shadow: 2px 2px 5px #E0E0E0;
+        border-radius: 2px;
+        padding: 0 10px;
+        .category {
+            padding: 10px 0;
+            &:not(:last-child) {
+                border-bottom: 1px solid #E0E0E0;
+            }
+        }
+        .title {
+            font-size: 14px;
+            line-height: 20px;
+            font-weight: bold;
+        }
+        .navList {
+            font-size: 12px;
+            line-height: 26px;
+        }
+        a {
+            color: #444;
+            font-size: 13px;
+        }
+        a:hover, a:active, a:visited {
+            text-decoration: underline;
+        }
+    }
+    .page {
+        margin-left: 212px;
+        border: 1px solid #E0E0E0;
+        padding: 40px;
+        border-radius: 4px;
+        min-height: 340px;
         .title {
             border-bottom: 1px solid #E0E0E0;
             font-size: 24px;
             line-height: 34px;
         }
+        .applyAd {
+            padding-left: 100px;
+            margin-right: 120px;
+        }
         .input-item {
             margin: 20px 0;
             label {
                 display: inline-block;
-                width: 120px;
+                width: 160px;
                 font-size: 14px;
             }
-            input {
+            input, select {
                 width: 230px;
                 height: 30px;
                 font-size: 14px;
                 padding: 0 5px;
                 border: 1px solid #aaa;
+                option {
+                    padding: 2px 5px;
+                }
                 &:focus {
                     border-color: #4349C5;
                     box-shadow: 0 0 10px #4349C5;
                 }
+            }
+            select {
+                width: 240px;
             }
             .tips {
                 font-size: 14px;
@@ -134,11 +178,11 @@ header {
                 }
             }
         }
-        .idPhoto {
+        .adImage {
             position: relative;
             i {
                 position: absolute;
-                left: 126px;
+                left: 166px;
                 z-index: 9;
                 line-height: 30px;
                 background: #fff;
@@ -176,19 +220,19 @@ header {
         .imagesPreview {
             overflow: hidden;
             transition: height 300ms ease-in-out;
-            width: 300px;
-            margin-left: 100px;
             text-align: center;
             font-size: 0;
+            margin-top: 8px;
+            width: 600px;
             height: 0;
             img {
                 vertical-align: middle;
-                width: 0;
-                height: 0;
+                width: 600px;
+                height: 200px;
             }
         }
         .submit {
-            padding-left: 180px;
+            padding-left: 225px;
             margin: 20px 0;
             input[type=submit] {
                 width: 120px;
@@ -203,11 +247,6 @@ header {
                     color: #999;
                 }
             }
-        }
-        .applying {
-            color: red;
-            font-size: 16px;
-            line-height: 24px;
         }
     }
 }

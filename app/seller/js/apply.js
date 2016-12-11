@@ -142,6 +142,9 @@ $applyForm.on("change", "#idPhoto", function(e){
     imgY.onload=function(){
         var $imagesPreview = $delegateTarget.find(".imagesPreview");
         var $img = $imagesPreview.find("img");
+        $img.ready(function(){
+            $imagesPreview.height($img.height());
+        });
         $img.attr("src", url);
         imgAuto($img);
         $imagesPreview[0].scrollIntoView();
