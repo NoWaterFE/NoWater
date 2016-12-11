@@ -5,7 +5,7 @@ var shopId = $("#shopId").text();
 var searchKey;
 var nextStartId;
 
-$("#showMoreButton").click(showMore);
+$("#showMoreButton").click(getClass);
 $(document).ready(function() {
     setText();
     $("#showMore").hide();
@@ -68,7 +68,7 @@ $(document).ready(function() {
         }
     });
     if (GetQueryString("classId")) {
-        getClass(GetQueryString("classId"));
+        getClass();
     } else {
         //todo ajax for all product
     }
@@ -201,7 +201,6 @@ function setText() {
     }
 }
 
-//get parameter from URL
 function GetQueryString(name) {
     var reg = new RegExp("(^|&)"+ name +"=([^&]*)(&|$)");
     var r = window.location.search.substr(1).match(reg);
@@ -210,10 +209,18 @@ function GetQueryString(name) {
     return null;
 }
 
-function getClass(classId) {
+function getClass() {
     var $adGoods = $("#adGoods");
-    var count = 40;
-    var sendData = "shopId=" + shopId + "&classId=" + classId + "&count=" + count;
+    var classId = GetQueryString("classId");
+    var count = 20;
+    var isFirst = true;
+    var sendData;
+    if (isFirst) {
+        sendData = "shopId=" + shopId + "&classId=" + classId + "&count=" + count;
+    } else {
+        count = 40;
+        sendData = "shopId=" + shopId + "&classId=" + GetQueryString("classId") + "&count=" + count +"&searchKey=" + searchKey +"&startId" + nextStartId;
+    }
 
     $.ajax({
         type: "post",
@@ -225,6 +232,7 @@ function getClass(classId) {
         data: sendData
     }).done(function (result) {
         if(result.status==200 || result.status==300 || result.status==400){
+            isFirst = false;
             searchKey = result.searchKey;
             nextStartId = result.nextStartId;
             setText();
@@ -234,6 +242,8 @@ function getClass(classId) {
             }
             if(result.status!=400) {
                 $("#showMore").show();
+            } else {
+                $("#showMore").hide();
             }
         }
         if(result.status==500){
@@ -346,155 +356,7 @@ function getClass(classId) {
             }
             if(result.status!=400) {
                 $("#showMore").show();
-            }
-        }
-        if(result.status==500){
-            $("#adGoods").hide();
-            $("#noResult").text("No such goods in this store,please try another.");
-            $("#noResult").show();
-        }
-        if(result.status==600) {
-            $("#adGoods").hide();
-            $("#noResult").text("No shop found,please try another shop name.");
-            $("#noResult").show();
-        }
-        $adGoods = null;
-    });
-}
-
-function showMore() {
-    var $adGoods = $("#adGoods");
-    var count = 40;
-    var sendData = "shopId=" + shopId + "&classId=" + GetQueryString("classId") + "&count=" + count +"&searchKey=" + searchKey +"&startId" + nextStartId;
-
-    $.ajax({
-        type: "post",
-        url: host+"/customer/shop/class/product",
-        xhrFields: {
-            withCredentials: true
-        },
-        dataType: "json",
-        data: sendData
-    }).done(function (result) {
-        if(result.status==200 || result.status==300 || result.status==400){
-            searchKey = result.searchKey;
-            nextStartId = result.nextStartId;
-            for(var i=0; i<result.actualCount; i++){
-                var goodItem = createGoodsItem(result.data[i]);
-                $adGoods.append(goodItem);
-            }
-            if(result.status==400) {
-                $("#showMore").hide();
-            }
-        }
-        if(result.status==500){
-            $("#adGoods").hide();
-            $("#noResult").text("No such goods in this store,please try another.");
-            $("#noResult").show();
-        }
-        if(result.status==600) {
-            $("#adGoods").hide();
-            $("#noResult").text("No shop found,please try another shop name.");
-            $("#noResult").show();
-        }
-        $adGoods = null;
-    }).fail(function(result){
-        result = {
-            status: 200,
-            actualCount: 10,
-            data: [
-                {
-                    productId: 1,
-                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                    price: "998.00",
-                    photoIdUrl: "imgs/product01a.jpg",
-                    quantityStock: 11,
-                    size: "1 PC"
-                },
-                {
-                    productId: 2,
-                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                    price: "998.00",
-                    photoIdUrl: "imgs/product02a.jpg",
-                    quantityStock: 11,
-                    size: "1 PC"
-                },
-                {
-                    productId: 3,
-                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                    price: "998.00",
-                    photoIdUrl: "imgs/product03a.jpg",
-                    quantityStock: 11,
-                    size: "1 PC"
-                },
-                {
-                    productId: 4,
-                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                    price: "998.00",
-                    photoIdUrl: "imgs/product04a.jpg",
-                    quantityStock: 11,
-                    size: "1 PC"
-                },
-                {
-                    productId: 5,
-                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                    price: "998.00",
-                    photoIdUrl: "imgs/product05a.jpg",
-                    quantityStock: 11,
-                    size: "1 PC"
-                },
-                {
-                    productId: 6,
-                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                    price: "998.00",
-                    photoIdUrl: "imgs/product01a.jpg",
-                    quantityStock: 11,
-                    size: "1 PC"
-                },
-                {
-                    productId: 7,
-                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                    price: "998.00",
-                    photoIdUrl: "imgs/product02a.jpg",
-                    quantityStock: 11,
-                    size: "1 PC"
-                },
-                {
-                    productId: 8,
-                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                    price: "998.00",
-                    photoIdUrl: "imgs/product03a.jpg",
-                    quantityStock: 11,
-                    size: "1 PC"
-                },
-                {
-                    productId: 9,
-                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                    price: "998.00",
-                    photoIdUrl: "imgs/product04a.jpg",
-                    quantityStock: 11,
-                    size: "1 PC"
-                },
-                {
-                    productId: 10,
-                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                    price: "998.00",
-                    photoIdUrl: "imgs/product05a.jpg",
-                    quantityStock: 11,
-                    size: "1 PC"
-                }
-            ],
-            nextStartId: 2,
-            searchKey: "str"
-        };
-        if(result.status==200 || result.status==300 || result.status==400){
-            searchKey = result.searchKey;
-            nextStartId = result.nextStartId;
-            for(var i=0; i<result.actualCount; i++){
-                var goodItem = createGoodsItem(result.data[i]);
-                $adGoods.append(goodItem);
-            }
-            if(result.status==400) {
+            } else {
                 $("#showMore").hide();
             }
         }
