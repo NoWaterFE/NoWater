@@ -61,7 +61,7 @@ function createProductList(info){
         '</td> ' +
         '<td> ' +
             '<div class="price">HK$' +
-                info.price +
+                info.price.toFixed(2) +
             '</div> ' +
         '</td> ' +
         '<td> ' +
@@ -123,7 +123,7 @@ var  postProductList = (function() {
                 productName: "INFRUITION CLASSIC WATER BOTTLE - GREEN",
                 class: "Video, Games, Movies & Music",
                 classIndex: 6,
-                price: "99.00",
+                price: 99,
                 stock: 798,
                 state: 0
             };
@@ -133,7 +133,7 @@ var  postProductList = (function() {
                 productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
                 class: "Cameras & Camcorders",
                 classIndex: 4,
-                price: "59.00",
+                price: 59,
                 stock: 699
             };
             for(var i=0; i<10; i++){

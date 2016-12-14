@@ -75,7 +75,7 @@
                     {
                         productId: 1,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998,
                         photoIdUrl: "imgs/product01a.jpg",
                         quantityStock: 11,
                         size: "1 PC"
@@ -83,7 +83,7 @@
                     {
                         productId: 2,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         photoIdUrl: "imgs/product02a.jpg",
                         quantityStock: 11,
                         size: "1 PC"
@@ -91,7 +91,7 @@
                     {
                         productId: 3,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         photoIdUrl: "imgs/product03a.jpg",
                         quantityStock: 11,
                         size: "1 PC"
@@ -99,7 +99,7 @@
                     {
                         productId: 4,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         photoIdUrl: "imgs/product04a.jpg",
                         quantityStock: 11,
                         size: "1 PC"
@@ -107,7 +107,7 @@
                     {
                         productId: 5,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         photoIdUrl: "imgs/product05a.jpg",
                         quantityStock: 11,
                         size: "1 PC"
@@ -115,7 +115,7 @@
                     {
                         productId: 6,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         photoIdUrl: "imgs/product01a.jpg",
                         quantityStock: 11,
                         size: "1 PC"
@@ -123,7 +123,7 @@
                     {
                         productId: 7,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         photoIdUrl: "imgs/product02a.jpg",
                         quantityStock: 11,
                         size: "1 PC"
@@ -131,7 +131,7 @@
                     {
                         productId: 8,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         photoIdUrl: "imgs/product03a.jpg",
                         quantityStock: 11,
                         size: "1 PC"
@@ -139,7 +139,7 @@
                     {
                         productId: 9,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         photoIdUrl: "imgs/product04a.jpg",
                         quantityStock: 11,
                         size: "1 PC"
@@ -147,7 +147,7 @@
                     {
                         productId: 10,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         photoIdUrl: "imgs/product05a.jpg",
                         quantityStock: 11,
                         size: "1 PC"
@@ -176,7 +176,7 @@ function createGoodsItem(data) {
             '</div> ' +
         '</div> ' +
         '<div class="item-prices"> HK$' +
-            data.price +
+            data.price.toFixed(2) +
         '</div> ' +
         '<div class="item-operate"> ' +
             '<div class="add-to-cart"> ' +
