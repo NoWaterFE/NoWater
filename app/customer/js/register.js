@@ -76,6 +76,9 @@ registerForm.on("submit", function (e) {
         password = this.password.value,
         confirm = this.confirm.value,
         telephone = this.telephone.value,
+        firstName = this.firstName.value,
+        lastName = this.lastName.value,
+        postCode = this.postCode.value,
         address1 = this.area.value,	//area
         address2 = this.district.value,	//district
         address3 = this.address.value;	//address from input
@@ -94,7 +97,8 @@ registerForm.on("submit", function (e) {
     }
 
     var data = "name=" + name + "&password=" + $.md5(password) +"&telephone=" + telephone 
-    + "&address1=" + address1 +"&address2=" + address2 +"&address3=" + address3;
+        + "&address1=" + address1 +"&address2=" + address2 +"&address3=" + address3
+        +"&firstName=" + firstName +"&lastName=" + lastName +"&postCode=" + postCode;
 
     var tips = showLoading(_this);
  
