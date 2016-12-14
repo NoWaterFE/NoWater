@@ -1,66 +1,64 @@
-var host="http://123.206.100.98:16120";
 $.ajax({
-    type: "post",
-    url: host+"/shop-owner/status",
+    method: "get",
+    url: "/proxy/shop-owner/status",
     dataType: "json",
-    xhrFields: {
-        withCredentials: true
-    },
     async: false
 }).done(function (result) {
+    var msg = "";
     if(result.status==200) {
         location.href = "index.html";
     } else if(result.status==300){
         location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
-    } else if(result.status==600){
-        $(document).ready(function(){
-            var applyForm = $("#applyForm");
-            applyForm.find("#shopName").val(result.data[0].shopName);
-            applyForm.find("#shopEmail").val(result.data[0].email);
-            applyForm.find("#shopTel").val(result.data[0].telephone);
-            applyForm.find(".applying").text("Sorry, your application is rejected by the administrator and you can apply again");
-        })
     } else if(result.status==500){
-        $(document).ready(function(){
-            var applyForm = $("#applyForm");
-            applyForm.find("#shopName").val(result.data[0].shopName);
-            applyForm.find("#shopEmail").val(result.data[0].email);
-            applyForm.find("#shopTel").val(result.data[0].telephone);
-            applyForm.find("input").addClass("disabled").attr("disabled", true);
-            applyForm.find(".applying").text("You are applying for a shop, please wait for the administrator to approve.");
-        });
+        msg = "You are applying for a shop, please wait for the administrator to approve.";
+        fillForm(result, msg, true);
+    } else if(result.status==600){
+        msg = "Sorry, your application is rejected by the administrator and you can apply again.";
+        fillForm(result, msg, false);
+    } else if(result.status==700){
+        msg = "Please go to verify your email first!";
+        fillForm(result, msg, true);
     }
-}).fail(function () {
-    /*alert("server error");
-    location.href = "../customer";*/
-    result = {
-        status: 400,
-        data: [{
-            "shopName": "test2",
-            "telephone": "62526523",
-            "shopId": 1,
-            "ownerId": 1,
-            "email": "wk@qq.com",
-            "status": 1
-        }]
-    };
+}).fail(function (result) {
+    alert("server error");
+    location.href = "../customer";
+    /*var msg = "";
     if(result.status==200) {
         location.href = "index.html";
     } else if(result.status==300){
         location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
-    } else if(result.status==600){
-        $(document).ready(function(){
-            var applyForm = $("#applyForm");
-            applyForm.find(".applying").text("Sorry, your application is rejected by the administrator and you can apply again");
-        })
     } else if(result.status==500){
-        $(document).ready(function(){
-            var applyForm = $("#applyForm");
-            applyForm.find("#shopName").val(result.data[0].shopName);
-            applyForm.find("#shopEmail").val(result.data[0].email);
-            applyForm.find("#shopTel").val(result.data[0].telephone);
-            applyForm.find("input").addClass("disabled").attr("disabled", true);
-            applyForm.find(".applying").text("You are applying for a shop, please wait for the administrator to approve.");
-        });
-    }
+        msg = "You are applying for a shop, please wait for the administrator to approve.";
+        fillForm(result, msg, true);
+    } else if(result.status==600){
+        msg = "Sorry, your application is rejected by the administrator and you can apply again.";
+        fillForm(result, msg, false);
+    } else if(result.status==700){
+        msg = "Please go to verify your email first!";
+        fillForm(result, msg, true);
+    }*/
 });
+function fillForm(result, msg, disabled){
+    var data = result.data[0],
+        photo = result.photo[0];
+    $(document).ready(function() {
+        var $applyForm = $("#applyForm"),
+            $imagesPreview = $applyForm.find(".imagesPreview"),
+            $img = $imagesPreview.find("img");
+        $img.ready(function(){
+            $imagesPreview.height($img.height());
+        });
+        $img.attr("src", photo);
+        imgAuto($img);
+        tipsAlert(msg);
+        $applyForm.data("fileNameList", photo)
+            .data("change", "false")
+            .find('#shopName').val(data.shopName).end()
+            .find('#shopEmail').val(data.email).end()
+            .find('#shopTel').val(data.telephone).end()
+            .find('.applying').text(msg);
+        if(disabled) {
+            $applyForm.find('input').addClass("disabled").attr("disabled", disabled);
+        }
+    });
+}

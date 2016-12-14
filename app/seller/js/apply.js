@@ -1,4 +1,3 @@
-var host = "http://123.206.100.98:16120";
 var emailReg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/i,
     telReg = /^\d{8}$/;
 
@@ -24,11 +23,7 @@ function addError(item, msg){
 var $applyForm = $("#applyForm");
 $applyForm.on("submit", function (e) {
     var _this = $(this);
-    if (e && e.preventDefault) {
-        e.preventDefault();
-    } else {
-        e.returnValue = false;
-    }
+    e.preventDefault();
     var $shopName = _this.find(".shopName"),
         $shopEmail = _this.find(".shopEmail"),
         $shopTel = _this.find(".shopTel"),
@@ -45,75 +40,120 @@ $applyForm.on("submit", function (e) {
         addError($shopTel, "error telephone!");
         return;
     }
-    if(this.idPhoto.files.length==0) {
+    var fileUrl = _this.data("fileNameList");
+    if(this.idPhoto.files.length==0 && fileUrl==undefined) {
         addError($idPhoto, "please add your ID photo!");
         return;
     }
     if(_this.data("submit")) return ;
     _this.data("submit", true);
     var loading = showLoading(_this);
-    var formData = new FormData();
-    formData.append("idPhoto", this.idPhoto.files[0]);
+    var $input=_this.find("input[name='fileNameList']");
+    if($input.length==0) {
+        $input = $("<input type='hidden' name='fileNameList'>");
+        $input.appendTo(_this);
+    }
+    if(fileUrl && _this.data("change") == "false"){
+        if(!$input.val()) {
+            var index = fileUrl.lastIndexOf("/");
+            var fileNameList = fileUrl.substr(index+1);
+            var arr = [];
+            arr.push(fileNameList);
+            $input.val(JSON.stringify(arr));
+        }
+        applyForShop(_this, loading);
+    } else {
+        var formData = new FormData();
+        formData.append("goodsPic[]", this.idPhoto.files[0]);
+        $.ajax({
+            method: "post",
+            url: "/proxy/picture/upload",
+            dataType: "json",
+            processData: false,
+            contentType: false,
+            data: formData
+        }).done(function(result){
+            if(result.status==200){
+                var url = JSON.stringify(result.data);
+                $input.val(url);
+                _this.data("fileNameList", url)
+                    .data("change", "false");
+                applyForShop(_this, loading);
+            } else if(result.status==300){
+                location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
+            } else {
+                tipsAlert("upload file fail");
+            }
+        }).fail(function(result){
+            if (loading) loading.remove();
+            _this.data("submit", false);
+            tipsAlert("server error");
+            /*result = {
+                status: 200
+            };
+            if(result.status==200){
+                $input.val(JSON.stringify(result.data));
+                applyForShop(_this, loading);
+            } else if(result.status==300){
+                location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
+            } else {
+                tipsAlert("upload file fail");
+            }*/
+        });
+    }
+});
+
+function applyForShop(_this, loading) {
+    var $shopName = _this.find(".shopName"),
+        $shopEmail = _this.find(".shopEmail"),
+        $shopTel = _this.find(".shopTel");
     $.ajax({
         method: "post",
-        url: host + "/shop-owner/apply",
+        url: "/proxy/shop-owner/apply",
         dataType: "json",
-        processData: false,
-        contentType: false,
-        xhrFields: {
-            withCredentials: true
-        },
-        data: formData
-    }).done(function(result){
-
-    }).fail(function(result){
-        if(result.status==200){
-            $.ajax({
-                type: "post",
-                url: host + "/shop-owner/apply",
-                dataType: "json",
-                xhrFields: {
-                    withCredentials: true
-                },
-                data: _this.serialize()
-            }).done(function (result) {
-                if (loading) loading.remove();
-                _this.data("submit", false);
-                if (result.status == 300) {
-                    location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
-                } else if (result.status == 500) {
-                    addError($shopName, "shop name is occupied!");
-                } else if (result.status == 800) {
-                    addError($shopEmail, "error email!");
-                } else if (result.status == 900) {
-                    addError($shopTel, "error telephone!");
-                } else if (result.status == 200) {
-                    _this.find("input").addClass("disabled").attr("disabled", true);
-                    _this.find(".applying").text("Successful operation, please wait for the administrator to approve.");
-                }
-            }).fail(function () {
-                if (loading) loading.remove();
-                _this.data("submit", false);
-                //tipsAlert("server error");
-                result = {
-                    status: 500
-                };
-                if (result.status == 300) {
-                    location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
-                } else if (result.status == 500) {
-                    addError($shopName, "shop name is occupied!");
-                } else if (result.status == 800) {
-                    addError($shopEmail, "error email!");
-                } else if (result.status == 900) {
-                    addError($shopTel, "error telephone!");
-                } else if (result.status == 200) {
-                    _this.find("input").addClass("disabled").attr("disabled", true);
-                    _this.find(".applying").text("Successful operation, please wait for the administrator to approve.");
-                }
-            });
+        data: _this.serialize()
+    }).done(function (result) {
+        if (loading) loading.remove();
+        _this.data("submit", false);
+        var status = result.status;
+        if (status == 200) {
+            _this.find("input").addClass("disabled").attr("disabled", true);
+            _this.find(".applying").text("Please go to verify your email first.");
+        } if (status == 300) {
+            location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
+        } else if (status == 400) {
+            addError($shopEmail, "error email!");
+        } else if (status == 500) {
+            addError($shopName, "shop name is occupied!");
+        } else if (status == 900) {
+            addError($shopTel, "error telephone!");
+        } else if(status == 1000 || status == 1010 || status == 1020 || status == 1030 || status ==1040) {
+            tipsAlert("server error");
         }
+    }).fail(function () {
+        if (loading) loading.remove();
+        _this.data("submit", false);
+        tipsAlert("server error");
+        /*result = {
+            status: 500
+        };
+        var status = result.status;
+        if (status == 200) {
+            _this.find("input").addClass("disabled").attr("disabled", true);
+            _this.find(".applying").text("Please go to verify your email first.");
+        } if (status == 300) {
+            location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
+        } else if (status == 400) {
+            addError($shopEmail, "error email!");
+        } else if (status == 500) {
+            addError($shopName, "shop name is occupied!");
+        } else if (status == 900) {
+            addError($shopTel, "error telephone!");
+        } else if(status == 1000 || status == 1010 || status == 1020 || status == 1030 || status ==1040) {
+            tipsAlert("server error");
+        }*/
     });
-});
+}
 
 function createObjectURL(blob) {
     if(window.URL){
@@ -130,6 +170,7 @@ $applyForm.on("change", "#idPhoto", function(e){
     var file=this.files[0];
     var url=createObjectURL(file);
     var $delegateTarget = $(e.delegateTarget);
+    $delegateTarget.data("change", "true");
     var type=file.type.toLowerCase();
     if (!(type==="image/jpg"||type==="image/gif"||type==="image/jpeg"||type==="image/png")){
         tipsAlert("Image format error, the image can only be JPG, GIF, JPEG, PNG format");
@@ -142,6 +183,9 @@ $applyForm.on("change", "#idPhoto", function(e){
     imgY.onload=function(){
         var $imagesPreview = $delegateTarget.find(".imagesPreview");
         var $img = $imagesPreview.find("img");
+        $img.ready(function(){
+            $imagesPreview.height($img.height());
+        });
         $img.attr("src", url);
         imgAuto($img);
         $imagesPreview[0].scrollIntoView();
@@ -186,8 +230,8 @@ var quickMenu = $("#quickMenu");
 quickMenu.on("click", ".logout", function () {
     var _this = $(this);
     $.ajax({
-        type: "post",
-        url: host+"/customer/loginout",
+        method: "post",
+        url: "/proxy/customer/loginout",
         xhrFields: {
             withCredentials: true
         }

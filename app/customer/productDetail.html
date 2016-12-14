@@ -6,7 +6,7 @@
     <title>PARKnSHOP</title>
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
     <link rel="icon" type="image/x-icon" href="../favicon.ico" >
-    <link rel="stylesheet" type="text/css" href="style/order.css">
+    <link rel="stylesheet" type="text/css" href="style/productDetail.css">
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 </head>
 
@@ -74,43 +74,48 @@
 </header>
 <div class="content">
     <!--页面写在这-->
-    <div class="orderDiv">
-        <ul class="orderMain clearfix" id="orderMain">
-            <li class="orderTab active">All Order</li>
-            <li class="orderTab">wait for payment</li>
-            <li class="orderTab">wait for confirming the payment</li>
-            <li class="orderTab">wait for delivery</li>
-            <li class="orderTab">wait for receiving</li>
-            <li class="orderTab">wait for comment</li>
-        </ul>
-        <div class="orderList" id="orderList">
-            <table class="orderTable">
-                <colgroup>
-                    <col class="col1">
-                    <col class="col2">
-                    <col class="col3">
-                    <col class="col4">
-                    <col class="col5">
-                    <col class="col6">
-                </colgroup>
-                <tbody class="orderTh">
-                    <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Total Price</th>
-                        <th>Status</th>
-                        <th>Operate</th>
-                    </tr>
-                </tbody>
-            </table>
-            <div class="more">
-                <div class="showMore hidden">
-                    <span>SHOW MORE</span>
-                    <span class="down"></span>
+    <div class="shop">
+        <span class="shopKey">SHOP:</span>
+        <a href="javascript:" class="shopValue"></a>
+    </div>
+    <div class="productDetail">
+        <form id="productForm" class="clearfix" novalidate>
+            <div class="productImages">
+                <div class="bigImage">
+                    <img src>
+                </div>
+                <ul class="smallImages clearfix">
+                </ul>
+            </div>
+            <div class="productInfo">
+                <h2 class="productName"></h2>
+                <div class="price"><span>HK$</span><span class="priceSpan"></span></div>
+                <div class="quantity">
+                    <label>Quantity:</label>
+                    <div class="quantityOp clearfix">
+                        <span class="minus disabled"></span>
+                        <input type="text" name="quantity" value="1" class="num">
+                        <span class="plus"></span>
+                        <span class="stockText">Pieces <span class="stockSpan"></span> available</span>
+                        <input type="hidden" name="stock" class="stock" value="50">
+                    </div>
+                </div>
+                <div class="buyNow">
+                    <a href="javascript:">Buy Now</a>
+                </div>
+                <div class="otherOp">
+                    <a href="javascript:">Add To Cart</a>
+                    <a href="javascript:">Add To Favorites</a>
                 </div>
             </div>
-        </div>
+        </form>
+    </div>
+    <div class="reviews">
+        <h3 class="reviewTitle">reviews</h3>
+        <ul class="reviewSet">
+            <li class="reviewList">
+            </li>
+        </ul>
     </div>
 </div>
 <footer>
@@ -118,7 +123,7 @@
         © Copyright NoWaterFE
     </div>
 </footer>
-<script type="text/javascript" src="js/order.js"></script>
+<script type="text/javascript" src="js/productDetail.js"></script>
 </body>
 
 </html>

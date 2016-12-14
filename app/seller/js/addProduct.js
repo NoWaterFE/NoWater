@@ -1,4 +1,3 @@
-var host = "http://123.206.100.98:16120";
 // header添加事件
 (function () {
     function delCookie(name){
@@ -12,11 +11,8 @@ var host = "http://123.206.100.98:16120";
     quickMenu.on("click", ".logout", function () {
         var _this = $(this);
         $.ajax({
-            type: "post",
-            url: host+"/customer/loginout",
-            xhrFields: {
-                withCredentials: true
-            }
+            type: "get",
+            url: "/proxy/customer/loginout"
         }).done(function(){
             delCookie("token");
             location.href = "../customer/index.html"
@@ -33,11 +29,12 @@ function showLoading($relative) {
     var $tips = $relative.siblings(".loadingImg");
     if ($tips.length > 0) $tips.remove();
     $tips = $("<div class='loadingImg'></div>");
-    $tips.appendTo($relative.parent())
+    if($relative.css("position")=="static") $relative.css('position', "relative");
+    $tips.appendTo($relative)
         .ready(function () {
             $tips.css({
-                "top": $relative.offset().top + $relative.outerHeight() / 2,
-                "left": $relative.offset().left + $relative.outerWidth() / 2,
+                "top": $relative.outerHeight() / 2,
+                "left": $relative.outerWidth() / 2,
                 "margin-left": -$tips.outerWidth() / 2,
                 "margin-top": -$tips.outerHeight() / 2,
                 "visibility": "visible"
@@ -47,15 +44,15 @@ function showLoading($relative) {
 }
 
 function tipsAlert(msg, callback){
-    var $alert = $(".alert");
+    var $alert = $(".tipsAlert");
     if ($alert.length > 0) $alert.remove();
-    $alert = $("<div class='alert'></div>");
+    $alert = $("<div class='tipsAlert'></div>");
     var $shadow = $("<div class='shadow'></div>");
     var $content = $("<div class='content'></div>");
     var $msg = $("<div class='msg'>"+ msg +"</div>");
     var $btn = $("<div class='btn'>OK</div>");
     $btn.on("click", function () {
-        $(this).parents(".alert").remove();
+        $(this).parents(".tipsAlert").remove();
         if(callback) callback();
     });
     $content.append($msg).append($btn);
@@ -64,8 +61,33 @@ function tipsAlert(msg, callback){
     $alert.appendTo($("body"));
 }
 
+function tipsConfirm(msg, callback){
+    var $confirm = $(".tipsConfirm");
+    if ($confirm.length > 0) $confirm.remove();
+    $confirm = $("<div class='tipsConfirm'></div>");
+    var $shadow = $("<div class='shadow'></div>");
+    var $content = $("<div class='content'></div>");
+    var $msg = $("<div class='msg'>"+ msg +"</div>");
+    var $btn = $('<div class="btn2"> ' +
+        '<div class="cancel">Cancel</div> ' +
+        '<div class="ok">Ok</div> </div>');
+
+    $btn.on("click", ".cancel", function () {
+        $(this).parents(".tipsConfirm").remove();
+    });
+    $btn.on("click", ".ok", function () {
+        $(this).parents(".tipsConfirm").remove();
+        if(callback) callback();
+    });
+    $content.append($msg).append($btn);
+    $confirm.append($shadow)
+        .append($content)
+        .appendTo($("body"));
+}
+
 var $addProduct = $("#addProduct");
 var imagesArray = [];
+var loginUrl = "../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
 
 function createObjectURL(blob) {
     if(window.URL){
@@ -157,7 +179,6 @@ $addProduct.on("submit", function (e) {
         e.returnValue = false;
     }
     var $productName = _this.find(".productName"),
-        $productCategories = _this.find(".productCategories"),
         $productPrice = _this.find(".productPrice"),
         $productStock = _this.find(".productStock"),
         $productImages = _this.find(".productImages");
@@ -182,31 +203,73 @@ $addProduct.on("submit", function (e) {
     _this.data("submit", true);
     var formData = new FormData();
     for(var i=0; i<len; i++){
-        formData.append("photo[]",imagesArray[i]);
+        formData.append("goodsPic[]",imagesArray[i]);
     }
     var loading = showLoading(_this);
+    var $input=_this.find("input[name='detailPhotoList']");
+    if($input.length==0) {
+        $input = $("<input type='hidden' name='detailPhotoList'>");
+        $input.appendTo(_this);
+    }
     $.ajax({
-        type: "post",
-        url: host + "/shop-owner/edit",
+        method: "post",
+        url: "/proxy/picture/upload",
         dataType: "json",
         processData: false,
         contentType: false,
-        xhrFields: {
-            withCredentials: true
-        },
         data: formData
-    }).done(function (result) {
+    }).done(function(result){
+        if(result.status==200){
+            var url = JSON.stringify(result.data);
+            $input.val(url);
+            _this.data("fileNameList", url);
+            $.ajax({
+                method: "post",
+                url: "/proxy/shop-owner/products/edit",
+                dataType: "json",
+                data: _this.serialize()
+            }).done(function (result) {
+                if (loading) loading.remove();
+                _this.data("submit", false);
+                var status = result.status;
+                if(status == 200){
+                    tipsAlert("add product success");
+                    imagesArray.length = 0;
+                    _this[0].reset();
+                    _this.find(".imagesPreview")
+                        .html("")
+                        .height(0);
+                } else if(status == 300) {
+                    location.href = loginUrl;
+                } else if(status == 400) {
+                    location.href = "apply.html";
+                } else if(status == 500) {
+                    addError($productName, "product name can't be the same!");
+                } else {
+                    tipsAlert("server error!");
+                }
+            }).fail(function (result) {
+                /*_this[0].reset();
+                _this.data("submit", false)
+                    .find(".imagesPreview")
+                    .html("")
+                    .height(0);
+                result = {
+                    status: 200
+                };*/
+                if (loading) loading.remove();
+                _this.data("submit", false);
+                tipsAlert("server error");
+            });
+        } else if(result.status==300){
+            location.href = loginUrl;
+        } else {
+            tipsAlert("upload file fail");
+        }
+    }).fail(function(result){
         if (loading) loading.remove();
         _this.data("submit", false);
-        //结果为空不显示'more'
-    }).fail(function (result) {
-        if (loading) loading.remove();
-        _this[0].reset();
-        _this.data("submit", false)
-            .find(".imagesPreview")
-            .html("")
-            .height(0);
-        //tipsAlert("server error");
+        tipsAlert("server error");
     });
 });
 

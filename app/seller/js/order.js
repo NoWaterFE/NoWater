@@ -111,19 +111,22 @@ function　createOrderItem(data){
         'Already delivered ' +
         '</div>';
 
-    var operate = ""
+    var operate = "";
     if(data.status==1){
-        data.statusText = "Pending payment";
+        data.statusText = "wait for payment";
     } else if(data.status==2){
-        data.statusText = "Already paid";
-        operate = delived;
+        data.statusText = "wait for confirming the payment";
     } else if(data.status==3){
-        data.statusText = "To be received";
+        data.statusText = "wait for delivery";
+        operate = delived;
     } else if(data.status==4){
-        data.statusText = "Success order";
+        data.statusText = "wait for receiving";
     } else if(data.status==5){
         data.statusText = "Success order";
+        operate = toBeComment;
     } else if(data.status==6){
+        data.statusText = "Success order";
+    } else if(data.status==7){
         data.statusText = "Order canceled";
     }
     var len = data.products.length,
@@ -378,7 +381,7 @@ var orderStatus = getUrlParam("status");
 
 if(!!orderStatus){
     orderStatus = parseInt(orderStatus);
-    if(!orderStatus || orderStatus<=-1||orderStatus>=5) orderStatus = 0;
+    if(!orderStatus || orderStatus<=-1||orderStatus>=6) orderStatus = 0;
 } else {
     orderStatus = 0;
 }

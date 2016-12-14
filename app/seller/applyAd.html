@@ -6,7 +6,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="style/order.css">
+    <link rel="stylesheet" type="text/css" href="style/applyAd.css">
 </head>
 <body>
 <header>
@@ -80,44 +80,29 @@
         </ul>
     </div>
     <div class="page">
-        <div class="orderDiv">
-            <ul class="orderMain clearfix" id="orderMain">
-                <li class="orderTab active">All Order</li>
-                <li class="orderTab">wait for payment</li>
-                <li class="orderTab">wait for confirming the payment</li>
-                <li class="orderTab">wait for delivery</li>
-                <li class="orderTab">wait for receiving</li>
-                <li class="orderTab">wait for comment</li>
-            </ul>
-            <div class="orderList" id="orderList">
-                <table class="orderTable">
-                    <colgroup>
-                        <col class="col1">
-                        <col class="col2">
-                        <col class="col3">
-                        <col class="col4">
-                        <col class="col5">
-                        <col class="col6">
-                    </colgroup>
-                    <tbody class="orderTh">
-                    <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Amount</th>
-                        <th>Total Price</th>
-                        <th>Status</th>
-                        <th>Operate</th>
-                    </tr>
-                    </tbody>
-                </table>
-                <div class="more">
-                    <div class="showMore hidden">
-                        <span>SHOW MORE</span>
-                        <span class="down"></span>
-                    </div>
+        <form id="applyAd" class="applyAd" novalidate>
+            <h2 class="title">Bidding for homepage ad slot</h2>
+            <div class="input-item amount">
+                <label for="amount" class="redStar">Bidding Price(HK):</label>
+                <input type="text" name="amount" id="amount" placeholder="your bidding price" maxlength="10" required>
+                <span class="tips"></span>
+            </div>
+            <div class="input-item adImage">
+                <label for="adImage" class="redStar">Ad Image:</label>
+                <input type="file" name="adImage" id="adImage" accept="image/gif,image/jpeg,image/jpg,image/png" required>
+                <i>Choose Image</i>
+                <span class="tips"></span>
+            </div>
+            <div class="preview">
+                <h2>IMAGES PREVIEW (the best images size is 1200px*400px)</h2>
+                <div class="imagesPreview">
+                    <img src="" alt="image preview">
                 </div>
             </div>
-        </div>
+            <div class="submit">
+                <input type="submit" value="Bid Now">
+            </div>
+        </form>
     </div>
 </div>
 <footer>
@@ -125,6 +110,6 @@
         © Copyright NoWaterFE
     </div>
 </footer>
-<script type="text/javascript" src="js/order.js"></script>
+<script type="text/javascript" src="js/applyAd.js"></script>
 </body>
 </html>
