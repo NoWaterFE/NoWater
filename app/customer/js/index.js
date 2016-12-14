@@ -259,10 +259,7 @@ function createGoodsItem(data) {
         var _this = $(this);
         $.ajax({
             method: "get",
-            url: "/proxy/customer/loginout",
-            xhrFields: {
-                withCredentials: true
-            }
+            url: "/proxy/customer/loginout"
         }).done(function(){
             delCookie("token");
             location.reload();

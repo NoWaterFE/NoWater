@@ -86,7 +86,7 @@ var  postProductList = (function() {
         if(loading) return ;
         loading = showLoading($(".more"));
         $.ajax({
-            type: "post",
+            type: "get",
             url: "/proxy/shop-owner/products/list",
             dataType: "json",
             data: reqData
@@ -173,7 +173,7 @@ $productList.on("click", ".delete", (function () {
         tipsConfirm("Are you sure to removed the product from shelves?", function(){
             loading = showLoading(_this.parent());
             $.ajax({
-                method: "post",
+                method: "get",
                 url: "/proxy/shop-owner/products/edit",
                 dataType: "json",
                 data: ""

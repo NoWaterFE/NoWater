@@ -77,12 +77,12 @@ applyListSet.on("click", ".applyList .operate", function () {
         alert("server error");
         location.href = "login.html";
         /*result = {
-            status: 200
-        };
-        if(result.status==200){
-            location.reload();
-        } else if(result.status==300){
-            location.href = "login.html";
-        }*/
+         status: 200
+         };
+         if(result.status==200){
+         location.reload();
+         } else if(result.status==300){
+         location.href = "login.html";
+         }*/
     });
 });

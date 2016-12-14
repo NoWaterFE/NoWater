@@ -11,7 +11,7 @@
     quickMenu.on("click", ".logout", function () {
         var _this = $(this);
         $.ajax({
-            method: "post",
+            method: "get",
             url: "/proxy/customer/loginout"
         }).done(function(){
             delCookie("token");
@@ -165,7 +165,7 @@ var postOrder = (function(){
         if(loading) return ;
         loading = showLoading($(".more"));
         $.ajax({
-            method: "post",
+            method: "get",
             url: "",
             dataType: "json"
         }).done(function(result){
