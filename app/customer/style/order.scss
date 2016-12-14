@@ -338,7 +338,8 @@ header {
                     .status {
                         border-right: 1px solid #e5e5e5;
                         &>div {
-                            line-height: 30px;
+                            line-height: 20px;
+                            padding: 5px 0;
                         }
                         .orderDetail {
                             a{

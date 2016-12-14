@@ -232,9 +232,9 @@ header {
             .sImage {
                 float: left;
                 border: 2px solid transparent;
-                margin: 2px;
                 cursor: pointer;
                 font-size: 0;
+                margin: 4px 10px;
                 &.active {
                     border-color: #292d84;
                 }

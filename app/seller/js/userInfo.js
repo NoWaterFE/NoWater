@@ -1,12 +1,8 @@
-var host="http://123.206.100.98:16120",
-    userInfo=null;
+var userInfo=null;
 $.ajax({
-    type: "post",
-    url: host+"/shop-owner/status",
+    type: "get",
+    url: "/proxy/shop-owner/status",
     dataType: "json",
-    xhrFields: {
-        withCredentials: true
-    },
     async: false
 }).done(function (result) {
     if(result.status==200) { //已注册
@@ -17,9 +13,9 @@ $.ajax({
         location.href = "apply.html";
     }
 }).fail(function (result) {
-    /*alert("server error");
-    location.href = "../customer/index.html";*/
-    result = {
+    alert("server error");
+    location.href = "../customer/index.html";
+    /*result = {
         status: 200,
         data: [{
             "shopName": "test2",
@@ -36,5 +32,5 @@ $.ajax({
         location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
     } else {
         location.href = "apply.html";
-    }
+    }*/
 });

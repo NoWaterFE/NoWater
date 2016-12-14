@@ -1,4 +1,3 @@
-var host = "http://123.206.100.98:16120";
 // header添加事件
 (function () {
     function delCookie(name){
@@ -12,11 +11,8 @@ var host = "http://123.206.100.98:16120";
     quickMenu.on("click", ".logout", function () {
         var _this = $(this);
         $.ajax({
-            method: "post",
-            url: host+"/customer/loginout",
-            xhrFields: {
-                withCredentials: true
-            }
+            method: "get",
+            url: "/proxy/customer/loginout"
         }).done(function(){
             delCookie("token");
             location.href = "../customer/index.html"

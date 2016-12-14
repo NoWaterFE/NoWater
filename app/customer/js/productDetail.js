@@ -191,7 +191,7 @@ function createSImageList(imgArray){
                     shopName: "Aokin Official Factory Store",
                     productId: 45,
                     productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                    price: 199.00,
+                    price: "199.00",
                     stock: 50,
                     productImage: [
                         "imgs/product01a.jpg",
@@ -226,7 +226,7 @@ function createSImageList(imgArray){
 
 var $productForm = $("#productForm");
 
-$productForm.on("click", ".sImage", function(){
+$productForm.on("mouseover", ".sImage", function(){
     var _this = $(this);
     if(!_this.hasClass("active")){
         _this.addClass("active")
