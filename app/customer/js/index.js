@@ -1,13 +1,9 @@
-var host="http://123.206.100.98:16120";
 // 首页广告请求
 (function () {
     var $adStore = $("#adStore");
     var getStoreAd = $.ajax({
-        type: "post",
-        url: host+"/customer/shop/ad",
-        xhrFields: {
-            withCredentials: true
-        },
+        method: "get",
+        url: "/proxy/customer/shop/ad",
         dataType: "json"
     });
     getStoreAd.done(function (result) {
@@ -59,11 +55,8 @@ var host="http://123.206.100.98:16120";
 
     var $adGoods = $("#adGoods");
     $.ajax({
-        type: "post",
-        url: host+"/customer/product/ad",
-        xhrFields: {
-            withCredentials: true
-        },
+        method: "get",
+        url: "/proxy/customer/product/ad",
         dataType: "json"
     }).done(function (result) {
         if(result.status==200){
@@ -201,11 +194,8 @@ function createGoodsItem(data) {
 (function () {
     //获取登录信息
     $.ajax({
-        type: "post",
-        url: host+"/customer/isLogin",
-        xhrFields: {
-            withCredentials: true
-        },
+        method: "get",
+        url: "/proxy/customer/isLogin",
         dataType: "json"
     }).done(function (result) {
         if(result.status==200){
@@ -268,8 +258,8 @@ function createGoodsItem(data) {
     quickMenu.on("click", ".logout", function () {
         var _this = $(this);
         $.ajax({
-            type: "post",
-            url: host+"/customer/loginout",
+            method: "get",
+            url: "/proxy/customer/loginout",
             xhrFields: {
                 withCredentials: true
             }
