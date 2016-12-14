@@ -1,4 +1,3 @@
-var host = "http://123.206.100.98:16120";
 // header添加事件
 (function () {
     function delCookie(name){
@@ -12,11 +11,8 @@ var host = "http://123.206.100.98:16120";
     quickMenu.on("click", ".logout", function () {
         var _this = $(this);
         $.ajax({
-            type: "post",
-            url: host+"/customer/loginout",
-            xhrFields: {
-                withCredentials: true
-            }
+            method: "get",
+            url: "/proxy/customer/loginout"
         }).done(function(){
             delCookie("token");
             location.href = "../customer/index.html"
@@ -27,8 +23,14 @@ var host = "http://123.206.100.98:16120";
     });
 })();
 
-function createProductList(productInfo){
-    var op = productInfo.state == 0 ?
+var loginUrl = "../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
+
+var productClass = ["TV & Home Theater", "Computers & Tablets", "Cell Phones",
+    "Cameras & Camcorders", "Audio", "Car Electronics & GPS",
+    "Video, Games, Movies & Music", "Health, Fitness & Sports", "Home & Offic"];
+
+function createProductList(info){
+    var op = info.isDel == 0 ?
     '<div class="operate"> ' +
         '<input type="button" value="modify" class="modify"> ' +
         '<input type="button" value="off" class="delete"> ' +
@@ -39,32 +41,32 @@ function createProductList(productInfo){
     return $('<tr class="productItem"> ' +
         '<td> ' +
             '<div class="productId">' +
-                productInfo.productId +
+                info.productId +
             '</div> ' +
         '</td> ' +
         '<td> ' +
             '<div class="productImg"> ' +
-                '<img src="'+productInfo.productImg+'" > ' +
+                '<img src="'+info.photo[0]+'" > ' +
             '</div> ' +
         '</td> ' +
         '<td> ' +
             '<div class="productName">' +
-                productInfo.productName +
+                info.productName +
             '</div> ' +
         '</td> ' +
         '<td> ' +
             '<div class="class">' +
-                productInfo.class +
+                productClass[info.classId-1] +
             '</div> ' +
         '</td> ' +
         '<td> ' +
             '<div class="price">HK$' +
-                productInfo.price +
+                info.price +
             '</div> ' +
         '</td> ' +
         '<td> ' +
             '<div class="stock">' +
-                productInfo.stock +
+                info.quantityStock +
             '</div> ' +
         '</td> ' +
         '<td> ' +
@@ -76,35 +78,46 @@ function createProductList(productInfo){
 var $productList = $("#productList");
 
 var  postProductList = (function() {
-    var searchKey = null,
-        loading = null;
+    var loading = null,
+        startId = null;
     return function(){
-        var data = "count=20";
-        if(searchKey!==null) data += "&searchKey="+searchKey;
+        var reqData = "count=10";
+        if(startId) reqData +="&startId="+startId;
         if(loading) return ;
         loading = showLoading($(".more"));
         $.ajax({
             type: "post",
-            url: host + "/shop-owner/list",
+            url: "/proxy/shop-owner/products/list",
             dataType: "json",
-            processData: false,
-            contentType: false,
-            xhrFields: {
-                withCredentials: true
-            },
-            data: data
+            data: reqData
         }).done(function (result) {
-            if (loading) {
-                loading.remove();
-                loading = null;
+            var status = result.status;
+            if(status==200){
+                if (loading) {
+                    loading.remove();
+                    loading = null;
+                }
+                var data = result.data,
+                    len = data.length;
+                startId = result.endId;
+                for(var i=0; i<len; i++){
+                    createProductList(data[i])
+                        .data("info", data[i])
+                        .appendTo($productList.find("tbody"));
+                }
+                if(startId!=-1){
+                    $productList.find(".more .showMore").removeClass("hidden");
+                }
+            } else if(status==300) {
+                location.href = loginUrl;
             }
         }).fail(function (result) {
             if (loading) {
                 loading.remove();
                 loading = null;
             }
-            //tipsAlert("server error");
-            result = {
+            tipsAlert("server error");
+            /*result = {
                 productId: 1234,
                 productImg: "imgs/1.jpg",
                 productName: "INFRUITION CLASSIC WATER BOTTLE - GREEN",
@@ -127,7 +140,7 @@ var  postProductList = (function() {
                 if(i%2) createProductList(result).data("info", result).appendTo($productList.find("tbody"));
                 else createProductList(result1).data("info", result1).appendTo($productList.find("tbody"));
             }
-            $productList.find(".more .showMore").removeClass("hidden");
+            $productList.find(".more .showMore").removeClass("hidden");*/
         });
     };
 })();
@@ -140,10 +153,15 @@ $productList.on("click", ".modify", function (e) {
         $modifyProduct = $modifyPop.find(".modifyProduct"),
         info = $productItem.data("info");
     $modifyProduct[0].productName.value = info.productName;
-    $modifyProduct[0].productCategories.options[info.classIndex-1].selected = true;
-    $modifyProduct[0].productPrice.value = info.price;
-    $modifyProduct[0].productStock.value = info.stock;
+    $modifyProduct[0].classId.options[info.classId-1].selected = true;
+    $modifyProduct[0].price.value = info.price;
+    $modifyProduct[0].quantityStock.value = info.quantityStock;
     $modifyProduct[0].productId.value = info.productId;
+    var len = info.photo.length,
+        $imagesPreview = $modifyProduct.find(".imagesPreview");
+    for(var i=0; i<len; i++){
+        $imagesPreview.append(createPreview(info.photo[i], false));
+    }
     $modifyPop.show();
 });
 
@@ -155,12 +173,9 @@ $productList.on("click", ".delete", (function () {
         tipsConfirm("Are you sure to removed the product from shelves?", function(){
             loading = showLoading(_this.parent());
             $.ajax({
-                type: "post",
-                url: host + "/shop-owner/edit",
+                method: "post",
+                url: "/proxy/shop-owner/products/edit",
                 dataType: "json",
-                xhrFields: {
-                    withCredentials: true
-                },
                 data: ""
             }).done(function(result){
                 if(loading) {
@@ -257,11 +272,17 @@ function createObjectURL(blob) {
     }
 }
 
-function createPreview(url){
-    return $('<li class="imagesList blob"> ' +
+function createPreview(url, blob){
+    var fileName = null;
+    if(!blob) {
+        var index = url.lastIndexOf("/");
+        fileName = url.substr(index+1);
+    }
+    var cl = blob ? "blob" : "url";
+    return $('<li class="imagesList"> ' +
         '<img src="'+url+'"> ' +
         '<i class="del"></i> ' +
-        '</li>');
+        '</li>').addClass(cl).data("fileName", fileName);
 }
 
 $modifyProduct.on("focus click", "#productImages", function(e) {
@@ -299,7 +320,7 @@ $modifyProduct.on("change", "#productImages", function(e){
     }
     var imgY=new Image();
     imgY.onload=function(){
-        var preview = createPreview(url);
+        var preview = createPreview(url, true);
         imagesArray.push(file);
         $imagesPreview.append(preview).height(168);
         if(len===0) $imagesPreview[0].scrollIntoView()
@@ -333,15 +354,51 @@ function addError(item, msg){
         .text(msg);
 }
 
+function modifyProduct(_this, loading){
+    var $productName = _this.find(".productName");
+    $.ajax({
+        method: "post",
+        url: "/proxy/shop-owner/products/edit",
+        dataType: "json",
+        data: _this.serialize()
+    }).done(function (result) {
+        if (loading) loading.remove();
+        _this.data("submit", false);
+        var status = result.status;
+        if(status == 200){
+            tipsAlert("modify success", function(){
+                location.reload();
+            });
+        } else if(status == 300) {
+            location.href = loginUrl;
+        } else if(status == 400) {
+            location.href = "apply.html";
+        } else if(status == 500) {
+            addError($productName, "product name can't be the same!");
+        } else {
+            tipsAlert("server error!");
+        }
+    }).fail(function () {
+        if (loading) loading.remove();
+        _this.data("submit", false);
+        //tipsAlert("server error");
+    });
+}
+
+function getDetailPhotoList(_this) {
+    var $imagesList = _this.find(".imagesList.url"),
+        arr = [],
+        len = $imagesList.length;
+    for(var i=0; i<len; i++){
+        arr.push($imagesList.eq(i).data("fileName"));
+    }
+    return arr;
+}
+
 $modifyProduct.on("submit", function (e) {
     var _this = $(this);
-    if (e && e.preventDefault) {
-        e.preventDefault();
-    } else {
-        e.returnValue = false;
-    }
+    e.preventDefault();
     var $productName = _this.find(".productName"),
-        $productCategories = _this.find(".productCategories"),
         $productPrice = _this.find(".productPrice"),
         $productStock = _this.find(".productStock"),
         $productImages = _this.find(".productImages"),
@@ -350,11 +407,11 @@ $modifyProduct.on("submit", function (e) {
         addError($productName, "product name can't be empty!");
         return;
     }
-    if (!floatReg.test(this.productPrice.value)) {
+    if (!floatReg.test(this.price.value)) {
         addError($productPrice, "product price should be number!");
         return;
     }
-    if (!intReg.test(this.productStock.value)) {
+    if (!intReg.test(this.quantityStock.value)) {
         addError($productStock, "product stock should be integer!");
         return;
     }
@@ -365,33 +422,39 @@ $modifyProduct.on("submit", function (e) {
     }
     if(_this.data("submit")) return ;
     _this.data("submit", true);
-    var formData = new FormData();
-    formData.append("productName", this.productName.value);
-    formData.append("productCategories", this.productCategories.value);
-    formData.append("productPrice", this.productPrice.value);
-    formData.append("productStock", this.productStock.value);
-    for(var i=0; i<len; i++){
-        formData.append("photo[]",imagesArray[i]);
-    }
     var loading = showLoading(_this);
-    $.ajax({
-        type: "post",
-        url: host + "/shop-owner/edit",
-        dataType: "json",
-        processData: false,
-        contentType: false,
-        xhrFields: {
-            withCredentials: true
-        },
-        data: formData
-    }).done(function (result) {
-        if (loading) loading.remove();
-        _this.data("submit", false);
-    }).fail(function () {
-        if (loading) loading.remove();
-        _this.data("submit", false);
-        //tipsAlert("server error");
-    });
+    if(imagesArray.length==0){
+        _this[0].detailPhotoList.value = JSON.stringify(getDetailPhotoList(_this));
+        modifyProduct(_this, loading);
+    } else {
+        var formData = new FormData();
+        for(var i=0; i<len; i++){
+            formData.append("goodsPic[]",imagesArray[i]);
+        }
+        $.ajax({
+            method: "post",
+            url: "/proxy/picture/upload",
+            dataType: "json",
+            processData: false,
+            contentType: false,
+            data: formData
+        }).done(function(result){
+            if(result.status==200){
+                var detailPhotoList = getDetailPhotoList(_this);
+                detailPhotoList = detailPhotoList.concat(result.data);
+                _this[0].detailPhotoList.value = JSON.stringify(detailPhotoList);
+                modifyProduct(_this, loading);
+            } else if(result.status==300){
+                location.href = loginUrl;
+            } else {
+                tipsAlert("upload file fail");
+            }
+        }).fail(function(result){
+            if (loading) loading.remove();
+            _this.data("submit", false);
+            tipsAlert("server error");
+        });
+    }
 });
 
 $modifyProduct.on("input", ".input-item input", function () {
@@ -437,7 +500,6 @@ $modifyProduct.on("click", ".cancel", function (e) {
     $delegateTarget[0].reset();
     $delegateTarget.find(".imagesPreview")
         .html("")
-        .height(0)
         .end()
         .parent()
         .hide();

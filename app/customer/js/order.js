@@ -173,33 +173,35 @@ function getUrlParam(name) {
 
 function　createOrderItem(data){
     var pendingPay = '<div class="payNow">' +
-            'Pay now ' +
+            'Pay now' +
         '</div> ' +
         '<div class="cancel">' +
-            'Cancel order ' +
+            'Cancel order' +
         '</div> ';
     var confirmReceived = '<div class="confirmR">' +
-        'Confirm received ' +
+        'Confirm received' +
         '</div> ';
     var toBeComment = '<div class="comment">' +
-        'Comment ' +
+        'Comment' +
         '</div>';
 
-    var operate = ""
+    var operate = "";
     if(data.status==1){
         operate = pendingPay;
-        data.statusText = "Pending payment";
+        data.statusText = "wait for payment";
     } else if(data.status==2){
-        data.statusText = "To be delivered";
+        data.statusText = "wait for confirming the payment";
     } else if(data.status==3){
-        data.statusText = "To be received";
-        operate = confirmReceived;
+        data.statusText = "wait for delivery";
     } else if(data.status==4){
-        data.statusText = "Success order";
-        operate = toBeComment;
+        data.statusText = "wait for receiving";
+        operate = confirmReceived;
     } else if(data.status==5){
         data.statusText = "Success order";
+        operate = toBeComment;
     } else if(data.status==6){
+        data.statusText = "Success order";
+    } else if(data.status==7){
         data.statusText = "Order canceled";
     }
     var len = data.products.length,
@@ -454,7 +456,7 @@ var orderStatus = getUrlParam("status");
 
 if(!!orderStatus){
     orderStatus = parseInt(orderStatus);
-    if(!orderStatus || orderStatus<=-1||orderStatus>=5) orderStatus = 0;
+    if(!orderStatus || orderStatus<=-1||orderStatus>=6) orderStatus = 0;
 } else {
     orderStatus = 0;
 }

@@ -6,6 +6,7 @@
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="js/userInfo.js"></script>
     <link rel="stylesheet" type="text/css" href="style/addProduct.css">
 </head>
 <body>
@@ -84,12 +85,12 @@
             <h2 class="title">Add New Product</h2>
             <div class="input-item productName">
                 <label for="productName" class="redStar">Product Name:</label>
-                <input type="text" name="productName" id="productName" maxlength="50" required>
+                <input type="text" name="productName" id="productName" maxlength="240" required>
                 <span class="tips"></span>
             </div>
             <div class="input-item productCategories">
                 <label for="productCategories" class="redStar">Product Categories:</label>
-                <select name="productCategories" id="productCategories">
+                <select name="classId" id="productCategories">
                     <option value="1">TV & Home Theater</option>
                     <option value="2">Computers & Tablets</option>
                     <option value="3">Cell Phones</option>
@@ -104,12 +105,12 @@
             </div>
             <div class="input-item productPrice">
                 <label for="productPrice" class="redStar">Product Price(HK):</label>
-                <input type="text" name="productPrice" id="productPrice" maxlength="10" required>
+                <input type="text" name="price" id="productPrice" maxlength="10" required>
                 <span class="tips"></span>
             </div>
             <div class="input-item productStock">
                 <label for="productStock" class="redStar">Product Stock:</label>
-                <input type="text" name="productStock" id="productStock" maxlength="10" required>
+                <input type="text" name="quantityStock" id="productStock" maxlength="10" required>
                 <span class="tips"></span>
             </div>
             <div class="input-item productImages">
@@ -119,7 +120,7 @@
                 <span class="tips"></span>
             </div>
             <div class="preview">
-                <h2>IMAGES PREVIEW (the best images size is 300px*300px)</h2>
+                <h2>IMAGES PREVIEW (the best images size is 600px*600px)</h2>
                 <ul class="imagesPreview clearfix">
                 </ul>
             </div>
