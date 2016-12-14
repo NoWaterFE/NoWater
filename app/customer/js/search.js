@@ -85,7 +85,6 @@ $(document).ready(function() {
 })();
 
 function getResult(shopId) {
-    var shopId = arguments[1] ? arguments[1] : null;
     var startId = 0;
     if (!shopId) {
         shopId = 0;
@@ -93,143 +92,18 @@ function getResult(shopId) {
     var $adGoods = $("#adGoods");
     var count = 40;
     var sendData = "keyWord=" + keyWord + "&count=" + count +"&shopId=" + shopId + "&startId=" + startId;
-
-    $.ajax({
-        type: "post",
-        url: host+"/customer/product/search",
-        xhrFields: {
-            withCredentials: true
-        },
-        dataType: "json",
-        data: sendData
-    }).done(function (result) {
-        if(result.status==200){
-            startId = result.startId;
-            if (result.actualCount == 0) {
-                $("#noResult").show();
-                $("#adGoods").hide();
-                return;
-            }
-            for(var i=0; i<result.data.length; i++){
-                var goodItem = createGoodsItem(result.data[i]);
-                $adGoods.append(goodItem);
-            }
-            if(startId != -1) {
-                $("#showMoreButton").show();
-            } else {
-                $("#showMoreButton").hide();
-            }
-        }
-        $adGoods = null;
-    })
-        .fail(function(result){
-            result = {
-                status: 200,
-                actualCount: 10,
-                data: [
-                    {
-                        product_id: 1,
-                        shop_id: 1,
-                        class_id: 1,
-                        product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photo: ["imgs/product02a.jpg"],
-                        is_del: false
-                    },
-                    {
-                        product_id: 2,
-                        shop_id: 1,
-                        class_id: 1,
-                        product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photo: ["imgs/product02a.jpg"],
-                        is_del: false
-                    },
-                    {
-                        product_id: 3,
-                        shop_id: 1,
-                        class_id: 1,
-                        product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photo: ["imgs/product02a.jpg"],
-                        is_del: false
-                    },
-                    {
-                        product_id: 4,
-                        shop_id: 1,
-                        class_id: 1,
-                        product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photo: ["imgs/product02a.jpg"],
-                        is_del: false
-                    },
-                    {
-                        product_id: 5,
-                        shop_id: 1,
-                        class_id: 1,
-                        product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photo: ["imgs/product02a.jpg"],
-                        is_del: false
-                    },
-                    {
-                        product_id: 6,
-                        shop_id: 1,
-                        class_id: 1,
-                        product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photo: ["imgs/product02a.jpg"],
-                        is_del: false
-                    },
-                    {
-                        product_id: 7,
-                        shop_id: 1,
-                        class_id: 1,
-                        product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photo: ["imgs/product02a.jpg"],
-                        is_del: false
-                    },
-                    {
-                        product_id: 8,
-                        shop_id: 1,
-                        class_id: 1,
-                        product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photo: ["imgs/product02a.jpg"],
-                        is_del: false
-                    },
-                    {
-                        product_id: 9,
-                        shop_id: 1,
-                        class_id: 1,
-                        product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photo: ["imgs/product02a.jpg"],
-                        is_del: false
-                    },
-                    {
-                        product_id: 10,
-                        shop_id: 1,
-                        class_id: 1,
-                        product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photo: ["imgs/product02a.jpg"],
-                        is_del: false
-                    }
-                ],
-                startId: -1
-            };
+    var classId = GetQueryString("pt");
+    if (classId) {
+        sendData = "shopId=" + 0 + "&classId=" + classId + "&count=" + count +"&startId" + startId;
+        $.ajax({
+            type: "post",
+            url: host+"/customer/class/product",
+            xhrFields: {
+                withCredentials: true
+            },
+            dataType: "json",
+            data: sendData
+        }).done(function (result) {
             if(result.status==200){
                 startId = result.startId;
                 if (result.actualCount == 0) {
@@ -248,7 +122,291 @@ function getResult(shopId) {
                 }
             }
             $adGoods = null;
-        });
+        })
+        // .fail(function(result){
+        //     result = {
+        //         status: 200,
+        //         actualCount: 10,
+        //         data: [
+        //             {
+        //                 productId: 1,
+        //                 shopId: 1,
+        //                 classId: 1,
+        //                 productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+        //                 price: "998.00",
+        //                 quantityStock: 11,
+        //                 photoUrl: ["imgs/product02a.jpg"],
+        //                 isDel: false
+        //             },
+        //             {
+        //                 productId: 2,
+        //                 shopId: 1,
+        //                 classId: 1,
+        //                 productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+        //                 price: "998.00",
+        //                 quantityStock: 11,
+        //                 photoUrl: ["imgs/product02a.jpg"],
+        //                 isDel: false
+        //             },
+        //             {
+        //                 product_id: 3,
+        //                 shop_id: 1,
+        //                 class_id: 1,
+        //                 product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+        //                 price: "998.00",
+        //                 quantityStock: 11,
+        //                 photo: ["imgs/product02a.jpg"],
+        //                 is_del: false
+        //             },
+        //             {
+        //                 product_id: 4,
+        //                 shop_id: 1,
+        //                 class_id: 1,
+        //                 product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+        //                 price: "998.00",
+        //                 quantityStock: 11,
+        //                 photo: ["imgs/product02a.jpg"],
+        //                 is_del: false
+        //             },
+        //             {
+        //                 product_id: 5,
+        //                 shop_id: 1,
+        //                 class_id: 1,
+        //                 product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+        //                 price: "998.00",
+        //                 quantityStock: 11,
+        //                 photo: ["imgs/product02a.jpg"],
+        //                 is_del: false
+        //             },
+        //             {
+        //                 product_id: 6,
+        //                 shop_id: 1,
+        //                 class_id: 1,
+        //                 product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+        //                 price: "998.00",
+        //                 quantityStock: 11,
+        //                 photo: ["imgs/product02a.jpg"],
+        //                 is_del: false
+        //             },
+        //             {
+        //                 product_id: 7,
+        //                 shop_id: 1,
+        //                 class_id: 1,
+        //                 product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+        //                 price: "998.00",
+        //                 quantityStock: 11,
+        //                 photo: ["imgs/product02a.jpg"],
+        //                 is_del: false
+        //             },
+        //             {
+        //                 product_id: 8,
+        //                 shop_id: 1,
+        //                 class_id: 1,
+        //                 product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+        //                 price: "998.00",
+        //                 quantityStock: 11,
+        //                 photo: ["imgs/product02a.jpg"],
+        //                 is_del: false
+        //             },
+        //             {
+        //                 product_id: 9,
+        //                 shop_id: 1,
+        //                 class_id: 1,
+        //                 product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+        //                 price: "998.00",
+        //                 quantityStock: 11,
+        //                 photo: ["imgs/product02a.jpg"],
+        //                 is_del: false
+        //             },
+        //             {
+        //                 product_id: 10,
+        //                 shop_id: 1,
+        //                 class_id: 1,
+        //                 product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+        //                 price: "998.00",
+        //                 quantityStock: 11,
+        //                 photo: ["imgs/product02a.jpg"],
+        //                 is_del: false
+        //             }
+        //         ],
+        //         startId: -1
+        //     };
+        //     if(result.status==200){
+        //         startId = result.startId;
+        //         if (result.actualCount == 0) {
+        //             $("#noResult").show();
+        //             $("#adGoods").hide();
+        //             return;
+        //         }
+        //         for(var i=0; i<result.data.length; i++){
+        //             var goodItem = createGoodsItem(result.data[i]);
+        //             $adGoods.append(goodItem);
+        //         }
+        //         if(startId != -1) {
+        //             $("#showMoreButton").show();
+        //         } else {
+        //             $("#showMoreButton").hide();
+        //         }
+        //     }
+        //     $adGoods = null;
+        // });
+    } else {
+        $.ajax({
+            type: "post",
+            url: host+"/customer/product/search",
+            xhrFields: {
+                withCredentials: true
+            },
+            dataType: "json",
+            data: sendData
+        }).done(function (result) {
+            if(result.status==200){
+                startId = result.startId;
+                if (result.actualCount == 0) {
+                    $("#noResult").show();
+                    $("#adGoods").hide();
+                    return;
+                }
+                for(var i=0; i<result.data.length; i++){
+                    var goodItem = createGoodsItem(result.data[i]);
+                    $adGoods.append(goodItem);
+                }
+                if(startId != -1) {
+                    $("#showMoreButton").show();
+                } else {
+                    $("#showMoreButton").hide();
+                }
+            }
+            $adGoods = null;
+        })
+        // .fail(function(result){
+        //     result = {
+        //         status: 200,
+        //         actualCount: 10,
+        //         data: [
+        //             {
+        //                 product_id: 1,
+        //                 shop_id: 1,
+        //                 class_id: 1,
+        //                 product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+        //                 price: "998.00",
+        //                 quantityStock: 11,
+        //                 photo: ["imgs/product02a.jpg"],
+        //                 is_del: false
+        //             },
+        //             {
+        //                 product_id: 2,
+        //                 shop_id: 1,
+        //                 class_id: 1,
+        //                 product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+        //                 price: "998.00",
+        //                 quantityStock: 11,
+        //                 photo: ["imgs/product02a.jpg"],
+        //                 is_del: false
+        //             },
+        //             {
+        //                 product_id: 3,
+        //                 shop_id: 1,
+        //                 class_id: 1,
+        //                 product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+        //                 price: "998.00",
+        //                 quantityStock: 11,
+        //                 photo: ["imgs/product02a.jpg"],
+        //                 is_del: false
+        //             },
+        //             {
+        //                 product_id: 4,
+        //                 shop_id: 1,
+        //                 class_id: 1,
+        //                 product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+        //                 price: "998.00",
+        //                 quantityStock: 11,
+        //                 photo: ["imgs/product02a.jpg"],
+        //                 is_del: false
+        //             },
+        //             {
+        //                 product_id: 5,
+        //                 shop_id: 1,
+        //                 class_id: 1,
+        //                 product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+        //                 price: "998.00",
+        //                 quantityStock: 11,
+        //                 photo: ["imgs/product02a.jpg"],
+        //                 is_del: false
+        //             },
+        //             {
+        //                 product_id: 6,
+        //                 shop_id: 1,
+        //                 class_id: 1,
+        //                 product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+        //                 price: "998.00",
+        //                 quantityStock: 11,
+        //                 photo: ["imgs/product02a.jpg"],
+        //                 is_del: false
+        //             },
+        //             {
+        //                 product_id: 7,
+        //                 shop_id: 1,
+        //                 class_id: 1,
+        //                 product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+        //                 price: "998.00",
+        //                 quantityStock: 11,
+        //                 photo: ["imgs/product02a.jpg"],
+        //                 is_del: false
+        //             },
+        //             {
+        //                 product_id: 8,
+        //                 shop_id: 1,
+        //                 class_id: 1,
+        //                 product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+        //                 price: "998.00",
+        //                 quantityStock: 11,
+        //                 photo: ["imgs/product02a.jpg"],
+        //                 is_del: false
+        //             },
+        //             {
+        //                 product_id: 9,
+        //                 shop_id: 1,
+        //                 class_id: 1,
+        //                 product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+        //                 price: "998.00",
+        //                 quantityStock: 11,
+        //                 photo: ["imgs/product02a.jpg"],
+        //                 is_del: false
+        //             },
+        //             {
+        //                 product_id: 10,
+        //                 shop_id: 1,
+        //                 class_id: 1,
+        //                 product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+        //                 price: "998.00",
+        //                 quantityStock: 11,
+        //                 photo: ["imgs/product02a.jpg"],
+        //                 is_del: false
+        //             }
+        //         ],
+        //         startId: -1
+        //     };
+        //     if(result.status==200){
+        //         startId = result.startId;
+        //         if (result.actualCount == 0) {
+        //             $("#noResult").show();
+        //             $("#adGoods").hide();
+        //             return;
+        //         }
+        //         for(var i=0; i<result.data.length; i++){
+        //             var goodItem = createGoodsItem(result.data[i]);
+        //             $adGoods.append(goodItem);
+        //         }
+        //         if(startId != -1) {
+        //             $("#showMoreButton").show();
+        //         } else {
+        //             $("#showMoreButton").hide();
+        //         }
+        //     }
+        //     $adGoods = null;
+        // });
+    }
 }
 
 function setText() {
@@ -260,7 +418,6 @@ function setText() {
         $("#tips").text(value+"\'"+keyWord+"\'");
         $("#keyWord").val(keyWord);
     }
-
 }
 
 function GetQueryString(name) {
@@ -298,10 +455,10 @@ function createGoodsItem(data) {
     return $('<li class="goods-item"> ' +
         '<div class="item-detail"> ' +
         '<div class="item-image"> ' +
-        '<img src="'+data.photo[0]+'"> ' +
+        '<img src="'+data.photoUrl[0]+'"> ' +
         '</div> ' +
         '<div class="item-name"> ' +
-        data.product_name +
+        data.productName +
         '</div> ' +
         '</div> ' +
         '<div class="item-prices"> HK$' +
@@ -315,5 +472,5 @@ function createGoodsItem(data) {
         '<i></i><span>ADD TO FAVORITES</span> ' +
         '</div> ' +
         '</div> ' +
-        '</li>').data("goodId", data.product_id);
+        '</li>').data("goodId", data.productId);
 }
