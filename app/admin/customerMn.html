@@ -6,7 +6,8 @@
     <title>PARKnSHOP</title>
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
     <link rel="icon" type="image/x-icon" href="../favicon.ico" >
-    <link rel="stylesheet" type="text/css" href="style/example.css">
+    <!-- <link rel="stylesheet" type="text/css" href="style/example.css"> -->
+    <link rel="stylesheet" type="text/css" href="style/customerMn.css">
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 </head>
 
@@ -36,13 +37,19 @@
         </div>
     </header>
     <div class="main">
+        <div id="cen-homeInfo-search">
+          <div id="hi-head">
+            <label>Customer List</label>
+            <input class="text" type="text" placeholder="enter the search content"/>
+            <input class="btn" type="button" value="search"/>
+             <!-- <a href="homeInfo-addingMumber.html"><input class="btn" type="button" value="添加"/></a> -->
+        </div>
         <!--页面在这写-->
-        <h3 class="applyTitle">New Shop ID Apply List</h3>
-        <ul class="applyListSet" id="applyListSet">
+        <ul class="applyListSet" id="userMn">
         </ul>
     </div>
 </div>
-<script type="text/javascript" src="js/example.js"></script>
+<script type="text/javascript" src="js/customerMn.js"></script>
 </body>
 
 </html>
