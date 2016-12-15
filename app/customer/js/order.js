@@ -179,21 +179,21 @@ function　createOrderItem(data){
     var operate = "";
     if(data.status==1){
         operate = pendingPay;
-        data.statusText = "wait for payment";
+        data.statusText = "Waiting for payment";
     } else if(data.status==2){
-        data.statusText = "wait for confirming the payment";
+        data.statusText = "Waiting for payment confirmation";
     } else if(data.status==3){
-        data.statusText = "wait for delivery";
+        data.statusText = "Waiting for delivery";
     } else if(data.status==4){
-        data.statusText = "wait for receiving";
+        data.statusText = "Waiting for receiving";
         operate = confirmReceived;
     } else if(data.status==5){
-        data.statusText = "Success order";
+        data.statusText = "Completed";
         operate = toBeComment;
     } else if(data.status==6){
-        data.statusText = "Success order";
+        data.statusText = "Completed";
     } else if(data.status==7){
-        data.statusText = "Order canceled";
+        data.statusText = "Closed";
     }
     var len = data.products.length,
         orderData = null;
@@ -253,7 +253,7 @@ var postOrder = (function(){
         if(loading) return ;
         loading = showLoading($(".more"));
         $.ajax({
-            method: "post",
+            method: "get",
             url: "",
             dataType: "json"
         }).done(function(result){
@@ -444,13 +444,11 @@ var orderStatus = getUrlParam("status");
 
 if(!!orderStatus){
     orderStatus = parseInt(orderStatus);
-    if(!orderStatus || orderStatus<=-1||orderStatus>=6) orderStatus = 0;
+    if(!orderStatus || orderStatus<=-1||orderStatus>=5) orderStatus = 0;
 } else {
     orderStatus = 0;
 }
 $orderMain.find(".orderTab")
     .eq(orderStatus)
-    .addClass("active")
-    .siblings()
-    .removeClass("active");
+    .addClass("active");
 postOrder(orderStatus);

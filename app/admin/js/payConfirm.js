@@ -13,6 +13,12 @@ $logoutBtn.click(function () {
     });
 });
 
+function delCookie(name){
+    var t = new Date();
+    t.setTime(t.getTime()-1);
+    document.cookie= name + "=null;path=/;expires="+t.toGMTString();
+}
+
 
 function showLoading($relative) {
     var $tips = $relative.siblings(".loadingImg");
