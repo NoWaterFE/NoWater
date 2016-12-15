@@ -9,7 +9,7 @@ body {
 }
 .nav {
     float: left;
-    background: #2F3847;
+    background: #232a32;
     width: 240px;
     height: 100%;
     position: relative;
@@ -17,7 +17,9 @@ body {
     overflow-x: hidden;
     overflow-y: auto;
     .navList {
-        border-bottom: 1px solid #666;
+        border-top: 1px solid #272e37;
+        border-bottom: 1px solid #1F2429;
+        overflow: visible;
         a {
             display: block;
             line-height: 40px;
@@ -25,19 +27,36 @@ body {
             padding-left: 20px;
         }
         &:first-child {
-            border-top: 1px solid #666;
             margin-top: 75px;
+            &:before {
+                content: "";
+                display: block;
+                border-bottom: 1px solid #1F2429;
+            }
+        }
+        &:last-child {
+            &:after {
+                content: "";
+                display: block;
+                border-top: 1px solid #272e37;
+            }
         }
         &:hover {
             a {
-                color: #ffb800;
+                border-left: 5px solid #008edd;
             }
+            /*a {
+                color: #ffb800;
+            }*/
         }
         &.active {
             a {
+                border-left: 4px solid #008edd;
+            }
+            /*a {
                 background: gray;
                 color: #fff;
-            }
+            }*/
         }
     }
 }

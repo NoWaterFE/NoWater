@@ -231,10 +231,7 @@ quickMenu.on("click", ".logout", function () {
     var _this = $(this);
     $.ajax({
         method: "post",
-        url: "/proxy/customer/loginout",
-        xhrFields: {
-            withCredentials: true
-        }
+        url: "/proxy/customer/loginout"
     }).done(function(){
         delCookie("token");
         location.href = "../customer";

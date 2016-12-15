@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>PARKnSHOP</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="stylesheet" type="text/css" href="style/payConfirm.css">
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+</head>
+
+<body>
+<div class="nav">
+    <ul>
+        <li class="navList"><a href="">Shop Management</a></li>
+        <li class="navList"><a href="">Customer Management</a></li>
+        <li class="navList"><a href="">Shop Application</a></li>
+        <li class="navList"><a href="">Shop AD Application</a></li>
+        <li class="navList"><a href="">Goods AD Application</a></li>
+        <li class="navList active"><a href="payConfirm.html">Payment Confirmation</a></li>
+    </ul>
+</div>
+<div class="content">
+    <header>
+        <div class="header">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="imgs/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="logout">
+                <span class="logoutBtn" id="logoutBtn">
+                    Logout
+                </span>
+            </div>
+        </div>
+    </header>
+    <div class="main">
+        <!--页面在这写-->
+        <div class="payConfirm">
+            <h2 class="title">Payment Confirmation</h2>
+            <div class="payList"  id="payList">
+                <table class="payTable">
+                    <colgroup>
+                        <col class="col1">
+                        <col class="col2">
+                        <col class="col3">
+                        <col class="col4">
+                        <col class="col5">
+                    </colgroup>
+                    <tbody>
+                    <tr class="payTh">
+                        <th>Date</th>
+                        <th>Payment No</th>
+                        <th>Alipay Username</th>
+                        <th class="amount">Amount(HK$)</th>
+                        <th class="operate">Operate</th>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="more">
+                    <div class="showMore hidden">
+                        <span>SHOW MORE</span>
+                        <span class="down"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="js/payConfirm.js"></script>
+</body>
+
+</html>
