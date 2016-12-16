@@ -1,15 +1,9 @@
-var host="http://123.206.100.98:16120";
-
-
 // header添加事件
 (function () {
     //获取登录信息可能不需要
     /*$.ajax({
-     method: "post",
-     url: host+"/customer/isLogin",
-     xhrFields: {
-     withCredentials: true
-     },
+     method: "get",
+     url: "/proxy/customer/isLogin",
      dataType: "json"
      }).done(function (result) {
      if(result.status==200){
@@ -72,11 +66,8 @@ var host="http://123.206.100.98:16120";
     quickMenu.on("click", ".logout", function () {
         var _this = $(this);
         $.ajax({
-            type: "post",
-            url: host+"/customer/loginout",
-            xhrFields: {
-                withCredentials: true
-            }
+            method: "get",
+            url: "/proxy/customer/loginout",
         }).done(function(){
             delCookie("token");
             location.reload();
@@ -188,21 +179,21 @@ function　createOrderItem(data){
     var operate = "";
     if(data.status==1){
         operate = pendingPay;
-        data.statusText = "wait for payment";
+        data.statusText = "Waiting for payment";
     } else if(data.status==2){
-        data.statusText = "wait for confirming the payment";
+        data.statusText = "Waiting for payment confirmation";
     } else if(data.status==3){
-        data.statusText = "wait for delivery";
+        data.statusText = "Waiting for delivery";
     } else if(data.status==4){
-        data.statusText = "wait for receiving";
+        data.statusText = "Waiting for receiving";
         operate = confirmReceived;
     } else if(data.status==5){
-        data.statusText = "Success order";
+        data.statusText = "Completed";
         operate = toBeComment;
     } else if(data.status==6){
-        data.statusText = "Success order";
+        data.statusText = "Completed";
     } else if(data.status==7){
-        data.statusText = "Order canceled";
+        data.statusText = "Closed";
     }
     var len = data.products.length,
         orderData = null;
@@ -262,11 +253,8 @@ var postOrder = (function(){
         if(loading) return ;
         loading = showLoading($(".more"));
         $.ajax({
-            method: "post",
-            url: host+"",
-            xhrFields: {
-                withCredentials: true
-            },
+            method: "get",
+            url: "",
             dataType: "json"
         }).done(function(result){
 
@@ -456,13 +444,11 @@ var orderStatus = getUrlParam("status");
 
 if(!!orderStatus){
     orderStatus = parseInt(orderStatus);
-    if(!orderStatus || orderStatus<=-1||orderStatus>=6) orderStatus = 0;
+    if(!orderStatus || orderStatus<=-1||orderStatus>=5) orderStatus = 0;
 } else {
     orderStatus = 0;
 }
 $orderMain.find(".orderTab")
     .eq(orderStatus)
-    .addClass("active")
-    .siblings()
-    .removeClass("active");
+    .addClass("active");
 postOrder(orderStatus);

@@ -1,6 +1,6 @@
 var userInfo=null;
 $.ajax({
-    type: "get",
+    method: "get",
     url: "/proxy/shop-owner/status",
     dataType: "json",
     async: false
@@ -13,8 +13,8 @@ $.ajax({
         location.href = "apply.html";
     }
 }).fail(function (result) {
-    alert("server error");
-    location.href = "../customer/index.html";
+    /*alert("server error");
+    location.href = "../customer/index.html";*/
     /*result = {
         status: 200,
         data: [{

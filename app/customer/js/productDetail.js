@@ -1,15 +1,9 @@
-var host="http://123.206.100.98:16120";
-
-
 // header添加事件
 (function () {
     //获取登录信息可能不需要
     /*$.ajax({
-     method: "post",
-     url: host+"/customer/isLogin",
-     xhrFields: {
-     withCredentials: true
-     },
+     method: "get",
+     url: "/proxy/customer/isLogin",
      dataType: "json"
      }).done(function (result) {
      if(result.status==200){
@@ -72,11 +66,8 @@ var host="http://123.206.100.98:16120";
     quickMenu.on("click", ".logout", function () {
         var _this = $(this);
         $.ajax({
-            method: "post",
-            url: host+"/customer/loginout",
-            xhrFields: {
-                withCredentials: true
-            }
+            method: "get",
+            url: "/proxy/customer/loginout"
         }).done(function(){
             delCookie("token");
             location.reload();
@@ -177,10 +168,7 @@ function createSImageList(imgArray){
 (function(){
     $.ajax({
         method: "get",
-        url: host+"/",
-        xhrFields: {
-            withCredentials: true
-        }
+        url: "/proxy/"
     }).done(function (result) {
 
     }).fail(function (result) {

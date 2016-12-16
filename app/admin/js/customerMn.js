@@ -1,16 +1,16 @@
-var applyListSet = $("#applyListSet");
+var applyListSet = $("#userMn");
 
 function createApplyList(list) {
     var r = $('<li class="applyList"> ' +
         '<table> ' +
         '<tbody> ' +
         '<tr> ' +
-        '<th class="big">shopName</th> ' +
+        '<th --class="big">customerName</th> ' +
         '<th>telephone</th> ' +
-        '<th>shopId</th> ' +
-        '<th>ownerId</th> ' +
+        '<th>customerID</th> ' +
+        '<th class="big">adress</th> ' +
         '<th class="big">email</th> ' +
-        '<th class="approve operate">approve</th> ' +
+        '<th class="approve operate">Delete</th> ' +
         '</tr> ' +
         '<tr> ' +
         '<td>'+list.shopName+'</td> ' +
@@ -18,7 +18,7 @@ function createApplyList(list) {
         '<td>'+list.shopId+'</td> ' +
         '<td>'+list.ownerId+'</td> ' +
         '<td>'+list.email+'</td>' +
-        '<td class="reject operate">reject</td> ' +
+        '<td class="reject operate">Add to blacklist</td> ' +
         '</tr>' +
         '</tbody> ' +
         '</table> ' +
@@ -77,12 +77,12 @@ applyListSet.on("click", ".applyList .operate", function () {
         alert("server error");
         location.href = "login.html";
         /*result = {
-            status: 200
-        };
-        if(result.status==200){
-            location.reload();
-        } else if(result.status==300){
-            location.href = "login.html";
-        }*/
+         status: 200
+         };
+         if(result.status==200){
+         location.reload();
+         } else if(result.status==300){
+         location.href = "login.html";
+         }*/
     });
 });

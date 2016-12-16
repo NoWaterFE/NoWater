@@ -60,8 +60,8 @@ function createProductList(info){
             '</div> ' +
         '</td> ' +
         '<td> ' +
-            '<div class="price">HK$' +
-                info.price +
+            '<div class="price">' +
+                info.price.toFixed(2) +
             '</div> ' +
         '</td> ' +
         '<td> ' +
@@ -86,17 +86,17 @@ var  postProductList = (function() {
         if(loading) return ;
         loading = showLoading($(".more"));
         $.ajax({
-            type: "post",
+            type: "get",
             url: "/proxy/shop-owner/products/list",
             dataType: "json",
             data: reqData
         }).done(function (result) {
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
             var status = result.status;
             if(status==200){
-                if (loading) {
-                    loading.remove();
-                    loading = null;
-                }
                 var data = result.data,
                     len = data.length;
                 startId = result.endId;
@@ -119,26 +119,16 @@ var  postProductList = (function() {
             tipsAlert("server error");
             /*result = {
                 productId: 1234,
-                productImg: "imgs/1.jpg",
+                photo: ["imgs/1.jpg"],
                 productName: "INFRUITION CLASSIC WATER BOTTLE - GREEN",
                 class: "Video, Games, Movies & Music",
-                classIndex: 6,
-                price: "99.00",
-                stock: 798,
-                state: 0
-            };
-            var result1 = {
-                productId: 4321,
-                productImg: "imgs/product01a.jpg",
-                productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                class: "Cameras & Camcorders",
-                classIndex: 4,
-                price: "59.00",
-                stock: 699
+                classId: 6,
+                price: 99,
+                quantityStock: 798,
+                isDel: 0
             };
             for(var i=0; i<10; i++){
-                if(i%2) createProductList(result).data("info", result).appendTo($productList.find("tbody"));
-                else createProductList(result1).data("info", result1).appendTo($productList.find("tbody"));
+                createProductList(result).data("info", result).appendTo($productList.find("tbody"));
             }
             $productList.find(".more .showMore").removeClass("hidden");*/
         });
@@ -173,7 +163,7 @@ $productList.on("click", ".delete", (function () {
         tipsConfirm("Are you sure to removed the product from shelves?", function(){
             loading = showLoading(_this.parent());
             $.ajax({
-                method: "post",
+                method: "get",
                 url: "/proxy/shop-owner/products/edit",
                 dataType: "json",
                 data: ""

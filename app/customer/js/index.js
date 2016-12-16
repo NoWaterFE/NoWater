@@ -1,13 +1,9 @@
-var host="http://123.206.100.98:16120";
 // 首页广告请求
 (function () {
     var $adStore = $("#adStore");
     var getStoreAd = $.ajax({
-        type: "post",
-        url: host+"/customer/shop/ad",
-        xhrFields: {
-            withCredentials: true
-        },
+        method: "get",
+        url: "/proxy/customer/shop/ad",
         dataType: "json"
     });
     getStoreAd.done(function (result) {
@@ -59,11 +55,8 @@ var host="http://123.206.100.98:16120";
 
     var $adGoods = $("#adGoods");
     $.ajax({
-        type: "post",
-        url: host+"/customer/product/ad",
-        xhrFields: {
-            withCredentials: true
-        },
+        method: "get",
+        url: "/proxy/customer/product/ad",
         dataType: "json"
     }).done(function (result) {
         if(result.status==200){
@@ -82,7 +75,7 @@ var host="http://123.206.100.98:16120";
                     {
                         productId: 1,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998,
                         photoIdUrl: "imgs/product01a.jpg",
                         quantityStock: 11,
                         size: "1 PC"
@@ -90,7 +83,7 @@ var host="http://123.206.100.98:16120";
                     {
                         productId: 2,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         photoIdUrl: "imgs/product02a.jpg",
                         quantityStock: 11,
                         size: "1 PC"
@@ -98,7 +91,7 @@ var host="http://123.206.100.98:16120";
                     {
                         productId: 3,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         photoIdUrl: "imgs/product03a.jpg",
                         quantityStock: 11,
                         size: "1 PC"
@@ -106,7 +99,7 @@ var host="http://123.206.100.98:16120";
                     {
                         productId: 4,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         photoIdUrl: "imgs/product04a.jpg",
                         quantityStock: 11,
                         size: "1 PC"
@@ -114,7 +107,7 @@ var host="http://123.206.100.98:16120";
                     {
                         productId: 5,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         photoIdUrl: "imgs/product05a.jpg",
                         quantityStock: 11,
                         size: "1 PC"
@@ -122,7 +115,7 @@ var host="http://123.206.100.98:16120";
                     {
                         productId: 6,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         photoIdUrl: "imgs/product01a.jpg",
                         quantityStock: 11,
                         size: "1 PC"
@@ -130,7 +123,7 @@ var host="http://123.206.100.98:16120";
                     {
                         productId: 7,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         photoIdUrl: "imgs/product02a.jpg",
                         quantityStock: 11,
                         size: "1 PC"
@@ -138,7 +131,7 @@ var host="http://123.206.100.98:16120";
                     {
                         productId: 8,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         photoIdUrl: "imgs/product03a.jpg",
                         quantityStock: 11,
                         size: "1 PC"
@@ -146,7 +139,7 @@ var host="http://123.206.100.98:16120";
                     {
                         productId: 9,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         photoIdUrl: "imgs/product04a.jpg",
                         quantityStock: 11,
                         size: "1 PC"
@@ -154,7 +147,7 @@ var host="http://123.206.100.98:16120";
                     {
                         productId: 10,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         photoIdUrl: "imgs/product05a.jpg",
                         quantityStock: 11,
                         size: "1 PC"
@@ -183,7 +176,7 @@ function createGoodsItem(data) {
             '</div> ' +
         '</div> ' +
         '<div class="item-prices"> HK$' +
-            data.price +
+            data.price.toFixed(2) +
         '</div> ' +
         '<div class="item-operate"> ' +
             '<div class="add-to-cart"> ' +
@@ -201,11 +194,8 @@ function createGoodsItem(data) {
 (function () {
     //获取登录信息
     $.ajax({
-        type: "post",
-        url: host+"/customer/isLogin",
-        xhrFields: {
-            withCredentials: true
-        },
+        method: "get",
+        url: "/proxy/customer/isLogin",
         dataType: "json"
     }).done(function (result) {
         if(result.status==200){
@@ -268,11 +258,8 @@ function createGoodsItem(data) {
     quickMenu.on("click", ".logout", function () {
         var _this = $(this);
         $.ajax({
-            type: "post",
-            url: host+"/customer/loginout",
-            xhrFields: {
-                withCredentials: true
-            }
+            method: "get",
+            url: "/proxy/customer/loginout"
         }).done(function(){
             delCookie("token");
             location.reload();

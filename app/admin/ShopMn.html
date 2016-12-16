@@ -1,71 +1,56 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>PARKnSHOP</title>
-    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
-    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" >
+    <!-- <link rel="stylesheet" type="text/css" href="style/example.css"> -->
+    <link rel="stylesheet" type="text/css" href="style/customerMn.css">
+    <link rel="stylesheet" type="text/css" href="style/shopMn.css">
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="style/index.css">
-    <link rel="stylesheet" href="style/applyList.css">
 </head>
+
 <body>
-<header>
-    <div class="header">
-        <div class="logo">
-            <a href="../customer/index.html">
-                <img src="imgs/logo.png" alt="logo">
-            </a>
-        </div>
-        <ul class="quick-menu" id="quickMenu">
-            <li class="account">
-                <a href="javascript:;">
-                    <i></i><span>ACCOUNT</span>
+<div class="nav">
+    <ul>
+        <li class="navList"><a href="">Shop Management</a></li>
+        <li class="navList"><a href="">Customer Management</a></li>
+        <li class="navList active"><a href="">Shop Application</a></li>
+        <li class="navList"><a href="">Shop AD Application</a></li>
+        <li class="navList"><a href="">Goods AD Application</a></li>
+    </ul>
+</div>
+<div class="content">
+    <header>
+        <div class="header">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="imgs/logo.png" alt="logo">
                 </a>
-                <ul class="accountOperate noLogin">
-                    <li><a href="register.html">Register</a></li>
-                    <li><a href="login.html">Login</a></li>
-                </ul>
-                <ul class="accountOperate hasLogin active">
-                    <li><a href="userCenter.html">Account Info</a></li>
-                    <li><a href="javascript:;" class="logout">Logout</a></li>
-                </ul>
-            </li>
+            </div>
+            <div class="logout">
+                <span class="logoutBtn">
+                    Logout
+                </span>
+            </div>
+        </div>
+    </header>
+    <div class="main">
+        <div id="cen-homeInfo-search">
+          <div id="hi-head">
+            <label>Shop List</label>
+            <input class="text" type="text" placeholder="enter the search content"/>
+            <input class="btn" type="button" value="search"/>
+             <!-- <a href="homeInfo-addingMumber.html"><input class="btn" type="button" value="添加"/></a> -->
+        </div>
+        <!--页面在这写-->
+        <ul class="applyListSet" id="shopMn">
         </ul>
     </div>
-</header>
-<div class="content clearfix">
-    <div class="nav">
-        <ul>
-            <li class="category">
-                <a href="ShopAD.html" class="title">Shop&nbsp; AD &nbsp; Application</a>                   
-            </li>
-             <li class="category">
-                <a href="GoodsAD.html" class="title">Goods AD Application</a>        
-            </li>
-            <li class="category">
-                <a href="ShopAp.html" class="title">Shop &nbsp; Application</a>    
-            </li>
-            <li class="category active">
-                <a href="ShopMn.html" class="title">Shop Management</a>   
-            </li>
-            <li class="category">
-                <a href="UserMn.html" class="title">User&nbsp;Management</a>   
-            </li>
-        </ul>
-    </div>
-    <div>
-	<h3 class="applyTitle">New Shop Owner Apply List</h3>
-	<ul class="applyListSet" id="applyListSet">
-	</ul>
 </div>
-</div>
-<footer>
-    <div class="footer">
-        © Copyright NoWaterFE
-    </div>
-</footer>
-<script type="text/javascript" src="js/index.js"></script>
-<script type="text/javascript" src="js/applyList.js"></script>
+<script type="text/javascript" src="js/shopMn.js"></script>
 </body>
+
 </html>

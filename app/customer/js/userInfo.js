@@ -1,8 +1,7 @@
-var host="http://123.206.100.98:16120",
-    userInfo=null;
+var userInfo=null;
 $.ajax({
-    type: "post",
-    url: host+"/customer/isLogin",
+    method: "get",
+    url: "/proxy/customer/isLogin",
     dataType: "json",
     async: false
 }).done(function (result) {

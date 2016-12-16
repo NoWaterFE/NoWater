@@ -1,0 +1,102 @@
+html{
+    height: 100%;
+}
+body {
+    background: #F8F8F8;
+    min-width: 1200px;
+    height: 100%;
+    min-height:100%;
+}
+.nav {
+    float: left;
+    background: #232a32;
+    width: 240px;
+    height: 100%;
+    position: relative;
+    z-index: 100;
+    overflow-x: hidden;
+    overflow-y: auto;
+    .navList {
+        border-top: 1px solid #272e37;
+        border-bottom: 1px solid #1F2429;
+        overflow: visible;
+        a {
+            display: block;
+            line-height: 40px;
+            color: white;
+            padding-left: 20px;
+        }
+        &:first-child {
+            margin-top: 75px;
+            &:before {
+                content: "";
+                display: block;
+                border-bottom: 1px solid #1F2429;
+            }
+        }
+        &:last-child {
+            &:after {
+                content: "";
+                display: block;
+                border-top: 1px solid #272e37;
+            }
+        }
+        &:hover {
+            a {
+                border-left: 5px solid #008edd;
+            }
+            /*a {
+                color: #ffb800;
+            }*/
+        }
+        &.active {
+            a {
+                border-left: 4px solid #008edd;
+            }
+            /*a {
+                background: gray;
+                color: #fff;
+            }*/
+        }
+    }
+}
+
+.content {
+    overflow: auto;
+    height: 100%;
+    position: relative;
+    header {
+        background: #292d84;
+        height: 75px;
+        padding-left: 50px;
+        .logo {
+            float: left;
+            a {
+                display: block;
+                line-height: 75px;
+                font-size: 0;
+                img {
+                    vertical-align: middle;
+                    height: 50px;
+                }
+            }
+        }
+        .logout {
+            float: right;
+            line-height: 75px;
+            margin-right: 50px;
+            cursor: pointer;
+            color: #fff;
+            span {
+                line-height: 30px;
+                padding: 8px 15px;
+                border-radius: 6px;
+                &:hover {
+                    background: #367fa9;
+                }
+            }
+        }
+    }
+    .main {
+    }
+}
