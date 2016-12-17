@@ -1,33 +1,33 @@
 // header添加事件
 (function () {
     //获取登录信息可能不需要
-    /*$.ajax({
+    $.ajax({
         method: "get",
         url: "/proxy/customer/isLogin",
         dataType: "json"
     }).done(function (result) {
-        if(result.status==200){
+        if (result.status == 200) {
             var userInfo = result.userInformation[0];
             var quickMenu = $("#quickMenu");
             quickMenu.find(".accountOperate").toggleClass("active");
             quickMenu.find(".my-cart .count").text(userInfo.cartNum);
         }
     }).fail(function (result) {
-        console.log(result.statusText);
+        /*console.log(result.statusText);
         result = {
-         status: 200,
-         userInformation: [{
-         name: "gdh",
-         cartNum: 33
-         }]
-         };
-         if(result.status==200){
-         var userInfo = result.userInformation[0];
-         var quickMenu = $("#quickMenu");
-         quickMenu.find(".accountOperate").toggleClass("active");
-         quickMenu.find(".my-cart .count").text(userInfo.cartNum);
-         }
-    });*/
+            status: 200,
+            userInformation: [{
+                name: "gdh",
+                cartNum: 33
+            }]
+        };
+        if (result.status == 200) {
+            var userInfo = result.userInformation[0];
+            var quickMenu = $("#quickMenu");
+            quickMenu.find(".accountOperate").toggleClass("active");
+            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+        }*/
+    });
 
     //headMenu添加事件
     var $headMenu = $("#headMenu");
@@ -164,6 +164,63 @@ function tipsConfirm(msg, callback){
         .append($content)
         .appendTo($("body"));
 }
-tipsConfirm("1", function () {
-    tipsAlert(2);
+
+function addError(item, msg){
+    item.addClass("error")
+        .find("input")
+        .focus()
+        .end()
+        .find(".tips")
+        .text(msg);
+}
+
+var loginUrl = "../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
+
+var confirmPay = (function(){
+    var loading = null;
+    return function (e) {
+        var _this = $(this);
+        e.preventDefault();
+        var $alipay = _this.find(".alipay");
+        if (!this.alipay.value) {
+            addError($alipay, "Alipay can't be empty!");
+            return;
+        }
+        if(loading) return ;
+        loading = showLoading(_this);
+        $.ajax({
+            method: "post",
+            url: "/proxy/order/price",
+            dataType: "json"
+        }).done(function (result) {
+
+        }).fail(function (result) {
+            if(loading){
+                loading.remove();
+                loading = null;
+            }
+            result = {
+                status: 200
+            };
+            var status = result.status;
+            if(status==200){
+                tipsAlert("Success", function(){
+                   location.href = "order.html?status=1";
+                });
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                tipsAlert("SERVER ERROR!");
+            }
+        });
+    }
+})();
+
+var $payForm = $("#payForm");
+
+$payForm.on("submit", confirmPay);
+
+$payForm.on("input", ".input-item input", function () {
+    var _this = $(this);
+    _this.parent().removeClass('error');
 });

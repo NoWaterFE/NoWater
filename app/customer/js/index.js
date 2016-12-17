@@ -167,14 +167,14 @@
 
 function createGoodsItem(data) {
     return $('<li class="goods-item"> ' +
-        '<div class="item-detail"> ' +
+        '<a class="item-detail" href="productDetail.html?id='+data.productId+'"> ' +
             '<div class="item-image"> ' +
                 '<img src="'+data.photoIdUrl+'"> ' +
             '</div> ' +
             '<div class="item-name"> ' +
                 data.productName +
             '</div> ' +
-        '</div> ' +
+        '</a> ' +
         '<div class="item-prices"> HK$' +
             data.price.toFixed(2) +
         '</div> ' +
@@ -186,7 +186,7 @@ function createGoodsItem(data) {
             '<i></i><span>ADD TO FAVORITES</span> ' +
             '</div> ' +
         '</div> ' +
-        '</li>').data("goodId", data.productId);
+        '</li>').data("productId", data.productId);
 }
 
 
@@ -205,7 +205,6 @@ function createGoodsItem(data) {
             quickMenu.find(".my-cart .count").text(userInfo.cartNum);
         }
     }).fail(function (result) {
-        console.log(result.statusText);
         /*result = {
          status: 200,
          userInformation: [{
@@ -285,6 +284,15 @@ function createGoodsItem(data) {
         $searchForm.trigger("submit");
     });
 
+    window.setCart = function(num){
+        var cart = quickMenu.find(".my-cart .count");
+        if(num > 99) {
+            cart.text("99+");
+        } else {
+            cart.text(num);
+        }
+    }
+
 })();
 
 
@@ -354,19 +362,101 @@ $adStore.on("mouseout", function () {
     setAdInterval();
 });
 
-var $adGoods = $("#adGoods");
-$adGoods.on("click", ".goods-item .item-detail", function(event){
-    location.href="goodsDetail.html?goodsId="+$(this).parent().data("goodsId");
-});
+var $adGoods = $("#adGoods"),
+    loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
+
+
+var addToCart = (function(){
+    var loading = null;
+    return function(e){
+        var _this = $(this);
+        if(loading) return;
+        var $goods = _this.parents(".goods-item");
+        loading = showLoading($goods);
+        var data = "productId="+$goods.data("productId")+"&addType=0";
+        $.ajax({
+            method: "get",
+            url: "/proxy/customer/cart/adding",
+            data: data
+        }).done(function(){
+
+        }).fail(function(result){
+            if(loading) {
+                loading.remove();
+                loading = null;
+            }
+            result = {
+                status: 200,
+                num: 1000
+            };
+            var status = result.status;
+            if(status==200){
+                setCart(result.num);
+                tipsAlert("Add success!")
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                tipsAlert("server error!");
+            }
+        });
+    };
+})();
+var addToFavo = (function(){
+    var loading = null;
+    return function(e){
+        var _this = $(this);
+        if(loading) return;
+        var $goods = _this.parents(".goods-item");
+        loading = showLoading($goods);
+        var data = "id="+$goods.data("productId")+"&favoriteType=0";
+        $.ajax({
+            method: "get",
+            url: "/proxy/customer/favorite/adding",
+            data: data
+        }).done(function(){
+
+        }).fail(function(result){
+            if(loading) {
+                loading.remove();
+                loading = null;
+            }
+            result = {
+                status: 200
+            };
+            var status = result.status;
+            if(status==200){
+                tipsAlert("Add success!")
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                tipsAlert("server error!");
+            }
+        });
+    };
+})();
 // 添加到购物车
-$adGoods.on("click", ".goods-item .add-to-cart", function (event) {
-
-});
+$adGoods.on("click", ".goods-item .add-to-cart", addToCart);
 // 添加到收藏
-$adGoods.on("click", ".goods-item .add-to-favorites", function (event) {
+$adGoods.on("click", ".goods-item .add-to-favorites", addToFavo);
 
-});
 
+function showLoading($relative) {
+    var $tips = $relative.siblings(".loadingImg");
+    if ($tips.length > 0) $tips.remove();
+    $tips = $("<div class='loadingImg'></div>");
+    if($relative.css("position")=="static") $relative.css('position', "relative");
+    $tips.appendTo($relative)
+        .ready(function () {
+            $tips.css({
+                "top": $relative.outerHeight() / 2,
+                "left": $relative.outerWidth() / 2,
+                "margin-left": -$tips.outerWidth() / 2,
+                "margin-top": -$tips.outerHeight() / 2,
+                "visibility": "visible"
+            });
+        });
+    return $tips;
+}
 
 function tipsAlert(msg, callback){
     var $alert = $(".tipsAlert");

@@ -173,11 +173,7 @@ function addError(item, msg){
 
 $addProduct.on("submit", function (e) {
     var _this = $(this);
-    if (e && e.preventDefault) {
-        e.preventDefault();
-    } else {
-        e.returnValue = false;
-    }
+    e.preventDefault();
     var $productName = _this.find(".productName"),
         $productPrice = _this.find(".productPrice"),
         $productStock = _this.find(".productStock"),

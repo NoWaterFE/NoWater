@@ -198,7 +198,7 @@ function　createOrderItem(data){
     for(var i=0; i<len; i++){
         orderData += '<tr class="orderData"> ' +
             '<td class="product"> ' +
-            '<a href="javascript:" class="clearfix productLink"> ' +
+            '<a href="productDetail.html?id='+data.products[i].productId+'" target="_blank" class="clearfix productLink"> ' +
             '<img src="'+data.products[i].photoIdUrl+'"> ' +
             '<span class="productName">'+data.products[i].productName+'</span> ' +
             '</a> ' +
@@ -254,12 +254,14 @@ var postOrder = (function(){
                             {
                                 photoIdUrl: "imgs/product03a.jpg",
                                 productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                                productId: 22,
                                 price: "333.33",
                                 amount: 1
                             },
                             {
                                 photoIdUrl: "imgs/product04a.jpg",
                                 productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                                productId: 22,
                                 price: "666.66",
                                 amount: 2
                             }

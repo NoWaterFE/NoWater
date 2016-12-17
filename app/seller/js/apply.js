@@ -27,6 +27,7 @@ $applyForm.on("submit", function (e) {
     var $shopName = _this.find(".shopName"),
         $shopEmail = _this.find(".shopEmail"),
         $shopTel = _this.find(".shopTel"),
+        $alipay = _this.find(".alipay"),
         $idPhoto = _this.find(".idPhoto");
     if (!this.shopName.value) {
         addError($shopName, "shop name can't be empty!");
@@ -38,6 +39,10 @@ $applyForm.on("submit", function (e) {
     }
     if (!telReg.test(this.telephone.value)) {
         addError($shopTel, "error telephone!");
+        return;
+    }
+    if (!this.alipay.value) {
+        addError($alipay, "alipay can't be empty!");
         return;
     }
     var fileUrl = _this.data("fileNameList");

@@ -200,7 +200,7 @@ function　createOrderItem(data){
     for(var i=0; i<len; i++){
         orderData += '<tr class="orderData"> ' +
             '<td class="product"> ' +
-            '<a href="javascript:" class="clearfix productLink"> ' +
+            '<a href="productDetail.html?id='+data.products[i].productId+'" target="_blank" class="clearfix productLink"> ' +
             '<img src="'+data.products[i].photoIdUrl+'"> ' +
             '<span class="productName">'+data.products[i].productName+'</span> ' +
             '</a> ' +
@@ -239,7 +239,7 @@ function　createOrderItem(data){
                 '<span class="orderTime">'+data.time+'</span> ' +
                 '<span class="orderId">Order ID: '+data.orderId+'</span> ' +
                 '<span class="shopName"> ' +
-                    '<a href="javascript:">'+data.shopName+'</a> ' +
+                    '<a href="store.html?shopId='+data.shopId+'" target="_blank">'+data.shopName+'</a> ' +
                 '</span> ' +
             '</td> ' +
         '</tr> ' +
@@ -416,7 +416,7 @@ var postOrder = (function(){
             }
             var len = result.data.length;
             for(var i=0; i<len; i++){
-                if(orderStatus!=0) { result.data[i].status=orderStatus};
+                if(orderStatus!=0) { result.data[i].status=orderStatus }
                 $orderList.find('.orderTable').append(createOrderItem(result.data[i]));
             }
             $orderList.find(".more .showMore")

@@ -6,7 +6,7 @@
     <title>PARKnSHOP</title>
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
     <link rel="icon" type="image/x-icon" href="../favicon.ico" >
-    <link rel="stylesheet" type="text/css" href="style/productDetail.css">
+    <link rel="stylesheet" type="text/css" href="style/pay.css">
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 </head>
 
@@ -75,45 +75,30 @@
 </header>
 <div class="content">
     <!--页面写在这-->
-    <div class="product" id="product">
-        <div class="productDetail">
-            <form id="productForm" class="clearfix" novalidate>
-                <div class="productImages">
-                    <div class="bigImage">
-                        <img src>
-                    </div>
-                    <ul class="smallImages clearfix">
-                    </ul>
+    <div class="pay clearfix">
+        <div class="payWay">
+            <div class="tips">Scan the QR code to pay by Alipay app.</div>
+            <div class="qrCode">
+                <img src="imgs/qrcode.png">
+            </div>
+        </div>
+        <div class="confirmPay">
+            <form action="javascript:" id="payForm" class="payForm" novalidate>
+                <h2 class="title">Confirm Payment</h2>
+                <div class="amount">
+                    <span class="key">Amount:</span>
+                    <span class="hk">HK$</span>
+                    <span class="price">1999.00</span>
                 </div>
-                <div class="productInfo">
-                    <h2 class="productName"></h2>
-                    <div class="price"><span>HK$</span><span class="priceSpan"></span></div>
-                    <div class="quantity">
-                        <label>Quantity:</label>
-                        <div class="quantityOp clearfix">
-                            <span class="minus disabled"></span>
-                            <input type="text" name="num" value="1" class="num">
-                            <span class="plus"></span>
-                            <span class="stockText">Pieces <span class="stockSpan"></span> available</span>
-                            <input type="hidden" name="stock" class="stock" value="50">
-                        </div>
-                    </div>
-                    <div class="buyNow">
-                        <a href="javascript:" class="buy">Buy Now</a>
-                    </div>
-                    <div class="otherOp">
-                        <a href="javascript:" class="addToCart">Add To Cart</a>
-                        <a href="javascript:" class="addToFavo">Add To Favorites</a>
-                    </div>
+                <div class="input-item alipay">
+                    <label for="alipay" class="redStar">Alipay:</label>
+                    <input type="text" name="alipay" id="alipay" placeholder="your Alipay username" maxlength="50" required>
+                    <span class="tips"></span>
+                </div>
+                <div class="submit">
+                    <input type="submit" value="CONFIRM">
                 </div>
             </form>
-        </div>
-        <div class="reviews">
-            <h3 class="reviewTitle">reviews</h3>
-            <ul class="reviewSet">
-                <li class="reviewList">
-                </li>
-            </ul>
         </div>
     </div>
 </div>
@@ -122,7 +107,7 @@
         © Copyright NoWaterFE
     </div>
 </footer>
-<script type="text/javascript" src="js/productDetail.js"></script>
+<script type="text/javascript" src="js/pay.js"></script>
 </body>
 
 </html>
