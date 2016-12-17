@@ -165,6 +165,33 @@ function tipsConfirm(msg, callback){
         .appendTo($("body"));
 }
 
+function showSpinner(msg, config){
+    var $spinner = $(".spinner");
+    if($spinner) $spinner.remove();
+    $spinner = $('<div class="spinner"> ' +
+        '<div class="tips"> ' +
+        msg +
+        '</div> ' +
+        '</div>');
+    var def = {
+        timeout: 1500
+    };
+    config = $.extend(config, def);
+    $spinner.appendTo($("body"))
+        .ready(function () {
+            $spinner.css({
+                "margin-left": -$spinner.width() / 2,
+                "margin-top": -$spinner.width() / 2,
+                "visibility": "visible"
+            });
+        });
+    setTimeout(function(){
+        if($spinner) $spinner.remove();
+        var callback = config.callback;
+        if(callback) callback();
+    }, config.timeout);
+}
+
 function getUrlParam(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
     var r = window.location.search.substr(1).match(reg); //匹配目标参数
@@ -187,7 +214,7 @@ function createSImageList(imgArray){
         $product.html("The product doesn't exist.")
     }
     $.ajax({
-        method: "get",
+        method: "post",
         url: "/proxy/customer/product/show",
         productId: productId
     }).done(function (result) {
@@ -247,9 +274,9 @@ var addToCart = (function(){
         var info = $productForm.data("info");
         if(loading) return;
         loading = showLoading($productForm);
-        var data = "productId="+info.productId+"&addType=0";
+        var data = "productId="+info.productId+"&addType=0&num="+$productForm.find(".num").val();
         $.ajax({
-            method: "get",
+            method: "post",
             url: "/proxy/customer/cart/adding",
             data: data
         }).done(function(){
@@ -266,7 +293,7 @@ var addToCart = (function(){
             var status = result.status;
             if(status==200){
                 setCart(result.num);
-                tipsAlert("Add success!")
+                showSpinner("Add success");
             } else if(status==300){
                 location.href = loginUrl;
             } else {
@@ -283,7 +310,7 @@ var addToFavo = (function(){
         loading = showLoading($productForm);
         var data = "id="+info.productId+"&favoriteType=0";
         $.ajax({
-            method: "get",
+            method: "post",
             url: "/proxy/customer/favorite/adding",
             data: data
         }).done(function(){
@@ -298,7 +325,7 @@ var addToFavo = (function(){
             };
             var status = result.status;
             if(status==200){
-                tipsAlert("Add success!")
+                showSpinner("Add success");
             } else if(status==300){
                 location.href = loginUrl;
             } else {
@@ -313,9 +340,9 @@ var buy = (function(){
         var info = $productForm.data("info");
         if(loading) return;
         loading = showLoading($productForm);
-        var data = "id="+info.productId+"&orderType=0&num="+$productForm.find(".num").val();
+        var data = "productId="+info.productId+"&orderType=0&num="+$productForm.find(".num").val();
         $.ajax({
-            method: "get",
+            method: "post",
             url: "/proxy/order/prepare",
             data: data
         }).done(function(){

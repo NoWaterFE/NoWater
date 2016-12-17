@@ -15,43 +15,43 @@
             }
         }
         $adStore = null;
-    })
-        .fail(function(result){
-            console.log(result.statusText);
-            /*result = {
-                status: 200,
-                data: [
-                    {
-                        shopId: 1,
-                        adPhotoUrl: "imgs/adshop01.jpg"
-                    },
-                    {
-                        shopId: 2,
-                        adPhotoUrl: "imgs/adshop02.jpg"
-                    },
-                    {
-                        shopId: 3,
-                        adPhotoUrl: "imgs/adshop03.jpg"
-                    },
-                    {
-                        shopId: 4,
-                        adPhotoUrl: "imgs/adshop04.jpg"
-                    },
-                    {
-                        shopId: 5,
-                        adPhotoUrl: "imgs/adshop05.jpg"
-                    }
-                ]
-            };
-            if(result.status==200){
-                var adLi = $adStore.find(".carousel li");
-                for(var i=result.data.length-1; i>=0; i--){
-                    adLi.eq(i).data("shopId", result.data[i].shopId);
-                    adLi.eq(i).find("img").attr({src: result.data[i].adPhotoUrl});
+    }).fail(function(result){
+        //tipsAlert("server error!");
+        console.log(result.statusText);
+        result = {
+            status: 200,
+            data: [
+                {
+                    shopId: 1,
+                    adPhotoUrl: "imgs/adshop01.jpg"
+                },
+                {
+                    shopId: 2,
+                    adPhotoUrl: "imgs/adshop02.jpg"
+                },
+                {
+                    shopId: 3,
+                    adPhotoUrl: "imgs/adshop03.jpg"
+                },
+                {
+                    shopId: 4,
+                    adPhotoUrl: "imgs/adshop04.jpg"
+                },
+                {
+                    shopId: 5,
+                    adPhotoUrl: "imgs/adshop05.jpg"
                 }
+            ]
+        };
+        if (result.status == 200) {
+            var adLi = $adStore.find(".carousel li");
+            for (var i = result.data.length - 1; i >= 0; i--) {
+                adLi.eq(i).data("shopId", result.data[i].shopId);
+                adLi.eq(i).find("img").attr({src: result.data[i].adPhotoUrl});
             }
-            $adStore = null;*/
-        });
+        }
+        $adStore = null;
+    });
 
     var $adGoods = $("#adGoods");
     $.ajax({
@@ -67,102 +67,101 @@
             }
         }
         $adGoods = null;
-    })
-        .fail(function(result){
-            result = {
-                status: 200,
-                data: [
-                    {
-                        productId: 1,
-                        productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: 998,
-                        photoIdUrl: "imgs/product01a.jpg",
-                        quantityStock: 11,
-                        size: "1 PC"
-                    },
-                    {
-                        productId: 2,
-                        productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: 998.00,
-                        photoIdUrl: "imgs/product02a.jpg",
-                        quantityStock: 11,
-                        size: "1 PC"
-                    },
-                    {
-                        productId: 3,
-                        productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: 998.00,
-                        photoIdUrl: "imgs/product03a.jpg",
-                        quantityStock: 11,
-                        size: "1 PC"
-                    },
-                    {
-                        productId: 4,
-                        productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: 998.00,
-                        photoIdUrl: "imgs/product04a.jpg",
-                        quantityStock: 11,
-                        size: "1 PC"
-                    },
-                    {
-                        productId: 5,
-                        productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: 998.00,
-                        photoIdUrl: "imgs/product05a.jpg",
-                        quantityStock: 11,
-                        size: "1 PC"
-                    },
-                    {
-                        productId: 6,
-                        productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: 998.00,
-                        photoIdUrl: "imgs/product01a.jpg",
-                        quantityStock: 11,
-                        size: "1 PC"
-                    },
-                    {
-                        productId: 7,
-                        productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: 998.00,
-                        photoIdUrl: "imgs/product02a.jpg",
-                        quantityStock: 11,
-                        size: "1 PC"
-                    },
-                    {
-                        productId: 8,
-                        productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: 998.00,
-                        photoIdUrl: "imgs/product03a.jpg",
-                        quantityStock: 11,
-                        size: "1 PC"
-                    },
-                    {
-                        productId: 9,
-                        productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: 998.00,
-                        photoIdUrl: "imgs/product04a.jpg",
-                        quantityStock: 11,
-                        size: "1 PC"
-                    },
-                    {
-                        productId: 10,
-                        productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: 998.00,
-                        photoIdUrl: "imgs/product05a.jpg",
-                        quantityStock: 11,
-                        size: "1 PC"
-                    }
-                ]
-            };
-            if(result.status==200){
-                var len  = result.data.length;
-                for(var i=0; i<len; i++){
-                    var goodItem = createGoodsItem(result.data[i]);
-                    $adGoods.append(goodItem);
+    }).fail(function (result) {
+        result = {
+            status: 200,
+            data: [
+                {
+                    productId: 1,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: 998,
+                    photoIdUrl: "imgs/product01a.jpg",
+                    quantityStock: 11,
+                    size: "1 PC"
+                },
+                {
+                    productId: 2,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: 998.00,
+                    photoIdUrl: "imgs/product02a.jpg",
+                    quantityStock: 11,
+                    size: "1 PC"
+                },
+                {
+                    productId: 3,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: 998.00,
+                    photoIdUrl: "imgs/product03a.jpg",
+                    quantityStock: 11,
+                    size: "1 PC"
+                },
+                {
+                    productId: 4,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: 998.00,
+                    photoIdUrl: "imgs/product04a.jpg",
+                    quantityStock: 11,
+                    size: "1 PC"
+                },
+                {
+                    productId: 5,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: 998.00,
+                    photoIdUrl: "imgs/product05a.jpg",
+                    quantityStock: 11,
+                    size: "1 PC"
+                },
+                {
+                    productId: 6,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: 998.00,
+                    photoIdUrl: "imgs/product01a.jpg",
+                    quantityStock: 11,
+                    size: "1 PC"
+                },
+                {
+                    productId: 7,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: 998.00,
+                    photoIdUrl: "imgs/product02a.jpg",
+                    quantityStock: 11,
+                    size: "1 PC"
+                },
+                {
+                    productId: 8,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: 998.00,
+                    photoIdUrl: "imgs/product03a.jpg",
+                    quantityStock: 11,
+                    size: "1 PC"
+                },
+                {
+                    productId: 9,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: 998.00,
+                    photoIdUrl: "imgs/product04a.jpg",
+                    quantityStock: 11,
+                    size: "1 PC"
+                },
+                {
+                    productId: 10,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: 998.00,
+                    photoIdUrl: "imgs/product05a.jpg",
+                    quantityStock: 11,
+                    size: "1 PC"
                 }
+            ]
+        };
+        if (result.status == 200) {
+            var len = result.data.length;
+            for (var i = 0; i < len; i++) {
+                var goodItem = createGoodsItem(result.data[i]);
+                $adGoods.append(goodItem);
             }
-            $adGoods = null;
-        });
+        }
+        $adGoods = null;
+    });
 })();
 
 function createGoodsItem(data) {
@@ -194,7 +193,7 @@ function createGoodsItem(data) {
 (function () {
     //获取登录信息
     $.ajax({
-        method: "get",
+        method: "post",
         url: "/proxy/customer/isLogin",
         dataType: "json"
     }).done(function (result) {
@@ -257,7 +256,7 @@ function createGoodsItem(data) {
     quickMenu.on("click", ".logout", function () {
         var _this = $(this);
         $.ajax({
-            method: "get",
+            method: "post",
             url: "/proxy/customer/loginout"
         }).done(function(){
             delCookie("token");
@@ -327,28 +326,24 @@ function setAdInterval() {
 }
 setAdInterval();
 $adStore.on("click", ".next", function (event) {
-    event = window.event || event;
     if(event && event.stopPropagation) event.stopPropagation();
     event.cancelBubble = true;
     var index = $adStore.find(".carousel .active").index();
     goAd(index + 1);
 });
 $adStore.on("click", ".prev", function (event) {
-    event = window.event || event;
     if(event && event.stopPropagation) event.stopPropagation();
     event.cancelBubble = true;
     var index = $adStore.find(".carousel .active").index();
     goAd(index - 1);
 });
 $adStore.on("click", ".spot li", function (event) {
-    event = window.event || event;
     if(event && event.stopPropagation) event.stopPropagation();
     event.cancelBubble = true;
     var index = $(this).index();
     goAd(index);
 });
 $adStore.on("click", ".carousel li", function (event) {
-    event = window.event || event;
     if(event && event.stopPropagation) event.stopPropagation();
     event.cancelBubble = true;
     var id = $(this).data("shopId");
@@ -375,16 +370,29 @@ var addToCart = (function(){
         loading = showLoading($goods);
         var data = "productId="+$goods.data("productId")+"&addType=0";
         $.ajax({
-            method: "get",
+            method: "post",
             url: "/proxy/customer/cart/adding",
             data: data
         }).done(function(){
-
+            if(loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                setCart(result.num);
+                showSpinner("Add success")
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                tipsAlert("server error!");
+            }
         }).fail(function(result){
             if(loading) {
                 loading.remove();
                 loading = null;
             }
+            //tipsAlert("server error!");
             result = {
                 status: 200,
                 num: 1000
@@ -392,7 +400,7 @@ var addToCart = (function(){
             var status = result.status;
             if(status==200){
                 setCart(result.num);
-                tipsAlert("Add success!")
+                showSpinner("Add success")
             } else if(status==300){
                 location.href = loginUrl;
             } else {
@@ -410,22 +418,34 @@ var addToFavo = (function(){
         loading = showLoading($goods);
         var data = "id="+$goods.data("productId")+"&favoriteType=0";
         $.ajax({
-            method: "get",
+            method: "post",
             url: "/proxy/customer/favorite/adding",
             data: data
         }).done(function(){
-
+            if(loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                showSpinner("Add success")
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                tipsAlert("server error!");
+            }
         }).fail(function(result){
             if(loading) {
                 loading.remove();
                 loading = null;
             }
+            //tipsAlert("server error");
             result = {
                 status: 200
             };
             var status = result.status;
             if(status==200){
-                tipsAlert("Add success!")
+                showSpinner("Add success")
             } else if(status==300){
                 location.href = loginUrl;
             } else {
@@ -498,4 +518,31 @@ function tipsConfirm(msg, callback){
     $confirm.append($shadow)
         .append($content)
         .appendTo($("body"));
+}
+
+function showSpinner(msg, config){
+    var $spinner = $(".spinner");
+    if($spinner) $spinner.remove();
+    $spinner = $('<div class="spinner"> ' +
+        '<div class="tips"> ' +
+        msg +
+        '</div> ' +
+        '</div>');
+    var def = {
+        timeout: 1500
+    };
+    config = $.extend(config, def);
+    $spinner.appendTo($("body"))
+        .ready(function () {
+            $spinner.css({
+                "margin-left": -$spinner.width() / 2,
+                "margin-top": -$spinner.width() / 2,
+                "visibility": "visible"
+            });
+        });
+    setTimeout(function(){
+        if($spinner) $spinner.remove();
+        var callback = config.callback;
+        if(callback) callback();
+    }, config.timeout);
 }

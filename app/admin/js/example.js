@@ -162,3 +162,30 @@ function tipsConfirm(msg, callback){
         .append($content)
         .appendTo($("body"));
 }
+
+function showSpinner(msg, config){
+    var $spinner = $(".spinner");
+    if($spinner) $spinner.remove();
+    $spinner = $('<div class="spinner"> ' +
+        '<div class="tips"> ' +
+        msg +
+        '</div> ' +
+        '</div>');
+    var def = {
+        timeout: 1500
+    };
+    config = $.extend(config, def);
+    $spinner.appendTo($("body"))
+        .ready(function () {
+            $spinner.css({
+                "margin-left": -$spinner.width() / 2,
+                "margin-top": -$spinner.width() / 2,
+                "visibility": "visible"
+            });
+        });
+    setTimeout(function(){
+        if($spinner) $spinner.remove();
+        var callback = config.callback;
+        if(callback) callback();
+    }, config.timeout);
+}

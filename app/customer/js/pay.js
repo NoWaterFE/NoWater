@@ -66,7 +66,7 @@
     quickMenu.on("click", ".logout", function () {
         var _this = $(this);
         $.ajax({
-            method: "get",
+            method: "post",
             url: "/proxy/customer/loginout",
         }).done(function(){
             delCookie("token");
@@ -165,6 +165,33 @@ function tipsConfirm(msg, callback){
         .appendTo($("body"));
 }
 
+function showSpinner(msg, config){
+    var $spinner = $(".spinner");
+    if($spinner) $spinner.remove();
+    $spinner = $('<div class="spinner"> ' +
+        '<div class="tips"> ' +
+        msg +
+        '</div> ' +
+        '</div>');
+    var def = {
+        timeout: 1500
+    };
+    config = $.extend(config, def);
+    $spinner.appendTo($("body"))
+        .ready(function () {
+            $spinner.css({
+                "margin-left": -$spinner.width() / 2,
+                "margin-top": -$spinner.width() / 2,
+                "visibility": "visible"
+            });
+        });
+    setTimeout(function(){
+        if($spinner) $spinner.remove();
+        var callback = config.callback;
+        if(callback) callback();
+    }, config.timeout);
+}
+
 function addError(item, msg){
     item.addClass("error")
         .find("input")
@@ -204,8 +231,10 @@ var confirmPay = (function(){
             };
             var status = result.status;
             if(status==200){
-                tipsAlert("Success", function(){
-                   location.href = "order.html?status=1";
+                showSpinner("Success", {
+                    callback: function() {
+                        location.href = "order.html?status=1";
+                    }
                 });
             } else if(status==300){
                 location.href = loginUrl;

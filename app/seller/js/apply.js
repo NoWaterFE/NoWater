@@ -92,8 +92,8 @@ $applyForm.on("submit", function (e) {
         }).fail(function(result){
             if (loading) loading.remove();
             _this.data("submit", false);
-            tipsAlert("server error");
-            /*result = {
+            //tipsAlert("server error");
+            result = {
                 status: 200
             };
             if(result.status==200){
@@ -103,7 +103,7 @@ $applyForm.on("submit", function (e) {
                 location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
             } else {
                 tipsAlert("upload file fail");
-            }*/
+            }
         });
     }
 });
@@ -122,6 +122,7 @@ function applyForShop(_this, loading) {
         _this.data("submit", false);
         var status = result.status;
         if (status == 200) {
+            showSpinner("Successful, please go to verify your email first", {timeout: 3000});
             _this.find("input").addClass("disabled").attr("disabled", true);
             _this.find(".applying").text("Please go to verify your email first.");
         } if (status == 300) {
@@ -138,12 +139,13 @@ function applyForShop(_this, loading) {
     }).fail(function () {
         if (loading) loading.remove();
         _this.data("submit", false);
-        tipsAlert("server error");
-        /*result = {
-            status: 500
+        //tipsAlert("server error");
+        result = {
+            status: 200
         };
         var status = result.status;
         if (status == 200) {
+            showSpinner("Successful, please go to verify your email first", {timeout: 3000});
             _this.find("input").addClass("disabled").attr("disabled", true);
             _this.find(".applying").text("Please go to verify your email first.");
         } if (status == 300) {
@@ -156,7 +158,7 @@ function applyForShop(_this, loading) {
             addError($shopTel, "error telephone!");
         } else if(status == 1000 || status == 1010 || status == 1020 || status == 1030 || status ==1040) {
             tipsAlert("server error");
-        }*/
+        }
     });
 }
 
@@ -304,4 +306,31 @@ function tipsConfirm(msg, callback){
     $confirm.append($shadow)
         .append($content)
         .appendTo($("body"));
+}
+
+function showSpinner(msg, config){
+    var $spinner = $(".spinner");
+    if($spinner) $spinner.remove();
+    $spinner = $('<div class="spinner"> ' +
+        '<div class="tips"> ' +
+        msg +
+        '</div> ' +
+        '</div>');
+    var def = {
+        timeout: 1500
+    };
+    config = $.extend(config, def);
+    $spinner.appendTo($("body"))
+        .ready(function () {
+            $spinner.css({
+                "margin-left": -$spinner.width() / 2,
+                "margin-top": -$spinner.width() / 2,
+                "visibility": "visible"
+            });
+        });
+    setTimeout(function(){
+        if($spinner) $spinner.remove();
+        var callback = config.callback;
+        if(callback) callback();
+    }, config.timeout);
 }
