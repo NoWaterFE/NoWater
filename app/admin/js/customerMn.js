@@ -13,11 +13,11 @@ function createApplyList(list) {
         '<th class="approve operate">Delete</th> ' +
         '</tr> ' +
         '<tr> ' +
-        '<td>'+list.shopName+'</td> ' +
-        '<td>'+list.telephone+'</td>' +
-        '<td>'+list.shopId+'</td> ' +
-        '<td>'+list.ownerId+'</td> ' +
-        '<td>'+list.email+'</td>' +
+        '<td>'+list.userId+'</td> ' +
+        '<td>'+list.name+'</td>' +
+        '<td>'+list.telephone+'</td> ' +
+        '<td>'+list.adress1+'<br/>'+list.adress2+'<br/>'+list.adress3+'<br/>'+'</td>' +
+        '<td>'+list.postCode+'</td> ' +
         '<td class="reject operate">Add to blacklist</td> ' +
         '</tr>' +
         '</tbody> ' +
@@ -29,7 +29,7 @@ function createApplyList(list) {
 
 $.ajax({
     method: "get",
-    url: "/proxy/admin/shop/applyList",
+    url: "/proxy/admin/customer/list",
     dataType: "json"
 }).done(function(result){
     if(result.status==200){
