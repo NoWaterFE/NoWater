@@ -13,12 +13,6 @@ $logoutBtn.click(function () {
     });
 });
 
-function delCookie(name){
-    var t = new Date();
-    t.setTime(t.getTime()-1);
-    document.cookie= name + "=null;path=/;expires="+t.toGMTString();
-}
-
 
 function showLoading($relative) {
     var $tips = $relative.siblings(".loadingImg");
@@ -80,28 +74,59 @@ function tipsConfirm(msg, callback){
         .appendTo($("body"));
 }
 
-function createPayItem(info){
-    return $('<tr class="payItem"> ' +
-        '<td class="time">'+info.time+'</td> ' +
-        '<td class="payNo">'+info.payId+'</td> ' +
-        '<td class="nick">'+info.nick+'</td> ' +
-        '<td class="price">'+info.sumPrice.toFixed(2)+'</td> ' +
-        '<td class="operate"> ' +
-            '<span class="confirmP">Confirm payment</span> ' +
-        '</td> ' +
-        '</tr>').data("payId", info.payId);
+function showSpinner(msg, config){
+    var $spinner = $(".spinner");
+    if($spinner) $spinner.remove();
+    $spinner = $('<div class="spinner"> ' +
+        '<div class="tips"> ' +
+        msg +
+        '</div> ' +
+        '</div>');
+    var def = {
+        timeout: 1500
+    };
+    config = $.extend(config, def);
+    $spinner.appendTo($("body"))
+        .ready(function () {
+            $spinner.css({
+                "margin-left": -$spinner.width() / 2,
+                "margin-top": -$spinner.width() / 2,
+                "visibility": "visible"
+            });
+        });
+    setTimeout(function(){
+        if($spinner) $spinner.remove();
+        var callback = config.callback;
+        if(callback) callback();
+    }, config.timeout);
 }
 
-var getPayItem = (function(){
+function createCustomerList(info) {
+    return $('<tr class="customerItem"> ' +
+        '<td class="id">'+info.userId+'</td> ' +
+        '<td class="name">'+info.name+'</td> ' +
+        '<td class="tel">'+info.telephone+'</td> ' +
+        '<td class="address">'+info.address1+' ' + info.address2+' ' + info.address3+'</td> ' +
+        '<td class="postCode">'+info.postCode+'</td> ' +
+        '<td class="firstName">'+info.firstName+'</td> ' +
+        '<td class="lastName">'+info.lastName+'</td> ' +
+        '<td class="operate"> ' +
+        '<span class="blackList">add to blacklist</span> ' +
+        '<span class="del">delete</span> ' +
+        '</td> ' +
+        '</tr>');
+}
+
+var getCustomerItem = (function(){
     var loading = null,
         startId = 0;
     return function () {
-        var reqData = "count=10&startId="+startId;
+        var reqData = "count=20&startId="+startId;
         if(loading) return ;
         loading = showLoading($(".more"));
         $.ajax({
             method: "get",
-            url: "/proxy/",
+            url: "/proxy/admin/customer/list",
             dataType: "json",
             data: reqData
         }).done(function(result){
@@ -111,52 +136,16 @@ var getPayItem = (function(){
                 status: 200,
                 data: [
                     {
-                        time: "2016.11.11 14:20:34",
-                        payId: 2333,
-                        sumPrice: 99999,
-                        nick: 'hello kitty'
-                    },
-                    {
-                        time: "2016.11.12 11:20:32",
-                        payId: 2334,
-                        sumPrice: 66999,
-                        nick: 'hello kitty'
-                    },
-                    {
-                        time: "2016.11.13 14:20:11",
-                        payId: 2335,
-                        sumPrice: 234999,
-                        nick: 'hello kitty'
-                    },
-                    {
-                        time: "2016.11.14 14:20:23",
-                        payId: 2336,
-                        sumPrice: 237966,
-                        nick: 'hello kitty'
-                    },
-                    {
-                        time: "2016.11.11 14:20:34",
-                        payId: 2333,
-                        sumPrice: 99999,
-                        nick: 'hello kitty'
-                    },
-                    {
-                        time: "2016.11.12 11:20:32",
-                        payId: 2334,
-                        sumPrice: 66999,
-                        nick: 'hello kitty'
-                    },
-                    {
-                        time: "2016.11.13 14:20:11",
-                        payId: 2335,
-                        sumPrice: 234999,
-                        nick: 'hello kitty'
-                    },
-                    {
-                        time: "2016.11.14 14:20:23",
-                        payId: 2336,
-                        sumPrice: 237966,
-                        nick: 'hello kitty'
+                        userId: 10,
+                        name: "dhgan yoyoo",
+                        telephone: "238409324",
+                        address1: "HongkongIsland(HK)",
+                        address2: "Chai wan",
+                        address3: "wanli street No.19",
+                        postCode: "729339",
+                        firstName: "yalish ituode",
+                        lastName: "yomi",
+                        status: 0
                     }
                 ]
             };
@@ -165,29 +154,24 @@ var getPayItem = (function(){
                 loading = null;
             }
             var data = result.data,
-                len = data.length,
-                $tbody = $payList.find(".payTable tbody");
-            for(var i=0; i<len; i++) {
-                $tbody.append(createPayItem(data[i]));
+                len = data.length;
+            var $tbody = $customerList.find(".customerTable tbody");
+            for(var i=0; i<10; i++) {
+                $tbody.append(createCustomerList(data[0]));
             }
             if(startId!=-1){
-                $payList.find(".more .showMore").removeClass("hidden");
+                $customerList.find(".more .showMore").removeClass("hidden");
             }
         });
     }
 })();
 
-getPayItem();
+getCustomerItem();
 
-var $payList = $("#payList");
+var $customerList = $("#customerList");
 
-$payList.on("click", ".more .showMore", function(){
+$customerList.on("click", ".more .showMore", function(){
     var _this = $(this);
     _this.addClass("hidden");
-    getPayItem();
+    getCustomerItem();
 });
-
-$payList.on("click", ".payItem .confirmP", function(e){
-   alert($(this).parents(".payItem").data("payId"));
-});
-

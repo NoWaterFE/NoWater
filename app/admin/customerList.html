@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>Customer Management | PARKnSHOP</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="stylesheet" type="text/css" href="style/customerList.css">
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+</head>
+
+<body>
+<div class="nav">
+    <ul>
+        <li class="navList active"><a href="customerList.html">Customer Management</a></li>
+        <li class="navList"><a href="shopList.html">Shop Management</a></li>
+        <li class="navList"><a href="">Shop Application</a></li>
+        <li class="navList"><a href="">Shop AD Application</a></li>
+        <li class="navList"><a href="">Goods AD Application</a></li>
+        <li class="navList"><a href="payConfirm.html">Payment Confirmation</a></li>
+    </ul>
+</div>
+<div class="content">
+    <header>
+        <div class="header">
+            <div class="logo">
+                <a href="index.html">
+                    <img src="imgs/logo.png" alt="logo">
+                </a>
+            </div>
+            <div class="logout">
+                <span class="logoutBtn">
+                    Logout
+                </span>
+            </div>
+        </div>
+    </header>
+    <div class="main">
+        <!--页面在这写-->
+        <!--<h2 class="title">Customer List</h2>-->
+        <ul class="customerMain clearfix" id="customerMain">
+            <li class="customerTab active">All Customer</li>
+            <li class="customerTab">BlackList Customer</li>
+        </ul>
+        <!--<div class="bar">
+            <div class="search">
+                <input type="text">
+            </div>
+        </div>-->
+        <div class="customerList" id="customerList">
+            <table class="customerTable">
+                <colgroup>
+                    <col class="col1">
+                    <col class="col2">
+                    <col class="col3">
+                    <col class="col4">
+                    <col class="col5">
+                    <col class="col6">
+                    <col class="col7">
+                    <col class="col8">
+                </colgroup>
+                <tbody>
+                <tr class="customerTh">
+                    <th class="id">ID</th>
+                    <th class="name">Username</th>
+                    <th class="tel">Telephone</th>
+                    <th class="address">Address</th>
+                    <th class="postCode">Postcode</th>
+                    <th class="firstName">First Name</th>
+                    <th class="lastName">Last Name</th>
+                    <th class="operate">Operate</th>
+                </tr>
+                </tbody>
+            </table>
+            <div class="more">
+                <div class="showMore hidden">
+                    <span>SHOW MORE</span>
+                    <span class="down"></span>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="js/customerList.js"></script>
+</body>
+
+</html>

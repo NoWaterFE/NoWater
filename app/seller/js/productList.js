@@ -100,10 +100,11 @@ var  postProductList = (function() {
                 var data = result.data,
                     len = data.length;
                 startId = result.endId;
+                var $tbody = $productList.find("tbody");
                 for(var i=0; i<len; i++){
                     createProductList(data[i])
                         .data("info", data[i])
-                        .appendTo($productList.find("tbody"));
+                        .appendTo($tbody);
                 }
                 if(startId!=-1){
                     $productList.find(".more .showMore").removeClass("hidden");
