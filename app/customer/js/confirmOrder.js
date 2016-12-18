@@ -321,9 +321,10 @@ result = {
         }
     ]
 };
-var len = result.data.length;
+var len = result.data.length,
+    $orderTable = $orderList.find('.orderTable');
 for(var i=0; i<3; i++){
-    $orderList.find('.orderTable').append(createOrderItem(result.data[i]));
+    $orderTable.append(createOrderItem(result.data[i]));
 }
 var $orderSubmit = $orderList.find(".orderSubmit");
 $orderSubmit.show()
