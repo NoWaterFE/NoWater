@@ -1,7 +1,7 @@
 @import "reset";
 
 body {
-    padding: 100px 0 75px;
+    padding: 74px 0 75px;
     min-height: 100%;
     min-width: 1200px;
     box-sizing: border-box;
@@ -33,7 +33,7 @@ header {
     position: fixed;
     width: 100%;
     min-width: 1200px;
-    height: 100px;
+    height: 74px;
     top: 0;
     background-color: #292d84;
     color: #fff;
@@ -42,17 +42,18 @@ header {
 
 .header {
     width: 1200px;
-    height: 100px;
+    height: 74px;
     margin: 0 auto;
     .logo{
         float: left;
         a {
             display: block;
-            line-height: 100px;
+            line-height: 74px;
             font-size: 0;
         }
         img {
-            width: 278px;
+            //width: 278px;
+            height: 50px;
             vertical-align: middle;
         }
     }

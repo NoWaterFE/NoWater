@@ -165,9 +165,10 @@ var getPayItem = (function(){
                 loading = null;
             }
             var data = result.data,
-                len = data.length;
+                len = data.length,
+                $tbody = $payList.find(".payTable tbody");
             for(var i=0; i<len; i++) {
-                $payList.find(".payTable tbody").append(createPayItem(data[i]));
+                $tbody.append(createPayItem(data[i]));
             }
             if(startId!=-1){
                 $payList.find(".more .showMore").removeClass("hidden");

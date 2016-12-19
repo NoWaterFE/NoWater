@@ -21,7 +21,7 @@ header {
     position: fixed;
     width: 100%;
     min-width: 1200px;
-    height: 100px;
+    height: 74px;
     top: 0;
     background-color: #292d84;
     color: #fff;
@@ -36,11 +36,12 @@ header {
         float: left;
         a {
             display: block;
-            line-height: 100px;
+            line-height: 74px;
             font-size: 0;
         }
         img {
-            width: 278px;
+            //width: 278px;
+            height: 50px;
             vertical-align: middle;
         }
     }
@@ -71,6 +72,9 @@ header {
                 font-size: 14px;
                 padding: 0 5px;
                 border: 1px solid #aaa;
+            }
+            select {
+                height: 30px;
             }
         }
         .submit {

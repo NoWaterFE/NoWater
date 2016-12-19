@@ -11,7 +11,7 @@
     quickMenu.on("click", ".logout", function () {
         var _this = $(this);
         $.ajax({
-            method: "get",
+            method: "post",
             url: "/proxy/customer/loginout"
         }).done(function(){
             delCookie("token");
@@ -344,10 +344,11 @@ var postOrder = (function(){
                 loading.remove();
                 loading = null;
             }
-            var len = result.data.length;
+            var len = result.data.length,
+                $orderTable = $orderList.find('.orderTable');
             for(var i=0; i<len; i++){
                 if(orderStatus!=0) { result.data[i].status=orderStatus };
-                $orderList.find('.orderTable').append(createOrderItem(result.data[i]));
+                $orderTable.append(createOrderItem(result.data[i]));
             }
             $orderList.find(".more .showMore")
                 .removeClass("hidden");

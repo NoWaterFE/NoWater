@@ -11,7 +11,7 @@
     quickMenu.on("click", ".logout", function () {
         var _this = $(this);
         $.ajax({
-            type: "get",
+            type: "post",
             url: "/proxy/customer/loginout"
         }).done(function(){
             delCookie("token");
@@ -83,6 +83,33 @@ function tipsConfirm(msg, callback){
     $confirm.append($shadow)
         .append($content)
         .appendTo($("body"));
+}
+
+function showSpinner(msg, config){
+    var $spinner = $(".spinner");
+    if($spinner) $spinner.remove();
+    $spinner = $('<div class="spinner"> ' +
+        '<div class="tips"> ' +
+        msg +
+        '</div> ' +
+        '</div>');
+    var def = {
+        timeout: 1500
+    };
+    config = $.extend(config, def);
+    $spinner.appendTo($("body"))
+        .ready(function () {
+            $spinner.css({
+                "margin-left": -$spinner.width() / 2,
+                "margin-top": -$spinner.width() / 2,
+                "visibility": "visible"
+            });
+        });
+    setTimeout(function(){
+        if($spinner) $spinner.remove();
+        var callback = config.callback;
+        if(callback) callback();
+    }, config.timeout);
 }
 
 var $addProduct = $("#addProduct");
@@ -173,11 +200,7 @@ function addError(item, msg){
 
 $addProduct.on("submit", function (e) {
     var _this = $(this);
-    if (e && e.preventDefault) {
-        e.preventDefault();
-    } else {
-        e.returnValue = false;
-    }
+    e.preventDefault();
     var $productName = _this.find(".productName"),
         $productPrice = _this.find(".productPrice"),
         $productStock = _this.find(".productStock"),
@@ -233,7 +256,7 @@ $addProduct.on("submit", function (e) {
                 _this.data("submit", false);
                 var status = result.status;
                 if(status == 200){
-                    tipsAlert("add product success");
+                    showSpinner("add product success");
                     imagesArray.length = 0;
                     _this[0].reset();
                     _this.find(".imagesPreview")

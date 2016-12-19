@@ -1,0 +1,111 @@
+@import "reset";
+@import "base";
+
+.content {
+    min-height: 380px;
+    width: 906px;
+    margin: 40px auto;
+    .payWay {
+        float: left;
+        padding-left: 20px;
+        .tips {
+            color: #666;
+            font-size: 14px;
+        }
+        .qrCode {
+            img {
+                width: 280px;
+                height: 280px;
+            }
+        }
+    }
+    .confirmPay {
+        margin-left: 300px;
+        .title {
+            border-bottom: 1px solid #E0E0E0;
+            font-size: 24px;
+            line-height: 34px;
+            margin-bottom: 40px;
+            color: #666;
+        }
+        .payForm {
+            padding-left: 60px;
+        }
+        .amount {
+            .key {
+                font-size: 14px;
+                color: #333;
+                font-weight: bold;
+                width: 100px;
+                display: inline-block;
+            }
+            .hk {
+                font-size: 24px;
+                color: #999;
+            }
+            .price {
+                font-size: 24px;
+                font-weight: bold;
+                line-height: 40px;
+                color: red;
+            }
+        }
+        .input-item {
+            margin: 20px 0;
+            label {
+                display: inline-block;
+                width: 100px;
+                font-size: 14px;
+                font-weight: bold;
+                color: #333;
+            }
+            input, select {
+                width: 230px;
+                height: 30px;
+                font-size: 14px;
+                padding: 0 5px;
+                border: 1px solid #aaa;
+                option {
+                    padding: 2px 5px;
+                }
+                &:focus {
+                    border-color: #4349C5;
+                    box-shadow: 0 0 10px #4349C5;
+                }
+            }
+            select {
+                width: 240px;
+            }
+            .tips {
+                font-size: 14px;
+                color: red;
+                display: none;
+            }
+            &.error {
+                input {
+                    border-color: red;
+                }
+                .tips {
+                    display: inline-block;
+                }
+            }
+        }
+        .submit {
+            padding-left: 165px;
+            margin: 40px 0;
+            input[type=submit] {
+                width: 120px;
+                height: 40px;
+                border: none;
+                cursor: pointer;
+                border-radius: 5px;
+                background: #292d84;
+                color: #fff;
+                &.disabled{
+                    background: #DCDEE3;
+                    color: #999;
+                }
+            }
+        }
+    }
+}
