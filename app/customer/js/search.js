@@ -98,7 +98,7 @@ function getResult() {
         }).done(function (result) {
             if(result.status==200){
                 startId = result.startId;
-                if (result.actualCount == 0) {
+                if (result.data.length == 0) {
                     $("#noResult").css('display','block');
                     return;
                 }
@@ -252,7 +252,7 @@ function getResult() {
         }).done(function (result) {
             if(result.status==200){
                 startId = result.startId;
-                if (result.actualCount == 0) {
+                if (result.data.length == 0) {
                     $("#noResult").css('display','block');
                     return;
                 }
