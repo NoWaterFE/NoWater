@@ -49,11 +49,8 @@ getResult();
     quickMenu.on("click", ".logout", function () {
         var _this = $(this);
         $.ajax({
-            type: "post",
-            url: host+"/customer/loginout",
-            xhrFields: {
-                withCredentials: true
-            }
+            method: "post",
+            url: "/proxy/customer/loginout"
         }).done(function(){
             delCookie("token");
             location.reload();
@@ -88,11 +85,8 @@ function getResult() {
     if (classId) {
         sendData = "classId=" + classId + "&count=" + count +"&startId" + startId;
         $.ajax({
-            type: "post",
-            url: host+"/customer/class/product",
-            xhrFields: {
-                withCredentials: true
-            },
+            method: "get",
+            url: "/proxy/customer/class/product",
             dataType: "json",
             data: sendData
         }).done(function (result) {
@@ -242,11 +236,8 @@ function getResult() {
         });
     } else {
         $.ajax({
-            type: "post",
-            url: host+"/customer/product/search",
-            xhrFields: {
-                withCredentials: true
-            },
+            method: "post",
+            url: "/proxy/customer/product/search",
             dataType: "json",
             data: sendData
         }).done(function (result) {

@@ -11,11 +11,8 @@ if (!GetQueryString("shopId")) {
 }
 var sendShopId = "shopId=" + shopId;
 $.ajax({
-    type: "post",
-    url: host+"/customer/shop/info",
-    xhrFields: {
-        withCredentials: true
-    },
+    method: "get",
+    url: "/proxy/customer/shop/info",
     dataType: "json",
     data: sendShopId
 }).done(function (result) {
@@ -138,10 +135,7 @@ if (!GetQueryString("keyWord")) {
         var _this = $(this);
         $.ajax({
             type: "post",
-            url: host+"/customer/loginout",
-            xhrFields: {
-                withCredentials: true
-            }
+            url: "/proxy/customer/loginout",
         }).done(function(){
             delCookie("token");
             location.reload();
@@ -217,14 +211,11 @@ function getClass() {
     if (!shopId) { shopId = 0; }
     if (!classId) { classId = 0; }
     var count = 40;
-    var sendData = "shopId=" + shopId + "&classId=" + classId + "&count=" + count +"&startId" + startId;
+    var sendData = "shopId=" + shopId + "&classId=" + classId + "&count=" + count +"&startId=" + startId;
 
     $.ajax({
-        type: "post",
-        url: host+"/customer/shop/class/product",
-        xhrFields: {
-            withCredentials: true
-        },
+        method: "post",
+        url: "/proxy/customer/class/product",
         dataType: "json",
         data: sendData
     }).done(function (result) {
@@ -403,11 +394,8 @@ function search() {
     var count = 40;
     var sendData = "keyWord=" + keyWord + "&count=" + count + "&startId=" + startId + "&shopId=" + shopId;
     $.ajax({
-        type: "post",
-        url: host + "/customer/product/search",
-        xhrFields: {
-            withCredentials: true
-        },
+        method: "get",
+        url: "/proxy/customer/product/search",
         dataType: "json",
         data: sendData
     }).done(function (result) {
