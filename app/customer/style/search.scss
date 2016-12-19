@@ -308,11 +308,13 @@ header {
   text-align: center;
   margin: 80px auto;
   color: grey;
+  display: none;
 }
 
 .showMore {
   text-align: center;
   margin: 40px auto;
+  display: none;
   input[type=button] {
     width: 200px;
     height: 40px;

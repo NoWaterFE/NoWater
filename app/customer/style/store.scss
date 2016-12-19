@@ -201,16 +201,26 @@ header {
 }
 
 .storeHeader {
-  width: 100%;
-  height: 50px;
-  color: #292d84;
+  width: 1200px;
+  height: 60px;
   z-index: 9999;
   min-width: 1200px;
+  margin: auto;
   margin-top: 30px;
   .storeInfo {
     float: left;
-    margin-left: 30px;
     margin-top: 15px;
+    .shopName {
+      width: 200px;
+      font-size: 30px;
+      float: left;
+    }
+    .detail {
+      font-size: 15px;
+      float: right;
+      color: darkgrey;
+      line-height: 20px;
+    }
   }
   .storeSearch {
     background-color: #e6e6e6;
@@ -218,8 +228,7 @@ header {
     height: 30px;
     width: 320px;
     padding-left: 20px;
-    margin-top: 10px;
-    margin-right: 20px;
+    margin-top: 20px;
     input {
       background-color: #e6e6e6;
       font-size: 16px;
@@ -242,17 +251,19 @@ header {
 }
 
 .storeMenu{
-  width: 100%;
+  width: 1200px;
   height: 30px;
   z-index: 9999;
   min-width: 1200px;
-  margin-top: 10px;
+  margin: 60px auto;
+  margin-top: 40px;
+  background-color: #292d84;
   .menuBar {
     float: left;
-    margin-left: 30px;
+    margin-left: 0px;
     width: 200px;
     height: 30px;
-    background-color: #292d84;
+    background-color: darkblue;
     color: #fff;
     cursor: pointer;
     span {
@@ -264,12 +275,11 @@ header {
     }
     .menuList {
       display: none;
-      background-color: rgba(41, 45, 132, 0.9);
+      background-color: rgba(0, 0, 139, 0.8);
       font-size: 14px;
       color: #fff;
       position: absolute;
-      top: 220px;
-      left: 30px;
+      top: 260px;
       width: 200px;
       padding: 10px 0;
       li {
@@ -278,7 +288,7 @@ header {
       }
       li:hover {
         background: #fff;
-        color: #292d84;
+        color: darkblue;
       }
     }
   }
@@ -290,7 +300,8 @@ header {
 
 .ad-goods {
   width: 1200px;
-  margin: 60px auto;
+  margin: auto;
+  margin-top: -30px;
   .tips {
     font-size: 20px;
     color: grey;
@@ -391,11 +402,13 @@ header {
   text-align: center;
   margin: 80px auto;
   color: grey;
+  display: none;
 }
 
 .showMore {
   text-align: center;
   margin: 40px auto;
+  display: none;
   input[type=button] {
     width: 200px;
     height: 40px;
