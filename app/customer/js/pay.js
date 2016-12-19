@@ -233,7 +233,7 @@ var confirmPay = (function(){
             if(status==200){
                 showSpinner("Success", {
                     callback: function() {
-                        location.href = "order.html?status=1";
+                        location.href = "order.html?status=2";
                     }
                 });
             } else if(status==300){

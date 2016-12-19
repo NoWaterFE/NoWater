@@ -268,7 +268,7 @@ function search(shopId) {
                             productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
                             price: "998.00",
                             quantityStock: 11,
-                            photo: ["imgs/product02a.jpg"],
+                            photoUrl: ["imgs/product02a.jpg"],
                             isDel: false
                         },
                         {
@@ -278,7 +278,7 @@ function search(shopId) {
                             productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
                             price: "998.00",
                             quantityStock: 11,
-                            photo: ["imgs/product02a.jpg"],
+                            photoUrl: ["imgs/product02a.jpg"],
                             isDel: false
                         },
                         {
@@ -288,7 +288,7 @@ function search(shopId) {
                             productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
                             price: "998.00",
                             quantityStock: 11,
-                            photo: ["imgs/product02a.jpg"],
+                            photoUrl: ["imgs/product02a.jpg"],
                             isDel: false
                         },
                         {
@@ -298,7 +298,7 @@ function search(shopId) {
                             productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
                             price: "998.00",
                             quantityStock: 11,
-                            photo: ["imgs/product02a.jpg"],
+                            photoUrl: ["imgs/product02a.jpg"],
                             isDel: false
                         },
                         {
@@ -308,7 +308,7 @@ function search(shopId) {
                             productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
                             price: "998.00",
                             quantityStock: 11,
-                            photo: ["imgs/product02a.jpg"],
+                            photoUrl: ["imgs/product02a.jpg"],
                             isDel: false
                         },
                         {
@@ -318,7 +318,7 @@ function search(shopId) {
                             productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
                             price: "998.00",
                             quantityStock: 11,
-                            photo: ["imgs/product02a.jpg"],
+                            photoUrl: ["imgs/product02a.jpg"],
                             isDel: false
                         },
                         {
@@ -328,7 +328,7 @@ function search(shopId) {
                             productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
                             price: "998.00",
                             quantityStock: 11,
-                            photo: ["imgs/product02a.jpg"],
+                            photoUrl: ["imgs/product02a.jpg"],
                             isDel: false
                         },
                         {
@@ -338,7 +338,7 @@ function search(shopId) {
                             productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
                             price: "998.00",
                             quantityStock: 11,
-                            photo: ["imgs/product02a.jpg"],
+                            photoUrl: ["imgs/product02a.jpg"],
                             isDel: false
                         },
                         {
@@ -348,7 +348,7 @@ function search(shopId) {
                             productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
                             price: "998.00",
                             quantityStock: 11,
-                            photo: ["imgs/product02a.jpg"],
+                            photoUrl: ["imgs/product02a.jpg"],
                             isDel: false
                         }
                     ],
@@ -356,12 +356,12 @@ function search(shopId) {
                 };
                 if (result.status == 200) {
                     startId = result.startId;
-                    if (result.actualCount == 0) {
+                    /*if (result.actualCount == 0) {
                         setText();
                         $noResult.text("No product found,please try another key words.");
                         $noResult.css('display','block');
                         return;
-                    }
+                    }*/
 
                     for (var i = 0; i < result.data.length; i++) {
                         var goodItem = createGoodsItem(result.data[i]);

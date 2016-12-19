@@ -92,71 +92,74 @@ function getUrlParam(name) {
 
 function　createOrderItem(data){
     var pendingPay = '<div class="payNow">' +
-        'Pay now ' +
+        'Pay now' +
         '</div> ' +
         '<div class="cancel">' +
-        'Cancel order ' +
+        'Cancel order' +
         '</div> ';
     var confirmReceived = '<div class="confirmR">' +
-        'Confirm received ' +
+        'Confirm received' +
         '</div> ';
     var toBeComment = '<div class="comment">' +
-        'Comment ' +
+        'Comment' +
         '</div>';
     var delived = '<div class="alreadyDelivered">' +
         'Already delivered ' +
         '</div>';
 
-    var operate = ""
+    var operate = "";
     if(data.status==1){
-        data.statusText = "Pending payment";
+        data.statusText = "Waiting for payment";
     } else if(data.status==2){
-        data.statusText = "Already paid";
+        data.statusText = "Waiting for delivery";
         operate = delived;
     } else if(data.status==3){
-        data.statusText = "To be received";
+        data.statusText = "Waiting for receiving";
     } else if(data.status==4){
-        data.statusText = "Success order<br />(to be commented)";
+        data.statusText = "Waiting for comment";
     } else if(data.status==5){
-        data.statusText = "Success order";
-    } else if(data.status==6){
-        data.statusText = "Order canceled";
+        data.statusText = "Completed";
+    } else if(data.status==-1){
+        data.statusText = "Closed";
     }
-    var len = data.products.length,
-        orderData = null;
-    for(var i=0; i<len; i++){
-        orderData += '<tr class="orderData"> ' +
-            '<td class="product"> ' +
-            '<a href="javascript:" class="clearfix productLink"> ' +
-            '<img src="'+data.products[i].photoIdUrl+'"> ' +
-            '<span class="productName">'+data.products[i].productName+'</span> ' +
-            '</a> ' +
-            '</td> ' +
-            '<td class="price">'+data.products[i].price+'</td> ' +
-            '<td class="amount">'+data.products[i].amount+'</td> ';
-        if(i==0){
-            orderData += '<td class="totalPrice">' +
-                'HK$'+data.totalPrice +
-                '</td>' +
-                '<td class="status"> ' +
-                '<div class="orderStatus">' +
-                data.statusText +
-                '</div> ' +
-                '</td> ' +
-                '<td class="operate">' +
-                operate +
-                '</td> ' +
-                '</tr> ';
-        } else {
-            orderData +='<td class="totalPrice"></td> ' +
-                '<td class="status"></td> ' +
-                '<td class="operate"></td>' +
-                '</tr>';
-        }
-    }
+    var product = data.product;
+    var orderData = '<tr class="orderData"> ' +
+        '<td class="product"> ' +
+        '<a href="productDetail.html?id='+product.productId+'" target="_blank" class="clearfix productLink"> ' +
+        '<img src="'+product.photo[0]+'"> ' +
+        '<span class="productName">'+product.productName+'</span> ' +
+        '</a> ' +
+        '</td> ' +
+        '<td class="price">HK$'+data.price.toFixed(2)+'</td> ' +
+        '<td class="amount">'+data.num+'</td> ' +
+        '<td class="totalPrice">' +
+        'HK$'+data.sumPrice.toFixed(2) +
+        '</td>' +
+        '<td class="status"> ' +
+        '<div class="orderStatus">' +
+        data.statusText +
+        '</div> ' +
+        '</td> ' +
+        '<td class="operate">' +
+        operate +
+        '</td> ' +
+        '</tr> ';
     return $('<tbody class="orderItem"> ' +
         orderData +
         '</tbody>')
+}
+
+function setOrderInfo(data) {
+    var $info = $("#info");
+    var shop = data.shop;
+    $info.find(".receiver .value").text(data.address).end()
+        .find(".orderTime .value").text(data.time).end()
+        .find(".orderId .value").text(data.orderId).end()
+        .find(".shopName .value").text(shop.shopName).end()
+        .find(".shopTel .value").text(shop.telephone).end()
+        .find(".shopEmail .value").text(shop.email).end()
+        .find(".express .value").text(data.express).end()
+        .find(".expressNo .value").text(data.expressCode);
 }
 
 var postOrder = (function(){
@@ -164,35 +167,45 @@ var postOrder = (function(){
     return function (orderId) {
         if(loading) return ;
         loading = showLoading($(".more"));
+        var arr = [];
+        arr.push(orderId);
+        var reqData = "orderId="+JSON.stringify(arr);
         $.ajax({
             method: "get",
-            url: "",
-            dataType: "json"
+            url: "/proxy/order/detail",
+            dataType: "json",
+            data: reqData
         }).done(function(result){
 
         }).fail(function(result){
             result = {
                 data: [
                     {
-                        time: "2016-9-05 16:30:06",
+                        time: "2016-09-05 16:30:06",
                         orderId: "2662774641999118",
-                        shopName: "MONEYBACK REWARD",
-                        status: 3,
-                        totalPrice: "999.99",
-                        products: [
-                            {
-                                photoIdUrl: "imgs/product01a.jpg",
-                                productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                                price: "333.33",
-                                amount: 1
-                            },
-                            {
-                                photoIdUrl: "imgs/1.jpg",
-                                productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                                price: "666.66",
-                                amount: 2
-                            }
-                        ]
+                        targetId: 12,
+                        shop: {
+                            shopName: "Tom's shop",
+                            telephone: 62937498,
+                            email: "nowater@nowater.com"
+                        },
+                        status: 1,
+                        address: "Dhgan, 18789427353, HongkongIsland(HK) Chai Wan Wanli",
+                        product: {
+                            productId: 10,
+                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                            photo: [
+                                "imgs/product01a.jpg",
+                                "imgs/product02a.jpg",
+                                "imgs/product03a.jpg",
+                                "imgs/product04a.jpg"
+                            ]
+                        },
+                        express: "SF",
+                        expressCode: "7978978",
+                        num: 1,
+                        price: 333.3,
+                        sumPrice: 333
                     }
                 ]
             };
@@ -201,9 +214,10 @@ var postOrder = (function(){
                 loading = null;
             }
             var $orderList = $("#orderList"),
-                $orderTable = $orderList.find(".orderTable");
-            result.data[0].status = orderId;
-            $orderTable.append(createOrderItem(result.data[0]));
+                $orderTable = $orderList.find(".orderTable"),
+                data = result.data[0];
+            setOrderInfo(data);
+            $orderTable.append(createOrderItem(data));
         });
     };
 })();

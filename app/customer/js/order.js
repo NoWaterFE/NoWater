@@ -2,32 +2,32 @@
 (function () {
     //获取登录信息可能不需要
     /*$.ajax({
-     method: "get",
-     url: "/proxy/customer/isLogin",
-     dataType: "json"
-     }).done(function (result) {
-     if(result.status==200){
-     var userInfo = result.userInformation[0];
-     var quickMenu = $("#quickMenu");
-     quickMenu.find(".accountOperate").toggleClass("active");
-     quickMenu.find(".my-cart .count").text(userInfo.cartNum);
-     }
-     }).fail(function (result) {
-     console.log(result.statusText);
-     result = {
-     status: 200,
-     userInformation: [{
-     name: "gdh",
-     cartNum: 33
-     }]
-     };
-     if(result.status==200){
-     var userInfo = result.userInformation[0];
-     var quickMenu = $("#quickMenu");
-     quickMenu.find(".accountOperate").toggleClass("active");
-     quickMenu.find(".my-cart .count").text(userInfo.cartNum);
-     }
-     });*/
+        method: "get",
+        url: "/proxy/customer/isLogin",
+        dataType: "json"
+    }).done(function (result) {
+        if (result.status == 200) {
+            var userInfo = result.userInformation[0];
+            var quickMenu = $("#quickMenu");
+            quickMenu.find(".accountOperate").toggleClass("active");
+            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+        }
+    }).fail(function (result) {
+        console.log(result.statusText);
+        result = {
+            status: 200,
+            userInformation: [{
+                name: "gdh",
+                cartNum: 33
+            }]
+        };
+        if (result.status == 200) {
+            var userInfo = result.userInformation[0];
+            var quickMenu = $("#quickMenu");
+            quickMenu.find(".accountOperate").toggleClass("active");
+            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+        }
+    });*/
 
     //headMenu添加事件
     var $headMenu = $("#headMenu");
@@ -95,6 +95,7 @@
 
 })();
 
+var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
 
 function showLoading($relative) {
     var $tips = $relative.siblings(".loadingImg");
@@ -181,57 +182,46 @@ function　createOrderItem(data){
         operate = pendingPay;
         data.statusText = "Waiting for payment";
     } else if(data.status==2){
-        data.statusText = "Waiting for payment confirmation";
-    } else if(data.status==3){
         data.statusText = "Waiting for delivery";
-    } else if(data.status==4){
+    } else if(data.status==3){
         data.statusText = "Waiting for receiving";
         operate = confirmReceived;
+    } else if(data.status==4){
+        data.statusText = "Waiting for comment";
+        operate = toBeComment;
     } else if(data.status==5){
         data.statusText = "Completed";
-        operate = toBeComment;
-    } else if(data.status==6){
-        data.statusText = "Completed";
-    } else if(data.status==7){
+    } else if(data.status==-1){
         data.statusText = "Closed";
     }
-    var len = data.products.length,
-        orderData = null;
-    for(var i=0; i<len; i++){
-        orderData += '<tr class="orderData"> ' +
+    var product = data.product,
+        shop = data.shop;
+    var orderData = '<tr class="orderData"> ' +
             '<td class="product"> ' +
-            '<a href="productDetail.html?id='+data.products[i].productId+'" target="_blank" class="clearfix productLink"> ' +
-            '<img src="'+data.products[i].photoIdUrl+'"> ' +
-            '<span class="productName">'+data.products[i].productName+'</span> ' +
+            '<a href="productDetail.html?id='+product.productId+'" target="_blank" class="clearfix productLink"> ' +
+            '<img src="'+product.photo[0]+'"> ' +
+            '<span class="productName">'+product.productName+'</span> ' +
             '</a> ' +
             '</td> ' +
-            '<td class="price">'+data.products[i].price+'</td> ' +
-            '<td class="amount">'+data.products[i].amount+'</td> ';
-        if(i==0){
-            orderData += '<td class="totalPrice">' +
-                'HK$'+data.totalPrice +
-                '</td>' +
-                '<td class="status"> ' +
-                    '<div class="orderStatus">' +
-                        data.statusText +
-                    '</div> ' +
-                    '<div class="orderDetail"> ' +
-                        '<a href="javascrpt:">' +
-                        'Order details ' +
-                        '</a> ' +
-                    '</div> ' +
-                '</td> ' +
-                '<td class="operate">' +
-                    operate +
-                '</td> ' +
-            '</tr> ';
-        } else {
-            orderData +='<td class="totalPrice"></td> ' +
-                '<td class="status"></td> ' +
-                '<td class="operate"></td>' +
-                '</tr>';
-        }
-    }
+            '<td class="price">HK$'+data.price.toFixed(2)+'</td> ' +
+            '<td class="amount">'+data.num+'</td> ' +
+            '<td class="totalPrice">' +
+                'HK$'+data.sumPrice.toFixed(2) +
+            '</td>' +
+            '<td class="status"> ' +
+                '<div class="orderStatus">' +
+                    data.statusText +
+                '</div> ' +
+                '<div class="orderDetail"> ' +
+                    '<a href="orderDetail.html?orderId='+data.orderId+'" target="_blank">' +
+                    'Order details ' +
+                    '</a> ' +
+                '</div> ' +
+            '</td> ' +
+            '<td class="operate">' +
+                operate +
+            '</td> ' +
+        '</tr> ';
     return $('<tbody class="orderItem"> ' +
         '<tr class="mr20"></tr> ' +
         '<tr class="orderHeader"> ' +
@@ -239,174 +229,170 @@ function　createOrderItem(data){
                 '<span class="orderTime">'+data.time+'</span> ' +
                 '<span class="orderId">Order ID: '+data.orderId+'</span> ' +
                 '<span class="shopName"> ' +
-                    '<a href="store.html?shopId='+data.shopId+'" target="_blank">'+data.shopName+'</a> ' +
+                    '<a href="store.html?shopId='+data.targetId+'" target="_blank">'+shop.shopName+'</a> ' +
                 '</span> ' +
             '</td> ' +
         '</tr> ' +
         orderData +
-        '</tbody>')
+        '</tbody>');
 }
 
 var postOrder = (function(){
-    var loading = null;
+    var loading = null,
+        startId = 0;
     return function (orderStatus) {
         if(loading) return ;
         loading = showLoading($(".more"));
+        var reqData = "status="+orderStatus+"&startId="+startId+
+                "&count=15";
         $.ajax({
             method: "get",
-            url: "",
-            dataType: "json"
+            url: "/proxy/order/list",
+            dataType: "json",
+            data: reqData
         }).done(function(result){
 
         }).fail(function(result){
             result = {
+                status: 200,
                 data: [
                     {
-                        time: "2016-9-05 16:30:06",
+                        time: "2016-09-05 16:30:06",
                         orderId: "2662774641999118",
-                        shopName: "MONEYBACK REWARD",
+                        targetId: 12,
+                        shop: {
+                            shopName: "Tom's shop"
+                        },
                         status: 1,
                         totalPrice: "999.99",
-                        products: [
-                            {
-                                photoIdUrl: "imgs/product03a.jpg",
-                                productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                                price: "333.33",
-                                amount: 1
-                            },
-                            {
-                                photoIdUrl: "imgs/product04a.jpg",
-                                productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                                price: "666.66",
-                                amount: 2
-                            }
-                        ]
+                        product: {
+                            productId: 10,
+                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                            photo: [
+                                "imgs/product01a.jpg",
+                                "imgs/product02a.jpg",
+                                "imgs/product03a.jpg",
+                                "imgs/product04a.jpg"
+                            ]
+                        },
+                        num: 1,
+                        price: 333,
+                        sumPrice: 333
                     },
                     {
-                        time: "2016-9-05 16:30:06",
+                        time: "2016-09-05 16:30:06",
                         orderId: "2662774641999118",
-                        shopName: "MONEYBACK REWARD",
+                        targetId: 12,
+                        shop: {
+                            shopName: "Tom's shop"
+                        },
                         status: 2,
                         totalPrice: "999.99",
-                        products: [
-                            {
-                                photoIdUrl: "imgs/product03a.jpg",
-                                productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                                price: "333.33",
-                                amount: 1
-                            },
-                            {
-                                photoIdUrl: "imgs/product04a.jpg",
-                                productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                                price: "666.66",
-                                amount: 2
-                            }
-                        ]
+                        product: {
+                            productId: 10,
+                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                            photo: [
+                                "imgs/product01a.jpg",
+                                "imgs/product02a.jpg",
+                                "imgs/product03a.jpg",
+                                "imgs/product04a.jpg"
+                            ]
+                        },
+                        num: 1,
+                        price: 333,
+                        sumPrice: 333
                     },
                     {
-                        time: "2016-9-05 16:30:06",
+                        time: "2016-09-05 16:30:06",
                         orderId: "2662774641999118",
-                        shopName: "MONEYBACK REWARD",
+                        targetId: 12,
+                        shop: {
+                            shopName: "Tom's shop"
+                        },
                         status: 3,
                         totalPrice: "999.99",
-                        products: [
-                            {
-                                photoIdUrl: "imgs/product03a.jpg",
-                                productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                                price: "333.33",
-                                amount: 1
-                            },
-                            {
-                                photoIdUrl: "imgs/product04a.jpg",
-                                productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                                price: "666.66",
-                                amount: 2
-                            }
-                        ]
+                        product: {
+                            productId: 10,
+                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                            photo: [
+                                "imgs/product01a.jpg",
+                                "imgs/product02a.jpg",
+                                "imgs/product03a.jpg",
+                                "imgs/product04a.jpg"
+                            ]
+                        },
+                        num: 1,
+                        price: 333,
+                        sumPrice: 333
                     },
                     {
-                        time: "2016-9-05 16:30:06",
+                        time: "2016-09-05 16:30:06",
                         orderId: "2662774641999118",
-                        shopName: "MONEYBACK REWARD",
+                        targetId: 12,
+                        shop: {
+                            shopName: "Tom's shop"
+                        },
                         status: 4,
                         totalPrice: "999.99",
-                        products: [
-                            {
-                                photoIdUrl: "imgs/product03a.jpg",
-                                productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                                price: "333.33",
-                                amount: 1
-                            },
-                            {
-                                photoIdUrl: "imgs/product04a.jpg",
-                                productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                                price: "666.66",
-                                amount: 2
-                            }
-                        ]
+                        product: {
+                            productId: 10,
+                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                            photo: [
+                                "imgs/product01a.jpg",
+                                "imgs/product02a.jpg",
+                                "imgs/product03a.jpg",
+                                "imgs/product04a.jpg"
+                            ]
+                        },
+                        num: 1,
+                        price: 333,
+                        sumPrice: 333
                     },
                     {
-                        time: "2016-9-05 16:30:06",
+                        time: "2016-09-05 16:30:06",
                         orderId: "2662774641999118",
-                        shopName: "MONEYBACK REWARD",
+                        targetId: 12,
+                        shop: {
+                            shopName: "Tom's shop"
+                        },
                         status: 5,
                         totalPrice: "999.99",
-                        products: [
-                            {
-                                photoIdUrl: "imgs/product03a.jpg",
-                                productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                                price: "333.33",
-                                amount: 1
-                            },
-                            {
-                                photoIdUrl: "imgs/product04a.jpg",
-                                productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                                price: "666.66",
-                                amount: 2
-                            }
-                        ]
+                        product: {
+                            productId: 10,
+                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                            photo: [
+                                "imgs/product01a.jpg",
+                                "imgs/product02a.jpg",
+                                "imgs/product03a.jpg",
+                                "imgs/product04a.jpg"
+                            ]
+                        },
+                        num: 1,
+                        price: 333,
+                        sumPrice: 333
                     },
                     {
-                        time: "2016-9-05 16:30:06",
+                        time: "2016-09-05 16:30:06",
                         orderId: "2662774641999118",
-                        shopName: "MONEYBACK REWARD",
-                        status: 6,
+                        targetId: 12,
+                        shop: {
+                            shopName: "Tom's shop"
+                        },
+                        status: -1,
                         totalPrice: "999.99",
-                        products: [
-                            {
-                                photoIdUrl: "imgs/product03a.jpg",
-                                productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                                price: "333.33",
-                                amount: 1
-                            },
-                            {
-                                photoIdUrl: "imgs/product04a.jpg",
-                                productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                                price: "666.66",
-                                amount: 2
-                            }
-                        ]
-                    },
-                    {
-                        time: "2016-9-05 16:30:06",
-                        orderId: "2662774641999118",
-                        shopName: "MONEYBACK REWARD",
-                        status: 1,
-                        totalPrice: "999.99",
-                        products: [
-                            {
-                                photoIdUrl: "imgs/product03a.jpg",
-                                productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                                price: "333.33",
-                                amount: 1
-                            },
-                            {
-                                photoIdUrl: "imgs/product04a.jpg",
-                                productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                                price: "666.66",
-                                amount: 2
-                            }
-                        ]
+                        product: {
+                            productId: 10,
+                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                            photo: [
+                                "imgs/product01a.jpg",
+                                "imgs/product02a.jpg",
+                                "imgs/product03a.jpg",
+                                "imgs/product04a.jpg"
+                            ]
+                        },
+                        num: 1,
+                        price: 333,
+                        sumPrice: 333
                     }
                 ]
             };
@@ -414,14 +400,21 @@ var postOrder = (function(){
                 loading.remove();
                 loading = null;
             }
-            var len = result.data.length,
-                $orderTable = $orderList.find('.orderTable');
-            for(var i=0; i<len; i++){
-                if(orderStatus!=0) { result.data[i].status=orderStatus }
-                $orderTable.append(createOrderItem(result.data[i]));
+            var status = result.status;
+            if(status==200){
+                var len = result.data.length,
+                    $orderTable = $orderList.find('.orderTable');
+                for(var i=0; i<len; i++){
+                    if(orderStatus!=0) { result.data[i].status=orderStatus }
+                    $orderTable.append(createOrderItem(result.data[i]));
+                }
+                $orderList.find(".more .showMore")
+                    .removeClass("hidden");
+            } else if(status==300) {
+                location.href = loginUrl;
+            } else {
+                tipsAlert("server error!");
             }
-            $orderList.find(".more .showMore")
-                .removeClass("hidden");
         });
     };
 })();
@@ -449,7 +442,9 @@ if(!!orderStatus){
 } else {
     orderStatus = 0;
 }
+
 $orderMain.find(".orderTab")
     .eq(orderStatus)
     .addClass("active");
+
 postOrder(orderStatus);

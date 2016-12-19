@@ -216,11 +216,32 @@ function createSImageList(imgArray){
     $.ajax({
         method: "post",
         url: "/proxy/customer/product/show",
-        productId: productId
+        data: "productId="+productId
     }).done(function (result) {
-
+        var status = result.status;
+        if(status==200 || status==500){
+            var $productForm = $("#productForm");
+            var data = result.data,
+                shop = data.shop;
+            $productForm.data("info", data)
+                .find(".productName").text(data.productName)
+                .end()
+                .find(".priceSpan").text(data.price.toFixed(2))
+                .end()
+                .find(".stockSpan").text(data.quantityStock)
+                .end()
+                .find(".stock").val(data.quantityStock)
+                .end()
+                .find(".bigImage img").attr("src", data.photo[0])
+                .end()
+                .find(".smallImages").append(createSImageList(data.photo));
+            $product.show();
+        } else if(status==400){
+            $product.html("The product doesn't exist.")
+        }
     }).fail(function (result) {
-        result = {
+        tipsAlert("server error!");
+        /*result = {
             data: {
                 shop: {
                     shopId: 234,
@@ -230,41 +251,41 @@ function createSImageList(imgArray){
                     telephone: "69812374",
                     status: 0
                 },
-                product: {
-                    productId: 45,
-                    classId: 1,
-                    productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                    price: 199,
-                    quantityStock: 50,
-                    idDel: 0,
-                    photo: [
-                        "imgs/product01a.jpg",
-                        "imgs/product02a.jpg",
-                        "imgs/product03a.jpg",
-                        "imgs/product04a.jpg"
-                    ]
-                }
+                productId: 45,
+                classId: 1,
+                productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                price: 199,
+                quantityStock: 50,
+                idDel: 0,
+                photo: [
+                    "imgs/product01a.jpg",
+                    "imgs/product02a.jpg",
+                    "imgs/product03a.jpg",
+                    "imgs/product04a.jpg"
+                ]
             }
         };
         var $productForm = $("#productForm");
-        var shop = result.data.shop,
-            product = result.data.product;
-        $productForm.data("info", product)
-            .find(".productName").text(product.productName)
+        var data = result.data,
+            shop = data.shop;
+        $productForm.data("info", data)
+            .find(".productName").text(data.productName)
             .end()
-            .find(".priceSpan").text(product.price.toFixed(2))
+            .find(".priceSpan").text(data.price.toFixed(2))
             .end()
-            .find(".stockSpan").text(product.quantityStock)
+            .find(".stockSpan").text(data.quantityStock)
             .end()
-            .find(".stock").val(product.quantityStock)
+            .find(".stock").val(data.quantityStock)
             .end()
-            .find(".bigImage img").attr("src", product.photo[0])
+            .find(".bigImage img").attr("src", data.photo[0])
             .end()
-            .find(".smallImages").append(createSImageList(product.photo));
-        $product.show();
+            .find(".smallImages").append(createSImageList(data.photo));
+        $product.show();*/
 
     });
 }());
+
+var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
 
 var $productForm = $("#productForm");
 
@@ -279,17 +300,11 @@ var addToCart = (function(){
             method: "post",
             url: "/proxy/customer/cart/adding",
             data: data
-        }).done(function(){
-
-        }).fail(function(result){
+        }).done(function(result){
             if(loading) {
                 loading.remove();
                 loading = null;
             }
-            result = {
-                status: 200,
-                num: 1000
-            };
             var status = result.status;
             if(status==200){
                 setCart(result.num);
@@ -299,6 +314,25 @@ var addToCart = (function(){
             } else {
                 tipsAlert("server error!");
             }
+        }).fail(function(result){
+            tipsAlert("server error!");
+            /*result = {
+                status: 200,
+                num: 1000
+            };
+            if(loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                setCart(result.num);
+                showSpinner("Add success");
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                tipsAlert("server error!");
+            }*/
         });
     };
 })();
@@ -313,16 +347,11 @@ var addToFavo = (function(){
             method: "post",
             url: "/proxy/customer/favorite/adding",
             data: data
-        }).done(function(){
-
-        }).fail(function(result){
+        }).done(function(result){
             if(loading) {
                 loading.remove();
                 loading = null;
             }
-            result = {
-                status: 200
-            };
             var status = result.status;
             if(status==200){
                 showSpinner("Add success");
@@ -331,6 +360,23 @@ var addToFavo = (function(){
             } else {
                 tipsAlert("server error!");
             }
+        }).fail(function(result){
+            tipsAlert("server error!");
+            /*result = {
+                status: 200
+            };
+            if(loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                showSpinner("Add success");
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                tipsAlert("server error!");
+            }*/
         });
     };
 })();
@@ -345,19 +391,31 @@ var buy = (function(){
             method: "post",
             url: "/proxy/order/prepare",
             data: data
-        }).done(function(){
-
-        }).fail(function(result){
+        }).done(function(result){
             if(loading) {
                 loading.remove();
                 loading = null;
             }
-            result = {
+            var status = result.status;
+            if(status==200){
+                location.href = "confirmOrder.html?orderIdList="+decodeURIComponent(JSON.Stringify(result.orderIdList));
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                tipsAlert("server error!");
+            }
+        }).fail(function(result){
+            tipsAlert("server error!");
+            /*result = {
                 status: 200,
                 data: {
                     orderId: 1
                 }
             };
+            if(loading) {
+                loading.remove();
+                loading = null;
+            }
             var status = result.status;
             if(status==200){
                 location.href = "confirmOrder.html?orderId="+result.data.orderId;
@@ -365,7 +423,7 @@ var buy = (function(){
                 location.href = loginUrl;
             } else {
                 tipsAlert("server error!");
-            }
+            }*/
         });
     };
 })();
