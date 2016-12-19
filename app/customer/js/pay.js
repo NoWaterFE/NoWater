@@ -208,11 +208,6 @@ var confirmPay = (function(){
     return function (e) {
         var _this = $(this);
         e.preventDefault();
-        var $alipay = _this.find(".alipay");
-        if (!this.alipay.value) {
-            addError($alipay, "Alipay can't be empty!");
-            return;
-        }
         if(loading) return ;
         loading = showLoading(_this);
         $.ajax({

@@ -398,7 +398,7 @@ var buy = (function(){
             }
             var status = result.status;
             if(status==200){
-                location.href = "confirmOrder.html?orderIdList="+decodeURIComponent(JSON.Stringify(result.orderIdList));
+                location.href = "confirmOrder.html?orderIdList="+decodeURIComponent(JSON.stringify(result.orderIdList));
             } else if(status==300){
                 location.href = loginUrl;
             } else {

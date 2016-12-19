@@ -237,7 +237,18 @@ var $orderList = $("#orderList"),
         url: "/proxy/customer/order/detail",
         data: "orderIdList="+orderIdList+"&status=-3"
     }).done(function (result) {
-
+        var data = result.data,
+            len = data.length,
+            $orderTable = $orderList.find('.orderTable'),
+            sumPrice = 0;
+        for(var i=0; i<len; i++){
+            $orderTable.append(createOrderItem(data[i]));
+            sumPrice += data[i].order.sumPrice;
+        }
+        var $orderSubmit = $orderList.find(".orderSubmit");
+        $orderSubmit.show()
+            .find('.price').text(sumPrice.toFixed(2)).end()
+            .find('.address').text(data[0].order.address);
     }).fail(function (result) {
         //tipsAlert("server error!");
         result = {
@@ -311,8 +322,19 @@ var submitOrder = (function(){
             method: "post",
             url: "/proxy/order/confirm",
             data: data
-        }).done(function(){
-
+        }).done(function(result){
+            if(loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                location.href = "pay.html?orderIdList="+orderIdList;
+            } else if(status==300) {
+                location.href = loginUrl;
+            } else {
+                tipsAlert("server error!");
+            }
         }).fail(function(result){
             result = {
                 status: 200
