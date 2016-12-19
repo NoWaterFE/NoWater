@@ -6,15 +6,15 @@
     <title>Customer Management | PARKnSHOP</title>
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
     <link rel="icon" type="image/x-icon" href="../favicon.ico" >
-    <link rel="stylesheet" type="text/css" href="style/customerList.css">
+    <link rel="stylesheet" type="text/css" href="style/shopList.css">
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 </head>
 
 <body>
 <div class="nav">
     <ul>
-        <li class="navList active"><a href="customerList.html">Customer Management</a></li>
-        <li class="navList"><a href="shopList.html">Shop Management</a></li>
+        <li class="navList"><a href="customerList.html">Customer Management</a></li>
+        <li class="navList active"><a href="shopList.html">Shop Management</a></li>
         <li class="navList"><a href="">Shop Application</a></li>
         <li class="navList"><a href="">Shop AD Application</a></li>
         <li class="navList"><a href="">Goods AD Application</a></li>
@@ -39,17 +39,17 @@
     <div class="main">
         <!--页面在这写-->
         <!--<h2 class="title">Customer List</h2>-->
-        <ul class="customerMain clearfix" id="customerMain">
-            <li><a href="customerList.html" class="customerTab">Customer List</a></li>
-            <li><a href="customerList.html?status=1" class="customerTab">BlackList</a></li>
+        <ul class="shopMain clearfix" id="shopMain">
+            <li><a href="shopList.html" class="shopTab">Shop List</a></li>
+            <li><a href="shopList.html?status=1" class="shopTab">BlackList</a></li>
         </ul>
         <!--<div class="bar">
             <div class="search">
                 <input type="text">
             </div>
         </div>-->
-        <div class="customerList" id="customerList">
-            <table class="customerTable">
+        <div class="shopList" id="shopList">
+            <table class="shopTable">
                 <colgroup>
                     <col class="col1">
                     <col class="col2">
@@ -61,7 +61,7 @@
                     <col class="col8">
                 </colgroup>
                 <tbody>
-                <tr class="customerTh">
+                <tr class="shopTh">
                     <th class="id">ID</th>
                     <th class="name">Username</th>
                     <th class="tel">Telephone</th>
@@ -82,7 +82,7 @@
         </div>
     </div>
 </div>
-<script type="text/javascript" src="js/customerList.js"></script>
+<script type="text/javascript" src="js/shopList.js"></script>
 </body>
 
 </html>
