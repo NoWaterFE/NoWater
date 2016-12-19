@@ -432,45 +432,6 @@ function search() {
             }
         }
         $adGoods = null;
-    });
-}
-
-function search() {
-    var keyWord = GetQueryString("keyWord");
-    var $adGoods = $("#adGoods");
-    var $noResult = $("#noResult");
-    var count = 40;
-    var sendData = "keyWord=" + keyWord + "&count=" + count + "&startId=" + startId + "&shopId=" + shopId;
-    $.ajax({
-        type: "post",
-        url: host + "/customer/product/search",
-        xhrFields: {
-            withCredentials: true
-        },
-        dataType: "json",
-        data: sendData
-    }).done(function (result) {
-        if (result.status == 200) {
-            startId = result.startId;
-            if (result.data.length == 0) {
-                setText();
-                $noResult.text("No product found,please try another key words.");
-                $noResult.css('display','block');
-                return;
-            }
-
-            for (var i = 0; i < result.data.length; i++) {
-                var goodItem = createGoodsItem(result.data[i]);
-                $adGoods.append(goodItem);
-            }
-
-            if (startId != -1) {
-                $("#showMore").css('display','block');
-            } else {
-                $("#showMore").css('display','none');
-            }
-        }
-        $adGoods = null;
     })
         .fail(function (result) {
             result = {

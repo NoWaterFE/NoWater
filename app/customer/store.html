@@ -56,7 +56,6 @@
                 </ul>
                 <ul class="accountOperate hasLogin">
                     <li><a href="userCenter.html">Account Info</a></li>
-                    <li><a href="order.html">My Orders</a></li>
                     <li><a href="javascript:;" class="logout">Logout</a></li>
                 </ul>
             </li>
@@ -77,8 +76,9 @@
 <div class="content">
     <div class="storeHeader" id="storeHeader">
         <div class="storeInfo" id="storeInfo">
-            <p class="shopId" id="shopId"></p>
+            <span class="shopName" id="shopName"></span>
 
+            <span class="detail" id="detail"></span>
         </div>
 
         <div class="storeSearch" id="storeSearch">
@@ -97,9 +97,6 @@
         </div>
     </div>
 
-    <div class="noResult" id="noResult">
-    </div>
-
     <ul class="ad-goods clearfix" id="adGoods">
         <div class="tips" id="tips">
         </div><br>
@@ -107,6 +104,8 @@
 
     </ul>
 
+    <div class="noResult" id="noResult">
+    </div>
     <div class="showMore" id="showMore">
         <input type="button" value="SHOW MORE&nbsp;&#8595;" name="showMoreButton" id="showMoreButton">
     </div>
