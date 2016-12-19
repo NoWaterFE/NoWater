@@ -1,33 +1,33 @@
 // header添加事件
 (function () {
     //获取登录信息可能不需要
-    /*$.ajax({
-     method: "get",
-     url: "/proxy/customer/isLogin",
-     dataType: "json"
-     }).done(function (result) {
-     if(result.status==200){
-     var userInfo = result.userInformation[0];
-     var quickMenu = $("#quickMenu");
-     quickMenu.find(".accountOperate").toggleClass("active");
-     quickMenu.find(".my-cart .count").text(userInfo.cartNum);
-     }
-     }).fail(function (result) {
-     console.log(result.statusText);
-     result = {
-     status: 200,
-     userInformation: [{
-     name: "gdh",
-     cartNum: 33
-     }]
-     };
-     if(result.status==200){
-     var userInfo = result.userInformation[0];
-     var quickMenu = $("#quickMenu");
-     quickMenu.find(".accountOperate").toggleClass("active");
-     quickMenu.find(".my-cart .count").text(userInfo.cartNum);
-     }
-     });*/
+    $.ajax({
+        method: "get",
+        url: "/proxy/customer/isLogin",
+        dataType: "json"
+    }).done(function (result) {
+        if (result.status == 200) {
+            var userInfo = result.userInformation[0];
+            var quickMenu = $("#quickMenu");
+            quickMenu.find(".accountOperate").toggleClass("active");
+            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+        }
+    }).fail(function (result) {
+        /*console.log(result.statusText);
+        result = {
+            status: 200,
+            userInformation: [{
+                name: "gdh",
+                cartNum: 33
+            }]
+        };
+        if (result.status == 200) {
+            var userInfo = result.userInformation[0];
+            var quickMenu = $("#quickMenu");
+            quickMenu.find(".accountOperate").toggleClass("active");
+            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+        }*/
+    });
 
     //headMenu添加事件
     var $headMenu = $("#headMenu");
@@ -93,6 +93,15 @@
         $searchForm.trigger("submit");
     });
 
+    window.setCart = function(num){
+        var cart = quickMenu.find(".my-cart .count");
+        if(num > 99) {
+            cart.text("99+");
+        } else {
+            cart.text(num);
+        }
+    }
+
 })();
 
 
@@ -156,6 +165,39 @@ function tipsConfirm(msg, callback){
         .appendTo($("body"));
 }
 
+function showSpinner(msg, config){
+    var $spinner = $(".spinner");
+    if($spinner) $spinner.remove();
+    $spinner = $('<div class="spinner"> ' +
+        '<div class="tips"> ' +
+        msg +
+        '</div> ' +
+        '</div>');
+    var def = {
+        timeout: 1500
+    };
+    config = $.extend(config, def);
+    $spinner.appendTo($("body"))
+        .ready(function () {
+            $spinner.css({
+                "margin-left": -$spinner.width() / 2,
+                "margin-top": -$spinner.width() / 2,
+                "visibility": "visible"
+            });
+        });
+    setTimeout(function(){
+        if($spinner) $spinner.remove();
+        var callback = config.callback;
+        if(callback) callback();
+    }, config.timeout);
+}
+
+function getUrlParam(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+    var r = window.location.search.substr(1).match(reg); //匹配目标参数
+    if (r != null) return r[2]; return null; //返回参数值
+}
+
 function createSImageList(imgArray){
     var sImage = "<li class='sImage active'><img src='"+imgArray[0]+"'></li>",
         len = imgArray.length;
@@ -166,53 +208,167 @@ function createSImageList(imgArray){
 }
 
 (function(){
+    var productId = getUrlParam("id");
+    var $product = $("#product");
+    if(productId==undefined) {
+        $product.html("The product doesn't exist.")
+    }
     $.ajax({
-        method: "get",
-        url: "/proxy/"
+        method: "post",
+        url: "/proxy/customer/product/show",
+        productId: productId
     }).done(function (result) {
 
     }).fail(function (result) {
         result = {
-            data: [
-                {
+            data: {
+                shop: {
                     shopId: 234,
                     shopName: "Aokin Official Factory Store",
+                    ownerId: 45,
+                    email: "nowater@nowater.com",
+                    telephone: "69812374",
+                    status: 0
+                },
+                product: {
                     productId: 45,
+                    classId: 1,
                     productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                    price: "199.00",
-                    stock: 50,
-                    productImage: [
+                    price: 199,
+                    quantityStock: 50,
+                    idDel: 0,
+                    photo: [
                         "imgs/product01a.jpg",
                         "imgs/product02a.jpg",
                         "imgs/product03a.jpg",
                         "imgs/product04a.jpg"
-                    ],
-                    reviews: []
+                    ]
                 }
-            ]
+            }
         };
         var $productForm = $("#productForm");
-        var data = result.data[0];
-        $(".shopValue").text(data.shopName)
-            .attr("href", "store.html?shopId="+encodeURIComponent(""+data.shopId));
-        $productForm
-            .data("info", data)
-            .find(".productName").text(data.productName)
+        var shop = result.data.shop,
+            product = result.data.product;
+        $productForm.data("info", product)
+            .find(".productName").text(product.productName)
             .end()
-            .find(".priceSpan").text(""+data.price)
+            .find(".priceSpan").text(product.price.toFixed(2))
             .end()
-            .find(".stockSpan").text(data.stock)
+            .find(".stockSpan").text(product.quantityStock)
             .end()
-            .find(".stock").val(data.stock)
+            .find(".stock").val(product.quantityStock)
             .end()
-            .find(".bigImage img").attr("src", data.productImage[0])
+            .find(".bigImage img").attr("src", product.photo[0])
             .end()
-            .find(".smallImages").append(createSImageList(data.productImage));
+            .find(".smallImages").append(createSImageList(product.photo));
+        $product.show();
 
     });
 }());
 
 var $productForm = $("#productForm");
+
+var addToCart = (function(){
+    var loading = null;
+    return function(e){
+        var info = $productForm.data("info");
+        if(loading) return;
+        loading = showLoading($productForm);
+        var data = "productId="+info.productId+"&addType=0&num="+$productForm.find(".num").val();
+        $.ajax({
+            method: "post",
+            url: "/proxy/customer/cart/adding",
+            data: data
+        }).done(function(){
+
+        }).fail(function(result){
+            if(loading) {
+                loading.remove();
+                loading = null;
+            }
+            result = {
+                status: 200,
+                num: 1000
+            };
+            var status = result.status;
+            if(status==200){
+                setCart(result.num);
+                showSpinner("Add success");
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                tipsAlert("server error!");
+            }
+        });
+    };
+})();
+var addToFavo = (function(){
+    var loading = null;
+    return function(e){
+        var info = $productForm.data("info");
+        if(loading) return;
+        loading = showLoading($productForm);
+        var data = "id="+info.productId+"&favoriteType=0";
+        $.ajax({
+            method: "post",
+            url: "/proxy/customer/favorite/adding",
+            data: data
+        }).done(function(){
+
+        }).fail(function(result){
+            if(loading) {
+                loading.remove();
+                loading = null;
+            }
+            result = {
+                status: 200
+            };
+            var status = result.status;
+            if(status==200){
+                showSpinner("Add success");
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                tipsAlert("server error!");
+            }
+        });
+    };
+})();
+var buy = (function(){
+    var loading = null;
+    return function(e){
+        var info = $productForm.data("info");
+        if(loading) return;
+        loading = showLoading($productForm);
+        var data = "productId="+info.productId+"&orderType=0&num="+$productForm.find(".num").val();
+        $.ajax({
+            method: "post",
+            url: "/proxy/order/prepare",
+            data: data
+        }).done(function(){
+
+        }).fail(function(result){
+            if(loading) {
+                loading.remove();
+                loading = null;
+            }
+            result = {
+                status: 200,
+                data: {
+                    orderId: 1
+                }
+            };
+            var status = result.status;
+            if(status==200){
+                location.href = "confirmOrder.html?orderId="+result.data.orderId;
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                tipsAlert("server error!");
+            }
+        });
+    };
+})();
 
 $productForm.on("mouseover", ".sImage", function(){
     var _this = $(this);
@@ -284,3 +440,9 @@ $productForm.on("click", ".quantityOp .plus", function (e) {
     }
     checkState($num);
 });
+
+$productForm.on("click", ".buy", buy);
+
+$productForm.on("click", ".addToCart", addToCart);
+
+$productForm.on("click", ".addToFavo", addToFavo);

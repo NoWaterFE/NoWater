@@ -1,92 +1,3 @@
-var applyListSet = $("#applyListSet");
-
-function createApplyList(list) {
-    var r = $('<li class="applyList"> ' +
-        '<table> ' +
-        '<tbody> ' +
-        '<tr> ' +
-        '<th class="big">shopName</th> ' +
-        '<th>telephone</th> ' +
-        '<th>shopId</th> ' +
-        '<th>ownerId</th> ' +
-        '<th class="big">email</th> ' +
-        '<th class="approve operate">approve</th> ' +
-        '</tr> ' +
-        '<tr> ' +
-        '<td>'+list.shopName+'</td> ' +
-        '<td>'+list.telephone+'</td>' +
-        '<td>'+list.shopId+'</td> ' +
-        '<td>'+list.ownerId+'</td> ' +
-        '<td>'+list.email+'</td>' +
-        '<td class="reject operate">reject</td> ' +
-        '</tr>' +
-        '</tbody> ' +
-        '</table> ' +
-        '</li>');
-    r.data("shopId", list.shopId);
-    return r;
-}
-
-$.ajax({
-    method: "get",
-    url: "/proxy/admin/shop/applyList",
-    dataType: "json"
-}).done(function(result){
-    if(result.status==200){
-        var list = result.data;
-        for(var len = list.length, i=0; i<len; i++ ){
-            applyListSet.append(createApplyList(list[i]));
-        }
-    } else if(result.status==300){
-        location.href = "login.html";
-    }
-}).fail(function (result) {
-    //alert("server error");
-    //location.href = "login.html";
-    result = {"status":200,"data":[{"shopName":"wukai-SHOP","telephone":"65204525","shopId":3,"ownerId":7,"email":"123@qq.com","status":0},{"shopName":"nolon","telephone":"96666666","shopId":5,"ownerId":16,"email":"964886469@qq.com","status":0},{"shopName":"takeashower","telephone":"96488888","shopId":6,"ownerId":18,"email":"964886469@qq.com","status":0}]};
-    if(result.status==200){
-        var list = result.data;
-        for(var len = list.length, i=0; i<len; i++ ){
-            applyListSet.append(createApplyList(list[i]));
-        }
-    } else if(result.status==300){
-        location.href = "login.html";
-    }
-
-});
-
-applyListSet.on("click", ".applyList .operate", function () {
-    var _this = $(this);
-    var behavior = -1;
-    if(_this.hasClass("approve")){
-        behavior = 1;
-    }
-    var shopId = _this.parents(".applyList").data("shopId");
-    $.ajax({
-        method: "post",
-        url: "/proxy/admin/shop/handle",
-        data: "shopId="+shopId+"&behavior="+behavior,
-        dataType: "json"
-    }).done(function(result){
-        if(result.status==200){
-            location.reload();
-        } else if(result.status==300){
-            location.href = "login.html";
-        }
-    }).fail(function (result) {
-        alert("server error");
-        location.href = "login.html";
-        /*result = {
-         status: 200
-         };
-         if(result.status==200){
-         location.reload();
-         } else if(result.status==300){
-         location.href = "login.html";
-         }*/
-    });
-});
-
 var $logoutBtn = $("#logoutBtn");
 
 $logoutBtn.click(function () {
@@ -102,6 +13,11 @@ $logoutBtn.click(function () {
     });
 });
 
+function delCookie(name){
+    var t = new Date();
+    t.setTime(t.getTime()-1);
+    document.cookie= name + "=null;path=/;expires="+t.toGMTString();
+}
 
 function showLoading($relative) {
     var $tips = $relative.siblings(".loadingImg");
@@ -189,3 +105,96 @@ function showSpinner(msg, config){
         if(callback) callback();
     }, config.timeout);
 }
+
+function getUrlParam(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+    var r = window.location.search.substr(1).match(reg); //匹配目标参数
+    if (r != null) return r[2]; return null; //返回参数值
+}
+
+function createCustomerList(info) {
+    return $('<tr class="customerItem"> ' +
+        '<td class="id">'+info.userId+'</td> ' +
+        '<td class="name">'+info.name+'</td> ' +
+        '<td class="tel">'+info.telephone+'</td> ' +
+        '<td class="address">'+info.address1+' ' + info.address2+' ' + info.address3+'</td> ' +
+        '<td class="postCode">'+info.postCode+'</td> ' +
+        '<td class="firstName">'+info.firstName+'</td> ' +
+        '<td class="lastName">'+info.lastName+'</td> ' +
+        '<td class="operate"> ' +
+        '<span class="blackList">add to blacklist</span> ' +
+        '<span class="del">delete</span> ' +
+        '</td> ' +
+        '</tr>');
+}
+
+var cStatus = getUrlParam("status");
+
+if(cStatus==null) cStatus=0;
+cStatus = parseInt(cStatus);
+if(cStatus>1 || cStatus<0) cStatus = 0;
+
+var $customerMain = $("#customerMain");
+$customerMain.find(".customerTab")
+    .eq(cStatus)
+    .addClass("active");
+
+
+var getCustomerItem = (function(){
+    var loading = null,
+        startId = 0;
+    return function (cStatus) {
+        var reqData = "count=20&startId="+startId;
+        if(loading) return ;
+        loading = showLoading($(".more"));
+        $.ajax({
+            method: "get",
+            url: "/proxy/admin/customer/list",
+            dataType: "json",
+            data: reqData
+        }).done(function(result){
+
+        }).fail(function(result){
+            result = {
+                status: 200,
+                data: [
+                    {
+                        userId: 10,
+                        name: "dhgan yoyoo",
+                        telephone: "238409324",
+                        address1: "HongkongIsland(HK)",
+                        address2: "Chai wan",
+                        address3: "wanli street No.19",
+                        postCode: "729339",
+                        firstName: "yalish ituode",
+                        lastName: "yomi",
+                        status: 0
+                    }
+                ]
+            };
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            var data = result.data,
+                len = data.length;
+            var $tbody = $customerList.find(".customerTable tbody");
+            for(var i=0; i<10; i++) {
+                $tbody.append(createCustomerList(data[0]));
+            }
+            if(startId!=-1){
+                $customerList.find(".more .showMore").removeClass("hidden");
+            }
+        });
+    }
+})();
+
+getCustomerItem(cStatus);
+
+var $customerList = $("#customerList");
+
+$customerList.on("click", ".more .showMore", function(){
+    var _this = $(this);
+    _this.addClass("hidden");
+    getCustomerItem(cStatus);
+});

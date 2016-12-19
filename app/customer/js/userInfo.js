@@ -9,7 +9,7 @@ $.ajax({
         userInfo = result.userInformation;
     }
 }).fail(function (result) {
-    result = {
+    /*result = {
         status: 200,
         userInformation: {
             name: "gdh",
@@ -18,5 +18,5 @@ $.ajax({
     };
     if(result.status==200){
         userInfo = result.userInformation;
-    }
+    }*/
 });

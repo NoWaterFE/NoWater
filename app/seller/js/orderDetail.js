@@ -11,7 +11,7 @@
     quickMenu.on("click", ".logout", function () {
         var _this = $(this);
         $.ajax({
-            method: "get",
+            method: "post",
             url: "/proxy/customer/loginout"
         }).done(function(){
             delCookie("token");
@@ -200,9 +200,10 @@ var postOrder = (function(){
                 loading.remove();
                 loading = null;
             }
-            var $orderList = $("#orderList");
+            var $orderList = $("#orderList"),
+                $orderTable = $orderList.find(".orderTable");
             result.data[0].status = orderId;
-            $orderList.find(".orderTable").append(createOrderItem(result.data[0]));
+            $orderTable.append(createOrderItem(result.data[0]));
         });
     };
 })();

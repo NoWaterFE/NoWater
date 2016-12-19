@@ -100,10 +100,11 @@ var  postProductList = (function() {
                 var data = result.data,
                     len = data.length;
                 startId = result.endId;
+                var $tbody = $productList.find("tbody");
                 for(var i=0; i<len; i++){
                     createProductList(data[i])
                         .data("info", data[i])
-                        .appendTo($productList.find("tbody"));
+                        .appendTo($tbody);
                 }
                 if(startId!=-1){
                     $productList.find(".more .showMore").removeClass("hidden");
@@ -163,7 +164,7 @@ $productList.on("click", ".delete", (function () {
         tipsConfirm("Are you sure to removed the product from shelves?", function(){
             loading = showLoading(_this.parent());
             $.ajax({
-                method: "get",
+                method: "post",
                 url: "/proxy/shop-owner/products/edit",
                 dataType: "json",
                 data: ""
@@ -246,6 +247,33 @@ function tipsConfirm(msg, callback){
     $confirm.append($shadow)
         .append($content)
         .appendTo($("body"));
+}
+
+function showSpinner(msg, config){
+    var $spinner = $(".spinner");
+    if($spinner) $spinner.remove();
+    $spinner = $('<div class="spinner"> ' +
+        '<div class="tips"> ' +
+        msg +
+        '</div> ' +
+        '</div>');
+    var def = {
+        timeout: 1500
+    };
+    config = $.extend(config, def);
+    $spinner.appendTo($("body"))
+        .ready(function () {
+            $spinner.css({
+                "margin-left": -$spinner.width() / 2,
+                "margin-top": -$spinner.width() / 2,
+                "visibility": "visible"
+            });
+        });
+    setTimeout(function(){
+        if($spinner) $spinner.remove();
+        var callback = config.callback;
+        if(callback) callback();
+    }, config.timeout);
 }
 
 //修改商品
@@ -356,8 +384,10 @@ function modifyProduct(_this, loading){
         _this.data("submit", false);
         var status = result.status;
         if(status == 200){
-            tipsAlert("modify success", function(){
-                location.reload();
+            showSpinner("modify success", {
+                callback: function(){
+                    location.reload();
+                }
             });
         } else if(status == 300) {
             location.href = loginUrl;
@@ -371,7 +401,7 @@ function modifyProduct(_this, loading){
     }).fail(function () {
         if (loading) loading.remove();
         _this.data("submit", false);
-        //tipsAlert("server error");
+        tipsAlert("server error");
     });
 }
 
