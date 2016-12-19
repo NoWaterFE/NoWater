@@ -11,11 +11,8 @@ if (!GetQueryString("shopId")) {
 }
 var sendShopId = "shopId=" + shopId;
 $.ajax({
-    type: "post",
-    url: host+"/customer/shop/info",
-    xhrFields: {
-        withCredentials: true
-    },
+    method: "get",
+    url: "/proxy/customer/shop/info",
     dataType: "json",
     data: sendShopId
 }).done(function (result) {
@@ -39,27 +36,27 @@ $.ajax({
             email: "apple@icloud.com",
             telephone: "123456",
             classList: [
-                    {
-                        classId: 0,
-                        className: "iPhone"
-                    },
-                    {
-                        classId: 1,
-                        className: "iPad"
-                    },
-                    {
-                        classId: 2,
-                        className: "iPod"
-                    },
-                    {
-                        classId: 3,
-                        className: "macBook"
-                    },
-                    {
-                        classId: 4,
-                        className: "Watch"
-                    }
-                ]
+                {
+                    classId: 0,
+                    className: "iPhone"
+                },
+                {
+                    classId: 1,
+                    className: "iPad"
+                },
+                {
+                    classId: 2,
+                    className: "iPod"
+                },
+                {
+                    classId: 3,
+                    className: "macBook"
+                },
+                {
+                    classId: 4,
+                    className: "Watch"
+                }
+            ]
         };
         if(result.status==200){
             $("#shopName").text(result.shopName);
@@ -138,10 +135,7 @@ if (!GetQueryString("keyWord")) {
         var _this = $(this);
         $.ajax({
             type: "post",
-            url: host+"/customer/loginout",
-            xhrFields: {
-                withCredentials: true
-            }
+            url: "/proxy/customer/loginout",
         }).done(function(){
             delCookie("token");
             location.reload();
@@ -217,14 +211,11 @@ function getClass() {
     if (!shopId) { shopId = 0; }
     if (!classId) { classId = 0; }
     var count = 40;
-    var sendData = "shopId=" + shopId + "&classId=" + classId + "&count=" + count +"&startId" + startId;
+    var sendData = "shopId=" + shopId + "&classId=" + classId + "&count=" + count +"&startId=" + startId;
 
     $.ajax({
-        type: "post",
-        url: host+"/customer/shop/class/product",
-        xhrFields: {
-            withCredentials: true
-        },
+        method: "post",
+        url: "/proxy/customer/class/product",
         dataType: "json",
         data: sendData
     }).done(function (result) {
@@ -258,11 +249,11 @@ function getClass() {
         $adGoods = null;
     })
         .fail(function(result){
-        result = {
-            status: 200,
-            actualCount: 10,
-            startId: 2,
-            data: [
+            result = {
+                status: 200,
+                actualCount: 10,
+                startId: 2,
+                data: [
                     {
                         productId: 1,
                         shopId: 1,
@@ -364,33 +355,69 @@ function getClass() {
                         isDel: false
                     }
                 ]
-        };
-        if(result.status==200 || result.status==300){
+            };
+            if(result.status==200 || result.status==300){
+                startId = result.startId;
+                setText();
+                if(startId != -1) {
+                    $("#showMore").css('display','block');
+                } else {
+                    $("#showMore").css('display','none');
+                }
+                for(var i=0; i<result.data.length; i++){
+                    var goodItem = createGoodsItem(result.data[i]);
+                    $adGoods.append(goodItem);
+                }
+            }
+            if(result.status==500){
+                $noResult.text("No shop found,please try another shop name.");
+                $noResult.css('display','block');
+                $("#storeHeader").css('display','none');
+                $("#storeMenu").css('display','none');
+                $("#adGoods").css('display','none');
+                return;
+            }
+            if(result.status==600) {
+                setText();
+                $noResult.text("No class found,please try another class name.");
+                $noResult.css('display','block');
+                return;
+            }
+            $adGoods = null;
+        });
+}
+
+function search() {
+    var keyWord = GetQueryString("keyWord");
+    var $adGoods = $("#adGoods");
+    var $noResult = $("#noResult");
+    var count = 40;
+    var sendData = "keyWord=" + keyWord + "&count=" + count + "&startId=" + startId + "&shopId=" + shopId;
+    $.ajax({
+        method: "get",
+        url: "/proxy/customer/product/search",
+        dataType: "json",
+        data: sendData
+    }).done(function (result) {
+        if (result.status == 200) {
             startId = result.startId;
-            setText();
-            if(startId != -1) {
+            if (result.data.length == 0) {
+                setText();
+                $noResult.text("No product found,please try another key words.");
+                $noResult.css('display','block');
+                return;
+            }
+
+            for (var i = 0; i < result.data.length; i++) {
+                var goodItem = createGoodsItem(result.data[i]);
+                $adGoods.append(goodItem);
+            }
+
+            if (startId != -1) {
                 $("#showMore").css('display','block');
             } else {
                 $("#showMore").css('display','none');
             }
-            for(var i=0; i<result.data.length; i++){
-                var goodItem = createGoodsItem(result.data[i]);
-                $adGoods.append(goodItem);
-            }
-        }
-        if(result.status==500){
-            $noResult.text("No shop found,please try another shop name.");
-            $noResult.css('display','block');
-            $("#storeHeader").css('display','none');
-            $("#storeMenu").css('display','none');
-            $("#adGoods").css('display','none');
-            return;
-        }
-        if(result.status==600) {
-            setText();
-            $noResult.text("No class found,please try another class name.");
-            $noResult.css('display','block');
-            return;
         }
         $adGoods = null;
     });

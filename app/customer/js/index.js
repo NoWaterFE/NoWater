@@ -373,7 +373,7 @@ var addToCart = (function(){
             method: "post",
             url: "/proxy/customer/cart/adding",
             data: data
-        }).done(function(){
+        }).done(function(result){
             if(loading) {
                 loading.remove();
                 loading = null;

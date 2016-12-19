@@ -113,14 +113,12 @@ function getUrlParam(name) {
 }
 
 function createCustomerList(info) {
-    return $('<tr class="customerItem"> ' +
-        '<td class="id">'+info.userId+'</td> ' +
-        '<td class="name">'+info.name+'</td> ' +
+    return $('<tr class="shopItem"> ' +
+        '<td class="id">'+info.shopId+'</td> ' +
+        '<td class="name">'+info.shopName+'</td> ' +
+        '<td class="ownerId">'+info.ownerId+'</td> ' +
         '<td class="tel">'+info.telephone+'</td> ' +
-        '<td class="address">'+info.address1+' ' + info.address2+' ' + info.address3+'</td> ' +
-        '<td class="postCode">'+info.postCode+'</td> ' +
-        '<td class="firstName">'+info.firstName+'</td> ' +
-        '<td class="lastName">'+info.lastName+'</td> ' +
+        '<td class="email">'+info.email+'</td> ' +
         '<td class="operate"> ' +
         '<span class="blackList">add to blacklist</span> ' +
         '<span class="del">delete</span> ' +
@@ -134,8 +132,8 @@ if(cStatus==null) cStatus=0;
 cStatus = parseInt(cStatus);
 if(cStatus>1 || cStatus<0) cStatus = 0;
 
-var $customerMain = $("#customerMain");
-$customerMain.find(".customerTab")
+var $shopMain = $("#shopMain");
+$shopMain.find(".shopTab")
     .eq(cStatus)
     .addClass("active");
 
@@ -149,7 +147,7 @@ var getCustomerItem = (function(){
         loading = showLoading($(".more"));
         $.ajax({
             method: "get",
-            url: "/proxy/admin/customer/list",
+            url: "/proxy/admin/shop/list",
             dataType: "json",
             data: reqData
         }).done(function(result){
@@ -159,16 +157,12 @@ var getCustomerItem = (function(){
                 status: 200,
                 data: [
                     {
-                        userId: 10,
-                        name: "dhgan yoyoo",
+                        shopId: 10,
+                        shopName: "dhgan yoyoo",
                         telephone: "238409324",
-                        address1: "HongkongIsland(HK)",
-                        address2: "Chai wan",
-                        address3: "wanli street No.19",
-                        postCode: "729339",
-                        firstName: "yalish ituode",
-                        lastName: "yomi",
-                        status: 0
+                        ownerId: 1,
+                        email: "nowater@nowater.com",
+                        status: 1
                     }
                 ]
             };
@@ -178,12 +172,12 @@ var getCustomerItem = (function(){
             }
             var data = result.data,
                 len = data.length;
-            var $tbody = $customerList.find(".customerTable tbody");
+            var $tbody = $shopList.find(".shopTable tbody");
             for(var i=0; i<10; i++) {
                 $tbody.append(createCustomerList(data[0]));
             }
             if(startId!=-1){
-                $customerList.find(".more .showMore").removeClass("hidden");
+                $shopList.find(".more .showMore").removeClass("hidden");
             }
         });
     }
@@ -191,9 +185,9 @@ var getCustomerItem = (function(){
 
 getCustomerItem(cStatus);
 
-var $customerList = $("#customerList");
+var $shopList = $("#shopList");
 
-$customerList.on("click", ".more .showMore", function(){
+$shopList.on("click", ".more .showMore", function(){
     var _this = $(this);
     _this.addClass("hidden");
     getCustomerItem(cStatus);
