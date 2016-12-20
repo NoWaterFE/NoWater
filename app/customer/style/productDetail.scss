@@ -58,7 +58,7 @@
         .menuBar {
             float: left;
             margin-left: 0;
-            width: 200px;
+            width: 240px;
             height: 30px;
             background-color: darkblue;
             color: #fff;
@@ -66,8 +66,9 @@
             span {
                 display: block;
                 font-size: 12px;
-                text-align: center;
+                text-align: left;
                 line-height: 30px;
+                margin-left: 12px;
             }
             &:hover {
                 .menuList {
@@ -77,11 +78,12 @@
             .menuList {
                 display: none;
                 background-color: rgba(0, 0, 139, 0.8);
-                font-size: 14px;
+                font-size: 12px;
                 color: #fff;
                 position: relative;
                 top: 0;
-                width: 200px;
+                left: 0;
+                width: 240px;
                 padding: 10px 0;
                 li {
                     line-height: 32px;

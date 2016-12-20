@@ -29,11 +29,8 @@ $(function () {
             warnInfo.text('warning:password error!');
 	    }else{
 	  	    $.ajax({
-	  	    	xhrFields: {
-                            withCredentials: true
-                },
 		        type: "post",
-		        url: host+"/admin/login",
+		        url: "/proxy/admin/login",
 		        data: "name="+name+"&password="+$.md5(pwd),
 		        dataType: "json"
 	    }).done(function (result) {

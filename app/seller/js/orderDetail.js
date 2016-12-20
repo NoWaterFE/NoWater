@@ -119,7 +119,7 @@ function　createOrderItem(data){
         data.statusText = "Waiting for comment";
     } else if(data.status==5){
         data.statusText = "Completed";
-    } else if(data.status==-1){
+    } else if(data.status==10){
         data.statusText = "Closed";
     }
     var product = data.product;
@@ -151,7 +151,7 @@ function　createOrderItem(data){
 
 function setOrderInfo(data) {
     var $info = $("#info");
-    var shop = data.shop;
+    var shop = data.product.shop;
     $info.find(".receiver .value").text(data.address).end()
         .find(".orderTime .value").text(data.time).end()
         .find(".orderId .value").text(data.orderId).end()
@@ -164,31 +164,44 @@ function setOrderInfo(data) {
 
 var postOrder = (function(){
     var loading = null;
-    return function (orderId) {
+    return function (orderId, orderStatus) {
         if(loading) return ;
         loading = showLoading($(".more"));
         var arr = [];
         arr.push(orderId);
-        var reqData = "orderId="+JSON.stringify(arr);
+        var reqData = "orderIdList="+JSON.stringify(arr)+"&status="+orderStatus;
         $.ajax({
             method: "get",
-            url: "/proxy/order/detail",
+            url: "/proxy/shop-owner/order/detail",
             dataType: "json",
             data: reqData
         }).done(function(result){
-
+            if(loading){
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                var $orderList = $("#orderList"),
+                    $orderTable = $orderList.find(".orderTable"),
+                    data = result.data[0];
+                setOrderInfo(data);
+                $orderTable.append(createOrderItem(data));
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                tipsAlert("unknown error!", function () {
+                    location.href = "index.html";
+                });
+            }
         }).fail(function(result){
-            result = {
+            /*result = {
                 data: [
                     {
                         time: "2016-09-05 16:30:06",
                         orderId: "2662774641999118",
                         targetId: 12,
-                        shop: {
-                            shopName: "Tom's shop",
-                            telephone: 62937498,
-                            email: "nowater@nowater.com"
-                        },
+                        countdown: "left 23 Hour",
                         status: 1,
                         address: "Dhgan, 18789427353, HongkongIsland(HK) Chai Wan Wanli",
                         product: {
@@ -199,7 +212,12 @@ var postOrder = (function(){
                                 "imgs/product02a.jpg",
                                 "imgs/product03a.jpg",
                                 "imgs/product04a.jpg"
-                            ]
+                            ],
+                            shop: {
+                                shopName: "Tom's shop",
+                                telephone: 62937498,
+                                email: "nowater@nowater.com"
+                            }
                         },
                         express: "SF",
                         expressCode: "7978978",
@@ -213,18 +231,28 @@ var postOrder = (function(){
                 loading.remove();
                 loading = null;
             }
-            var $orderList = $("#orderList"),
-                $orderTable = $orderList.find(".orderTable"),
-                data = result.data[0];
-            setOrderInfo(data);
-            $orderTable.append(createOrderItem(data));
+            var status = result.status;
+            if(status==200){
+                var $orderList = $("#orderList"),
+                    $orderTable = $orderList.find(".orderTable"),
+                    data = result.data[0];
+                setOrderInfo(data);
+                $orderTable.append(createOrderItem(data));
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                tipsAlert("unknown error!", function () {
+                    location.href = "index.html";
+                });
+            }*/
         });
     };
 })();
 
-var orderId = getUrlParam("orderId");
-if(orderId){
-    postOrder(orderId);
+var orderId = getUrlParam("orderId"),
+    status = getUrlParam("status");
+if(orderId&&status){
+    postOrder(orderId, status);
 } else {
-    location.href = "index.html";
+    location.href = "order.html";
 }

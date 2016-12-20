@@ -219,3 +219,119 @@
         }
     }
 }
+
+.deliverPop {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    display: none;
+    .shadow {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+    }
+    .title {
+        border-bottom: 1px solid #E0E0E0;
+        font-size: 24px;
+        line-height: 34px;
+    }
+    .deliverForm {
+        padding: 20px;
+        width: 500px;
+        margin: 120px auto;
+        background: #fff;
+        position: relative;
+        border-radius: 4px;
+        .close {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            right: 10px;
+            top: 5px;
+            cursor: pointer;
+            background-image: url(../imgs/close.png);
+            &:hover {
+                background-image: url(../imgs/close_hover.png);
+            }
+        }
+    }
+    .input-item {
+        margin: 20px 0;
+        label {
+            display: inline-block;
+            width: 100px;
+            font-size: 14px;
+        }
+        input, select {
+            width: 180px;
+            height: 30px;
+            font-size: 14px;
+            padding: 0 5px;
+            border: 1px solid #aaa;
+            option {
+                padding: 2px 5px;
+            }
+            &:focus {
+                border-color: #4349C5;
+                box-shadow: 0 0 10px #4349C5;
+            }
+        }
+        select {
+            width: 240px;
+        }
+        .tips {
+            font-size: 14px;
+            color: red;
+            display: none;
+        }
+        &.error {
+            input {
+                border-color: red;
+            }
+            .tips {
+                display: inline-block;
+            }
+        }
+    }
+    .submit {
+        padding-left: 140px;
+        margin: 20px 0;
+        input[type=submit] {
+            width: 120px;
+            height: 40px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            background: #292d84;
+            color: #fff;
+            &.disabled{
+                background: #DCDEE3;
+                color: #999;
+            }
+        }
+        .cancel {
+            width: 100px;
+            height: 40px;
+            margin-left: 20px;
+            cursor: pointer;
+            border-radius: 5px;
+            border: 1px solid #292d84;
+            color: #292d84;
+            background: #fff;
+            /*&:hover {
+                background: #292d84;
+                color: #fff;
+            }*/
+            &.disabled{
+                background: #DCDEE3;
+                color: #999;
+            }
+        }
+    }
+}

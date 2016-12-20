@@ -1,67 +1,85 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
-    <title>PARKnSHOP</title>
-    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
-    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <title>Customer Management | PARKnSHOP</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="stylesheet" type="text/css" href="style/customerList.css">
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
-    <link rel="stylesheet" type="text/css" href="style/index.css">
 </head>
+
 <body>
-<header>
-    <div class="header">
-        <div class="logo">
-            <a href="../customer/index.html">
-                <img src="imgs/logo.png" alt="logo">
-            </a>
-        </div>
-        <ul class="quick-menu" id="quickMenu">
-            <li class="account">
-                <a href="javascript:;">
-                    <i></i><span>ACCOUNT</span>
+<div class="nav">
+    <ul>
+        <li class="navList active"><a href="customerList.html">Customer Management</a></li>
+        <li class="navList"><a href="shopList.html">Shop Management</a></li>
+        <li class="navList"><a href="applyList.html">Shop Application List</a></li>
+    </ul>
+</div>
+<div class="content">
+    <header>
+        <div class="header">
+            <div class="logo">
+                <a href="index.html">
+                    Administrator System
                 </a>
-                <ul class="accountOperate noLogin">
-                    <li><a href="register.html">Register</a></li>
-                    <li><a href="login.html">Login</a></li>
-                </ul>
-                <ul class="accountOperate hasLogin active">
-                    <li><a href="userCenter.html">Account Info</a></li>
-                    <li><a href="javascript:;" class="logout">Logout</a></li>
-                </ul>
-            </li>
+            </div>
+            <div class="logout">
+                <span class="logoutBtn" id="logoutBtn">
+                    Logout
+                </span>
+            </div>
+        </div>
+    </header>
+    <div class="main">
+        <!--页面在这写-->
+        <!--<h2 class="title">Customer List</h2>-->
+        <ul class="customerMain clearfix" id="customerMain">
+            <li><a href="customerList.html" class="customerTab">Customer List</a></li>
+            <li><a href="customerList.html?status=1" class="customerTab">BlackList</a></li>
         </ul>
-    </div>
-</header>
-<div class="content clearfix">
-    <div class="nav">
-        <ul>
-            <li class="category">
-                <a href="ShopAD.html" class="title">Shop&nbsp; AD &nbsp; Application</a>                   
-            </li>
-             <li class="category">
-                <a href="GoodsAD.html" class="title">Goods AD Application</a>        
-            </li>
-            <li class="category">
-                <a href="ShopAp.html" class="title">Shop &nbsp; Application</a>    
-            </li>
-            <li class="category">
-                <a href="ShopMn.html" class="title">Shop Management</a>   
-            </li>
-            <li class="category">
-                <a href="UserMn.html" class="title">User&nbsp;Management</a>   
-            </li>
-        </ul>
-    </div>
-    <div>
-      <img src="imgs/bg.jpg" alt="bg">
+        <!--<div class="bar">
+            <div class="search">
+                <input type="text">
+            </div>
+        </div>-->
+        <div class="customerList" id="customerList">
+            <table class="customerTable">
+                <colgroup>
+                    <col class="col1">
+                    <col class="col2">
+                    <col class="col3">
+                    <col class="col4">
+                    <col class="col5">
+                    <col class="col6">
+                    <col class="col7">
+                    <col class="col8">
+                </colgroup>
+                <tbody>
+                <tr class="customerTh">
+                    <th class="id">ID</th>
+                    <th class="name">Username</th>
+                    <th class="tel">Telephone</th>
+                    <th class="address">Address</th>
+                    <th class="postCode">Postcode</th>
+                    <th class="firstName">First Name</th>
+                    <th class="lastName">Last Name</th>
+                    <th class="operate">Operate</th>
+                </tr>
+                </tbody>
+            </table>
+            <div class="more">
+                <div class="showMore hidden">
+                    <span>SHOW MORE</span>
+                    <span class="down"></span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
-<footer>
-    <div class="footer">
-        © Copyright NoWaterFE
-    </div>
-</footer>
-<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/customerList.js"></script>
 </body>
+
 </html>

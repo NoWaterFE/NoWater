@@ -200,8 +200,7 @@ function getUrlParam(name) {
 
 function　createOrderItem(data){
     var product = data.product,
-        shop = product.shop,
-        order = data.order;
+        shop = product.shop;
     var orderData = '<tr class="orderData"> ' +
         '<td class="product"> ' +
         '<a href="productDetail.html?id='+product.productId+'" target="_blank" class="clearfix productLink"> ' +
@@ -210,9 +209,9 @@ function　createOrderItem(data){
         '</a> ' +
         '</td> ' +
         '<td class="price">HK$'+product.price.toFixed(2)+'</td> ' +
-        '<td class="amount">'+product.num+'</td> ' +
+        '<td class="amount">'+data.num+'</td> ' +
         '<td class="totalPrice">' +
-        'HK$'+order.sumPrice.toFixed(2) +
+        'HK$'+data.sumPrice.toFixed(2) +
         '</td>' +
         '</tr> ';
     return $('<tbody class="orderItem"> ' +
@@ -230,83 +229,93 @@ function　createOrderItem(data){
 
 var $orderList = $("#orderList"),
     $orderSubmit = $orderList.find(".orderSubmit"),
-    orderIdList = getUrlParam("orderIdList");
+    orderIdList = getUrlParam("orderIdList"),
+    sumPrice = 0;
 (function(){
     $.ajax({
         method: "post",
-        url: "/proxy/customer/order/detail",
+        url: "/proxy/order/detail",
         data: "orderIdList="+orderIdList+"&status=-3"
     }).done(function (result) {
-        var data = result.data,
-            len = data.length,
-            $orderTable = $orderList.find('.orderTable'),
-            sumPrice = 0;
-        for(var i=0; i<len; i++){
-            $orderTable.append(createOrderItem(data[i]));
-            sumPrice += data[i].order.sumPrice;
+        var status = result.status;
+        if(status==200){
+            var data = result.data,
+                len = data.length,
+                $orderTable = $orderList.find('.orderTable');
+            for(var i=0; i<len; i++){
+                $orderTable.append(createOrderItem(data[i]));
+                sumPrice += data[i].sumPrice;
+            }
+            var $orderSubmit = $orderList.find(".orderSubmit");
+            $orderSubmit.show()
+                .find('.price').text(sumPrice.toFixed(2)).end()
+                .find('.address').text(data[0].address);
+        } else if(status==300) {
+            location.href = loginUrl;
+        } else {
+            tipsAlert("server error!");
         }
-        var $orderSubmit = $orderList.find(".orderSubmit");
-        $orderSubmit.show()
-            .find('.price').text(sumPrice.toFixed(2)).end()
-            .find('.address').text(data[0].order.address);
     }).fail(function (result) {
         //tipsAlert("server error!");
         result = {
             status: 200,
             data: [
                 {
-                    order: {
-                        orderId: "2662774641999118",
-                        sumPrice: 999.99,
-                        address: "Dhgan, 18789427353, HongkongIsland(HK) Chai Wan Wanli"
-                    },
+                    orderId: "2662774641999118",
+                    sumPrice: 999.99,
+                    address: "Dhgan, 18789427353, HongkongIsland(HK) Chai Wan Wanli",
+                    num: 3,
                     product: {
                         shop: {
                             shopId: 1,
-                            shopName: "MONEYBACK REWARD",
+                            shopName: "MONEYBACK REWARD"
                         },
                         photo: [
                             "imgs/product03a.jpg"
                         ],
                         productId: 1,
                         productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                        price: 333.33,
-                        num: 3
+                        price: 333.33
                     }
                 },
                 {
-                    order: {
-                        orderId: "2662774641999118",
-                        sumPrice: 999.99
-                    },
+                    orderId: "2662774641999118",
+                    sumPrice: 999.99,
+                    address: "Dhgan, 18789427353, HongkongIsland(HK) Chai Wan Wanli",
+                    num: 3,
                     product: {
                         shop: {
-                            shopId: 2,
-                            shopName: "MONEYBACK REWARD",
+                            shopId: 1,
+                            shopName: "MONEYBACK REWARD"
                         },
                         photo: [
                             "imgs/product03a.jpg"
                         ],
-                        productId: 2,
+                        productId: 1,
                         productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                        price: 333.33,
-                        num: 3
+                        price: 333.33
                     }
-                }
+                },
             ]
         };
-        var data = result.data,
-            len = data.length,
-            $orderTable = $orderList.find('.orderTable'),
-            sumPrice = 0;
-        for(var i=0; i<len; i++){
-            $orderTable.append(createOrderItem(data[i]));
-            sumPrice += data[i].order.sumPrice;
+        var status = result.status;
+        if(status==200){
+            var data = result.data,
+                len = data.length,
+                $orderTable = $orderList.find('.orderTable');
+            for(var i=0; i<len; i++){
+                $orderTable.append(createOrderItem(data[i]));
+                sumPrice += data[i].sumPrice;
+            }
+            var $orderSubmit = $orderList.find(".orderSubmit");
+            $orderSubmit.show()
+                .find('.price').text(sumPrice.toFixed(2)).end()
+                .find('.address').text(data[0].address);
+        } else if(status==300) {
+            location.href = loginUrl;
+        } else {
+            tipsAlert("server error!");
         }
-        var $orderSubmit = $orderList.find(".orderSubmit");
-        $orderSubmit.show()
-            .find('.price').text(sumPrice.toFixed(2)).end()
-            .find('.address').text(data[0].order.address);
     });
 }());
 
@@ -329,24 +338,25 @@ var submitOrder = (function(){
             }
             var status = result.status;
             if(status==200){
-                location.href = "pay.html?orderIdList="+orderIdList;
+                location.href = "pay.html?orderIdList="+orderIdList+"&sumPrice="+sumPrice;
             } else if(status==300) {
                 location.href = loginUrl;
             } else {
                 tipsAlert("server error!");
             }
         }).fail(function(result){
-            result = {
-                status: 200
-            };
             if(loading) {
                 loading.remove();
                 loading = null;
             }
+            tipsAlert("server error!");
+            result = {
+                status: 200
+            };
             var status = result.status;
-            if(status==200){
-                location.href = "pay.html?orderIdList="+orderIdList;
-            } else if(status==300) {
+            if (status == 200) {
+                location.href = "pay.html?orderIdList=" + orderIdList + "&sumPrice=" + sumPrice;
+            } else if (status == 300) {
                 location.href = loginUrl;
             } else {
                 tipsAlert("server error!");

@@ -3,7 +3,7 @@ var $logoutBtn = $("#logoutBtn");
 $logoutBtn.click(function () {
     $.ajax({
         method: "get",
-        url: "/proxy/admin/loginout"
+        url: "/proxy/admin/logout"
     }).done(function(){
         delCookie("admin_token");
         location.href = "login.html";
@@ -128,8 +128,7 @@ function createShopList(info) {
         '<td class="tel">'+info.telephone+'</td> ' +
         '<td class="email">'+info.email+'</td> ' +
         '<td class="operate"> ' +
-        '<span class="blackList">add to blacklist</span> ' +
-        '<span class="del">delete</span> ' +
+            operate +
         '</td> ' +
         '</tr>').data("shopId", info.shopId);
 }

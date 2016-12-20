@@ -174,7 +174,7 @@ function showSpinner(msg, config){
     var def = {
         timeout: 1500
     };
-    config = $.extend(config, def);
+    config = $.extend(def, config);
     $spinner.appendTo($("body"))
         .ready(function () {
             $spinner.css({

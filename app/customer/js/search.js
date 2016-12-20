@@ -12,6 +12,35 @@ getResult();
 
 // header添加事件
 (function () {
+    //获取登录信息可能不需要
+    $.ajax({
+        method: "get",
+        url: "/proxy/customer/isLogin",
+        dataType: "json"
+    }).done(function (result) {
+        if(result.status==200){
+            var userInfo = result.userInformation[0];
+            var quickMenu = $("#quickMenu");
+            quickMenu.find(".accountOperate").toggleClass("active");
+            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+        }
+    }).fail(function (result) {
+        /*console.log(result.statusText);
+        result = {
+            status: 200,
+            userInformation: [{
+                name: "gdh",
+                cartNum: 33
+            }]
+        };
+        if(result.status==200){
+            var userInfo = result.userInformation[0];
+            var quickMenu = $("#quickMenu");
+            quickMenu.find(".accountOperate").toggleClass("active");
+            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+        }*/
+    });
+
     //headMenu添加事件
     var $headMenu = $("#headMenu");
     var navTimer;
@@ -83,7 +112,7 @@ function getResult() {
     var sendData = "keyWord=" + keyWord + "&count=" + count + "&startId=" + startId;
     var classId = GetQueryString("pt");
     if (classId) {
-        sendData = "classId=" + classId + "&count=" + count +"&startId" + startId;
+        sendData = "classId=" + classId + "&count=" + count +"&startId=" + startId;
         $.ajax({
             method: "get",
             url: "/proxy/customer/class/product",
@@ -109,7 +138,7 @@ function getResult() {
             $adGoods = null;
         })
         .fail(function(result){
-            result = {
+            /*result = {
                 status: 200,
                 actualCount: 10,
                 data: [
@@ -231,7 +260,7 @@ function getResult() {
                 } else {
                     $("#showMore").css('display','none');
                 }
-            }
+            }*/
             $adGoods = null;
         });
     } else {
@@ -260,7 +289,7 @@ function getResult() {
             $adGoods = null;
         })
         .fail(function(result){
-            result = {
+            /*result = {
                 status: 200,
                 actualCount: 10,
                 data: [
@@ -382,7 +411,7 @@ function getResult() {
                 } else {
                     $("#showMore").css('display','none');
                 }
-            }
+            }*/
             $adGoods = null;
         });
     }

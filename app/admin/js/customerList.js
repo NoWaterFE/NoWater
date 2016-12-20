@@ -3,7 +3,7 @@ var $logoutBtn = $("#logoutBtn");
 $logoutBtn.click(function () {
     $.ajax({
         method: "get",
-        url: "/proxy/admin/loginout"
+        url: "/proxy/admin/logout"
     }).done(function(){
         delCookie("admin_token");
         location.href = "login.html";

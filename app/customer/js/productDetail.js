@@ -104,6 +104,9 @@
 
 })();
 
+var className = ["ALL", "TV & Home Theater", "Computers & Tablets", "Cell Phones",
+    "Cameras & Camcorders", "Audio", "Car Electronics & GPS",
+    "Video, Games, Movies & Music", "Health, Fitness & Sports", "Home & Offic"];
 
 function showLoading($relative) {
     var $tips = $relative.siblings(".loadingImg");
@@ -207,10 +210,19 @@ function createSImageList(imgArray){
     return $(sImage);
 }
 
+function enter() {
+    var keyWord = $("#keyWordInStore").val();
+    var e= window.event;
+    if (e.keyCode == 13 && keyWord) {
+        location.href = "store.html?shopId=" + encodeURIComponent(shopId) + "&keyWord=" + encodeURIComponent(keyWord);
+    }
+}
+
+var shopId = 1;
+
 (function(){
     var productId = getUrlParam("id"),
-        $product = $("#product"),
-        shopId = 1;
+        $product = $("#product");
     if(productId==undefined) {
         $product.html("The product doesn't exist.")
     }
@@ -229,9 +241,12 @@ function createSImageList(imgArray){
             $("#detail").html("Telephone: " + shop.telephone + "<br>" + "E-mail: " +shop.email);
             var classList = shop.classList,
                 len = classList.length,
-                $menuList = $("#menuList");
+                $menuList = $("#menuList"),
+                menuList = "",
+                classId = 0;
             for (var i=0; i<len; i++) {
-                var menuList = '<li data-pt="' + classList[i].classId +' ">' + classList[i].className + '</li>';
+                classId = classList[i];
+                menuList = '<li data-pt="' + classId +' ">' + className[classId] + '</li>';
                 $menuList.append(menuList);
             }
             $productForm.data("info", data)
@@ -247,12 +262,14 @@ function createSImageList(imgArray){
                 .end()
                 .find(".smallImages").append(createSImageList(data.photo));
             $product.show();
+            var $num = $productForm.find('.num');
+            if($num.val()>1) $productForm.find('.minus').removeClass("disabled");
         } else if(status==400){
             $product.html("The product doesn't exist.").show();
         }
     }).fail(function (result) {
-        //tipsAlert("server error!");
-        result = {
+        tipsAlert("server error!");
+        /*result = {
             status: 200,
             data: {
                 shop: {
@@ -263,26 +280,8 @@ function createSImageList(imgArray){
                     telephone: "69812374",
                     status: 0,
                     classList: [
-                        {
-                            classId: 0,
-                            className: "iPhone"
-                        },
-                        {
-                            classId: 1,
-                            className: "iPad"
-                        },
-                        {
-                            classId: 2,
-                            className: "iPod"
-                        },
-                        {
-                            classId: 3,
-                            className: "macBook"
-                        },
-                        {
-                            classId: 4,
-                            className: "Watch"
-                        }
+                        1,2,3,4
+
                     ]
                 },
                 productId: 45,
@@ -306,12 +305,14 @@ function createSImageList(imgArray){
                 shop = data.shop;
             shopId = shop.shopId;
             $("#shopName").text(shop.shopName);
-            $("#detail").html("Telephone: " + shop.telephone + "<br>" + "E-mail: " +shop.email);
             var classList = shop.classList,
                 len = classList.length,
-                $menuList = $("#menuList");
+                $menuList = $("#menuList"),
+                menuList = "",
+                classId = 0;
             for (var i=0; i<len; i++) {
-                var menuList = '<li data-pt="' + classList[i].classId +' ">' + classList[i].className + '</li>';
+                classId = classList[i];
+                menuList = '<li data-pt="' + classId +' ">' + className[classId] + '</li>';
                 $menuList.append(menuList);
             }
             $productForm.data("info", data)
@@ -329,7 +330,7 @@ function createSImageList(imgArray){
             $product.show();
         } else if(status==400){
             $product.html("The product doesn't exist.").show();
-        }
+        }*/
     });
 
     var $storeMenu = $("#menuBar");

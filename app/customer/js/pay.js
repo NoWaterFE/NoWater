@@ -201,7 +201,23 @@ function addError(item, msg){
         .text(msg);
 }
 
+function getUrlParam(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+    var r = window.location.search.substr(1).match(reg); //匹配目标参数
+    if (r != null) return decodeURIComponent(r[2]); return null; //返回参数值
+}
+
 var loginUrl = "../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
+
+var orderIdList = getUrlParam("orderIdList"),
+    sumPrice = getUrlParam("sumPrice"),
+    $payForm = $("#payForm");
+if(orderIdList&&sumPrice){
+    $payForm.find(".price").text(parseFloat(sumPrice).toFixed(2));
+} else {
+    location.href = "index.html";
+}
+
 
 var confirmPay = (function(){
     var loading = null;
@@ -210,18 +226,36 @@ var confirmPay = (function(){
         e.preventDefault();
         if(loading) return ;
         loading = showLoading(_this);
+        var reqData = "orderIdList="+orderIdList;
         $.ajax({
             method: "post",
             url: "/proxy/order/price",
-            dataType: "json"
+            dataType: "json",
+            data: reqData
         }).done(function (result) {
-
+            if(loading){
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                showSpinner("Success", {
+                    callback: function() {
+                        location.href = "order.html?status=2";
+                    }
+                });
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                tipsAlert("SERVER ERROR!");
+            }
         }).fail(function (result) {
             if(loading){
                 loading.remove();
                 loading = null;
             }
-            result = {
+            tipsAlert("server error!");
+            /*result = {
                 status: 200
             };
             var status = result.status;
@@ -235,12 +269,10 @@ var confirmPay = (function(){
                 location.href = loginUrl;
             } else {
                 tipsAlert("SERVER ERROR!");
-            }
+            }*/
         });
     }
 })();
-
-var $payForm = $("#payForm");
 
 $payForm.on("submit", confirmPay);
 

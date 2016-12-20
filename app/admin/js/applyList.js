@@ -1,88 +1,310 @@
-var applyListSet = $("#applyListSet");
+var $logoutBtn = $("#logoutBtn");
 
-function createApplyList(list) {
-    var r = $('<li class="applyList"> ' +
-        '<table> ' +
-        '<tbody> ' +
-        '<tr> ' +
-        '<th class="big">shopName</th> ' +
-        '<th>telephone</th> ' +
-        '<th>shopId</th> ' +
-        '<th>ownerId</th> ' +
-        '<th class="big">email</th> ' +
-        '<th class="approve operate">approve</th> ' +
-        '</tr> ' +
-        '<tr> ' +
-        '<td>'+list.shopName+'</td> ' +
-        '<td>'+list.telephone+'</td>' +
-        '<td>'+list.shopId+'</td> ' +
-        '<td>'+list.ownerId+'</td> ' +
-        '<td>'+list.email+'</td>' +
-        '<td class="reject operate">reject</td> ' +
-        '</tr>' +
-        '</tbody> ' +
-        '</table> ' +
-        '</li>');
-    r.data("shopId", list.shopId);
-    return r;
-}
-
-$.ajax({
-    method: "get",
-    url: "/proxy/admin/shop/applyList",
-    dataType: "json"
-}).done(function(result){
-    if(result.status==200){
-        var list = result.data;
-        for(var len = list.length, i=0; i<len; i++ ){
-            applyListSet.append(createApplyList(list[i]));
-        }
-    } else if(result.status==300){
-        location.href = "login.html";
-    }
-}).fail(function (result) {
-    //alert("server error");
-    //location.href = "login.html";
-    result = {"status":200,"data":[{"shopName":"wukai-SHOP","telephone":"65204525","shopId":3,"ownerId":7,"email":"123@qq.com","status":0},{"shopName":"nolon","telephone":"96666666","shopId":5,"ownerId":16,"email":"964886469@qq.com","status":0},{"shopName":"takeashower","telephone":"96488888","shopId":6,"ownerId":18,"email":"964886469@qq.com","status":0}]};
-    if(result.status==200){
-        var list = result.data;
-        for(var len = list.length, i=0; i<len; i++ ){
-            applyListSet.append(createApplyList(list[i]));
-        }
-    } else if(result.status==300){
-        location.href = "login.html";
-    }
-
-});
-
-applyListSet.on("click", ".applyList .operate", function () {
-    var _this = $(this);
-    var behavior = -1;
-    if(_this.hasClass("approve")){
-        behavior = 1;
-    }
-    var shopId = _this.parents(".applyList").data("shopId");
+$logoutBtn.click(function () {
     $.ajax({
-        method: "post",
-        url: "/proxy/admin/shop/handle",
-        data: "shopId="+shopId+"&behavior="+behavior,
-        dataType: "json"
-    }).done(function(result){
-        if(result.status==200){
-            location.reload();
-        } else if(result.status==300){
-            location.href = "login.html";
-        }
-    }).fail(function (result) {
-        alert("server error");
+        method: "get",
+        url: "/proxy/admin/logout"
+    }).done(function(){
+        delCookie("admin_token");
         location.href = "login.html";
-        /*result = {
-            status: 200
-        };
-        if(result.status==200){
-            location.reload();
-        } else if(result.status==300){
-            location.href = "login.html";
-        }*/
+    }).fail(function () {
+        delCookie("admin_token");
+        location.href = "login.html";
     });
 });
+
+function delCookie(name){
+    var t = new Date();
+    t.setTime(t.getTime()-1);
+    document.cookie= name + "=null;path=/;expires="+t.toGMTString();
+}
+
+function showLoading($relative) {
+    var $tips = $relative.siblings(".loadingImg");
+    if ($tips.length > 0) $tips.remove();
+    $tips = $("<div class='loadingImg'></div>");
+    if($relative.css("position")=="static") $relative.css('position', "relative");
+    $tips.appendTo($relative)
+        .ready(function () {
+            $tips.css({
+                "top": $relative.outerHeight() / 2,
+                "left": $relative.outerWidth() / 2,
+                "margin-left": -$tips.outerWidth() / 2,
+                "margin-top": -$tips.outerHeight() / 2,
+                "visibility": "visible"
+            });
+        });
+    return $tips;
+}
+
+function tipsAlert(msg, callback){
+    var $alert = $(".tipsAlert");
+    if ($alert.length > 0) $alert.remove();
+    $alert = $("<div class='tipsAlert'></div>");
+    var $shadow = $("<div class='shadow'></div>");
+    var $content = $("<div class='content'></div>");
+    var $msg = $("<div class='msg'>"+ msg +"</div>");
+    var $btn = $("<div class='btn'>OK</div>");
+    $btn.on("click", function () {
+        $(this).parents(".tipsAlert").remove();
+        if(callback) callback();
+    });
+    $content.append($msg).append($btn);
+    $alert.append($shadow);
+    $alert.append($content);
+    $alert.appendTo($("body"));
+}
+
+function tipsConfirm(msg, callback){
+    var $confirm = $(".tipsConfirm");
+    if ($confirm.length > 0) $confirm.remove();
+    $confirm = $("<div class='tipsConfirm'></div>");
+    var $shadow = $("<div class='shadow'></div>");
+    var $content = $("<div class='content'></div>");
+    var $msg = $("<div class='msg'>"+ msg +"</div>");
+    var $btn = $('<div class="btn2"> ' +
+        '<div class="cancel">Cancel</div> ' +
+        '<div class="ok">Ok</div> </div>');
+
+    $btn.on("click", ".cancel", function () {
+        $(this).parents(".tipsConfirm").remove();
+    });
+    $btn.on("click", ".ok", function () {
+        $(this).parents(".tipsConfirm").remove();
+        if(callback) callback();
+    });
+    $content.append($msg).append($btn);
+    $confirm.append($shadow)
+        .append($content)
+        .appendTo($("body"));
+}
+
+function showSpinner(msg, config){
+    var $spinner = $(".spinner");
+    if($spinner) $spinner.remove();
+    $spinner = $('<div class="spinner"> ' +
+        '<div class="tips"> ' +
+        msg +
+        '</div> ' +
+        '</div>');
+    var def = {
+        timeout: 1500
+    };
+    config = $.extend(def, config);
+    $spinner.appendTo($("body"))
+        .ready(function () {
+            $spinner.css({
+                "margin-left": -$spinner.width() / 2,
+                "margin-top": -$spinner.width() / 2,
+                "visibility": "visible"
+            });
+        });
+    setTimeout(function(){
+        if($spinner) $spinner.remove();
+        var callback = config.callback;
+        if(callback) callback();
+    }, config.timeout);
+}
+
+function getUrlParam(name) {
+    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
+    var r = window.location.search.substr(1).match(reg); //匹配目标参数
+    if (r != null) return r[2]; return null; //返回参数值
+}
+
+function imgAuto($img) {
+    var imgW=$img[0].naturalWidth;
+    var imgH=$img[0].naturalHeight;
+    var constW=$img.parent().width();
+    if(imgH>=imgW){
+        $img.css({
+            "width": "auto",
+            "height": constW
+        });
+    } else {
+        $img.css({
+            "width": constW,
+            "height": "auto"
+        });
+    }
+}
+
+function createApplyList(info) {
+    var $applyList = $('<li class="applyItem clearfix"> ' +
+        '<div class="photo"> ' +
+            '<img src="'+info.photo[0]+'"> ' +
+        '</div> ' +
+        '<ul class="info"> ' +
+            '<li class="infoItem">' +
+                'Shop ID: '+ info.shopId +
+            '</li> ' +
+            '<li class="infoItem">' +
+                'Shop Name: ' + info.shopName +
+            '</li> ' +
+            '<li class="infoItem">' +
+                'Owner ID: '+ info.ownerId +
+            '</li> ' +
+            '<li class="infoItem">' +
+                'Telephone: '+ info.telephone +
+            '</li> ' +
+            '<li class="infoItem">' +
+                'Email: '+ info.email +
+            '</li> ' +
+        '</ul> ' +
+        '<div class="operate"> ' +
+            '<span class="approve">APPROVE</span> ' +
+            '<span class="reject">REJECT</span> ' +
+        '</div> ' +
+        '</li>').data("shopId", info.shopId);
+    var $img = $applyList.find("img");
+    $img.ready(function () {
+       imgAuto($img);
+    });
+    return $applyList;
+}
+
+var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
+
+
+var getApplyItem = (function(){
+    var loading = null,
+        startId = 0;
+    return function () {
+        if(loading) return ;
+        loading = showLoading($(".more"));
+        $.ajax({
+            method: "get",
+            url: "/proxy/admin/shop/applyList",
+            dataType: "json"
+        }).done(function(result){
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                var data = result.data,
+                    len = data.length;
+                for(var i=0; i<len; i++) {
+                    $applyList.append(createApplyList(data[i]));
+                }
+            } else if(status==300) {
+                location.href = loginUrl;
+            }
+        }).fail(function(result){
+            tipsAlert("server error!");
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            /*result = {
+                status: 200,
+                data: [
+                    {
+                        applyId: 10,
+                        applyName: "dhgan yoyoo",
+                        telephone: "238409324",
+                        ownerId: 1,
+                        email: "nowater@nowater.com",
+                        status: 1,
+                        photo: ["http://koprvhdix117-10038234.file.myqcloud.com/ebbb7295-edc0-47c8-823e-f4af70d8bdf1.jpg"]
+                    }
+                ]
+            };
+            var status = result.status;
+            if(status==200){
+                var data = result.data,
+                    len = data.length;
+                for(var i=0; i<len; i++) {
+                    $applyList.append(createApplyList(data[i]));
+                }
+            } else if(status==300) {
+                location.href = loginUrl;
+            }*/
+        });
+    }
+})();
+
+getApplyItem();
+
+var $applyList = $("#applyList");
+
+$applyList.on("click", ".more .showMore", function(){
+    var _this = $(this);
+    _this.addClass("hidden");
+    getApplyItem();
+});
+
+$applyList.on("click", ".applyItem .approve", function(e){
+    var _this = $(this);
+    tipsConfirm("Are you sure want to approve the application?", function(){
+        operate(_this);
+    }, {
+        "ok": "YES",
+        "cancel": "NO"
+    });
+});
+$applyList.on("click", ".applyItem .reject", function(e){
+    var _this = $(this);
+    tipsConfirm("Are you sure want to reject the application?", function(){
+        operate(_this);
+    }, {
+        "ok": "YES",
+        "cancel": "NO"
+    });
+});
+
+var operate = (function(){
+    var loading = null;
+    return function (_this) {
+        var behavior = -1,
+            $applyItem = _this.parents(".applyItem");
+        loading = showLoading($applyItem);
+        if(_this.hasClass("approve")){
+            behavior = 1;
+        }
+        var shopId = $applyItem.data("shopId");
+        $.ajax({
+            method: "post",
+            url: "/proxy/admin/shop/handle",
+            data: "shopId="+shopId+"&behavior="+behavior,
+            dataType: "json"
+        }).done(function(result){
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                $applyItem.remove();
+                showSpinner("Success!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            } else if(status==300){
+                location.href = loginUrl
+            }
+        }).fail(function (result) {
+            tipsAlert("server error");
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            /*result = {
+                status: 200
+            };
+            var status = result.status;
+            if(status==200){
+                $applyItem.remove();
+                showSpinner("Success!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            } else if(status==300){
+                location.href = loginUrl
+            }*/
+        });
+    }
+})();

@@ -56,6 +56,7 @@ function fillForm(result, msg, disabled){
             .find('#shopName').val(data.shopName).end()
             .find('#shopEmail').val(data.email).end()
             .find('#shopTel').val(data.telephone).end()
+            .find('#alipay').val(data.telephone).end()
             .find('.applying').text(msg);
         if(disabled) {
             $applyForm.find('input').addClass("disabled").attr("disabled", disabled);

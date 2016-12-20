@@ -27,7 +27,7 @@ $applyForm.on("submit", function (e) {
     var $shopName = _this.find(".shopName"),
         $shopEmail = _this.find(".shopEmail"),
         $shopTel = _this.find(".shopTel"),
-        $alipay = _this.find(".alipay"),
+        //$alipay = _this.find(".alipay"),
         $idPhoto = _this.find(".idPhoto");
     if (!this.shopName.value) {
         addError($shopName, "shop name can't be empty!");
@@ -41,10 +41,11 @@ $applyForm.on("submit", function (e) {
         addError($shopTel, "error telephone!");
         return;
     }
-    if (!this.alipay.value) {
+    /*if (!this.alipay.value) {
         addError($alipay, "alipay can't be empty!");
         return;
-    }
+    }*/
+
     var fileUrl = _this.data("fileNameList");
     if(this.idPhoto.files.length==0 && fileUrl==undefined) {
         addError($idPhoto, "please add your ID photo!");
@@ -140,7 +141,7 @@ function applyForShop(_this, loading) {
         if (loading) loading.remove();
         _this.data("submit", false);
         //tipsAlert("server error");
-        result = {
+        /*result = {
             status: 200
         };
         var status = result.status;
@@ -158,7 +159,7 @@ function applyForShop(_this, loading) {
             addError($shopTel, "error telephone!");
         } else if(status == 1000 || status == 1010 || status == 1020 || status == 1030 || status ==1040) {
             tipsAlert("server error");
-        }
+        }*/
     });
 }
 

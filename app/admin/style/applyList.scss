@@ -1,36 +1,112 @@
 @import "reset";
+@import "base";
 
-.applyTitle {
-    font-size: 30px;
-    text-align: center;
-    margin: 50px 0 0;
-}
-.applyListSet {
-    text-align: center;
+.main {
+    padding: 20px 27px;
+    .title {
+        border-bottom: 1px dashed #E0E0E0;
+        font-size: 24px;
+        line-height: 34px;
+    }
     .applyList {
-        margin: 20px auto;
-        display: inline-block;
-        table, td, th {
-            border: 1px solid #aaa;
-            border-collapse: collapse;
+        margin: 20px 0;
+        .applyItem {
+            border: 1px solid #e5e5e5;
+            padding: 20px;
+            margin: 10px auto;
+            .photo {
+                float: left;
+                width: 140px;
+                height: 140px;
+                margin-right: 20px;
+                line-height: 140px;
+                font-size: 0;
+                text-align: center;
+                img {
+                    height: 100%;
+                    vertical-align: middle;
+                }
+            }
+            .info {
+                float: left;
+                max-width: 600px;
+                .infoItem {
+                    line-height: 30px;
+                }
+            }
+            .operate {
+                float: right;
+                .approve, .reject {
+                    user-select: none;
+                    cursor: pointer;
+                    color: #292d84;
+                    line-height: 30px;
+                    border: 1px solid #292d84;
+                    border-radius: 4px;
+                    width: 124px;
+                    display: block;
+                    text-align: center;
+                    margin: 5px 0;
+                    &:hover {
+                        background: #292d84;
+                        color: #fff;
+                    }
+                }
+            }
+        }
+        .more {
             text-align: center;
-            word-wrap: break-word;
+            margin-top: 10px;
+            height: 40px;
+            position: relative;
+            .showMore{
+                cursor: pointer;
+                display: inline-block;
+                padding: 10px 40px;
+                font-size: 14px;
+                text-align: center;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                &.hidden {
+                    display: none;
+                }
+                .down {
+                    border: 1px solid #000;
+                    border-top-color: transparent;
+                    border-right-color: transparent;
+                    width: 10px;
+                    height: 10px;
+                    display: inline-block;
+                    transform: rotate(-45deg) translate(6px, 2px);
+                }
+            }
         }
-        td, th {
-            padding: 10px 10px;
-            width: 100px;
-            max-width: 100px;
-        }
-        .big {
-            width: 160px;
-            max-width: 160px;
-        }
-        .approve, .reject {
-            background: #292d84;
-            color: #fff;
+    }
+
+    .more {
+        text-align: center;
+        margin-top: 10px;
+        height: 40px;
+        position: relative;
+        .showMore{
             cursor: pointer;
-            &:hover {
-                background: darkblue;
+            display: inline-block;
+            padding: 10px 40px;
+            font-size: 14px;
+            text-align: center;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            &.hidden {
+                display: none;
+            }
+            .down {
+                border: 1px solid #000;
+                border-top-color: transparent;
+                border-right-color: transparent;
+                width: 10px;
+                height: 10px;
+                display: inline-block;
+                transform: rotate(-45deg) translate(6px, 2px);
             }
         }
     }

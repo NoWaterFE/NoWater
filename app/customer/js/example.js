@@ -1,7 +1,7 @@
 // header添加事件
 (function () {
     //获取登录信息可能不需要
-    /*$.ajax({
+    $.ajax({
         method: "get",
         url: "/proxy/customer/isLogin",
         dataType: "json"
@@ -27,7 +27,7 @@
          quickMenu.find(".accountOperate").toggleClass("active");
          quickMenu.find(".my-cart .count").text(userInfo.cartNum);
          }
-    });*/
+    });
 
     //headMenu添加事件
     var $headMenu = $("#headMenu");
