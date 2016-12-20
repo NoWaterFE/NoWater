@@ -208,8 +208,9 @@ function createSImageList(imgArray){
 }
 
 (function(){
-    var productId = getUrlParam("id");
-    var $product = $("#product");
+    var productId = getUrlParam("id"),
+        $product = $("#product"),
+        shopId = 1;
     if(productId==undefined) {
         $product.html("The product doesn't exist.")
     }
@@ -223,6 +224,16 @@ function createSImageList(imgArray){
             var $productForm = $("#productForm");
             var data = result.data,
                 shop = data.shop;
+            shopId = shop.shopId;
+            $("#shopName").text(shop.shopName);
+            $("#detail").html("Telephone: " + shop.telephone + "<br>" + "E-mail: " +shop.email);
+            var classList = shop.classList,
+                len = classList.length,
+                $menuList = $("#menuList");
+            for (var i=0; i<len; i++) {
+                var menuList = '<li data-pt="' + classList[i].classId +' ">' + classList[i].className + '</li>';
+                $menuList.append(menuList);
+            }
             $productForm.data("info", data)
                 .find(".productName").text(data.productName)
                 .end()
@@ -237,11 +248,12 @@ function createSImageList(imgArray){
                 .find(".smallImages").append(createSImageList(data.photo));
             $product.show();
         } else if(status==400){
-            $product.html("The product doesn't exist.")
+            $product.html("The product doesn't exist.").show();
         }
     }).fail(function (result) {
-        tipsAlert("server error!");
-        /*result = {
+        //tipsAlert("server error!");
+        result = {
+            status: 200,
             data: {
                 shop: {
                     shopId: 234,
@@ -249,7 +261,29 @@ function createSImageList(imgArray){
                     ownerId: 45,
                     email: "nowater@nowater.com",
                     telephone: "69812374",
-                    status: 0
+                    status: 0,
+                    classList: [
+                        {
+                            classId: 0,
+                            className: "iPhone"
+                        },
+                        {
+                            classId: 1,
+                            className: "iPad"
+                        },
+                        {
+                            classId: 2,
+                            className: "iPod"
+                        },
+                        {
+                            classId: 3,
+                            className: "macBook"
+                        },
+                        {
+                            classId: 4,
+                            className: "Watch"
+                        }
+                    ]
                 },
                 productId: 45,
                 classId: 1,
@@ -265,24 +299,46 @@ function createSImageList(imgArray){
                 ]
             }
         };
-        var $productForm = $("#productForm");
-        var data = result.data,
-            shop = data.shop;
-        $productForm.data("info", data)
-            .find(".productName").text(data.productName)
-            .end()
-            .find(".priceSpan").text(data.price.toFixed(2))
-            .end()
-            .find(".stockSpan").text(data.quantityStock)
-            .end()
-            .find(".stock").val(data.quantityStock)
-            .end()
-            .find(".bigImage img").attr("src", data.photo[0])
-            .end()
-            .find(".smallImages").append(createSImageList(data.photo));
-        $product.show();*/
-
+        var status = result.status;
+        if(status==200 || status==500){
+            var $productForm = $("#productForm");
+            var data = result.data,
+                shop = data.shop;
+            shopId = shop.shopId;
+            $("#shopName").text(shop.shopName);
+            $("#detail").html("Telephone: " + shop.telephone + "<br>" + "E-mail: " +shop.email);
+            var classList = shop.classList,
+                len = classList.length,
+                $menuList = $("#menuList");
+            for (var i=0; i<len; i++) {
+                var menuList = '<li data-pt="' + classList[i].classId +' ">' + classList[i].className + '</li>';
+                $menuList.append(menuList);
+            }
+            $productForm.data("info", data)
+                .find(".productName").text(data.productName)
+                .end()
+                .find(".priceSpan").text(data.price.toFixed(2))
+                .end()
+                .find(".stockSpan").text(data.quantityStock)
+                .end()
+                .find(".stock").val(data.quantityStock)
+                .end()
+                .find(".bigImage img").attr("src", data.photo[0])
+                .end()
+                .find(".smallImages").append(createSImageList(data.photo));
+            $product.show();
+        } else if(status==400){
+            $product.html("The product doesn't exist.").show();
+        }
     });
+
+    var $storeMenu = $("#menuBar");
+    $storeMenu.on("click", ".menuList li", function () {
+        var classId = $(this).data("pt");
+        location.href = "store.html?shopId=" +shopId + "&classId=" + classId;
+    });
+    $storeMenu = null;
+
 }());
 
 var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
@@ -316,14 +372,14 @@ var addToCart = (function(){
             }
         }).fail(function(result){
             tipsAlert("server error!");
-            /*result = {
-                status: 200,
-                num: 1000
-            };
             if(loading) {
                 loading.remove();
                 loading = null;
             }
+            /*result = {
+                status: 200,
+                num: 1000
+            };
             var status = result.status;
             if(status==200){
                 setCart(result.num);
@@ -362,13 +418,13 @@ var addToFavo = (function(){
             }
         }).fail(function(result){
             tipsAlert("server error!");
-            /*result = {
-                status: 200
-            };
             if(loading) {
                 loading.remove();
                 loading = null;
             }
+            /*result = {
+                status: 200
+            };
             var status = result.status;
             if(status==200){
                 showSpinner("Add success");
@@ -406,16 +462,16 @@ var buy = (function(){
             }
         }).fail(function(result){
             tipsAlert("server error!");
+            if(loading) {
+                loading.remove();
+                loading = null;
+            }
             /*result = {
                 status: 200,
                 data: {
                     orderId: 1
                 }
             };
-            if(loading) {
-                loading.remove();
-                loading = null;
-            }
             var status = result.status;
             if(status==200){
                 location.href = "confirmOrder.html?orderId="+result.data.orderId;

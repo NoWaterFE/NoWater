@@ -55,7 +55,12 @@ function tipsAlert(msg, callback){
     $alert.appendTo($("body"));
 }
 
-function tipsConfirm(msg, callback){
+function tipsConfirm(msg, callback, config){
+    var def = {
+        "ok": "OK",
+        "cancel": "Cancel"
+    };
+    config = $.extend(def, config);
     var $confirm = $(".tipsConfirm");
     if ($confirm.length > 0) $confirm.remove();
     $confirm = $("<div class='tipsConfirm'></div>");
@@ -63,8 +68,8 @@ function tipsConfirm(msg, callback){
     var $content = $("<div class='content'></div>");
     var $msg = $("<div class='msg'>"+ msg +"</div>");
     var $btn = $('<div class="btn2"> ' +
-        '<div class="cancel">Cancel</div> ' +
-        '<div class="ok">Ok</div> </div>');
+        '<div class="cancel">'+config.cancel+'</div> ' +
+        '<div class="ok">'+config.ok+'</div> </div>');
 
     $btn.on("click", ".cancel", function () {
         $(this).parents(".tipsConfirm").remove();
@@ -90,7 +95,7 @@ function showSpinner(msg, config){
     var def = {
         timeout: 1500
     };
-    config = $.extend(config, def);
+    config = $.extend(def, config);
     $spinner.appendTo($("body"))
         .ready(function () {
             $spinner.css({
@@ -113,20 +118,29 @@ function getUrlParam(name) {
 }
 
 function createCustomerList(info) {
+    var status = info.status,
+        operate = "";
+    if(status==1){
+        operate = '<span class="blackList">add to blacklist</span> ' +
+            '<span class="del">delete</span> ';
+    } else {
+        operate = '<span class="removeBlack">remove from blacklist</span> ';
+    }
     return $('<tr class="customerItem"> ' +
         '<td class="id">'+info.userId+'</td> ' +
         '<td class="name">'+info.name+'</td> ' +
-        '<td class="tel">'+info.telephone+'</td> ' +
+        '<td class="tel">'+info.phone+'</td> ' +
         '<td class="address">'+info.address1+' ' + info.address2+' ' + info.address3+'</td> ' +
         '<td class="postCode">'+info.postCode+'</td> ' +
         '<td class="firstName">'+info.firstName+'</td> ' +
         '<td class="lastName">'+info.lastName+'</td> ' +
         '<td class="operate"> ' +
-        '<span class="blackList">add to blacklist</span> ' +
-        '<span class="del">delete</span> ' +
+            operate +
         '</td> ' +
-        '</tr>');
+        '</tr>').data("userId", info.userId);
 }
+
+var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
 
 var cStatus = getUrlParam("status");
 
@@ -144,7 +158,7 @@ var getCustomerItem = (function(){
     var loading = null,
         startId = 0;
     return function (cStatus) {
-        var reqData = "count=20&startId="+startId;
+        var reqData = "count=20&startId="+startId+"&customerType="+(1-2*cStatus);
         if(loading) return ;
         loading = showLoading($(".more"));
         $.ajax({
@@ -153,10 +167,34 @@ var getCustomerItem = (function(){
             dataType: "json",
             data: reqData
         }).done(function(result){
-
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                var data = result.data,
+                    len = data.length;
+                var $tbody = $customerList.find(".customerTable tbody");
+                for(var i=0; i<len; i++) {
+                    $tbody.append(createCustomerList(data[i]));
+                }
+                startId = result.endId;
+                if(startId!=-1){
+                    $customerList.find(".more .showMore").removeClass("hidden");
+                }
+            } else if(status==300){
+                location.href = loginUrl;
+            }
         }).fail(function(result){
-            result = {
+            tipsAlert("server error");
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            /*result = {
                 status: 200,
+                startId: 1,
                 data: [
                     {
                         userId: 10,
@@ -168,23 +206,25 @@ var getCustomerItem = (function(){
                         postCode: "729339",
                         firstName: "yalish ituode",
                         lastName: "yomi",
-                        status: 0
+                        status: -1
                     }
                 ]
             };
-            if (loading) {
-                loading.remove();
-                loading = null;
-            }
-            var data = result.data,
-                len = data.length;
-            var $tbody = $customerList.find(".customerTable tbody");
-            for(var i=0; i<10; i++) {
-                $tbody.append(createCustomerList(data[0]));
-            }
-            if(startId!=-1){
-                $customerList.find(".more .showMore").removeClass("hidden");
-            }
+            var status = result.status;
+            if(status==200){
+                var data = result.data,
+                    len = data.length;
+                var $tbody = $customerList.find(".customerTable tbody");
+                for(var i=0; i<len; i++) {
+                    $tbody.append(createCustomerList(data[i]));
+                }
+                startId = result.endId;
+                if(startId!=-1){
+                    $customerList.find(".more .showMore").removeClass("hidden");
+                }
+            } else if(status==300){
+                location.href = loginUrl;
+            }*/
         });
     }
 })();
@@ -198,3 +238,226 @@ $customerList.on("click", ".more .showMore", function(){
     _this.addClass("hidden");
     getCustomerItem(cStatus);
 });
+
+$customerList.on("click", ".customerItem .blackList", function(e){
+    var _this = $(this);
+    tipsConfirm("Are you sure want to add the customer to blacklist?", function(){
+        addToBlackList(_this);
+    }, {
+        "ok": "YES",
+        "cancel": "NO"
+    });
+});
+
+$customerList.on("click", ".customerItem .removeBlack", function(e){
+    var _this = $(this);
+    tipsConfirm("Are you sure want to remove the customer from blacklist?", function(){
+        removeBlack(_this);
+    }, {
+        "ok": "YES",
+        "cancel": "NO"
+    });
+});
+
+$customerList.on("click", ".customerItem .del", function(e){
+    var _this = $(this);
+    tipsConfirm("Are you sure want to delete the customer?", function(){
+        deleteCustomer(_this);
+    }, {
+        "ok": "YES",
+        "cancel": "NO"
+    });
+});
+
+
+var addToBlackList = (function(){
+    var loading = null;
+    return function (_this) {
+        var $customerItem = _this.parents(".customerItem"),
+            userId = $customerItem.data("userId"),
+            reqData = "userId="+userId;
+        if(loading) return ;
+        loading = showLoading(_this.parent());
+        $.ajax({
+            method: "post",
+            url: "/proxy/admin/customer/blacklist/adding",
+            dataType: "json",
+            data: reqData
+        }).done(function(result){
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                $customerItem.remove();
+                showSpinner("Add Success!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            } else if(status==300){
+                location.href = loginUrl;
+            } else if(status==400){
+                showSpinner("The customer has been deleted!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            }
+        }).fail(function(result){
+            tipsAlert("server error");
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            /*result = {
+                status: 200
+            };
+            var status = result.status;
+            if(status==200){
+                showSpinner("Add Success!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            } else if(status==300){
+                location.href = loginUrl;
+            } else if(status==400){
+                showSpinner("The customer has been deleted!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            }*/
+        });
+    }
+})();
+
+var removeBlack = (function(){
+    var loading = null;
+    return function (_this) {
+        var $customerItem = _this.parents(".customerItem"),
+            userId = $customerItem.data("userId"),
+            reqData = "userId="+userId;
+        if(loading) return ;
+        loading = showLoading(_this.parent());
+        $.ajax({
+            method: "post",
+            url: "/proxy/admin/customer/blacklist/deleting",
+            dataType: "json",
+            data: reqData
+        }).done(function(result){
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                $customerItem.remove();
+                showSpinner("Success!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            } else if(status==300){
+                location.href = loginUrl;
+            } else if(status==400){
+                showSpinner("unknown error!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            }
+        }).fail(function(result){
+            tipsAlert("server error");
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            /*result = {
+                status: 200
+            };
+            var status = result.status;
+            if(status==200){
+                showSpinner("Success!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            } else if(status==300){
+                location.href = loginUrl;
+            } else if(status==400){
+                showSpinner("unknown error!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            }*/
+        });
+    }
+})();
+
+var deleteCustomer = (function(){
+    var loading = null;
+    return function (_this) {
+        var $customerItem = _this.parents(".customerItem"),
+            userId = $customerItem.data("userId"),
+            reqData = "userId="+userId;
+        if(loading) return ;
+        loading = showLoading(_this.parent());
+        $.ajax({
+            method: "post",
+            url: "/proxy/admin/customer/delete",
+            dataType: "json",
+            data: reqData
+        }).done(function(result){
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                $customerItem.remove();
+                showSpinner("Delete Success!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            } else if(status==300){
+                location.href = loginUrl;
+            } else if(status==400){
+                showSpinner("unknown error!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            }
+        }).fail(function(result){
+            tipsAlert("server error");
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            /*result = {
+                status: 200
+            };
+            var status = result.status;
+            if(status==200){
+                showSpinner("Delete Success!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            } else if(status==300){
+                location.href = loginUrl;
+            } else if(status==400){
+                showSpinner("unknown error!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            }*/
+        });
+    }
+})();

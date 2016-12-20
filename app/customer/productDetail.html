@@ -75,9 +75,31 @@
 </header>
 <div class="content">
     <!--页面写在这-->
+    <div class="storeHeader" id="storeHeader">
+        <div class="storeInfo" id="storeInfo">
+            <span class="shopName" id="shopName"></span>
+
+            <span class="detail" id="detail"></span>
+        </div>
+
+        <div class="storeSearch" id="storeSearch">
+            <input type="text" name="keyWordInStore" id="keyWordInStore" placeholder="Search goods in this store" onkeypress="enter()">
+            <span id="searchInStore"></span>
+        </div>
+
+    </div>
+
+    <div class="storeMenu" id="storeMenu">
+        <div class="menuBar" id="menuBar">
+            <span>ALL PRODUCT</span>
+            <ul class="menuList" id="menuList">
+                <li data-pt="0">ALL</li>
+            </ul>
+        </div>
+    </div>
     <div class="product" id="product">
         <div class="productDetail">
-            <form id="productForm" class="clearfix" novalidate>
+            <form id="productForm" class="productForm clearfix" novalidate>
                 <div class="productImages">
                     <div class="bigImage">
                         <img src>

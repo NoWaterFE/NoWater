@@ -90,6 +90,8 @@ function getUrlParam(name) {
     if (r != null) return r[2]; return null; //返回参数值
 }
 
+var loginUrl = "../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
+
 function　createOrderItem(data){
     var pendingPay = '<div class="payNow">' +
         'Pay now ' +
