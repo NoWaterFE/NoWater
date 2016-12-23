@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>CART | PARKnSHOP</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="stylesheet" type="text/css" href="style/cart.css">
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+</head>
+
+<body>
+<header>
+    <div class="header">
+        <div class="menu" id="headMenu">
+            <i></i><span>PRODUCT</span>
+            <ul class="menuList">
+                <li data-pt="1">TV & Home Theater</li>
+                <li data-pt="2">Computers & Tablets</li>
+                <li data-pt="3">Cell Phones</li>
+                <li data-pt="4">Cameras & Camccarts</li>
+                <li data-pt="5">Audio</li>
+                <li data-pt="6">Car Electronics & GPS</li>
+                <li data-pt="7">Video, Games, Movies & Music</li>
+                <li data-pt="8">Health, Fitness & Sports</li>
+                <li data-pt="9">Home & Office</li>
+            </ul>
+        </div>
+        <div class="logo">
+            <a href="index.html">
+                <img src="imgs/head_icon/logo.png" alt="logo">
+            </a>
+        </div>
+        <div class="search">
+            <form novalidate="novalidate" id="searchForm">
+                <div class="search-input">
+                    <input type="text" name="keyWord" placeholder="Search your goods here">
+                    <span class="searchBtn"></span>
+                </div>
+            </form>
+        </div>
+        <ul class="quick-menu" id="quickMenu">
+            <li class="seller-center">
+                <a href="../seller">
+                    <i></i><span>SELLER CENTER</span>
+                </a>
+            </li>
+            <li class="account">
+                <a href="javascript:;">
+                    <i></i><span>ACCOUNT</span>
+                </a>
+                <ul class="accountOperate noLogin active">
+                    <li><a href="register.html">Register</a></li>
+                    <li><a href="login.html">Login</a></li>
+                </ul>
+                <ul class="accountOperate hasLogin">
+                    <li><a href="userCenter.html">Account Info</a></li>
+                    <li><a href="order.html">My Orders</a></li>
+                    <li><a href="javascript:;" class="logout">Logout</a></li>
+                </ul>
+            </li>
+            <li class="favorites">
+                <a href="favorites.html">
+                    <i></i><span>FAVORITES</span>
+                </a>
+            </li>
+            <li class="my-cart">
+                <a href="cart.html">
+                    <i><em class="count">0</em></i><span>MY CART</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</header>
+<div class="content">
+    <!--页面写在这-->
+    <div class="cartDiv">
+        <ul class="cartMain clearfix" id="cartMain">
+            <li class="cartTab">All Order</li>
+            <li class="cartTab">Processing Order</li>
+            <li class="cartTab">Preparing for Shipment</li>
+            <li class="cartTab">Shipped</li>
+            <li class="cartTab">Waiting for Comment</li>
+        </ul>
+        <div class="cartList" id="cartList">
+            <table class="cartTable">
+                <colgroup>
+                    <col class="col1">
+                    <col class="col2">
+                    <col class="col3">
+                    <col class="col4">
+                    <col class="col5">
+                    <col class="col6">
+                </colgroup>
+                <tbody class="cartTh">
+                <tr>
+                    <th class="selectAll">
+                        <div class="clearfix">
+                            <input type="checkbox" name="allCart" id="allCart" class="allCart float">
+                            <label for="allCart" class="float">ALL</label>
+                        </div>
+                    </th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                    <th>Operate</th>
+                </tr>
+                </tbody>
+            </table>
+            <div class="more">
+                <div class="showMore hidden">
+                    <span>SHOW MORE</span>
+                    <span class="down"></span>
+                </div>
+            </div>
+            <div class="checkoutBox">
+                <div class="optionBox clearfix">
+                    <div class="selectAll">
+                        <div class="clearfix">
+                            <input type="checkbox" name="allCart" id="allCart1" class="allCart float">
+                            <label for="allCart1" class="float">ALL</label>
+                        </div>
+                    </div>
+                    <div class="checkout">
+                        <div class="productNum floatL">
+                            <span class="num">0</span> product(s) selected
+                        </div>
+                        <div class="amount floatL">
+                            <span>Amount: </span><span class="total">HK$0.00</span>
+                        </div>
+                        <div class="check floatL disabled">
+                            Checkout
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    <div class="footer">
+        © Copyright NoWaterFE
+    </div>
+</footer>
+<script type="text/javascript" src="js/cart.js"></script>
+</body>
+
+</html>

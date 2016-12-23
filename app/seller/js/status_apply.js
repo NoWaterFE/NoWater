@@ -21,7 +21,7 @@ $.ajax({
     }
 }).fail(function (result) {
     alert("server error");
-    //location.href = "../customer";
+    location.href = "../customer";
     /*var msg = "";
     if(result.status==200) {
         location.href = "index.html";
