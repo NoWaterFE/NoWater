@@ -6,6 +6,7 @@ var className = ["ALL", "TV & Home Theater", "Computers & Tablets", "Cell Phones
     "Cameras & Camcorders", "Audio", "Car Electronics & GPS",
     "Video, Games, Movies & Music", "Health, Fitness & Sports", "Home & Offic"];
 var startId = 0;
+var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
 
 $("#showMoreButton").click(getResult);
 if (!GetQueryString("shopId")) {
@@ -637,10 +638,12 @@ var addToCart = (function(){
             }
             var status = result.status;
             if(status==200){
-                setCart(result.num);
+                setCart(result.userInformation[0].cartNum);
                 showSpinner("Add success")
             } else if(status==300){
                 location.href = loginUrl;
+            } else if (status==600){
+                tipsAlert("Sorry, the stock of the product is not enough!");
             } else {
                 tipsAlert("server error!");
             }
@@ -649,23 +652,24 @@ var addToCart = (function(){
                 loading.remove();
                 loading = null;
             }
-            //tipsAlert("server error!");
-            result = {
-                status: 200,
-                num: 1000
-            };
-            var status = result.status;
-            if(status==200){
-                setCart(result.num);
-                showSpinner("Add success")
-            } else if(status==300){
-                location.href = loginUrl;
-            } else {
-                tipsAlert("server error!");
-            }
+            tipsAlert("server error!");
+            /*result = {
+             status: 200,
+             num: 1000
+             };
+             var status = result.status;
+             if(status==200){
+             setCart(result.num);
+             showSpinner("Add success")
+             } else if(status==300){
+             location.href = loginUrl;
+             } else {
+             tipsAlert("server error!");
+             }*/
         });
     };
 })();
+
 var addToFavo = (function(){
     var loading = null;
     return function(e){
@@ -759,4 +763,22 @@ function showLoading($relative) {
             });
         });
     return $tips;
+}
+
+function tipsAlert(msg, callback){
+    var $alert = $(".tipsAlert");
+    if ($alert.length > 0) $alert.remove();
+    $alert = $("<div class='tipsAlert'></div>");
+    var $shadow = $("<div class='shadow'></div>");
+    var $content = $("<div class='content'></div>");
+    var $msg = $("<div class='msg'>"+ msg +"</div>");
+    var $btn = $("<div class='btn'>OK</div>");
+    $btn.on("click", function () {
+        $(this).parents(".tipsAlert").remove();
+        if(callback) callback();
+    });
+    $content.append($msg).append($btn);
+    $alert.append($shadow);
+    $alert.append($content);
+    $alert.appendTo($("body"));
 }

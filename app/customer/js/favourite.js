@@ -1,6 +1,7 @@
 var host="http://123.206.100.98:16120";
 var startId = 0;
 var favoriteType = GetQueryString("kind");
+var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
 $("#showMoreButton").click(getResult);
 
 if(!GetQueryString("kind")) {
@@ -15,7 +16,7 @@ $favMain.on("click", ".favTab", function () {
 });
 $favMain.find(".favTab").eq(favoriteType).addClass("active");
 if (favoriteType == 1) {
-    $("#adGoods").css('width','900px');
+    $("#adGoods").css('width','800px');
 } else {
     $("#adGoods").css('width','1200px');
 }
@@ -137,9 +138,7 @@ function getResult() {
                 $("#showMore").css('display', 'none');
             }
         } else if (result.status == 300) {
-            $noResult.html("<p>Please login first!&nbsp;<a href='login.html'>click here</a>&nbsp;to login.</p>");
-            $noResult.css('display', 'block');
-            return;
+            location.href = "login.html";
         }
         $adGoods = null;
     })
@@ -353,9 +352,7 @@ function getResult() {
                     $("#showMore").css('display', 'none');
                 }
             } else if (result.status == 300) {
-                $noResult.html("<p>Please login first!&nbsp;<a href='login.html'>click here</a>&nbsp;to login.</p>");
-                $noResult.css('display', 'block');
-                return;
+                location.href = "login.html";
             }
             $adGoods = null;
         });
@@ -382,9 +379,8 @@ function createGoodsItem(data) {
         '<i></i><span>REMOVE</span> ' +
         '</div> ' +
         '</div> ' +
-        '</li>').data("productId", data.productId);
+        '</li>').data("favoriteId", data.favoriteId);
 }
-
 
 function createShopItem(data) {
     return $('<li class="shop-item"> ' +
@@ -406,7 +402,7 @@ function createShopItem(data) {
         '<div class="removeShop"> ' +
         '<button id="removeShop">REMOVE</button> ' +
         '</div> ' +
-        '</li>').data("productId", data.shopId);
+        '</li>').data("productId", data.favoriteId);
 }
 
 function GetQueryString(name) {
@@ -436,10 +432,12 @@ var addToCart = (function(){
             }
             var status = result.status;
             if(status==200){
-                setCart(result.num);
+                setCart(result.userInformation[0].cartNum);
                 showSpinner("Add success")
             } else if(status==300){
                 location.href = loginUrl;
+            } else if (status==600){
+                tipsAlert("Sorry, the stock of the product is not enough!");
             } else {
                 tipsAlert("server error!");
             }
@@ -448,20 +446,20 @@ var addToCart = (function(){
                 loading.remove();
                 loading = null;
             }
-            //tipsAlert("server error!");
-            result = {
-                status: 200,
-                num: 1000
-            };
-            var status = result.status;
-            if(status==200){
-                setCart(result.num);
-                showSpinner("Add success")
-            } else if(status==300){
-                location.href = loginUrl;
-            } else {
-                tipsAlert("server error!");
-            }
+            tipsAlert("server error!");
+            // result = {
+            //  status: 200,
+            //  num: 1000
+            //  };
+            //  var status = result.status;
+            //  if(status==200){
+            //  setCart(result.num);
+            //  showSpinner("Add success")
+            //  } else if(status==300){
+            //  location.href = loginUrl;
+            //  } else {
+            //  tipsAlert("server error!");
+            //  }
         });
     };
 })();
@@ -469,33 +467,31 @@ var addToCart = (function(){
 var remove = (function(){
     var loading = null;
     return function(e){
-        if (!window.confirm("Sure to delete?")) {
-            return;
-        } else {
+        tipsConfirm("Sure to delete?", function () {
             var _this = $(this);
-            if(loading) return;
+            if (loading) return;
             var $goods = _this.parents(".goods-item");
             loading = showLoading($goods);
-            var data = "id="+$goods.data("productId")+"&favoriteType="+favoriteType;
+            var data = "favoriteId=" + $goods.data("favoriteId");
             $.ajax({
                 method: "post",
                 url: "/proxy/customer/favorite/deleting",
                 data: data
-            }).done(function(){
-                if(loading) {
+            }).done(function () {
+                if (loading) {
                     loading.remove();
                     loading = null;
                 }
                 var status = result.status;
-                if(status==200){
+                if (status == 200) {
                     location.reload();
-                } else if(status==300){
+                } else if (status == 300) {
                     location.href = "login.html";
                 } else {
                     tipsAlert("server error!");
                 }
-            }).fail(function(result){
-                if(loading) {
+            }).fail(function (result) {
+                if (loading) {
                     loading.remove();
                     loading = null;
                 }
@@ -504,15 +500,15 @@ var remove = (function(){
                     status: 200
                 };
                 var status = result.status;
-                if(status==200){
+                if (status == 200) {
                     location.reload();
-                } else if(status==300){
+                } else if (status == 300) {
                     location.href = "login.html";
                 } else {
                     tipsAlert("server error!");
                 }
             });
-        }
+        });
     };
 })();
 
@@ -565,4 +561,46 @@ function showLoading($relative) {
             });
         });
     return $tips;
+}
+
+function tipsAlert(msg, callback){
+    var $alert = $(".tipsAlert");
+    if ($alert.length > 0) $alert.remove();
+    $alert = $("<div class='tipsAlert'></div>");
+    var $shadow = $("<div class='shadow'></div>");
+    var $content = $("<div class='content'></div>");
+    var $msg = $("<div class='msg'>"+ msg +"</div>");
+    var $btn = $("<div class='btn'>OK</div>");
+    $btn.on("click", function () {
+        $(this).parents(".tipsAlert").remove();
+        if(callback) callback();
+    });
+    $content.append($msg).append($btn);
+    $alert.append($shadow);
+    $alert.append($content);
+    $alert.appendTo($("body"));
+}
+
+function tipsConfirm(msg, callback){
+    var $confirm = $(".tipsConfirm");
+    if ($confirm.length > 0) $confirm.remove();
+    $confirm = $("<div class='tipsConfirm'></div>");
+    var $shadow = $("<div class='shadow'></div>");
+    var $content = $("<div class='content'></div>");
+    var $msg = $("<div class='msg'>"+ msg +"</div>");
+    var $btn = $('<div class="btn2"> ' +
+        '<div class="cancel">Cancel</div> ' +
+        '<div class="ok">Ok</div> </div>');
+
+    $btn.on("click", ".cancel", function () {
+        $(this).parents(".tipsConfirm").remove();
+    });
+    $btn.on("click", ".ok", function () {
+        $(this).parents(".tipsConfirm").remove();
+        if(callback) callback();
+    });
+    $content.append($msg).append($btn);
+    $confirm.append($shadow)
+        .append($content)
+        .appendTo($("body"));
 }
