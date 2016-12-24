@@ -263,7 +263,7 @@ var shopId = 1;
                 .find(".smallImages").append(createSImageList(data.photo));
             $product.show();
             var $num = $productForm.find('.num');
-            if($num.val()>1) $productForm.find('.minus').removeClass("disabled");
+            checkState($num);
         } else if(status==400){
             $product.html("The product doesn't exist.").show();
         }
@@ -368,6 +368,8 @@ var addToCart = (function(){
                 showSpinner("Add success");
             } else if(status==300){
                 location.href = loginUrl;
+            } else if (status==600){
+                tipsAlert("Sorry, the stock of the product is not enough!");
             } else {
                 tipsAlert("server error!");
             }
@@ -441,6 +443,14 @@ var buy = (function(){
     var loading = null;
     return function(e){
         var info = $productForm.data("info");
+        var $num = $productForm.find('.num'),
+            $stock = $productForm.find(".stock"),
+            num = $num.val(),
+            stock = $stock.val();
+        if(num>stock || stock==0){
+            tipsAlert("Sorry, stock is not enough!");
+            return;
+        }
         if(loading) return;
         loading = showLoading($productForm);
         var data = "productId="+info.productId+"&orderType=0&num="+$productForm.find(".num").val();
@@ -516,19 +526,27 @@ $productForm.on("input", ".quantityOp .num", function (e) {
 
 function checkState($num){
     var $minus = $num.siblings(".minus"),
-        val = $num.val();
-    if(parseInt(val)>=2){
+        val = parseInt($num.val()),
+        $plus = $num.siblings(".plus"),
+        $stock = $num.siblings(".stock"),
+        stock = parseInt($stock.val());
+    if(stock==0){
+        $minus.addClass("disabled");
+        $plus.addClass("disabled");
+        $num.val(1);
+        return ;
+    }
+    if(val>=stock){
+        $plus.addClass("disabled");
+        $num.val(stock);
+    } else {
+        $plus.removeClass("disabled");
+    }
+    val = parseInt($num.val());
+    if(val>=2){
         $minus.removeClass("disabled");
     } else {
         $minus.addClass("disabled");
-    }
-    var $plus = $num.siblings(".plus"),
-        $stock = $num.siblings(".stock");
-    if(parseInt(val)>=parseInt($stock.val())){
-        $plus.addClass("disabled");
-        $num.val($stock.val());
-    } else {
-        $plus.removeClass("disabled");
     }
 }
 

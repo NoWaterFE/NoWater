@@ -13,8 +13,8 @@ $.ajax({
         location.href = "apply.html";
     }
 }).fail(function (result) {
-    /*alert("server error");
-    location.href = "../customer/index.html";*/
+    alert("server error");
+    location.href = "../customer/index.html";
     /*result = {
         status: 200,
         data: [{

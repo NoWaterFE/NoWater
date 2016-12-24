@@ -380,10 +380,12 @@ var addToCart = (function(){
             }
             var status = result.status;
             if(status==200){
-                setCart(result.num);
+                setCart(result.userInformation.num);
                 showSpinner("Add success")
             } else if(status==300){
                 location.href = loginUrl;
+            } else if (status==600){
+                tipsAlert("Sorry, the stock of the product is not enough!");
             } else {
                 tipsAlert("server error!");
             }
@@ -392,8 +394,8 @@ var addToCart = (function(){
                 loading.remove();
                 loading = null;
             }
-            //tipsAlert("server error!");
-            result = {
+            tipsAlert("server error!");
+            /*result = {
                 status: 200,
                 num: 1000
             };
@@ -405,7 +407,7 @@ var addToCart = (function(){
                 location.href = loginUrl;
             } else {
                 tipsAlert("server error!");
-            }
+            }*/
         });
     };
 })();
