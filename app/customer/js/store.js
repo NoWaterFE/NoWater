@@ -616,8 +616,6 @@ function createGoodsItem(data) {
         '</div> ' +
         '</div> ' +
         '</li>').data("productId", data.productId);
-<<<<<<< HEAD
-=======
 }
 
 var addToCart = (function(){
@@ -761,5 +759,4 @@ function showLoading($relative) {
             });
         });
     return $tips;
->>>>>>> ghs
 }
