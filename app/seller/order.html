@@ -63,10 +63,7 @@
                 <h2 class="title">Order Management</h2>
                 <ul>
                     <li class="navList">
-                        <a href="order.html">Incomplete Order</a>
-                    </li>
-                    <li class="navList">
-                        <a href="order.html">Completed Order</a>
+                        <a href="order.html">All Order</a>
                     </li>
                 </ul>
             </li>
@@ -74,7 +71,7 @@
                 <h2 class="title">Shop Management</h2>
                 <ul>
                     <li class="navList">
-                        <a href="#">Modify shop information</a>
+                        <a href="index.html">Modify shop information</a>
                     </li>
                 </ul>
             </li>
@@ -119,6 +116,28 @@
             </div>
         </div>
     </div>
+</div>
+<div class="deliverPop">
+    <div class="shadow"></div>
+    <form class="deliverForm" id="deliverForm" novalidate>
+        <input type="hidden" name="orderId">
+        <i class="cancel close"></i>
+        <h2 class="title">Express Info</h2>
+        <div class="input-item express">
+            <label for="express" class="redStar">Express:</label>
+            <input type="text" name="express" id="express" maxlength="50">
+            <span class="tips"></span>
+        </div>
+        <div class="input-item expressCode">
+            <label for="expressCode" class="redStar">Express No:</label>
+            <input type="text" name="expressCode" id="expressCode" maxlength="30">
+            <span class="tips"></span>
+        </div>
+        <div class="submit">
+            <input type="submit" value="CONFIRM">
+            <input type="button" value="CANCEL" class="cancel">
+        </div>
+    </form>
 </div>
 <footer>
     <div class="footer">

@@ -104,6 +104,9 @@
 
 })();
 
+var className = ["ALL", "TV & Home Theater", "Computers & Tablets", "Cell Phones",
+    "Cameras & Camcorders", "Audio", "Car Electronics & GPS",
+    "Video, Games, Movies & Music", "Health, Fitness & Sports", "Home & Offic"];
 
 function showLoading($relative) {
     var $tips = $relative.siblings(".loadingImg");
@@ -207,9 +210,19 @@ function createSImageList(imgArray){
     return $(sImage);
 }
 
+function enter() {
+    var keyWord = $("#keyWordInStore").val();
+    var e= window.event;
+    if (e.keyCode == 13 && keyWord) {
+        location.href = "store.html?shopId=" + encodeURIComponent(shopId) + "&keyWord=" + encodeURIComponent(keyWord);
+    }
+}
+
+var shopId = 1;
+
 (function(){
-    var productId = getUrlParam("id");
-    var $product = $("#product");
+    var productId = getUrlParam("id"),
+        $product = $("#product");
     if(productId==undefined) {
         $product.html("The product doesn't exist.")
     }
@@ -223,6 +236,19 @@ function createSImageList(imgArray){
             var $productForm = $("#productForm");
             var data = result.data,
                 shop = data.shop;
+            shopId = shop.shopId;
+            $("#shopName").text(shop.shopName);
+            $("#detail").html("Telephone: " + shop.telephone + "<br>" + "E-mail: " +shop.email);
+            var classList = shop.classList,
+                len = classList.length,
+                $menuList = $("#menuList"),
+                menuList = "",
+                classId = 0;
+            for (var i=0; i<len; i++) {
+                classId = classList[i];
+                menuList = '<li data-pt="' + classId +' ">' + className[classId] + '</li>';
+                $menuList.append(menuList);
+            }
             $productForm.data("info", data)
                 .find(".productName").text(data.productName)
                 .end()
@@ -236,12 +262,15 @@ function createSImageList(imgArray){
                 .end()
                 .find(".smallImages").append(createSImageList(data.photo));
             $product.show();
+            var $num = $productForm.find('.num');
+            checkState($num);
         } else if(status==400){
-            $product.html("The product doesn't exist.")
+            $product.html("The product doesn't exist.").show();
         }
     }).fail(function (result) {
         tipsAlert("server error!");
         /*result = {
+            status: 200,
             data: {
                 shop: {
                     shopId: 234,
@@ -249,7 +278,11 @@ function createSImageList(imgArray){
                     ownerId: 45,
                     email: "nowater@nowater.com",
                     telephone: "69812374",
-                    status: 0
+                    status: 0,
+                    classList: [
+                        1,2,3,4
+
+                    ]
                 },
                 productId: 45,
                 classId: 1,
@@ -265,24 +298,48 @@ function createSImageList(imgArray){
                 ]
             }
         };
-        var $productForm = $("#productForm");
-        var data = result.data,
-            shop = data.shop;
-        $productForm.data("info", data)
-            .find(".productName").text(data.productName)
-            .end()
-            .find(".priceSpan").text(data.price.toFixed(2))
-            .end()
-            .find(".stockSpan").text(data.quantityStock)
-            .end()
-            .find(".stock").val(data.quantityStock)
-            .end()
-            .find(".bigImage img").attr("src", data.photo[0])
-            .end()
-            .find(".smallImages").append(createSImageList(data.photo));
-        $product.show();*/
-
+        var status = result.status;
+        if(status==200 || status==500){
+            var $productForm = $("#productForm");
+            var data = result.data,
+                shop = data.shop;
+            shopId = shop.shopId;
+            $("#shopName").text(shop.shopName);
+            var classList = shop.classList,
+                len = classList.length,
+                $menuList = $("#menuList"),
+                menuList = "",
+                classId = 0;
+            for (var i=0; i<len; i++) {
+                classId = classList[i];
+                menuList = '<li data-pt="' + classId +' ">' + className[classId] + '</li>';
+                $menuList.append(menuList);
+            }
+            $productForm.data("info", data)
+                .find(".productName").text(data.productName)
+                .end()
+                .find(".priceSpan").text(data.price.toFixed(2))
+                .end()
+                .find(".stockSpan").text(data.quantityStock)
+                .end()
+                .find(".stock").val(data.quantityStock)
+                .end()
+                .find(".bigImage img").attr("src", data.photo[0])
+                .end()
+                .find(".smallImages").append(createSImageList(data.photo));
+            $product.show();
+        } else if(status==400){
+            $product.html("The product doesn't exist.").show();
+        }*/
     });
+
+    var $storeMenu = $("#menuBar");
+    $storeMenu.on("click", ".menuList li", function () {
+        var classId = $(this).data("pt");
+        location.href = "store.html?shopId=" +shopId + "&classId=" + classId;
+    });
+    $storeMenu = null;
+
 }());
 
 var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
@@ -311,19 +368,21 @@ var addToCart = (function(){
                 showSpinner("Add success");
             } else if(status==300){
                 location.href = loginUrl;
+            } else if (status==600){
+                tipsAlert("Sorry, the stock of the product is not enough!");
             } else {
                 tipsAlert("server error!");
             }
         }).fail(function(result){
             tipsAlert("server error!");
-            /*result = {
-                status: 200,
-                num: 1000
-            };
             if(loading) {
                 loading.remove();
                 loading = null;
             }
+            /*result = {
+                status: 200,
+                num: 1000
+            };
             var status = result.status;
             if(status==200){
                 setCart(result.num);
@@ -362,13 +421,13 @@ var addToFavo = (function(){
             }
         }).fail(function(result){
             tipsAlert("server error!");
-            /*result = {
-                status: 200
-            };
             if(loading) {
                 loading.remove();
                 loading = null;
             }
+            /*result = {
+                status: 200
+            };
             var status = result.status;
             if(status==200){
                 showSpinner("Add success");
@@ -384,6 +443,14 @@ var buy = (function(){
     var loading = null;
     return function(e){
         var info = $productForm.data("info");
+        var $num = $productForm.find('.num'),
+            $stock = $productForm.find(".stock"),
+            num = $num.val(),
+            stock = $stock.val();
+        if(num>stock || stock==0){
+            tipsAlert("Sorry, stock is not enough!");
+            return;
+        }
         if(loading) return;
         loading = showLoading($productForm);
         var data = "productId="+info.productId+"&orderType=0&num="+$productForm.find(".num").val();
@@ -406,16 +473,16 @@ var buy = (function(){
             }
         }).fail(function(result){
             tipsAlert("server error!");
+            if(loading) {
+                loading.remove();
+                loading = null;
+            }
             /*result = {
                 status: 200,
                 data: {
                     orderId: 1
                 }
             };
-            if(loading) {
-                loading.remove();
-                loading = null;
-            }
             var status = result.status;
             if(status==200){
                 location.href = "confirmOrder.html?orderId="+result.data.orderId;
@@ -459,19 +526,27 @@ $productForm.on("input", ".quantityOp .num", function (e) {
 
 function checkState($num){
     var $minus = $num.siblings(".minus"),
-        val = $num.val();
-    if(parseInt(val)>=2){
+        val = parseInt($num.val()),
+        $plus = $num.siblings(".plus"),
+        $stock = $num.siblings(".stock"),
+        stock = parseInt($stock.val());
+    if(stock==0){
+        $minus.addClass("disabled");
+        $plus.addClass("disabled");
+        $num.val(1);
+        return ;
+    }
+    if(val>=stock){
+        $plus.addClass("disabled");
+        $num.val(stock);
+    } else {
+        $plus.removeClass("disabled");
+    }
+    val = parseInt($num.val());
+    if(val>=2){
         $minus.removeClass("disabled");
     } else {
         $minus.addClass("disabled");
-    }
-    var $plus = $num.siblings(".plus"),
-        $stock = $num.siblings(".stock");
-    if(parseInt(val)>=parseInt($stock.val())){
-        $plus.addClass("disabled");
-        $num.val($stock.val());
-    } else {
-        $plus.removeClass("disabled");
     }
 }
 

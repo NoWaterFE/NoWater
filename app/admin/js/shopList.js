@@ -3,7 +3,7 @@ var $logoutBtn = $("#logoutBtn");
 $logoutBtn.click(function () {
     $.ajax({
         method: "get",
-        url: "/proxy/admin/loginout"
+        url: "/proxy/admin/logout"
     }).done(function(){
         delCookie("admin_token");
         location.href = "login.html";
@@ -90,7 +90,7 @@ function showSpinner(msg, config){
     var def = {
         timeout: 1500
     };
-    config = $.extend(config, def);
+    config = $.extend(def, config);
     $spinner.appendTo($("body"))
         .ready(function () {
             $spinner.css({
@@ -112,7 +112,15 @@ function getUrlParam(name) {
     if (r != null) return r[2]; return null; //返回参数值
 }
 
-function createCustomerList(info) {
+function createShopList(info) {
+    var status = info.status,
+        operate = "";
+    if(status==1){
+        operate = '<span class="blackList">add to blacklist</span> ' +
+            '<span class="del">delete</span> ';
+    } else {
+        operate = '<span class="removeBlack">remove from blacklist</span> ';
+    }
     return $('<tr class="shopItem"> ' +
         '<td class="id">'+info.shopId+'</td> ' +
         '<td class="name">'+info.shopName+'</td> ' +
@@ -120,11 +128,12 @@ function createCustomerList(info) {
         '<td class="tel">'+info.telephone+'</td> ' +
         '<td class="email">'+info.email+'</td> ' +
         '<td class="operate"> ' +
-        '<span class="blackList">add to blacklist</span> ' +
-        '<span class="del">delete</span> ' +
+            operate +
         '</td> ' +
-        '</tr>');
+        '</tr>').data("shopId", info.shopId);
 }
+
+var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
 
 var cStatus = getUrlParam("status");
 
@@ -138,11 +147,11 @@ $shopMain.find(".shopTab")
     .addClass("active");
 
 
-var getCustomerItem = (function(){
+var getShopItem = (function(){
     var loading = null,
         startId = 0;
     return function (cStatus) {
-        var reqData = "count=20&startId="+startId;
+        var reqData = "count=20&startId="+startId+"&shopType="+(1-2*cStatus);
         if(loading) return ;
         loading = showLoading($(".more"));
         $.ajax({
@@ -151,9 +160,32 @@ var getCustomerItem = (function(){
             dataType: "json",
             data: reqData
         }).done(function(result){
-
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                var data = result.data,
+                    len = data.length;
+                var $tbody = $shopList.find(".shopTable tbody");
+                for(var i=0; i<len; i++) {
+                    $tbody.append(createShopList(data[i]));
+                }
+                startId = result.endId;
+                if(startId!=-1){
+                    $shopList.find(".more .showMore").removeClass("hidden");
+                }
+            } else if(status==300) {
+                location.href = loginUrl;
+            }
         }).fail(function(result){
-            result = {
+            tipsAlert("server error!");
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            /*result = {
                 status: 200,
                 data: [
                     {
@@ -166,29 +198,281 @@ var getCustomerItem = (function(){
                     }
                 ]
             };
-            if (loading) {
-                loading.remove();
-                loading = null;
-            }
-            var data = result.data,
-                len = data.length;
-            var $tbody = $shopList.find(".shopTable tbody");
-            for(var i=0; i<10; i++) {
-                $tbody.append(createCustomerList(data[0]));
-            }
-            if(startId!=-1){
-                $shopList.find(".more .showMore").removeClass("hidden");
-            }
+            var status = result.status;
+            if(status==200){
+                var data = result.data,
+                    len = data.length;
+                var $tbody = $shopList.find(".shopTable tbody");
+                for(var i=0; i<len; i++) {
+                    $tbody.append(createShopList(data[i]));
+                }
+                startId = result.endId;
+                if(startId!=-1){
+                    $shopList.find(".more .showMore").removeClass("hidden");
+                }
+            } else if(status==300) {
+                location.href = loginUrl;
+            }*/
         });
     }
 })();
 
-getCustomerItem(cStatus);
+getShopItem(cStatus);
 
 var $shopList = $("#shopList");
 
 $shopList.on("click", ".more .showMore", function(){
     var _this = $(this);
     _this.addClass("hidden");
-    getCustomerItem(cStatus);
+    getShopItem(cStatus);
 });
+
+$shopList.on("click", ".shopItem .blackList", function(e){
+    var _this = $(this);
+    tipsConfirm("Are you sure want to add the shop to blacklist?", function(){
+        addToBlackList(_this);
+    }, {
+        "ok": "YES",
+        "cancel": "NO"
+    });
+});
+
+$shopList.on("click", ".shopItem .removeBlack", function(e){
+    var _this = $(this);
+    tipsConfirm("Are you sure want to remove the shop from blacklist?", function(){
+        removeBlack(_this);
+    }, {
+        "ok": "YES",
+        "cancel": "NO"
+    });
+});
+
+$shopList.on("click", ".shopItem .del", function(e){
+    var _this = $(this);
+    tipsConfirm("Are you sure want to delete the shop?", function(){
+        deleteCustomer(_this);
+    }, {
+        "ok": "YES",
+        "cancel": "NO"
+    });
+});
+
+
+var addToBlackList = (function(){
+    var loading = null;
+    return function (_this) {
+        var $shopItem = _this.parents(".shopItem"),
+            shopId = $shopItem.data("shopId"),
+            reqData = "shopId="+shopId;
+        if(loading) return ;
+        loading = showLoading(_this.parent());
+        $.ajax({
+            method: "post",
+            url: "/proxy/admin/shop/blacklist/adding",
+            dataType: "json",
+            data: reqData
+        }).done(function(result){
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                $shopItem.remove();
+                showSpinner("Add Success!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            } else if(status==300){
+                location.href = loginUrl;
+            } else if(status==400){
+                showSpinner("Unknown error!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            } else if(status==500){
+                showSpinner("The shop has been deleted!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            }
+        }).fail(function(result){
+            tipsAlert("server error");
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            /*result = {
+                status: 200
+            };
+            var status = result.status;
+            if(status==200){
+                $shopItem.remove();
+                showSpinner("Add Success!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            } else if(status==300){
+                location.href = loginUrl;
+            } else if(status==400){
+                showSpinner("Unknown error!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            } else if(status==500){
+                showSpinner("The shop has been deleted!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            }*/
+        });
+    }
+})();
+
+var removeBlack = (function(){
+    var loading = null;
+    return function (_this) {
+        var $shopItem = _this.parents(".shopItem"),
+            shopId = $shopItem.data("shopId"),
+            reqData = "shopId="+shopId;
+        if(loading) return ;
+        loading = showLoading(_this.parent());
+        $.ajax({
+            method: "post",
+            url: "/proxy/admin/shop/blacklist/deleting",
+            dataType: "json",
+            data: reqData
+        }).done(function(result){
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                $shopItem.remove();
+                showSpinner("Success!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            } else if(status==300){
+                location.href = loginUrl;
+            } else if(status==400){
+                showSpinner("unknown error!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            } else if(status==500){
+                showSpinner("The shop has been deleted!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            }
+        }).fail(function(result){
+            tipsAlert("server error");
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            /*result = {
+                status: 200
+            };
+            var status = result.status;
+            if(status==200){
+                $shopItem.remove();
+                showSpinner("Success!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            } else if(status==300){
+                location.href = loginUrl;
+            } else if(status==400){
+                showSpinner("unknown error!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            } else if(status==500){
+                showSpinner("The shop has been deleted!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            }*/
+        });
+    }
+})();
+
+var deleteCustomer = (function(){
+    var loading = null;
+    return function (_this) {
+        var $shopItem = _this.parents(".shopItem"),
+            shopId = $shopItem.data("shopId"),
+            reqData = "shopId="+shopId;
+        if(loading) return ;
+        loading = showLoading(_this.parent());
+        $.ajax({
+            method: "post",
+            url: "/proxy/admin/shop/delete",
+            dataType: "json",
+            data: reqData
+        }).done(function(result){
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                $shopItem.remove();
+                showSpinner("Delete Success!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            } else if(status==300){
+                location.href = loginUrl;
+            } else if(status==400){
+                showSpinner("unknown error!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            }
+        }).fail(function(result){
+            tipsAlert("server error");
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+           /* result = {
+                status: 200
+            };
+            var status = result.status;
+            if(status==200){
+                $shopItem.remove();
+                showSpinner("Delete Success!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            } else if(status==300){
+                location.href = loginUrl;
+            } else if(status==400){
+                showSpinner("unknown error!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            }*/
+        });
+    }
+})();

@@ -1,33 +1,33 @@
 // header添加事件
 (function () {
     //获取登录信息可能不需要
-    /*$.ajax({
-     method: "get",
-     url: "/proxy/customer/isLogin",
-     dataType: "json"
-     }).done(function (result) {
-     if(result.status==200){
-     var userInfo = result.userInformation[0];
-     var quickMenu = $("#quickMenu");
-     quickMenu.find(".accountOperate").toggleClass("active");
-     quickMenu.find(".my-cart .count").text(userInfo.cartNum);
-     }
-     }).fail(function (result) {
-     console.log(result.statusText);
-     result = {
-     status: 200,
-     userInformation: [{
-     name: "gdh",
-     cartNum: 33
-     }]
-     };
-     if(result.status==200){
-     var userInfo = result.userInformation[0];
-     var quickMenu = $("#quickMenu");
-     quickMenu.find(".accountOperate").toggleClass("active");
-     quickMenu.find(".my-cart .count").text(userInfo.cartNum);
-     }
-     });*/
+    $.ajax({
+        method: "get",
+        url: "/proxy/customer/isLogin",
+        dataType: "json"
+    }).done(function (result) {
+        if (result.status == 200) {
+            var userInfo = result.userInformation[0];
+            var quickMenu = $("#quickMenu");
+            quickMenu.find(".accountOperate").toggleClass("active");
+            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+        }
+    }).fail(function (result) {
+        /*console.log(result.statusText);
+        result = {
+            status: 200,
+            userInformation: [{
+                name: "gdh",
+                cartNum: 33
+            }]
+        };
+        if (result.status == 200) {
+            var userInfo = result.userInformation[0];
+            var quickMenu = $("#quickMenu");
+            quickMenu.find(".accountOperate").toggleClass("active");
+            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+        }*/
+    });
 
     //headMenu添加事件
     var $headMenu = $("#headMenu");
@@ -156,6 +156,33 @@ function tipsConfirm(msg, callback){
         .appendTo($("body"));
 }
 
+function showSpinner(msg, config){
+    var $spinner = $(".spinner");
+    if($spinner) $spinner.remove();
+    $spinner = $('<div class="spinner"> ' +
+        '<div class="tips"> ' +
+        msg +
+        '</div> ' +
+        '</div>');
+    var def = {
+        timeout: 1500
+    };
+    config = $.extend(def, config);
+    $spinner.appendTo($("body"))
+        .ready(function () {
+            $spinner.css({
+                "margin-left": -$spinner.width() / 2,
+                "margin-top": -$spinner.width() / 2,
+                "visibility": "visible"
+            });
+        });
+    setTimeout(function(){
+        if($spinner) $spinner.remove();
+        var callback = config.callback;
+        if(callback) callback();
+    }, config.timeout);
+}
+
 function getUrlParam(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
     var r = window.location.search.substr(1).match(reg); //匹配目标参数
@@ -163,7 +190,10 @@ function getUrlParam(name) {
 }
 
 function　createOrderItem(data){
-    var pendingPay = '<div class="payNow">' +
+    var pendingPay = '<div class="timeTips">' +
+            data.countdown +
+        '</div>' +
+        '<div class="payNow">' +
         'Pay now' +
         '</div> ' +
         '<div class="cancel">' +
@@ -172,7 +202,10 @@ function　createOrderItem(data){
     var confirmReceived = '<div class="confirmR">' +
         'Confirm received' +
         '</div> ';
-    var toBeComment = '<div class="comment">' +
+    var toBeComment = '<div class="timeTips">' +
+            data.countdown +
+        '</div>' +
+        '<div class="comment">' +
         'Comment' +
         '</div>';
 
@@ -190,7 +223,7 @@ function　createOrderItem(data){
         operate = toBeComment;
     } else if(data.status==5){
         data.statusText = "Completed";
-    } else if(data.status==-1){
+    } else if(data.status==10){
         data.statusText = "Closed";
     }
     var product = data.product;
@@ -217,12 +250,12 @@ function　createOrderItem(data){
         '</tr> ';
     return $('<tbody class="orderItem"> ' +
         orderData +
-        '</tbody>')
+        '</tbody>').data('info', data);
 }
 
 function setOrderInfo(data) {
     var $info = $("#info");
-    var shop = data.shop;
+    var shop = data.product.shop;
     $info.find(".receiver .value").text(data.address).end()
         .find(".orderTime .value").text(data.time).end()
         .find(".orderId .value").text(data.orderId).end()
@@ -233,33 +266,53 @@ function setOrderInfo(data) {
         .find(".expressNo .value").text(data.expressCode);
 }
 
+var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
+
 var postOrder = (function(){
     var loading = null;
-    return function (orderId) {
+    return function (orderId, orderStatus) {
         if(loading) return ;
         loading = showLoading($(".more"));
         var arr = [];
         arr.push(orderId);
-        var reqData = "orderId="+JSON.stringify(arr);
+        var reqData = "orderIdList="+JSON.stringify(arr);
         $.ajax({
             method: "get",
-            url: "",
+            url: "/proxy/order/detail",
             dataType: "json",
             data: reqData
         }).done(function(result){
-
+            if(loading){
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                var $orderList = $("#orderList"),
+                    $orderTable = $orderList.find(".orderTable"),
+                    data = result.data[0];
+                setOrderInfo(data);
+                $orderTable.append(createOrderItem(data));
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                tipsAlert("unknown error!", function () {
+                    location.href = "index.html";
+                });
+            }
         }).fail(function(result){
-            result = {
+            if(loading){
+                loading.remove();
+                loading = null;
+            }
+            tipsAlert("server error!");
+            /*result = {
                 data: [
                     {
                         time: "2016-09-05 16:30:06",
                         orderId: "2662774641999118",
                         targetId: 12,
-                        shop: {
-                            shopName: "Tom's shop",
-                            telephone: 62937498,
-                            email: "nowater@nowater.com"
-                        },
+                        countdown: "left 23 Hour",
                         status: 1,
                         address: "Dhgan, 18789427353, HongkongIsland(HK) Chai Wan Wanli",
                         product: {
@@ -270,7 +323,12 @@ var postOrder = (function(){
                                 "imgs/product02a.jpg",
                                 "imgs/product03a.jpg",
                                 "imgs/product04a.jpg"
-                            ]
+                            ],
+                            shop: {
+                                shopName: "Tom's shop",
+                                telephone: 62937498,
+                                email: "nowater@nowater.com"
+                            },
                         },
                         express: "SF",
                         expressCode: "7978978",
@@ -280,23 +338,179 @@ var postOrder = (function(){
                     }
                 ]
             };
-            if(loading){
-                loading.remove();
-                loading = null;
-            }
             var $orderList = $("#orderList"),
                 $orderTable = $orderList.find(".orderTable"),
                 data = result.data[0];
-            data.status = orderId;
             setOrderInfo(data);
-            $orderTable.append(createOrderItem(data));
+            $orderTable.append(createOrderItem(data));*/
         });
     };
 })();
 
-var orderId = getUrlParam("orderId");
-if(orderId){
-    postOrder(orderId);
+function payNow() {
+    var _this = $(this),
+        $orderItem = _this.parents(".orderItem"),
+        info = $orderItem.data("info"),
+        orderId = info.orderId,
+        sumPrice = info.sumPrice,
+        arr = [];
+    arr.push(orderId);
+    location.href = "pay?orderIdList="+JSON.stringify(arr)+"&sumPrice="+sumPrice;
+}
+var $orderList = $("#orderList");
+
+var confirmR = (function(){
+    var loading = null;
+    return function () {
+        var _this = $(this),
+            $orderItem = _this.parents(".orderItem"),
+            info = $orderItem.data("info"),
+            orderId = info.orderId,
+            reqData = "orderId="+orderId;
+        if(loading) return ;
+        loading = showLoading(_this.parent());
+        $.ajax({
+            method: "post",
+            url: "/proxy/order/confirm/receipt",
+            dataType: "json",
+            data: reqData
+        }).done(function(result){
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                showSpinner("Success!", {
+                    "callback": function () {
+                        location.reload();
+                    },
+                    "timeout": 800
+                });
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                showSpinner("Unknown error!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            }
+        }).fail(function(result){
+            tipsAlert("server error");
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            /*result = {
+             status: 200
+             };
+             var status = result.status;
+             if(status==200){
+             $orderItem.remove();
+             showSpinner("Add Success!", {
+             "callback": function () {
+             location.reload();
+             }
+             });
+             } else if(status==300){
+             location.href = loginUrl;
+             } else if(status==400){
+             showSpinner("Unknown error!", {
+             "callback": function () {
+             location.reload();
+             }
+             });
+             } else if(status==500){
+             showSpinner("The order has been deleted!", {
+             "callback": function () {
+             location.reload();
+             }
+             });
+             }*/
+        });
+    }
+})();
+var orderCancel = (function(){
+    var loading = null;
+    return function () {
+        var _this = $(this),
+            $orderItem = _this.parents(".orderItem"),
+            info = $orderItem.data("info"),
+            orderId = info.orderId,
+            reqData = "orderId="+orderId;
+        if(loading) return ;
+        loading = showLoading(_this.parent());
+        $.ajax({
+            method: "post",
+            url: "/proxy/order/cancel",
+            dataType: "json",
+            data: reqData
+        }).done(function(result){
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                showSpinner("Success!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                showSpinner("Unknown error!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            }
+        }).fail(function(result){
+            tipsAlert("server error");
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            /*result = {
+             status: 200
+             };
+             var status = result.status;
+             if(status==200){
+             $orderItem.remove();
+             showSpinner("Add Success!", {
+             "callback": function () {
+             location.reload();
+             }
+             });
+             } else if(status==300){
+             location.href = loginUrl;
+             } else if(status==400){
+             showSpinner("Unknown error!", {
+             "callback": function () {
+             location.reload();
+             }
+             });
+             } else if(status==500){
+             showSpinner("The order has been deleted!", {
+             "callback": function () {
+             location.reload();
+             }
+             });
+             }*/
+        });
+    }
+})();
+
+$orderList.on("click", ".orderItem .payNow", payNow);
+$orderList.on("click", ".orderItem .confirmR", confirmR);
+$orderList.on("click", ".orderItem .cancel", orderCancel);
+
+var orderId = getUrlParam("orderId"),
+    status = getUrlParam("status");
+if(orderId&&status){
+    postOrder(orderId, status);
 } else {
     location.href = "index.html";
 }

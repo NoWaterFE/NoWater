@@ -1,20 +1,15 @@
-var userInfo=null;
 $.ajax({
     method: "get",
-    url: "/proxy/shop-owner/status",
+    url: "/proxy/admin/status",
     dataType: "json",
     async: false
 }).done(function (result) {
-    if(result.status==200) { //已注册
-        userInfo = result.data[0];
-    } else if(result.status==300){
-        location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
-    } else {
-        location.href = "apply.html";
+    if(result.status!=200) {
+        location.href="login.html?redirectUrl="+encodeURIComponent(location.href);
     }
 }).fail(function (result) {
-    alert("server error");
-    location.href = "../customer/index.html";
+    /*alert("server error");
+    location.href = "../customer/index.html";*/
     /*result = {
         status: 200,
         data: [{

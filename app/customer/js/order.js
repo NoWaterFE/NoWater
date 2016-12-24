@@ -1,7 +1,7 @@
 // header添加事件
 (function () {
     //获取登录信息可能不需要
-    /*$.ajax({
+    $.ajax({
         method: "get",
         url: "/proxy/customer/isLogin",
         dataType: "json"
@@ -13,7 +13,7 @@
             quickMenu.find(".my-cart .count").text(userInfo.cartNum);
         }
     }).fail(function (result) {
-        console.log(result.statusText);
+        /*console.log(result.statusText);
         result = {
             status: 200,
             userInformation: [{
@@ -26,8 +26,8 @@
             var quickMenu = $("#quickMenu");
             quickMenu.find(".accountOperate").toggleClass("active");
             quickMenu.find(".my-cart .count").text(userInfo.cartNum);
-        }
-    });*/
+        }*/
+    });
 
     //headMenu添加事件
     var $headMenu = $("#headMenu");
@@ -157,6 +157,33 @@ function tipsConfirm(msg, callback){
         .appendTo($("body"));
 }
 
+function showSpinner(msg, config){
+    var $spinner = $(".spinner");
+    if($spinner) $spinner.remove();
+    $spinner = $('<div class="spinner"> ' +
+        '<div class="tips"> ' +
+        msg +
+        '</div> ' +
+        '</div>');
+    var def = {
+        timeout: 1500
+    };
+    config = $.extend(def, config);
+    $spinner.appendTo($("body"))
+        .ready(function () {
+            $spinner.css({
+                "margin-left": -$spinner.width() / 2,
+                "margin-top": -$spinner.width() / 2,
+                "visibility": "visible"
+            });
+        });
+    setTimeout(function(){
+        if($spinner) $spinner.remove();
+        var callback = config.callback;
+        if(callback) callback();
+    }, config.timeout);
+}
+
 function getUrlParam(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
     var r = window.location.search.substr(1).match(reg); //匹配目标参数
@@ -164,13 +191,19 @@ function getUrlParam(name) {
 }
 
 function　createOrderItem(data){
-    var pendingPay = '<div class="payNow">' +
+    var pendingPay = '<div class="timeTips">' +
+            data.countdown +
+        '</div>' +
+        '<div class="payNow">' +
             'Pay now' +
         '</div> ' +
         '<div class="cancel">' +
             'Cancel order' +
         '</div> ';
-    var confirmReceived = '<div class="confirmR">' +
+    var confirmReceived = '<div class="timeTips">' +
+            data.countdown +
+        '</div>' +
+        '<div class="confirmR">' +
         'Confirm received' +
         '</div> ';
     var toBeComment = '<div class="comment">' +
@@ -191,11 +224,11 @@ function　createOrderItem(data){
         operate = toBeComment;
     } else if(data.status==5){
         data.statusText = "Completed";
-    } else if(data.status==-1){
+    } else if(data.status==10){
         data.statusText = "Closed";
     }
     var product = data.product,
-        shop = data.shop;
+        shop = product.shop;
     var orderData = '<tr class="orderData"> ' +
             '<td class="product"> ' +
             '<a href="productDetail.html?id='+product.productId+'" target="_blank" class="clearfix productLink"> ' +
@@ -213,7 +246,7 @@ function　createOrderItem(data){
                     data.statusText +
                 '</div> ' +
                 '<div class="orderDetail"> ' +
-                    '<a href="orderDetail.html?orderId='+data.orderId+'" target="_blank">' +
+                    '<a href="orderDetail.html?orderId='+data.orderId+'&status='+data.status+'" target="_blank">' +
                     'Order details ' +
                     '</a> ' +
                 '</div> ' +
@@ -234,168 +267,21 @@ function　createOrderItem(data){
             '</td> ' +
         '</tr> ' +
         orderData +
-        '</tbody>');
+        '</tbody>').data("info", data);
 }
 
 var postOrder = (function(){
-    var loading = null,
-        startId = 0;
+    var loading = null;
     return function (orderStatus) {
         if(loading) return ;
         loading = showLoading($(".more"));
-        var reqData = "status="+orderStatus+"&startId="+startId+
-                "&count=15";
+        var reqData = "status="+orderStatus;
         $.ajax({
             method: "get",
             url: "/proxy/order/list",
             dataType: "json",
             data: reqData
         }).done(function(result){
-
-        }).fail(function(result){
-            result = {
-                status: 200,
-                data: [
-                    {
-                        time: "2016-09-05 16:30:06",
-                        orderId: "2662774641999118",
-                        targetId: 12,
-                        shop: {
-                            shopName: "Tom's shop"
-                        },
-                        status: 1,
-                        totalPrice: "999.99",
-                        product: {
-                            productId: 10,
-                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                            photo: [
-                                "imgs/product01a.jpg",
-                                "imgs/product02a.jpg",
-                                "imgs/product03a.jpg",
-                                "imgs/product04a.jpg"
-                            ]
-                        },
-                        num: 1,
-                        price: 333,
-                        sumPrice: 333
-                    },
-                    {
-                        time: "2016-09-05 16:30:06",
-                        orderId: "2662774641999118",
-                        targetId: 12,
-                        shop: {
-                            shopName: "Tom's shop"
-                        },
-                        status: 2,
-                        totalPrice: "999.99",
-                        product: {
-                            productId: 10,
-                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                            photo: [
-                                "imgs/product01a.jpg",
-                                "imgs/product02a.jpg",
-                                "imgs/product03a.jpg",
-                                "imgs/product04a.jpg"
-                            ]
-                        },
-                        num: 1,
-                        price: 333,
-                        sumPrice: 333
-                    },
-                    {
-                        time: "2016-09-05 16:30:06",
-                        orderId: "2662774641999118",
-                        targetId: 12,
-                        shop: {
-                            shopName: "Tom's shop"
-                        },
-                        status: 3,
-                        totalPrice: "999.99",
-                        product: {
-                            productId: 10,
-                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                            photo: [
-                                "imgs/product01a.jpg",
-                                "imgs/product02a.jpg",
-                                "imgs/product03a.jpg",
-                                "imgs/product04a.jpg"
-                            ]
-                        },
-                        num: 1,
-                        price: 333,
-                        sumPrice: 333
-                    },
-                    {
-                        time: "2016-09-05 16:30:06",
-                        orderId: "2662774641999118",
-                        targetId: 12,
-                        shop: {
-                            shopName: "Tom's shop"
-                        },
-                        status: 4,
-                        totalPrice: "999.99",
-                        product: {
-                            productId: 10,
-                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                            photo: [
-                                "imgs/product01a.jpg",
-                                "imgs/product02a.jpg",
-                                "imgs/product03a.jpg",
-                                "imgs/product04a.jpg"
-                            ]
-                        },
-                        num: 1,
-                        price: 333,
-                        sumPrice: 333
-                    },
-                    {
-                        time: "2016-09-05 16:30:06",
-                        orderId: "2662774641999118",
-                        targetId: 12,
-                        shop: {
-                            shopName: "Tom's shop"
-                        },
-                        status: 5,
-                        totalPrice: "999.99",
-                        product: {
-                            productId: 10,
-                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                            photo: [
-                                "imgs/product01a.jpg",
-                                "imgs/product02a.jpg",
-                                "imgs/product03a.jpg",
-                                "imgs/product04a.jpg"
-                            ]
-                        },
-                        num: 1,
-                        price: 333,
-                        sumPrice: 333
-                    },
-                    {
-                        time: "2016-09-05 16:30:06",
-                        orderId: "2662774641999118",
-                        targetId: 12,
-                        shop: {
-                            shopName: "Tom's shop"
-                        },
-                        status: -1,
-                        totalPrice: "999.99",
-                        product: {
-                            productId: 10,
-                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                            photo: [
-                                "imgs/product01a.jpg",
-                                "imgs/product02a.jpg",
-                                "imgs/product03a.jpg",
-                                "imgs/product04a.jpg"
-                            ]
-                        },
-                        num: 1,
-                        price: 333,
-                        sumPrice: 333
-                    }
-                ]
-            };
             if(loading){
                 loading.remove();
                 loading = null;
@@ -408,15 +294,216 @@ var postOrder = (function(){
                     if(orderStatus!=0) { result.data[i].status=orderStatus }
                     $orderTable.append(createOrderItem(result.data[i]));
                 }
-                $orderList.find(".more .showMore")
-                    .removeClass("hidden");
             } else if(status==300) {
                 location.href = loginUrl;
             } else {
                 tipsAlert("server error!");
             }
+        }).fail(function(result){
+            if(loading){
+                loading.remove();
+                loading = null;
+            }
+            tipsAlert("server error!");
+            /*result = {
+                status: 200,
+                data: [
+                    {
+                        time: "2016-09-05 16:30:06",
+                        orderId: "2662774641999118",
+                        targetId: 12,
+                        status: 1,
+                        countdown: "left 23 Hour",
+                        product: {
+                            productId: 10,
+                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                            photo: [
+                                "imgs/product01a.jpg",
+                                "imgs/product02a.jpg",
+                                "imgs/product03a.jpg",
+                                "imgs/product04a.jpg"
+                            ],
+                            shop: {
+                                shopName: "Tom's shop"
+                            }
+                        },
+                        num: 1,
+                        price: 333,
+                        sumPrice: 333
+                    }
+                ]
+            };
+            var status = result.status;
+            if(status==200){
+                var len = result.data.length,
+                    $orderTable = $orderList.find('.orderTable');
+                for(var i=0; i<len; i++){
+                    if(orderStatus!=0) { result.data[i].status=orderStatus }
+                    $orderTable.append(createOrderItem(result.data[i]));
+                }
+            } else if(status==300) {
+                location.href = loginUrl;
+            } else {
+                tipsAlert("server error!");
+            }*/
         });
     };
+})();
+
+function payNow() {
+    var _this = $(this),
+        $orderItem = _this.parents(".orderItem"),
+        info = $orderItem.data("info"),
+        orderId = info.orderId,
+        sumPrice = info.sumPrice,
+        arr = [];
+    arr.push(orderId);
+    location.href = "pay?orderIdList="+JSON.stringify(arr)+"&sumPrice="+sumPrice;
+}
+
+var confirmR = (function(){
+    var loading = null;
+    return function () {
+        var _this = $(this),
+            $orderItem = _this.parents(".orderItem"),
+            info = $orderItem.data("info"),
+            orderId = info.orderId,
+            reqData = "orderId="+orderId;
+        if(loading) return ;
+        loading = showLoading(_this.parent());
+        $.ajax({
+            method: "post",
+            url: "/proxy/order/confirm/receipt",
+            dataType: "json",
+            data: reqData
+        }).done(function(result){
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                $orderItem.remove();
+                showSpinner("Success!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                showSpinner("Unknown error!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            }
+        }).fail(function(result){
+            tipsAlert("server error");
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            /*result = {
+             status: 200
+             };
+             var status = result.status;
+             if(status==200){
+             $orderItem.remove();
+             showSpinner("Add Success!", {
+             "callback": function () {
+             location.reload();
+             }
+             });
+             } else if(status==300){
+             location.href = loginUrl;
+             } else if(status==400){
+             showSpinner("Unknown error!", {
+             "callback": function () {
+             location.reload();
+             }
+             });
+             } else if(status==500){
+             showSpinner("The order has been deleted!", {
+             "callback": function () {
+             location.reload();
+             }
+             });
+             }*/
+        });
+    }
+})();
+var orderCancel = (function(){
+    var loading = null;
+    return function () {
+        var _this = $(this),
+            $orderItem = _this.parents(".orderItem"),
+            info = $orderItem.data("info"),
+            orderId = info.orderId,
+            reqData = "orderId="+orderId;
+        if(loading) return ;
+        loading = showLoading(_this.parent());
+        $.ajax({
+            method: "post",
+            url: "/proxy/order/cancel",
+            dataType: "json",
+            data: reqData
+        }).done(function(result){
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                $orderItem.remove();
+                showSpinner("Success!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                showSpinner("Unknown error!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
+            }
+        }).fail(function(result){
+            tipsAlert("server error");
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            /*result = {
+             status: 200
+             };
+             var status = result.status;
+             if(status==200){
+             $orderItem.remove();
+             showSpinner("Add Success!", {
+             "callback": function () {
+             location.reload();
+             }
+             });
+             } else if(status==300){
+             location.href = loginUrl;
+             } else if(status==400){
+             showSpinner("Unknown error!", {
+             "callback": function () {
+             location.reload();
+             }
+             });
+             } else if(status==500){
+             showSpinner("The order has been deleted!", {
+             "callback": function () {
+             location.reload();
+             }
+             });
+             }*/
+        });
+    }
 })();
 
 var $orderList = $("#orderList");
@@ -426,6 +513,10 @@ $orderList.on("click", ".more .showMore", function(e){
     _this.addClass("hidden");
     postOrder(orderStatus);
 });
+
+$orderList.on("click", ".orderItem .payNow", payNow);
+$orderList.on("click", ".orderItem .confirmR", confirmR);
+$orderList.on("click", ".orderItem .cancel", orderCancel);
 
 var $orderMain = $("#orderMain");
 $orderMain.on("click", ".orderTab", function () {

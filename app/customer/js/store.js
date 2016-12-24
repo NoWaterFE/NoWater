@@ -2,12 +2,14 @@ var host="http://123.206.100.98:16120";
 var value = "Products about ";
 var data;
 var shopId = GetQueryString("shopId");
-var className = new Array(10);
+var className = ["ALL", "TV & Home Theater", "Computers & Tablets", "Cell Phones",
+    "Cameras & Camcorders", "Audio", "Car Electronics & GPS",
+    "Video, Games, Movies & Music", "Health, Fitness & Sports", "Home & Offic"];
 var startId = 0;
 
-$("#showMoreButton").click(getClass);
+$("#showMoreButton").click(getResult);
 if (!GetQueryString("shopId")) {
-    location.href = "store.html?shopId="+ encodeURIComponent(1);
+    location.href = "store.html?shopId="+ 1;
 }
 var sendShopId = "shopId=" + shopId;
 $.ajax({
@@ -17,19 +19,22 @@ $.ajax({
     data: sendShopId
 }).done(function (result) {
     if(result.status==200){
-        $("#shopName").text(result.shopName);
-        $("#detail").html("Telephone: " + result.telephone + "<br>" + "E-mail: " +result.email);
-        for (var i=0; i<result.classList.length; i++) {
-            className[i] = result.classList[i].className;
-            var menuList = '<li data-pt="' + result.classList[i].classId +' ">' + result.classList[i].className + '</li>';
-            $("#menuList").append(menuList);
+        var data = result.data,
+            classId = 0,
+            menuList = "",
+            $menuList = $("#menuList");
+        $("#shopName").text(data.shopName);
+        $("#detail").html("Telephone: " + data.telephone + "<br>" + "E-mail: " +data.email);
+        for (var i=0; i<data.classList.length; i++) {
+            classId = data.classList[i];
+            menuList = '<li data-pt="' + classId +' ">' +className[classId] + '</li>';
+            $menuList.append(menuList);
         }
-        setText();
     }
-})
-    .fail(function(result) {
-        result = {
-            status: 200,
+}).fail(function(result) {
+    result = {
+        status: 200,
+        data: {
             shopId: 1,
             shopName: "Apple store",
             ownerId: 1,
@@ -37,12 +42,8 @@ $.ajax({
             telephone: "123456",
             classList: [
                 {
-                    classId: 0,
-                    className: "iPhone"
-                },
-                {
                     classId: 1,
-                    className: "iPad"
+                    className: "Video, Games, Movies & Music"
                 },
                 {
                     classId: 2,
@@ -55,39 +56,38 @@ $.ajax({
                 {
                     classId: 4,
                     className: "Watch"
+                },
+                {
+                    classId: 5,
+                    className: "iPhone"
                 }
             ]
-        };
-        if(result.status==200){
-            $("#shopName").text(result.shopName);
-            $("#detail").html("Telephone: " + result.telephone + "<br>" + "E-mail: " +result.email);
-            for (var i=0; i<result.classList.length; i++) {
-                className[i] = result.classList[i].className;
-                var menuList = '<li data-pt="' + result.classList[i].classId +' ">' + result.classList[i].className + '</li>';
-                $("#menuList").append(menuList);
-            }
-            setText();
         }
-    });
-if (!GetQueryString("keyWord")) {
-    getClass();
-} else {
-    search();
+
+    };
+    if(result.status==200){
+        var data = result.data;
+        $("#shopName").text(data.shopName);
+        $("#detail").html("Telephone: " + data.telephone + "<br>" + "E-mail: " +data.email);
+        for (var i=0; i<data.classList.length; i++) {
+            var menuList = '<li data-pt="' + data.classList[i].classId +' ">' + data.classList[i].className + '</li>';
+            $("#menuList").append(menuList);
+        }
+    }
+});
+
+function getResult(){
+    if (!GetQueryString("keyWord")) {
+        getClass();
+    } else {
+        search();
+    }
 }
+
+getResult();
 
 (function () {
     var $storeMenu = $("#menuBar");
-    var navTimer;
-    $storeMenu.on("mouseover", function () {
-        if (navTimer) clearTimeout(navTimer);
-        $(this).find(".menuList").show();
-    });
-    $storeMenu.on("mouseout", function () {
-        var _this = $(this);
-        navTimer = setTimeout(function () {
-            _this.find(".menuList").hide();
-        }, 400);
-    });
     $storeMenu.on("click", ".menuList li", function () {
         var classId = $(this).data("pt");
         location.href = "store.html?shopId=" + encodeURIComponent(shopId) + "&classId=" + classId;
@@ -97,6 +97,35 @@ if (!GetQueryString("keyWord")) {
 
 // header添加事件
 (function () {
+    //获取登录信息可能不需要
+    $.ajax({
+        method: "get",
+        url: "/proxy/customer/isLogin",
+        dataType: "json"
+    }).done(function (result) {
+        if(result.status==200){
+            var userInfo = result.userInformation[0];
+            var quickMenu = $("#quickMenu");
+            quickMenu.find(".accountOperate").toggleClass("active");
+            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+        }
+    }).fail(function (result) {
+        /*console.log(result.statusText);
+        result = {
+            status: 200,
+            userInformation: [{
+                name: "gdh",
+                cartNum: 33
+            }]
+        };
+        if(result.status==200){
+            var userInfo = result.userInformation[0];
+            var quickMenu = $("#quickMenu");
+            quickMenu.find(".accountOperate").toggleClass("active");
+            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+        }*/
+    });
+
     //headMenu添加事件
     var $headMenu = $("#headMenu");
     var navTimer;
@@ -196,7 +225,11 @@ function setText() {
     var valueFromInput = GetQueryString("classId");
     var keyWord = GetQueryString("keyWord");
     if (valueFromInput) {
-        $("#tips").text(value+"\'"+className[valueFromInput]+"\'");
+        if(valueFromInput=="0"){
+            $("#tips").text("ALL PRODUCTS");
+        } else {
+            $("#tips").text(className[valueFromInput]);
+        }
     } else if (keyWord) {
         $("#tips").text(value+"\'"+keyWord+"\'");
         $("#keyWordInStore").val(keyWord);
@@ -258,7 +291,7 @@ function getClass() {
         $adGoods = null;
     })
         .fail(function(result){
-            result = {
+            /*result = {
                 status: 200,
                 actualCount: 10,
                 startId: 2,
@@ -268,7 +301,7 @@ function getClass() {
                         shopId: 1,
                         classId: 1,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         quantityStock: 11,
                         photoUrl: ["imgs/product02a.jpg"],
                         isDel: false
@@ -278,7 +311,7 @@ function getClass() {
                         shopId: 1,
                         classId: 1,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         quantityStock: 11,
                         photoUrl: ["imgs/product02a.jpg"],
                         isDel: false
@@ -288,7 +321,7 @@ function getClass() {
                         shopId: 1,
                         classId: 1,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         quantityStock: 11,
                         photoUrl: ["imgs/product02a.jpg"],
                         isDel: false
@@ -298,7 +331,7 @@ function getClass() {
                         shopId: 1,
                         classId: 1,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         quantityStock: 11,
                         photoUrl: ["imgs/product02a.jpg"],
                         isDel: false
@@ -308,7 +341,7 @@ function getClass() {
                         shopId: 1,
                         classId: 1,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         quantityStock: 11,
                         photoUrl: ["imgs/product02a.jpg"],
                         isDel: false
@@ -318,7 +351,7 @@ function getClass() {
                         shopId: 1,
                         classId: 1,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         quantityStock: 11,
                         photoUrl: ["imgs/product02a.jpg"],
                         isDel: false
@@ -328,7 +361,7 @@ function getClass() {
                         shopId: 1,
                         classId: 1,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         quantityStock: 11,
                         photoUrl: ["imgs/product02a.jpg"],
                         isDel: false
@@ -338,7 +371,7 @@ function getClass() {
                         shopId: 1,
                         classId: 1,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         quantityStock: 11,
                         photoUrl: ["imgs/product02a.jpg"],
                         isDel: false
@@ -348,7 +381,7 @@ function getClass() {
                         shopId: 1,
                         classId: 1,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         quantityStock: 11,
                         photoUrl: ["imgs/product02a.jpg"],
                         isDel: false
@@ -358,7 +391,7 @@ function getClass() {
                         shopId: 1,
                         classId: 1,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
+                        price: 998.00,
                         quantityStock: 11,
                         photoUrl: ["imgs/product02a.jpg"],
                         isDel: false
@@ -391,7 +424,7 @@ function getClass() {
                 $noResult.text("No class found,please try another class name.");
                 $noResult.css('display','block');
                 return;
-            }
+            }*/
             $adGoods = null;
         });
 }
@@ -410,8 +443,8 @@ function search() {
     }).done(function (result) {
         if (result.status == 200) {
             startId = result.startId;
+            setText();
             if (result.data.length == 0) {
-                setText();
                 $noResult.text("No product found,please try another key words.");
                 $noResult.css('display','block');
                 return;
@@ -429,137 +462,136 @@ function search() {
             }
         }
         $adGoods = null;
-    })
-        .fail(function (result) {
-            result = {
-                status: 200,
-                actualCount: 10,
-                data: [
-                    {
-                        product_id: 1,
-                        shop_id: 1,
-                        class_id: 1,
-                        product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photoUrl: ["imgs/product02a.jpg"],
-                        is_del: false
-                    },
-                    {
-                        product_id: 2,
-                        shop_id: 1,
-                        class_id: 1,
-                        product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photoUrl: ["imgs/product02a.jpg"],
-                        is_del: false
-                    },
-                    {
-                        product_id: 3,
-                        shop_id: 1,
-                        class_id: 1,
-                        product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photoUrl: ["imgs/product02a.jpg"],
-                        is_del: false
-                    },
-                    {
-                        product_id: 4,
-                        shop_id: 1,
-                        class_id: 1,
-                        product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photoUrl: ["imgs/product02a.jpg"],
-                        is_del: false
-                    },
-                    {
-                        product_id: 5,
-                        shop_id: 1,
-                        class_id: 1,
-                        product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photoUrl: ["imgs/product02a.jpg"],
-                        is_del: false
-                    },
-                    {
-                        product_id: 6,
-                        shop_id: 1,
-                        class_id: 1,
-                        product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photoUrl: ["imgs/product02a.jpg"],
-                        is_del: false
-                    },
-                    {
-                        product_id: 7,
-                        shop_id: 1,
-                        class_id: 1,
-                        product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photoUrl: ["imgs/product02a.jpg"],
-                        is_del: false
-                    },
-                    {
-                        product_id: 8,
-                        shop_id: 1,
-                        class_id: 1,
-                        product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photoUrl: ["imgs/product02a.jpg"],
-                        is_del: false
-                    },
-                    {
-                        product_id: 9,
-                        shop_id: 1,
-                        class_id: 1,
-                        product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photoUrl: ["imgs/product02a.jpg"],
-                        is_del: false
-                    },
-                    {
-                        product_id: 10,
-                        shop_id: 1,
-                        class_id: 1,
-                        product_name: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photoUrl: ["imgs/product02a.jpg"],
-                        is_del: false
-                    }
-                ],
-                startId: 2
-            };
-            if (result.status == 200) {
-                startId = result.startId;
-                if (result.actualCount == 0) {
-                    setText();
-                    $noResult.text("No product found,please try another key words.");
-                    $noResult.css('display','block');
-                    return;
+    }).fail(function (result) {
+        /*result = {
+            status: 200,
+            actualCount: 10,
+            data: [
+                {
+                    productId: 1,
+                    shopId: 1,
+                    classId: 1,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: 998.00,
+                    quantityStock: 11,
+                    photoUrl: ["imgs/product02a.jpg"],
+                    is_del: false
+                },
+                {
+                    productId: 2,
+                    shopId: 1,
+                    classId: 1,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: 998.00,
+                    quantityStock: 11,
+                    photoUrl: ["imgs/product02a.jpg"],
+                    is_del: false
+                },
+                {
+                    productId: 3,
+                    shopId: 1,
+                    classId: 1,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: 998.00,
+                    quantityStock: 11,
+                    photoUrl: ["imgs/product02a.jpg"],
+                    is_del: false
+                },
+                {
+                    productId: 4,
+                    shopId: 1,
+                    classId: 1,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: 998.00,
+                    quantityStock: 11,
+                    photoUrl: ["imgs/product02a.jpg"],
+                    is_del: false
+                },
+                {
+                    productId: 5,
+                    shopId: 1,
+                    classId: 1,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: 998.00,
+                    quantityStock: 11,
+                    photoUrl: ["imgs/product02a.jpg"],
+                    is_del: false
+                },
+                {
+                    productId: 6,
+                    shopId: 1,
+                    classId: 1,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: 998.00,
+                    quantityStock: 11,
+                    photoUrl: ["imgs/product02a.jpg"],
+                    is_del: false
+                },
+                {
+                    productId: 7,
+                    shopId: 1,
+                    classId: 1,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: 998.00,
+                    quantityStock: 11,
+                    photoUrl: ["imgs/product02a.jpg"],
+                    is_del: false
+                },
+                {
+                    productId: 8,
+                    shopId: 1,
+                    classId: 1,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: 998.00,
+                    quantityStock: 11,
+                    photoUrl: ["imgs/product02a.jpg"],
+                    is_del: false
+                },
+                {
+                    productId: 9,
+                    shopId: 1,
+                    classId: 1,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: 998.00,
+                    quantityStock: 11,
+                    photoUrl: ["imgs/product02a.jpg"],
+                    is_del: false
+                },
+                {
+                    productId: 10,
+                    shopId: 1,
+                    classId: 1,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: 998.00,
+                    quantityStock: 11,
+                    photoUrl: ["imgs/product02a.jpg"],
+                    is_del: false
                 }
-
-                for (var i = 0; i < result.data.length; i++) {
-                    var goodItem = createGoodsItem(result.data[i]);
-                    $adGoods.append(goodItem);
-                }
-
-                if (startId != -1) {
-                    $("#showMore").css('display','block');
-                } else {
-                    $("#showMore").css('display','none');
-                }
+            ],
+            startId: 2
+        };
+        if (result.status == 200) {
+            startId = result.startId;
+            setText();
+            if (result.actualCount == 0) {
+                $noResult.text("No product found,please try another key words.");
+                $noResult.css('display','block');
+                return;
             }
-            $adGoods = null;
-        });
+
+            for (var i = 0; i < result.data.length; i++) {
+                var goodItem = createGoodsItem(result.data[i]);
+                $adGoods.append(goodItem);
+            }
+
+            if (startId != -1) {
+                $("#showMore").css('display','block');
+            } else {
+                $("#showMore").css('display','none');
+            }
+        }*/
+        $adGoods = null;
+    });
 }
 
 function createGoodsItem(data) {
@@ -573,7 +605,7 @@ function createGoodsItem(data) {
         '</div> ' +
         '</a> ' +
         '<div class="item-prices"> HK$' +
-        data.price +
+        data.price.toFixed(2) +
         '</div> ' +
         '<div class="item-operate"> ' +
         '<div class="add-to-cart"> ' +
@@ -584,6 +616,7 @@ function createGoodsItem(data) {
         '</div> ' +
         '</div> ' +
         '</li>').data("productId", data.productId);
+<<<<<<< HEAD
 }
 
 var addToCart = (function(){
@@ -727,4 +760,6 @@ function showLoading($relative) {
             });
         });
     return $tips;
+=======
+>>>>>>> master
 }

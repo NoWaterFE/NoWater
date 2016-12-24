@@ -3,10 +3,10 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>PARKnSHOP</title>
+    <title>CART | PARKnSHOP</title>
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
     <link rel="icon" type="image/x-icon" href="../favicon.ico" >
-    <link rel="stylesheet" type="text/css" href="style/pay.css">
+    <link rel="stylesheet" type="text/css" href="style/cart.css">
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 </head>
 
@@ -19,7 +19,7 @@
                 <li data-pt="1">TV & Home Theater</li>
                 <li data-pt="2">Computers & Tablets</li>
                 <li data-pt="3">Cell Phones</li>
-                <li data-pt="4">Cameras & Camcorders</li>
+                <li data-pt="4">Cameras & Camccarts</li>
                 <li data-pt="5">Audio</li>
                 <li data-pt="6">Car Electronics & GPS</li>
                 <li data-pt="7">Video, Games, Movies & Music</li>
@@ -75,25 +75,67 @@
 </header>
 <div class="content">
     <!--页面写在这-->
-    <div class="pay clearfix">
-        <div class="payWay">
-            <div class="tips">Scan the QR code to pay by Alipay app.</div>
-            <div class="qrCode">
-                <img src="http://koprvhdix117-10038234.cos.myqcloud.com/pay.jpg">
+    <div class="cartDiv">
+        <ul class="cartMain clearfix" id="cartMain">
+            <li class="cartTab">All Order</li>
+            <li class="cartTab">Processing Order</li>
+            <li class="cartTab">Preparing for Shipment</li>
+            <li class="cartTab">Shipped</li>
+            <li class="cartTab">Waiting for Comment</li>
+        </ul>
+        <div class="cartList" id="cartList">
+            <table class="cartTable">
+                <colgroup>
+                    <col class="col1">
+                    <col class="col2">
+                    <col class="col3">
+                    <col class="col4">
+                    <col class="col5">
+                    <col class="col6">
+                </colgroup>
+                <tbody class="cartTh">
+                <tr>
+                    <th class="selectAll">
+                        <div class="clearfix">
+                            <input type="checkbox" name="allCart" id="allCart" class="allCart float">
+                            <label for="allCart" class="float">ALL</label>
+                        </div>
+                    </th>
+                    <th>Product</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total Price</th>
+                    <th>Operate</th>
+                </tr>
+                </tbody>
+            </table>
+            <div class="more">
+                <div class="showMore hidden">
+                    <span>SHOW MORE</span>
+                    <span class="down"></span>
+                </div>
             </div>
-        </div>
-        <div class="confirmPay">
-            <form action="javascript:" id="payForm" class="payForm" novalidate>
-                <h2 class="title">Confirm Payment</h2>
-                <div class="amount">
-                    <span class="key">Amount:</span>
-                    <span class="hk">HK$</span>
-                    <span class="price"></span>
+            <div class="checkoutBox">
+                <div class="optionBox clearfix">
+                    <div class="selectAll">
+                        <div class="clearfix">
+                            <input type="checkbox" name="allCart" id="allCart1" class="allCart float">
+                            <label for="allCart1" class="float">ALL</label>
+                        </div>
+                    </div>
+                    <div class="checkout">
+                        <div class="productNum floatL">
+                            <span class="num">0</span> product(s) selected
+                        </div>
+                        <div class="amount floatL">
+                            <span>Amount: </span><span class="total">HK$0.00</span>
+                        </div>
+                        <div class="check floatL disabled">
+                            Checkout
+                        </div>
+                    </div>
                 </div>
-                <div class="submit">
-                    <input type="submit" value="CHECKOUT">
-                </div>
-            </form>
+            </div>
         </div>
     </div>
 </div>
@@ -102,7 +144,7 @@
         © Copyright NoWaterFE
     </div>
 </footer>
-<script type="text/javascript" src="js/pay.js"></script>
+<script type="text/javascript" src="js/cart.js"></script>
 </body>
 
 </html>
