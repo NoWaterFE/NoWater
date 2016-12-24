@@ -4,42 +4,31 @@
 
 .content {
   min-height: 400px;
-  .favMenu {
-    background-color: #292d84;
-    height: 30px;
-    .name {
+  .favMain {
+    width: 1200px;
+    margin: 40px auto;
+    border-bottom: 2px solid #aaa;
+    .favTab {
       float: left;
-      color: white;
-      width: 150px;
-      font-size: 20px;
-      position: relative;
-      top: 5px;
-      left: 30px;
-    }
-    .goods {
-      width: 100px;
-      height: 30px;
-      border: none;
+      padding: 10px 15px;
+      margin-bottom: -2px;
+      border-bottom: 2px solid transparent;
       cursor: pointer;
-      background: #292d84;
-      border-radius: 0px;
-      color: #fff;
-    }
-    .shop {
-      width: 100px;
-      height: 30px;
-      border: none;
-      cursor: pointer;
-      background: #292d84;
-      border-radius: 0px;
-      color: #fff;
+      font-weight: 700;
+      &.active {
+        border-color: blue;
+        color: blue;
+      }
+      &:hover {
+        color: blue;
+      }
     }
   }
 }
 
 .ad-goods {
   width: 1200px;
-  margin: 20px auto;
+  margin: 40px auto;
   .goods-item {
     float: left;
     width: 220px;
@@ -54,6 +43,7 @@
   }
   .item-detail {
     cursor: pointer;
+    color: #444;
   }
   .item-image {
     width: 200px;
@@ -89,22 +79,59 @@
     height: 40px;
     overflow: hidden;
   }
+  .add-to-cart, .remove {
+    height: 40px;
+    width: 100px;
+    color: #fff;
+    background: #292d84;
+    float: left;
+    border-radius: 4px;
+    cursor: pointer;
+    i {
+      display: block;
+      height: 20px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      margin: 3px 0;
+    }
+    span {
+      display: block;
+      font-size: 20px;
+      text-align: center;
+      width: 200%;
+      transform:scale(0.5);
+      transform-origin: 0 0;
+    }
+  }
+  .add-to-cart {
+    margin-right: 20px;
+    i {
+      background-image: url("../imgs/head_icon/CART.png");
+    }
+  }
+  .remove {
+    i {
+      background-image: url("../imgs/head_icon/remove.png");
+    }
+  }
   .shop-item {
     float: left;
-    width: 220px;
+    width: 280px;
     padding: 9px;
     display: block;
     border-radius: 5px;
     border: 1px solid #f1f1f1;
     margin-bottom: 10px;
     cursor: pointer;
+    text-align: center;
     &:hover {
       border: 1px solid #aaa;
     }
     .shop-name {
       height: 50px;
       text-align: center;
-      font-size: 30px;
+      font-size: 20px;
       position: relative;
       top: 5px;
     }
@@ -112,6 +139,18 @@
       font-size: 15px;
       color: darkgrey;
       line-height: 20px;
+    }
+    .removeShop {
+      margin-top: 20px;
+      text-align: center;
+      button {
+        background-color: #292d84;
+        color: white;
+        width: 100px;
+        height: 20px;
+        border: none;
+        border-radius: 4px;
+      }
     }
   }
 }
