@@ -1,19 +1,23 @@
 var host="http://123.206.100.98:16120";
 var startId = 0;
-var favoriteType = 0;
+var favoriteType = GetQueryString("kind");
 $("#showMoreButton").click(getResult);
-$("#goods").click(showGoods);
-$("#shop").click(showShop);
 
 if(!GetQueryString("kind")) {
-    location.href = "favourite.html?kind="+ encodeURIComponent("goods");
+    location.href = "favourite.html?kind="+ encodeURIComponent("0");
 }
 
-if(GetQueryString("kind") == "goods") {
-    $("#goods").css("background","darkblue");
-}else {
-    $("#shop").css("background","darkblue");
-    favoriteType = 1;
+var $favMain = $("#favMain");
+$favMain.on("click", ".favTab", function () {
+    var _this = $(this);
+    var i =_this.index();
+    location.href = "favourite.html?kind="+i;
+});
+$favMain.find(".favTab").eq(favoriteType).addClass("active");
+if (favoriteType == 1) {
+    $("#adGoods").css('width','900px');
+} else {
+    $("#adGoods").css('width','1200px');
 }
 getResult();
 
@@ -82,12 +86,21 @@ getResult();
     $searchForm.on("click", ".searchBtn", function(e){
         $searchForm.trigger("submit");
     });
+
+    window.setCart = function(num){
+        var cart = quickMenu.find(".my-cart .count");
+        if(num > 99) {
+            cart.text("99+");
+        } else {
+            cart.text(num);
+        }
+    }
 })();
 
 function getResult() {
     var $adGoods = $("#adGoods");
     var $noResult = $("#noResult");
-    var count = 40;
+    var count = 30;
     var sendData = "favoriteType=" + favoriteType + "&count=" + count + "&startId=" + startId;
     $.ajax({
         method: "get",
@@ -155,7 +168,7 @@ function getResult() {
                         isDel: false
                     },
                     {
-                        product_id: 3,
+                        productId: 3,
                         shopId: 1,
                         classId: 1,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
@@ -165,7 +178,7 @@ function getResult() {
                         isDel: false
                     },
                     {
-                        product_id: 4,
+                        productId: 4,
                         shopId: 1,
                         classId: 1,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
@@ -175,7 +188,7 @@ function getResult() {
                         isDel: false
                     },
                     {
-                        product_id: 5,
+                        productId: 5,
                         shopId: 1,
                         classId: 1,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
@@ -185,7 +198,7 @@ function getResult() {
                         isDel: false
                     },
                     {
-                        product_id: 6,
+                        productId: 6,
                         shopId: 1,
                         classId: 1,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
@@ -195,7 +208,7 @@ function getResult() {
                         isDel: false
                     },
                     {
-                        product_id: 7,
+                        productId: 7,
                         shopId: 1,
                         classId: 1,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
@@ -205,7 +218,7 @@ function getResult() {
                         isDel: false
                     },
                     {
-                        product_id: 8,
+                        productId: 8,
                         shopId: 1,
                         classId: 1,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
@@ -215,7 +228,7 @@ function getResult() {
                         isDel: false
                     },
                     {
-                        product_id: 9,
+                        productId: 9,
                         shopId: 1,
                         classId: 1,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
@@ -225,7 +238,7 @@ function getResult() {
                         isDel: false
                     },
                     {
-                        product_id: 10,
+                        productId: 10,
                         shopId: 1,
                         classId: 1,
                         productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
@@ -322,14 +335,6 @@ function getResult() {
                             email: "apple@icloud.com",
                             telephone: 123456,
                             status: 1
-                        },
-                        {
-                            shopId: 10,
-                            shopName: "Apple store",
-                            ownerId: 1,
-                            email: "apple@icloud.com",
-                            telephone: 123456,
-                            status: 1
                         }
                     ];
                     if (result.data.length == 0) {
@@ -358,22 +363,32 @@ function getResult() {
 
 function createGoodsItem(data) {
     return $('<li class="goods-item"> ' +
-        '<div class="item-detail"> ' +
+        '<a class="item-detail" href="productDetail.html?id='+data.productId+'"> ' +
         '<div class="item-image"> ' +
-        '<img src="'+data.photoUrl[0]+'"> ' +
+        '<img src="'+data.photoUrl+'"> ' +
         '</div> ' +
         '<div class="item-name"> ' +
         data.productName +
         '</div> ' +
-        '</div> ' +
+        '</a> ' +
         '<div class="item-prices"> HK$' +
         data.price +
         '</div> ' +
-        '</li>').data("goodId", data.productId);
+        '<div class="item-operate"> ' +
+        '<div class="add-to-cart"> ' +
+        '<i></i><span>ADD TO CART</span> ' +
+        '</div> ' +
+        '<div class="remove"> ' +
+        '<i></i><span>REMOVE</span> ' +
+        '</div> ' +
+        '</div> ' +
+        '</li>').data("productId", data.productId);
 }
+
 
 function createShopItem(data) {
     return $('<li class="shop-item"> ' +
+        '<a class="item-detail" href="store.html?shopId='+data.shopId+'"> ' +
         '<div class="shop-name"> ' +
         data.shopName +
         '</div> ' +
@@ -387,15 +402,11 @@ function createShopItem(data) {
         data.telephone +
         '</div> ' +
         '</div> ' +
-        '</li>').data("shopId", data.shopId);
-}
-
-function showGoods() {
-    location.href = "favourite.html?kind="+ encodeURIComponent("goods");
-}
-
-function showShop() {
-    location.href = "favourite.html?kind="+ encodeURIComponent("shop");
+        '</a> ' +
+        '<div class="removeShop"> ' +
+        '<button id="removeShop">REMOVE</button> ' +
+        '</div> ' +
+        '</li>').data("productId", data.shopId);
 }
 
 function GetQueryString(name) {
@@ -404,4 +415,154 @@ function GetQueryString(name) {
     if(r!=null)
         return decodeURIComponent(r[2]);
     return null;
+}
+
+var addToCart = (function(){
+    var loading = null;
+    return function(e){
+        var _this = $(this);
+        if(loading) return;
+        var $goods = _this.parents(".goods-item");
+        loading = showLoading($goods);
+        var data = "productId="+$goods.data("productId")+"&addType=0";
+        $.ajax({
+            method: "post",
+            url: "/proxy/customer/cart/adding",
+            data: data
+        }).done(function(result){
+            if(loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200){
+                setCart(result.num);
+                showSpinner("Add success")
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                tipsAlert("server error!");
+            }
+        }).fail(function(result){
+            if(loading) {
+                loading.remove();
+                loading = null;
+            }
+            //tipsAlert("server error!");
+            result = {
+                status: 200,
+                num: 1000
+            };
+            var status = result.status;
+            if(status==200){
+                setCart(result.num);
+                showSpinner("Add success")
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                tipsAlert("server error!");
+            }
+        });
+    };
+})();
+
+var remove = (function(){
+    var loading = null;
+    return function(e){
+        if (!window.confirm("Sure to delete?")) {
+            return;
+        } else {
+            var _this = $(this);
+            if(loading) return;
+            var $goods = _this.parents(".goods-item");
+            loading = showLoading($goods);
+            var data = "id="+$goods.data("productId")+"&favoriteType="+favoriteType;
+            $.ajax({
+                method: "post",
+                url: "/proxy/customer/favorite/deleting",
+                data: data
+            }).done(function(){
+                if(loading) {
+                    loading.remove();
+                    loading = null;
+                }
+                var status = result.status;
+                if(status==200){
+                    location.reload();
+                } else if(status==300){
+                    location.href = "login.html";
+                } else {
+                    tipsAlert("server error!");
+                }
+            }).fail(function(result){
+                if(loading) {
+                    loading.remove();
+                    loading = null;
+                }
+                //tipsAlert("server error");
+                result = {
+                    status: 200
+                };
+                var status = result.status;
+                if(status==200){
+                    location.reload();
+                } else if(status==300){
+                    location.href = "login.html";
+                } else {
+                    tipsAlert("server error!");
+                }
+            });
+        }
+    };
+})();
+
+$("#adGoods").on("click", ".goods-item .add-to-cart", addToCart);
+
+$("#adGoods").on("click", ".goods-item .remove", remove);
+
+$("#adGoods").on("click", ".shop-item .removeShop", remove);
+
+function showSpinner(msg, config){
+    var $spinner = $(".spinner");
+    if($spinner) $spinner.remove();
+    $spinner = $('<div class="spinner"> ' +
+        '<div class="tips"> ' +
+        msg +
+        '</div> ' +
+        '</div>');
+    var def = {
+        timeout: 1500
+    };
+    config = $.extend(config, def);
+    $spinner.appendTo($("body"))
+        .ready(function () {
+            $spinner.css({
+                "margin-left": -$spinner.width() / 2,
+                "margin-top": -$spinner.width() / 2,
+                "visibility": "visible"
+            });
+        });
+    setTimeout(function(){
+        if($spinner) $spinner.remove();
+        var callback = config.callback;
+        if(callback) callback();
+    }, config.timeout);
+}
+
+function showLoading($relative) {
+    var $tips = $relative.siblings(".loadingImg");
+    if ($tips.length > 0) $tips.remove();
+    $tips = $("<div class='loadingImg'></div>");
+    if($relative.css("position")=="static") $relative.css('position', "relative");
+    $tips.appendTo($relative)
+        .ready(function () {
+            $tips.css({
+                "top": $relative.outerHeight() / 2,
+                "left": $relative.outerWidth() / 2,
+                "margin-left": -$tips.outerWidth() / 2,
+                "margin-top": -$tips.outerHeight() / 2,
+                "visibility": "visible"
+            });
+        });
+    return $tips;
 }
