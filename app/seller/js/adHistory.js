@@ -117,29 +117,25 @@ function getUrlParam(name) {
     if (r != null) return r[2]; return null; //返回参数值
 }
 
-function　createOrderItem(data){
-    var pendingPay = '<div class="payNow">' +
+var loginUrl = "../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
+
+function　createShowItem(data){
+    var pendingPay = '<div class="timeTips">' +
+        data.countdown +
+        '</div>' +
+        '<div class="payNow">' +
         'Pay now' +
         '</div> ' +
         '<div class="cancel">' +
         'Cancel order' +
         '</div> ';
-    var confirmReceived = '<div class="confirmR">' +
-        'Confirm received' +
-        '</div> ';
-    var toBeComment = '<div class="comment">' +
-        'Comment' +
-        '</div>';
-    var delived = '<div class="alreadyDelivered">' +
-        'Already delivered ' +
-        '</div>';
 
     var operate = "";
     if(data.status==1){
         data.statusText = "Waiting for payment";
+        operate  = pendingPay;
     } else if(data.status==2){
         data.statusText = "Waiting for delivery";
-        operate = delived;
     } else if(data.status==3){
         data.statusText = "Waiting for receiving";
     } else if(data.status==4){
@@ -149,57 +145,45 @@ function　createOrderItem(data){
     } else if(data.status==10){
         data.statusText = "Closed";
     }
-    var product = data.product;
-    var orderData = '<tr class="orderData"> ' +
-        '<td class="product"> ' +
-        '<a href="productDetail.html?id='+product.productId+'" target="_blank" class="clearfix productLink"> ' +
-        '<img src="'+product.photo[0]+'"> ' +
-        '<span class="productName">'+product.productName+'</span> ' +
-        '</a> ' +
-        '</td> ' +
-        '<td class="price">HK$'+data.price.toFixed(2)+'</td> ' +
-        '<td class="amount">'+data.num+'</td> ' +
-        '<td class="totalPrice">' +
-        'HK$'+data.sumPrice.toFixed(2) +
-        '</td>' +
-        '<td class="status"> ' +
-        '<div class="orderStatus">' +
-        data.statusText +
-        '</div> ' +
-        '</td> ' +
-        '<td class="operate">' +
-        operate +
-        '</td> ' +
-        '</tr> ';
-    return $('<tbody class="orderItem"> ' +
-        orderData +
-        '</tbody>')
+    var shop = data.shop;
+    return $('<tbody class="showItem"> ' +
+        '<tr class="mr20"></tr> ' +
+        '<tr class="showHeader"> ' +
+            '<td colspan="6">' +
+                '<span class="showTime">'+data.time+'</span> ' +
+                '<span class="showId">Bid ID: '+data.orderId+'</span> ' +
+                '<span class="shopName"> ' +
+                    '<a href="../customer/store.html?'+shop.shopId+'" target="_blank">'+shop.shopName+'</a> ' +
+                '</span>' +
+            '</td> ' +
+        '</tr> ' +
+        '<tr class="showData"> ' +
+            '<td class="product"> ' +
+                '<a href="'+data.photo[0]+'" target="_blank" class="pictureLink"> ' +
+                    '<img src="'+data.photo[0]+'"> ' +
+                '</a> ' +
+            '</td> ' +
+            '<td class="price">HK$'+data.price.toFixed(2)+'</td> ' +
+            '<td class="displayTimee">'+data.displayTime+'</td> ' +
+            '<td class="status"> ' +
+                '<div class="showStatus">'+data.statusText+'</div> ' +
+            '</td> ' +
+            '<td class="operate"> ' +
+                operate +
+            '</td> ' +
+        '</tr> ' +
+        '</tbody>').data("bidId", data.bidId);
 }
 
-function setOrderInfo(data) {
-    var $info = $("#info");
-    var shop = data.product.shop;
-    $info.find(".receiver .value").text(data.address).end()
-        .find(".orderTime .value").text(data.time).end()
-        .find(".orderId .value").text(data.orderId).end()
-        .find(".shopName .value").text(shop.shopName).end()
-        .find(".shopTel .value").text(shop.telephone).end()
-        .find(".shopEmail .value").text(shop.email).end()
-        .find(".express .value").text(data.express).end()
-        .find(".expressNo .value").text(data.expressCode);
-}
-
-var postOrder = (function(){
+var postShow = (function(){
     var loading = null;
-    return function (orderId, orderStatus) {
+    return function (showStatus) {
         if(loading) return ;
         loading = showLoading($(".more"));
-        var arr = [];
-        arr.push(orderId);
-        var reqData = "orderIdList="+JSON.stringify(arr)+"&status="+orderStatus;
+        var reqData = "status="+showStatus;
         $.ajax({
             method: "get",
-            url: "/proxy/shop-owner/order/detail",
+            url: "/proxy/shop-owner/show/list",
             dataType: "json",
             data: reqData
         }).done(function(result){
@@ -209,91 +193,150 @@ var postOrder = (function(){
             }
             var status = result.status;
             if(status==200){
-                var $orderList = $("#orderList"),
-                    $orderTable = $orderList.find(".orderTable"),
-                    data = result.data[0];
-                setOrderInfo(data);
-                $orderTable.append(createOrderItem(data));
-            } else if(status==300){
+                var len = result.data.length,
+                    $showTable = $showList.find('.showTable');
+                for(var i=0; i<len; i++){
+                    if(showStatus!=0) { result.data[i].status=showStatus }
+                    $showTable.append(createShowItem(result.data[i]));
+                }
+            } else if(status==300) {
                 location.href = loginUrl;
             } else {
-                tipsAlert("unknown error!", function () {
-                    location.href = "index.html";
-                });
+                tipsAlert("server error!");
             }
         }).fail(function(result){
             if(loading){
                 loading.remove();
                 loading = null;
             }
-            tipsAlert("Server error!");
-            /*result = {
+            //tipsAlert("server error!");
+            result = {
                 status: 200,
                 data: [
                     {
                         time: "2016-09-05 16:30:06",
                         orderId: "2662774641999118",
                         targetId: 12,
+                        status: 1,
                         countdown: "left 23 Hour",
-                        status: 2,
-                        address: "Dhgan, 18789427353, HongkongIsland(HK) Chai Wan Wanli",
-                        product: {
-                            productId: 10,
-                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                            photo: [
-                                "imgs/product01a.jpg",
-                                "imgs/product02a.jpg",
-                                "imgs/product03a.jpg",
-                                "imgs/product04a.jpg"
-                            ],
-                            shop: {
-                                shopName: "Tom's shop",
-                                telephone: 62937498,
-                                email: "nowater@nowater.com"
-                            }
+                        shop: {
+                            shopId: 2,
+                            shopName: "Tom's shop"
                         },
-                        express: "SF",
-                        expressCode: "7978978",
-                        num: 1,
-                        price: 333.3,
-                        sumPrice: 333
+                        photo: [
+                          "../customer/imgs/adshop01.jpg"
+                        ],
+                        price: 333,
+                        displayTime: "2016-09-06"
+                    },
+                    {
+                        time: "2016-09-05 16:30:06",
+                        orderId: "2662774641999118",
+                        targetId: 12,
+                        status: 2,
+                        countdown: "left 23 Hour",
+                        shop: {
+                            shopId: 2,
+                            shopName: "Tom's shop"
+                        },
+                        photo: [
+                          "../customer/imgs/adshop01.jpg"
+                        ],
+                        price: 333,
+                        displayTime: "2016-09-06"
+                    },
+                    {
+                        time: "2016-09-05 16:30:06",
+                        orderId: "2662774641999118",
+                        targetId: 12,
+                        status: 3,
+                        countdown: "left 23 Hour",
+                        shop: {
+                            shopId: 2,
+                            shopName: "Tom's shop"
+                        },
+                        photo: [
+                          "../customer/imgs/adshop01.jpg"
+                        ],
+                        price: 333,
+                        displayTime: "2016-09-06"
+                    },
+                    {
+                        time: "2016-09-05 16:30:06",
+                        orderId: "2662774641999118",
+                        targetId: 12,
+                        status: 4,
+                        countdown: "left 23 Hour",
+                        shop: {
+                            shopId: 2,
+                            shopName: "Tom's shop"
+                        },
+                        photo: [
+                          "../customer/imgs/adshop01.jpg"
+                        ],
+                        price: 333,
+                        displayTime: "2016-09-06"
                     }
                 ]
             };
             var status = result.status;
-            if(status==200){
-                var $orderList = $("#orderList"),
-                    $orderTable = $orderList.find(".orderTable"),
-                    data = result.data[0];
-                setOrderInfo(data);
-                $orderTable.append(createOrderItem(data));
-            } else if(status==300){
+            if (status == 200) {
+                var len = result.data.length,
+                    $showTable = $showList.find('.showTable');
+                for (var i = 0; i < len; i++) {
+                    if (showStatus != 0) {
+                        result.data[i].status = showStatus
+                    }
+                    $showTable.append(createShowItem(result.data[i]));
+                }
+            } else if (status == 300) {
                 location.href = loginUrl;
             } else {
-                tipsAlert("unknown error!", function () {
-                    location.href = "index.html";
-                });
-            }*/
+                tipsAlert("server error!");
+            }
         });
     };
 })();
 
-var orderId = getUrlParam("orderId"),
-    status = getUrlParam("status");
-if(orderId&&status){
-    postOrder(orderId, status);
-} else {
-    location.href = "order.html";
-}
+var $showList = $("#showList");
 
-var $orderList = $("#orderList");
+$showList.on("click", ".more .showMore", function(e){
+    var _this = $(this);
+    _this.addClass("hidden");
+    postShow(showStatus);
+});
 
-$orderList.on("click", ".orderItem .alreadyDelivered", function(){
-    var $deliverPop = $(".deliverPop"),
-        $deliverForm = $("#deliverForm");
-    $deliverForm[0].orderId.value = orderId;
+$showList.on("click", ".showItem .alreadyDelivered", function(){
+    var _this = $(this),
+        $showItem = _this.parents(".showItem"),
+        $deliverPop = $(".deliverPop"),
+        $deliverForm = $("#deliverForm"),
+        info = $showItem.data("info");
+    $deliverForm[0].showId.value = info.showId;
     $deliverPop.show();
 });
+
+var $showMain = $("#showMain");
+$showMain.on("click", ".showTab", function () {
+    var _this = $(this);
+    var i =_this.index();
+    location.href = "adHistory.html?status="+i;
+});
+
+var showStatus = getUrlParam("status");
+
+if(!!showStatus){
+    showStatus = parseInt(showStatus);
+    if(!showStatus || showStatus<=-1||showStatus>=5) showStatus = 0;
+} else {
+    showStatus = 0;
+}
+
+$showMain.find(".showTab")
+    .eq(showStatus)
+    .addClass("active");
+
+postShow(showStatus);
 
 var $deliverForm = $("#deliverForm");
 
@@ -310,7 +353,7 @@ function addError(item, msg){
 function deliverProduct(_this, loading){
     $.ajax({
         method: "post",
-        url: "/proxy/shop-owner/order/delivery",
+        url: "/proxy/shop-owner/show/delivery",
         dataType: "json",
         data: _this.serialize()
     }).done(function (result) {

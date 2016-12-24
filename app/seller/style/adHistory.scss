@@ -1,0 +1,197 @@
+@import "reset";
+@import "base";
+
+.content {
+    .page {
+        margin-left: 212px;
+        border: 1px solid #E0E0E0;
+        padding: 40px;
+        border-radius: 4px;
+        .title {
+            border-bottom: 1px solid #E0E0E0;
+            font-size: 24px;
+            line-height: 34px;
+        }
+        .showMain {
+            border-bottom: 2px solid #aaa;
+            height: 36px;
+            .showTab {
+                float: left;
+                padding: 10px 15px;
+                margin-bottom: -2px;
+                border-bottom: 2px solid transparent;
+                cursor: pointer;
+                font-weight: 700;
+                &.active {
+                    border-color: blue;
+                    color: blue;
+                }
+                &:hover {
+                    color: blue;
+                }
+            }
+        }
+        .showList {
+            margin: 20px 0;
+            color: #3c3c3c;
+            .showTable {
+                width: 100%;
+                th {
+                    text-align: center;
+                    background: #f5f5f5;
+                    padding: 5px 0;
+                }
+                colgroup {
+                    .col1 {
+                        width: 36%;
+                    }
+                    .col2 {
+                        width: 16%;
+                    }
+                    .col3 {
+                        width: 16%;
+                    }
+                    .col4 {
+                        width: 16%;
+                    }
+                    .col5 {
+                        width: 16%;
+                    }
+                }
+                .showTh {
+                    border: 1px solid #e5e5e5;
+                }
+                .showItem {
+                    border: 1px solid #e5e5e5;
+                    .mr20 {
+                        height: 20px;
+                    }
+                    .showHeader {
+                        font-size: 12px;
+                        background: #f5f5f5;
+                        line-height: 36px;
+                        height: 36px;
+                        border: 1px solid #e5e5e5;
+                        &>td>span {
+                            float: left;
+                        }
+                        .showTime {
+                            padding: 0 14px;
+                            color: #000;
+                        }
+                        .showId {
+                            margin-right: 20px;
+                            width: 220px;
+                            display: inline-block;
+                        }
+                        .shopName {
+                            a {
+                                display: block;
+                                width: 200px;
+                                color: #3c3c3c;
+                                overflow: hidden;
+                                text-overflow: ellipsis;
+                                white-space: nowrap;
+                                &:hover {
+                                    color: blue;
+                                    text-decoration: underline;
+                                }
+                            }
+                        }
+                    }
+                    .showData {
+                        font-size: 14px;
+                        margin: 20px 0;
+                        td {
+                            padding: 10px 0;
+                            text-align: center;
+                            vertical-align: top;
+                        }
+                        .product {
+                            .pictureLink {
+                                display: inline-block;
+                                img {
+                                    width: 300px;
+                                    height: 100px;
+                                }
+                            }
+                        }
+                        .price {
+                            color: red;
+                        }
+                        .status {
+                            font-size: 13px;
+                        }
+                        .operate{
+                            &>div {
+                                margin: 10px;
+                                cursor: pointer;
+                                line-height: 22px;
+                                color: #3c3c3c;
+                                &:hover {
+                                    color: blue;
+                                }
+                            }
+                            .comment {
+                                &:hover {
+                                    text-decoration: underline;
+                                }
+                            }
+                            .payNow, .confirmR {
+                                color: #292d84;
+                                line-height: 30px;
+                                border: 1px solid #292d84;
+                                border-radius: 4px;
+                                &:hover {
+                                    background: #292d84;
+                                    color: #fff;
+                                }
+                            }
+                            .confirmR {
+                                line-height: 18px;
+                                padding: 4px 0;
+                            }
+                            .timeTips {
+                                font-size: 13px;
+                                text-align: left;
+                                line-height: 1;
+                                margin-bottom: -5px;
+                                color: #666;
+                                &:hover {
+                                    color: #666;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+            .more {
+                text-align: center;
+                margin-top: 10px;
+                height: 40px;
+                position: relative;
+                .showMore{
+                    cursor: pointer;
+                    display: inline-block;
+                    padding: 10px 40px;
+                    font-size: 14px;
+                    text-align: center;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    &.hidden {
+                        display: none;
+                    }
+                    .down {
+                        border: 1px solid #000;
+                        border-top-color: transparent;
+                        border-right-color: transparent;
+                        width: 10px;
+                        height: 10px;
+                        display: inline-block;
+                        transform: rotate(-45deg) translate(6px, 2px);
+                    }
+                }
+            }
+        }
+    }
+}

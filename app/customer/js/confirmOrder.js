@@ -176,7 +176,7 @@ function showSpinner(msg, config){
     var def = {
         timeout: 1500
     };
-    config = $.extend(config, def);
+    $.extend(def, config);
     $spinner.appendTo($("body"))
         .ready(function () {
             $spinner.css({
@@ -187,9 +187,9 @@ function showSpinner(msg, config){
         });
     setTimeout(function(){
         if($spinner) $spinner.remove();
-        var callback = config.callback;
+        var callback = def.callback;
         if(callback) callback();
-    }, config.timeout);
+    }, def.timeout);
 }
 
 function getUrlParam(name) {

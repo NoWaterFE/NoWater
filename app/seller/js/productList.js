@@ -117,8 +117,8 @@ var  postProductList = (function() {
                 loading.remove();
                 loading = null;
             }
-            tipsAlert("server error");
-            /*result = {
+            //tipsAlert("server error");
+            result = {
                 productId: 1234,
                 photo: ["imgs/1.jpg"],
                 productName: "INFRUITION CLASSIC WATER BOTTLE - GREEN",
@@ -131,7 +131,7 @@ var  postProductList = (function() {
             for(var i=0; i<10; i++){
                 createProductList(result).data("info", result).appendTo($productList.find("tbody"));
             }
-            $productList.find(".more .showMore").removeClass("hidden");*/
+            $productList.find(".more .showMore").removeClass("hidden");
         });
     };
 })();
@@ -260,7 +260,7 @@ function showSpinner(msg, config){
     var def = {
         timeout: 1500
     };
-    config = $.extend(config, def);
+    $.extend(def, config);
     $spinner.appendTo($("body"))
         .ready(function () {
             $spinner.css({
@@ -271,9 +271,9 @@ function showSpinner(msg, config){
         });
     setTimeout(function(){
         if($spinner) $spinner.remove();
-        var callback = config.callback;
+        var callback = def.callback;
         if(callback) callback();
-    }, config.timeout);
+    }, def.timeout);
 }
 
 //修改商品

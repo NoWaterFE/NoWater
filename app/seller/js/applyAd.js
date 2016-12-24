@@ -84,6 +84,32 @@ function tipsConfirm(msg, callback){
         .appendTo($("body"));
 }
 
+function showSpinner(msg, config){
+    var $spinner = $(".spinner");
+    if($spinner) $spinner.remove();
+    $spinner = $('<div class="spinner"> ' +
+        '<div class="tips"> ' +
+        msg +
+        '</div> ' +
+        '</div>');
+    var def = {
+        timeout: 1500
+    };
+    $.extend(def, config);
+    $spinner.appendTo($("body"))
+        .ready(function () {
+            $spinner.css({
+                "margin-left": -$spinner.width() / 2,
+                "margin-top": -$spinner.width() / 2,
+                "visibility": "visible"
+            });
+        });
+    setTimeout(function(){
+        if($spinner) $spinner.remove();
+        var callback = def.callback;
+        if(callback) callback();
+    }, def.timeout);
+}
 
 //输入错误提示
 function addError(item, msg){
@@ -98,6 +124,58 @@ function addError(item, msg){
 
 }
 var $applyAd = $("#applyAd");
+
+//请求广告信息
+$.ajax({
+    method: "get",
+    url: "/proxy/2"
+}).done(function (result){
+
+}).fail(function (result) {
+    result = {
+        status: 300,
+        data: [
+            {
+                photo: ["imgs/product01a.jpg"],
+                price: 999
+            }
+        ]
+    };
+    var status = result.status,
+        data = result.data[0],
+        photo = data.photo[0];
+    if(status==300){
+        $applyAd[0].price.value=data.price.toFixed(2);
+        $applyAd.data("fileUrl", photo)
+            .data("change", "false")
+            .find(".imagesPreview")
+            .height(200)
+            .find("img")
+            .attr("src", photo);
+        $applyAd.find("input").addClass("disabled")
+            .prop("disabled", true);
+    }
+});
+
+function applyAd(_this, loading) {
+    $.ajax({
+        method: "post",
+        url: "/proxy/1",
+        dataType: "json",
+        data: _this.serialize()
+    }).done(function (result) {
+        if (loading) loading.remove();
+        _this.data("submit", false);
+        var status = result.status;
+    }).fail(function (result) {
+        if (loading) loading.remove();
+        _this.data("submit", false);
+        _this.data("submit", false);
+        var status = result.status;
+
+    });
+}
+
 $applyAd.on("submit", function (e) {
     var _this = $(this);
     if (e && e.preventDefault) {
@@ -106,73 +184,79 @@ $applyAd.on("submit", function (e) {
         e.returnValue = false;
     }
     var $amount = _this.find(".amount"),
-        $adImage = _this.find(".adImage");
-    if (!this.amount.value) {
-        addError($amount, "bidding price can't be empty!");
+        $adImage = _this.find(".adImage"),
+        amount = this.price.value;
+    if (!amount) {
+        addError($amount, "Bidding price can't be empty!");
+        return;
+    } else if(parseFloat(amount)<500) {
+        addError($amount, "Bidding price can't be less than HK$500!");
         return;
     }
-    if(this.adImage.files.length==0) {
+    var fileUrl = _this.data("fileUrl");
+    if(this.adImage.files.length==0 && fileUrl==undefined) {
         addError($adImage, "please add your ID photo!");
         return;
     }
     if(_this.data("submit")) return ;
     _this.data("submit", true);
     var loading = showLoading(_this);
-    var formData = new FormData();
-    formData.append("adImage", this.adImage.files[0]);
-    $.ajax({
-        method: "post",
-        url: "/proxy/shop-owner/",
-        dataType: "json",
-        processData: false,
-        contentType: false,
-        data: formData
-    }).done(function(result){
-
-    }).fail(function(result){
-        if(result.status==200){
-            $.ajax({
-                type: "post",
-                url: "/proxy/shop-owner/",
-                dataType: "json",
-                data: _this.serialize()
-            }).done(function (result) {
-                if (loading) loading.remove();
-                _this.data("submit", false);
-                if (result.status == 300) {
-                    location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
-                } else if (result.status == 500) {
-                    addError($shopName, "shop name is occupied!");
-                } else if (result.status == 800) {
-                    addError($shopEmail, "error email!");
-                } else if (result.status == 900) {
-                    addError($shopTel, "error telephone!");
-                } else if (result.status == 200) {
-                    _this.find("input").addClass("disabled").attr("disabled", true);
-                    _this.find(".applying").text("Successful operation, please wait for the administrator to approve.");
-                }
-            }).fail(function () {
-                if (loading) loading.remove();
-                _this.data("submit", false);
-                //tipsAlert("server error");
-                result = {
-                    status: 500
-                };
-                if (result.status == 300) {
-                    location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
-                } else if (result.status == 500) {
-                    addError($shopName, "shop name is occupied!");
-                } else if (result.status == 800) {
-                    addError($shopEmail, "error email!");
-                } else if (result.status == 900) {
-                    addError($shopTel, "error telephone!");
-                } else if (result.status == 200) {
-                    _this.find("input").addClass("disabled").attr("disabled", true);
-                    _this.find(".applying").text("Successful operation, please wait for the administrator to approve.");
-                }
-            });
+    var $input=_this.find("input[name='fileNameList']");
+    if($input.length==0) {
+        $input = $("<input type='hidden' name='fileNameList'>");
+        $input.appendTo(_this);
+    }
+    if(fileUrl && _this.data("change") == "false") {
+        if(!$input.val()) {
+            var index = fileUrl.lastIndexOf("/");
+            var fileNameList = fileUrl.substr(index+1);
+            var arr = [];
+            arr.push(fileNameList);
+            $input.val(JSON.stringify(arr));
         }
-    });
+        applyAd(_this, loading);
+    } else {
+        var formData = new FormData();
+        formData.append("goodsPic[]", this.adImage.files[0]);
+        $.ajax({
+            method: "post",
+            url: "/proxy/picture/upload",
+            dataType: "json",
+            processData: false,
+            contentType: false,
+            data: formData
+        }).done(function(result){
+            if(result.status==200){
+                var url = JSON.stringify(result.data);
+                $input.val(url);
+                _this.data("fileUrl", url)
+                    .data("change", "false");
+                applyAd(_this, loading);
+            } else if(result.status==300){
+                location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
+            } else {
+                tipsAlert("upload file fail");
+            }
+        }).fail(function(result){
+            if (loading) loading.remove();
+            _this.data("submit", false);
+            //tipsAlert("server error");
+            result = {
+                status: 200
+            };
+            if(result.status==200){
+                var url = JSON.stringify(result.data);
+                $input.val(url);
+                _this.data("fileUrl", url)
+                    .data("change", "false");
+                applyAd(_this, loading);
+            } else if(result.status==300){
+                location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
+            } else {
+                tipsAlert("upload file fail");
+            }
+        });
+    }
 });
 
 function createObjectURL(blob) {
@@ -190,6 +274,7 @@ $applyAd.on("change", "#adImage", function(e){
     var file=this.files[0];
     var url=createObjectURL(file);
     var $delegateTarget = $(e.delegateTarget);
+    $delegateTarget.data("change", "true");
     var type=file.type.toLowerCase();
     if (!(type==="image/jpg"||type==="image/gif"||type==="image/jpeg"||type==="image/png")){
         tipsAlert("Image format error, the image can only be JPG, GIF, JPEG, PNG format");

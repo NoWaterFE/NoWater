@@ -95,7 +95,7 @@ function showSpinner(msg, config){
     var def = {
         timeout: 1500
     };
-    config = $.extend(def, config);
+    $.extend(def, config);
     $spinner.appendTo($("body"))
         .ready(function () {
             $spinner.css({
@@ -106,9 +106,9 @@ function showSpinner(msg, config){
         });
     setTimeout(function(){
         if($spinner) $spinner.remove();
-        var callback = config.callback;
+        var callback = def.callback;
         if(callback) callback();
-    }, config.timeout);
+    }, def.timeout);
 }
 
 function getUrlParam(name) {
@@ -215,7 +215,6 @@ var postOrder = (function(){
                 var len = result.data.length,
                     $orderTable = $orderList.find('.orderTable');
                 for(var i=0; i<len; i++){
-                    if(orderStatus!=0) { result.data[i].status=orderStatus }
                     $orderTable.append(createOrderItem(result.data[i]));
                 }
             } else if(status==300) {
@@ -285,7 +284,6 @@ $orderList.on("click", ".more .showMore", function(e){
 $orderList.on("click", ".orderItem .alreadyDelivered", function(){
     var _this = $(this),
         $orderItem = _this.parents(".orderItem"),
-        orderId = $orderItem.data("orderId"),
         $deliverPop = $(".deliverPop"),
         $deliverForm = $("#deliverForm"),
         info = $orderItem.data("info");

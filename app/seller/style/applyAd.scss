@@ -82,7 +82,8 @@
                 position: relative;
                 z-index: 10;
                 width: 242px;
-                &:hover {
+
+                &:enabled:hover {
                     &+i{
                         background: #292d84;
                         color: #fff;

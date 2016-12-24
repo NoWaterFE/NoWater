@@ -380,7 +380,7 @@ var addToCart = (function(){
             }
             var status = result.status;
             if(status==200){
-                setCart(result.userInformation.num);
+                setCart(result.userInformation[0].cartNum);
                 showSpinner("Add success")
             } else if(status==300){
                 location.href = loginUrl;
@@ -533,7 +533,7 @@ function showSpinner(msg, config){
     var def = {
         timeout: 1500
     };
-    config = $.extend(config, def);
+    $.extend(def, config);
     $spinner.appendTo($("body"))
         .ready(function () {
             $spinner.css({
@@ -544,7 +544,7 @@ function showSpinner(msg, config){
         });
     setTimeout(function(){
         if($spinner) $spinner.remove();
-        var callback = config.callback;
+        var callback = def.callback;
         if(callback) callback();
-    }, config.timeout);
+    }, def.timeout);
 }
