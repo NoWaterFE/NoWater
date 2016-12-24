@@ -10,7 +10,7 @@
             var userInfo = result.userInformation[0];
             var quickMenu = $("#quickMenu");
             quickMenu.find(".accountOperate").toggleClass("active");
-            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+            setCart(userInfo.cartNum);
         }
     }).fail(function (result) {
         /*console.log(result.statusText);
@@ -94,11 +94,15 @@
     });
 
     window.setCart = function(num){
-        var cart = quickMenu.find(".my-cart .count");
+        var cart = quickMenu.find(".my-cart .count"),
+            $count = $(".cartMain").find(".count");
         if(num > 99) {
             cart.text("99+");
+            $count.text("99+");
         } else {
             cart.text(num);
+            $count.text(num);
+
         }
     }
 
@@ -176,7 +180,7 @@ function showSpinner(msg, config){
     var def = {
         timeout: 1500
     };
-    config = $.extend(config, def);
+    $.extend(def, config);
     $spinner.appendTo($("body"))
         .ready(function () {
             $spinner.css({
@@ -187,9 +191,9 @@ function showSpinner(msg, config){
         });
     setTimeout(function(){
         if($spinner) $spinner.remove();
-        var callback = config.callback;
+        var callback = def.callback;
         if(callback) callback();
-    }, config.timeout);
+    }, def.timeout);
 }
 
 var $cartList = $("#cartList");
@@ -224,6 +228,9 @@ var postCart = (function(){
                 if (startId != -1) {
                     $cartList.find(".showMore").removeClass("hidden");
                 }
+                setTimeout(function(){
+                    $(window).trigger("scroll");
+                });
             } else if (status == 300) {
                 location.href = loginUrl;
             } else {
@@ -326,6 +333,270 @@ var postCart = (function(){
                                 shopName: "Tom's shop"
                             }
                         }
+                    },
+                    {
+                        cartId: 11,
+                        targetId: 12,
+                        num: 4,
+                        startId: 2,
+                        product: {
+                            productId: 10,
+                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                            photo: [
+                                "imgs/product01a.jpg",
+                                "imgs/product02a.jpg",
+                                "imgs/product03a.jpg",
+                                "imgs/product04a.jpg"
+                            ],
+                            quantityStock: 90,
+                            price: 333,
+                            shop: {
+                                shopId: 1,
+                                shopName: "Tom's shop"
+                            }
+                        }
+                    },
+                    {
+                        cartId: 11,
+                        targetId: 12,
+                        num: 4,
+                        startId: 2,
+                        product: {
+                            productId: 10,
+                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                            photo: [
+                                "imgs/product01a.jpg",
+                                "imgs/product02a.jpg",
+                                "imgs/product03a.jpg",
+                                "imgs/product04a.jpg"
+                            ],
+                            quantityStock: 22,
+                            price: 333,
+                            shop: {
+                                shopId: 1,
+                                shopName: "Tom's shop"
+                            }
+                        }
+                    },
+                    {
+                        cartId: 11,
+                        targetId: 12,
+                        num: 4,
+                        startId: 2,
+                        product: {
+                            productId: 10,
+                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                            photo: [
+                                "imgs/product01a.jpg",
+                                "imgs/product02a.jpg",
+                                "imgs/product03a.jpg",
+                                "imgs/product04a.jpg"
+                            ],
+                            quantityStock: 90,
+                            price: 333,
+                            shop: {
+                                shopId: 1,
+                                shopName: "Tom's shop"
+                            }
+                        }
+                    },
+                    {
+                        cartId: 11,
+                        targetId: 12,
+                        num: 4,
+                        startId: 2,
+                        product: {
+                            productId: 10,
+                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                            photo: [
+                                "imgs/product01a.jpg",
+                                "imgs/product02a.jpg",
+                                "imgs/product03a.jpg",
+                                "imgs/product04a.jpg"
+                            ],
+                            quantityStock: 22,
+                            price: 333,
+                            shop: {
+                                shopId: 1,
+                                shopName: "Tom's shop"
+                            }
+                        }
+                    },
+                    {
+                        cartId: 11,
+                        targetId: 12,
+                        num: 4,
+                        startId: 2,
+                        product: {
+                            productId: 10,
+                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                            photo: [
+                                "imgs/product01a.jpg",
+                                "imgs/product02a.jpg",
+                                "imgs/product03a.jpg",
+                                "imgs/product04a.jpg"
+                            ],
+                            quantityStock: 90,
+                            price: 333,
+                            shop: {
+                                shopId: 1,
+                                shopName: "Tom's shop"
+                            }
+                        }
+                    },
+                    {
+                        cartId: 11,
+                        targetId: 12,
+                        num: 4,
+                        startId: 2,
+                        product: {
+                            productId: 10,
+                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                            photo: [
+                                "imgs/product01a.jpg",
+                                "imgs/product02a.jpg",
+                                "imgs/product03a.jpg",
+                                "imgs/product04a.jpg"
+                            ],
+                            quantityStock: 22,
+                            price: 333,
+                            shop: {
+                                shopId: 1,
+                                shopName: "Tom's shop"
+                            }
+                        }
+                    },
+                    {
+                        cartId: 11,
+                        targetId: 12,
+                        num: 4,
+                        startId: 2,
+                        product: {
+                            productId: 10,
+                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                            photo: [
+                                "imgs/product01a.jpg",
+                                "imgs/product02a.jpg",
+                                "imgs/product03a.jpg",
+                                "imgs/product04a.jpg"
+                            ],
+                            quantityStock: 90,
+                            price: 333,
+                            shop: {
+                                shopId: 1,
+                                shopName: "Tom's shop"
+                            }
+                        }
+                    },
+                    {
+                        cartId: 11,
+                        targetId: 12,
+                        num: 4,
+                        startId: 2,
+                        product: {
+                            productId: 10,
+                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                            photo: [
+                                "imgs/product01a.jpg",
+                                "imgs/product02a.jpg",
+                                "imgs/product03a.jpg",
+                                "imgs/product04a.jpg"
+                            ],
+                            quantityStock: 22,
+                            price: 333,
+                            shop: {
+                                shopId: 1,
+                                shopName: "Tom's shop"
+                            }
+                        }
+                    },
+                    {
+                        cartId: 11,
+                        targetId: 12,
+                        num: 4,
+                        startId: 2,
+                        product: {
+                            productId: 10,
+                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                            photo: [
+                                "imgs/product01a.jpg",
+                                "imgs/product02a.jpg",
+                                "imgs/product03a.jpg",
+                                "imgs/product04a.jpg"
+                            ],
+                            quantityStock: 90,
+                            price: 333,
+                            shop: {
+                                shopId: 1,
+                                shopName: "Tom's shop"
+                            }
+                        }
+                    },
+                    {
+                        cartId: 11,
+                        targetId: 12,
+                        num: 4,
+                        startId: 2,
+                        product: {
+                            productId: 10,
+                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                            photo: [
+                                "imgs/product01a.jpg",
+                                "imgs/product02a.jpg",
+                                "imgs/product03a.jpg",
+                                "imgs/product04a.jpg"
+                            ],
+                            quantityStock: 22,
+                            price: 333,
+                            shop: {
+                                shopId: 1,
+                                shopName: "Tom's shop"
+                            }
+                        }
+                    },
+                    {
+                        cartId: 11,
+                        targetId: 12,
+                        num: 4,
+                        startId: 2,
+                        product: {
+                            productId: 10,
+                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                            photo: [
+                                "imgs/product01a.jpg",
+                                "imgs/product02a.jpg",
+                                "imgs/product03a.jpg",
+                                "imgs/product04a.jpg"
+                            ],
+                            quantityStock: 90,
+                            price: 333,
+                            shop: {
+                                shopId: 1,
+                                shopName: "Tom's shop"
+                            }
+                        }
+                    },
+                    {
+                        cartId: 11,
+                        targetId: 12,
+                        num: 4,
+                        startId: 2,
+                        product: {
+                            productId: 10,
+                            productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
+                            photo: [
+                                "imgs/product01a.jpg",
+                                "imgs/product02a.jpg",
+                                "imgs/product03a.jpg",
+                                "imgs/product04a.jpg"
+                            ],
+                            quantityStock: 22,
+                            price: 333,
+                            shop: {
+                                shopId: 1,
+                                shopName: "Tom's shop"
+                            }
+                        }
                     }
                 ]
             };
@@ -341,6 +612,9 @@ var postCart = (function(){
                 if (startId != -1) {
                     $cartList.find(".showMore").removeClass("hidden");
                 }
+                setTimeout(function(){
+                    $(window).trigger("scroll");
+                });
             } else if (status == 300) {
                 location.href = loginUrl;
             } else {
@@ -490,7 +764,6 @@ function changeCart($num, productId, num, val) {
         var status = result.status;
         if(status==200){
             $num.data("val", num);
-            setCart(result.userInformation.num);
         } else if(status==300){
             location.href = loginUrl;
         } else {
@@ -629,7 +902,7 @@ var buy = (function(){
                 arr.push(cartId);
             }
         }
-        var reqData = "orderType=3&orderIdList="+ JSON.stringify(arr);
+        var reqData = "orderType=3&cartIdList="+ JSON.stringify(arr);
         $.ajax({
             method: "post",
             url: "/proxy/order/prepare",
@@ -734,7 +1007,4 @@ $window.on("scroll resize", function(){
         $optionBox.removeClass("fixed");
     }
     $optionBox.css("left", $cartList.offset().left - $window.scrollLeft());
-});
-$window.ready(function(){
-    $(window).trigger("scroll");
 });

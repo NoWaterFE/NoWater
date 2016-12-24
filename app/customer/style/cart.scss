@@ -14,14 +14,17 @@
             padding: 10px 15px;
             margin-bottom: -2px;
             border-bottom: 2px solid transparent;
-            cursor: pointer;
+            //cursor: pointer;
             font-weight: 700;
             &.active {
-                border-color: blue;
-                color: blue;
+                border-color: #00529e;
+                color: #00529e;
             }
             &:hover {
-                color: blue;
+                color: #00529e;
+            }
+            .count {
+                color: red;
             }
         }
     }

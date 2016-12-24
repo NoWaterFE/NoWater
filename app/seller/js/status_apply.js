@@ -59,7 +59,7 @@ function fillForm(result, msg, disabled){
             .find('#alipay').val(data.telephone).end()
             .find('.applying').text(msg);
         if(disabled) {
-            $applyForm.find('input').addClass("disabled").attr("disabled", disabled);
+            $applyForm.find('input').addClass("disabled").prop("disabled", true);
         }
     });
 }

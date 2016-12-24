@@ -7,7 +7,7 @@
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="js/userInfo.js"></script>
-    <link rel="stylesheet" type="text/css" href="style/orderDetail.css">
+    <link rel="stylesheet" type="text/css" href="style/adHistory.css">
 </head>
 <body>
 <header>
@@ -78,65 +78,61 @@
         </ul>
     </div>
     <div class="page">
-        <div class="orderDetail">
-            <h2 class="title">Order Detail</h2>
-            <div class="orderInfo">
-                <h2 class="orderInfoTitle">
-                    Order Information
-                </h2>
-                <div class="info" id="info">
-                    <div class="orderInfoItem receiver">
-                        <span class="key">Receiver:</span>
-                        <span class="value"></span>
-                    </div>
-                    <div class="orderInfoItem orderTime">
-                        <span class="key">Order time:</span>
-                        <span class="value"></span>
-                    </div>
-                    <div class="orderInfoItem orderId">
-                        <span class="key">Order ID:</span>
-                        <span class="value"></span>
-                    </div>
-                    <div class="orderInfoItem shopName">
-                        <span class="key">Shop name:</span>
-                        <span class="value"></span>
-                    </div>
-                    <div class="orderInfoItem shopTel">
-                        <span class="key">Shop tel:</span>
-                        <span class="value"></span>
-                    </div>
-                    <div class="orderInfoItem shopEmail">
-                        <span class="key">Shop email:</span>
-                        <span class="value"></span>
-                    </div>
-                    <div class="orderInfoItem express">
-                        <span class="key">Express:</span>
-                        <span class="value"></span>
-                    </div>
-                    <div class="orderInfoItem expressNo">
-                        <span class="key">Express No:</span>
-                        <span class="value"></span>
-                    </div>
-                </div>
-            </div>
-            <div class="orderList" id="orderList">
-                <table class="orderTable">
+        <div class="showDiv">
+            <ul class="showMain clearfix" id="showMain">
+                <li class="showTab">All</li>
+                <li class="showTab">Processing Order</li>
+                <li class="showTab">Preparing for Shipment</li>
+                <li class="showTab">Shipped</li>
+                <li class="showTab">Waiting for Comment</li>
+            </ul>
+            <div class="showList" id="showList">
+                <table class="showTable">
                     <colgroup>
                         <col class="col1">
                         <col class="col2">
                         <col class="col3">
                         <col class="col4">
                         <col class="col5">
-                        <col class="col6">
                     </colgroup>
-                    <tbody class="orderTh">
+                    <tbody class="showTh">
                     <tr>
-                        <th>Product</th>
-                        <th>Price</th>
-                        <th>Quantity</th>
-                        <th>Total Price</th>
+                        <th>Picture</th>
+                        <th>Bid price</th>
+                        <th>Display time</th>
                         <th>Status</th>
                         <th>Operate</th>
+                    </tr>
+                    </tbody>
+                    <tbody class="showItem">
+                    <tr class="mr20"></tr>
+                    <tr class="showHeader">
+                        <td colspan="6"><span class="showTime">2016-09-05 16:30:06</span> <span class="showId">Bid ID: 2662774641999118</span>
+                            <span class="shopName"> <a href="../customer/store.html?shopId=12" target="_blank">Tom's shop</a> </span>
+                        </td>
+                    </tr>
+                    <tr class="showData">
+                        <td class="product">
+                            <a href="../customer/imgs/adshop01.jpg" target="_blank" class="pictureLink">
+                                <img src="../customer/imgs/adshop01.jpg">
+                            </a>
+                        </td>
+                        <td class="price">HK$333.00</td>
+                        <td class="displayTimee">2016-12-25</td>
+                        <td class="status">
+                            <div class="showStatus">Waiting for payment</div>
+                        </td>
+                        <td class="operate">
+                            <div class="timeTips">
+                            Leave 12 Hours
+                            </div>
+                            <div class="payNow">
+                                Pay now
+                            </div>
+                            <div class="cancel">
+                            Cancel Bid
+                            </div>
+                        </td>
                     </tr>
                     </tbody>
                 </table>
@@ -150,33 +146,11 @@
         </div>
     </div>
 </div>
-<div class="deliverPop">
-    <div class="shadow"></div>
-    <form class="deliverForm" id="deliverForm" novalidate>
-        <input type="hidden" name="orderId">
-        <i class="cancel close"></i>
-        <h2 class="title">Express Info</h2>
-        <div class="input-item express">
-            <label for="express" class="redStar">Express:</label>
-            <input type="text" name="express" id="express" maxlength="50">
-            <span class="tips"></span>
-        </div>
-        <div class="input-item expressCode">
-            <label for="expressCode" class="redStar">Express No:</label>
-            <input type="text" name="expressCode" id="expressCode" maxlength="30">
-            <span class="tips"></span>
-        </div>
-        <div class="submit">
-            <input type="submit" value="CONFIRM">
-            <input type="button" value="CANCEL" class="cancel">
-        </div>
-    </form>
-</div>
 <footer>
     <div class="footer">
         © Copyright NoWaterFE
     </div>
 </footer>
-<script type="text/javascript" src="js/orderDetail.js"></script>
+<script type="text/javascript" src="js/adHistory.js"></script>
 </body>
 </html>
