@@ -357,7 +357,7 @@ function payNow() {
         sumPrice = info.sumPrice,
         arr = [];
     arr.push(orderId);
-    location.href = "pay?orderIdList="+JSON.stringify(arr)+"&sumPrice="+sumPrice;
+    location.href = "pay.html?orderIdList="+JSON.stringify(arr)+"&sumPrice="+sumPrice;
 }
 
 var confirmR = (function(){
@@ -515,7 +515,12 @@ $orderList.on("click", ".more .showMore", function(e){
 
 $orderList.on("click", ".orderItem .payNow", payNow);
 $orderList.on("click", ".orderItem .confirmR", confirmR);
-$orderList.on("click", ".orderItem .cancel", orderCancel);
+$orderList.on("click", ".orderItem .cancel", function () {
+    var self = this;
+    tipsConfirm("Are you sure want to cancel the order?", function(){
+        orderCancel.apply(self);
+    });
+});
 
 var $orderMain = $("#orderMain");
 $orderMain.on("click", ".orderTab", function () {

@@ -1,27 +1,17 @@
-// header添加事件
-(function () {
-    function delCookie(name){
-        var t = new Date();
-        t.setTime(t.getTime()-1);
-        document.cookie= name + "=null;path=/;expires="+t.toGMTString();
-    }
+var $logoutBtn = $("#logoutBtn");
 
-    var quickMenu = $("#quickMenu");
-
-    quickMenu.on("click", ".logout", function () {
-        var _this = $(this);
-        $.ajax({
-            method: "post",
-            url: "/proxy/customer/loginout"
-        }).done(function(){
-            delCookie("token");
-            location.href = "../customer/index.html"
-        }).fail(function () {
-            delCookie("token");
-            location.href = "../customer/index.html"
-        });
+$logoutBtn.click(function () {
+    $.ajax({
+        method: "get",
+        url: "/proxy/admin/loginout"
+    }).done(function(){
+        delCookie("admin_token");
+        location.href = "login.html";
+    }).fail(function () {
+        delCookie("admin_token");
+        location.href = "login.html";
     });
-})();
+});
 
 
 function showLoading($relative) {
@@ -143,31 +133,39 @@ function　createShowItem(data){
     } else if(data.status==-2){
         data.statusText = "Bidding failure";
     }
+    var product = data.product;
     return $('<tbody class="showItem"> ' +
         '<tr class="mr20"></tr> ' +
         '<tr class="showHeader"> ' +
-            '<td colspan="6">' +
-                '<span class="showTime">'+data.time+'</span> ' +
-                '<span class="showId">Bid ID: '+data.orderId+'</span> ' +
-                /*'<span class="shopName"> ' +
-                    '<a href="../customer/store.html?'+shop.shopId+'" target="_blank">'+shop.shopName+'</a> ' +
-                '</span>' +*/
-            '</td> ' +
+        '<td colspan="7">' +
+        '<span class="showTime">'+data.time+'</span> ' +
+        '<span class="showId">Bid ID: '+data.orderId+'</span> ' +
+        /*'<span class="shopName"> ' +
+         '<a href="../customer/store.html?'+shop.shopId+'" target="_blank">'+shop.shopName+'</a> ' +
+         '</span>' +*/
+        '</td> ' +
         '</tr> ' +
         '<tr class="showData"> ' +
-            '<td class="product"> ' +
-                '<a href="'+data.photo+'" target="_blank" class="pictureLink"> ' +
-                    '<img src="'+data.photo+'"> ' +
-                '</a> ' +
-            '</td> ' +
-            '<td class="price">HK$'+data.price.toFixed(2)+'</td> ' +
-            '<td class="displayTimee">'+data.showTime+'</td> ' +
-            '<td class="status"> ' +
-                '<div class="showStatus">'+data.statusText+'</div> ' +
-            '</td> ' +
-            '<td class="operate"> ' +
-                operate +
-            '</td> ' +
+        '<td class="product"> ' +
+        '<a href="../customer/productDetail.html?id='+product.productId+'" target="_blank" class="clearfix productLink"> ' +
+        '<img src="'+product.photo[0]+'"> ' +
+        '<span class="productName">'+product.productName+'</span> ' +
+        '</a> ' +
+        '</td> ' +
+        '<td class="productId"> ' +
+        product.productId +
+        '</td>' +
+        '<td class="shopId"> ' +
+        data.shopId +
+        '</td>' +
+        '<td class="price">HK$'+data.price.toFixed(2)+'</td> ' +
+        '<td class="displayTimee">'+data.showTime+'</td> ' +
+        '<td class="status"> ' +
+        '<div class="showStatus">'+data.statusText+'</div> ' +
+        '</td> ' +
+        '<td class="operate"> ' +
+        operate +
+        '</td> ' +
         '</tr> ' +
         '</tbody>').data("info", data);
 }
@@ -181,7 +179,7 @@ var postShow = (function(){
         var reqData = "count=10&startId="+startId;
         $.ajax({
             method: "get",
-            url: "/proxy/shop-owner/shop/ad/list",
+            url: "/proxy/shop-owner/product/ad/list",
             dataType: "json",
             data: reqData
         }).done(function(result){
@@ -223,7 +221,14 @@ var postShow = (function(){
                         shopId: 2,
                         photo: "../customer/imgs/adshop01.jpg",
                         price: 333,
-                        showTime: "2016-09-06"
+                        showTime: "2016-09-06",
+                        product: {
+                            "productId": 3,
+                            "productName": "iPhone 7",
+                            "photo": [
+                                "http://koprvhdix117-10038234.file.myqcloud.com/d59d569e-47f3-4df4-aedd-9e0feabe44e7.jpg"
+                            ]
+                        }
                     },
                     {
                         time: "2016-09-05 16:30:06",
@@ -232,7 +237,14 @@ var postShow = (function(){
                         shopId: 2,
                         photo: "../customer/imgs/adshop01.jpg",
                         price: 333,
-                        showTime: "2016-09-06"
+                        showTime: "2016-09-06",
+                        product: {
+                            "productId": 3,
+                            "productName": "iPhone 7",
+                            "photo": [
+                                "http://koprvhdix117-10038234.file.myqcloud.com/d59d569e-47f3-4df4-aedd-9e0feabe44e7.jpg"
+                            ]
+                        }
                     },
                     {
                         time: "2016-09-05 16:30:06",
@@ -241,7 +253,14 @@ var postShow = (function(){
                         shopId: 2,
                         photo: "../customer/imgs/adshop01.jpg",
                         price: 333,
-                        showTime: "2016-09-06"
+                        showTime: "2016-09-06",
+                        product: {
+                            "productId": 3,
+                            "productName": "iPhone 7",
+                            "photo": [
+                                "http://koprvhdix117-10038234.file.myqcloud.com/d59d569e-47f3-4df4-aedd-9e0feabe44e7.jpg"
+                            ]
+                        }
                     },
                     {
                         time: "2016-09-05 16:30:06",
@@ -250,7 +269,14 @@ var postShow = (function(){
                         shopId: 2,
                         photo: "../customer/imgs/adshop01.jpg",
                         price: 333,
-                        showTime: "2016-09-06"
+                        showTime: "2016-09-06",
+                        product: {
+                            "productId": 3,
+                            "productName": "iPhone 7",
+                            "photo": [
+                                "http://koprvhdix117-10038234.file.myqcloud.com/d59d569e-47f3-4df4-aedd-9e0feabe44e7.jpg"
+                            ]
+                        }
                     },
                     {
                         time: "2016-09-05 16:30:06",
@@ -259,7 +285,14 @@ var postShow = (function(){
                         shopId: 3,
                         photo: "../customer/imgs/adshop01.jpg",
                         price: 333,
-                        showTime: "2016-09-06"
+                        showTime: "2016-09-06",
+                        product: {
+                            "productId": 3,
+                            "productName": "iPhone 7",
+                            "photo": [
+                                "http://koprvhdix117-10038234.file.myqcloud.com/d59d569e-47f3-4df4-aedd-9e0feabe44e7.jpg"
+                            ]
+                        }
                     }
                 ]
             };

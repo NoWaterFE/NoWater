@@ -48,15 +48,18 @@
                         width: 36%;
                     }
                     .col2 {
-                        width: 16%;
+                        width: 8%;
                     }
                     .col3 {
-                        width: 16%;
+                        width: 12%;
                     }
                     .col4 {
-                        width: 16%;
+                        width: 14%;
                     }
                     .col5 {
+                        width: 16%;
+                    }
+                    .col6 {
                         width: 16%;
                     }
                 }
@@ -110,11 +113,22 @@
                             vertical-align: top;
                         }
                         .product {
-                            .pictureLink {
-                                display: inline-block;
+                            text-align: left;
+                            font-size: 12px;
+                            border-bottom: 1px solid #e5e5e5;
+                            .productLink {
+                                display: block;
+                                margin-left: 96px;
+                                color: #3c3c3c;
+                                &:hover {
+                                    color: blue;
+                                    text-decoration: underline;
+                                }
                                 img {
-                                    width: 300px;
-                                    height: 100px;
+                                    margin-left: -86px;
+                                    float: left;
+                                    width: 80px;
+                                    height: 80px;
                                 }
                             }
                         }

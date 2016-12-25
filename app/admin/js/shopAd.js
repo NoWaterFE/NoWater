@@ -1,27 +1,17 @@
-// header添加事件
-(function () {
-    function delCookie(name){
-        var t = new Date();
-        t.setTime(t.getTime()-1);
-        document.cookie= name + "=null;path=/;expires="+t.toGMTString();
-    }
+var $logoutBtn = $("#logoutBtn");
 
-    var quickMenu = $("#quickMenu");
-
-    quickMenu.on("click", ".logout", function () {
-        var _this = $(this);
-        $.ajax({
-            method: "post",
-            url: "/proxy/customer/loginout"
-        }).done(function(){
-            delCookie("token");
-            location.href = "../customer/index.html"
-        }).fail(function () {
-            delCookie("token");
-            location.href = "../customer/index.html"
-        });
+$logoutBtn.click(function () {
+    $.ajax({
+        method: "get",
+        url: "/proxy/admin/loginout"
+    }).done(function(){
+        delCookie("admin_token");
+        location.href = "login.html";
+    }).fail(function () {
+        delCookie("admin_token");
+        location.href = "login.html";
     });
-})();
+});
 
 
 function showLoading($relative) {
@@ -146,28 +136,29 @@ function　createShowItem(data){
     return $('<tbody class="showItem"> ' +
         '<tr class="mr20"></tr> ' +
         '<tr class="showHeader"> ' +
-            '<td colspan="6">' +
-                '<span class="showTime">'+data.time+'</span> ' +
-                '<span class="showId">Bid ID: '+data.orderId+'</span> ' +
-                /*'<span class="shopName"> ' +
-                    '<a href="../customer/store.html?'+shop.shopId+'" target="_blank">'+shop.shopName+'</a> ' +
-                '</span>' +*/
-            '</td> ' +
+        '<td colspan="6">' +
+        '<span class="showTime">'+data.time+'</span> ' +
+        '<span class="showId">Bid ID: '+data.orderId+'</span> ' +
+        /*'<span class="shopName"> ' +
+         '<a href="../customer/store.html?'+shop.shopId+'" target="_blank">'+shop.shopName+'</a> ' +
+         '</span>' +*/
+        '</td> ' +
         '</tr> ' +
         '<tr class="showData"> ' +
-            '<td class="product"> ' +
-                '<a href="'+data.photo+'" target="_blank" class="pictureLink"> ' +
-                    '<img src="'+data.photo+'"> ' +
-                '</a> ' +
-            '</td> ' +
-            '<td class="price">HK$'+data.price.toFixed(2)+'</td> ' +
-            '<td class="displayTimee">'+data.showTime+'</td> ' +
-            '<td class="status"> ' +
-                '<div class="showStatus">'+data.statusText+'</div> ' +
-            '</td> ' +
-            '<td class="operate"> ' +
-                operate +
-            '</td> ' +
+        '<td class="product"> ' +
+        '<a href="'+data.photo+'" target="_blank" class="pictureLink"> ' +
+        '<img src="'+data.photo+'"> ' +
+        '</a> ' +
+        '</td> ' +
+        '<td class="shopAd">'+data.shopId+'</td> ' +
+        '<td class="price">HK$'+data.price.toFixed(2)+'</td> ' +
+        '<td class="displayTimee">'+data.showTime+'</td> ' +
+        '<td class="status"> ' +
+        '<div class="showStatus">'+data.statusText+'</div> ' +
+        '</td> ' +
+        '<td class="operate"> ' +
+        operate +
+        '</td> ' +
         '</tr> ' +
         '</tbody>').data("info", data);
 }

@@ -7,7 +7,7 @@
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="js/userInfo.js"></script>
-    <link rel="stylesheet" type="text/css" href="style/adHistory.css">
+    <link rel="stylesheet" type="text/css" href="style/pay.css">
 </head>
 <body>
 <header>
@@ -55,9 +55,6 @@
                         <a href="applyAd.html">Apply Advertisement</a>
                     </li>
                     <li class="navList">
-                        <a href="adHistory.html">AD History</a>
-                    </li>
-                    <li class="navList">
                         <a href="#">Homepage Design</a>
                     </li>
                 </ul>
@@ -81,36 +78,25 @@
         </ul>
     </div>
     <div class="page">
-        <div class="showDiv">
-            <ul class="showMain clearfix" id="showMain">
-                <li><a href="adHistory.html"  class="showTab active">Shop AD</a></li>
-                <li><a href="productAd.html"  class="showTab">Product AD</a></li>
-            </ul>
-            <div class="showList" id="showList">
-                <table class="showTable">
-                    <colgroup>
-                        <col class="col1">
-                        <col class="col2">
-                        <col class="col3">
-                        <col class="col4">
-                        <col class="col5">
-                    </colgroup>
-                    <tbody class="showTh">
-                    <tr>
-                        <th>Picture</th>
-                        <th>Bid price</th>
-                        <th>Display time</th>
-                        <th>Status</th>
-                        <th>Operate</th>
-                    </tr>
-                    </tbody>
-                </table>
-                <div class="more">
-                    <div class="showMore hidden">
-                        <span>SHOW MORE</span>
-                        <span class="down"></span>
-                    </div>
+        <div class="pay clearfix">
+            <div class="payWay">
+                <div class="tips">Scan the QR code to pay by Alipay app.</div>
+                <div class="qrCode">
+                    <img src="http://koprvhdix117-10038234.cos.myqcloud.com/pay.jpg">
                 </div>
+            </div>
+            <div class="confirmPay">
+                <form action="javascript:" id="payForm" class="payForm" novalidate>
+                    <h2 class="title">Confirm Payment</h2>
+                    <div class="amount">
+                        <span class="key">Amount:</span>
+                        <span class="hk">HK$</span>
+                        <span class="price"></span>
+                    </div>
+                    <div class="submit">
+                        <input type="submit" value="CHECKOUT">
+                    </div>
+                </form>
             </div>
         </div>
     </div>
@@ -120,6 +106,6 @@
         © Copyright NoWaterFE
     </div>
 </footer>
-<script type="text/javascript" src="js/adHistory.js"></script>
+<script type="text/javascript" src="js/pay.js"></script>
 </body>
 </html>

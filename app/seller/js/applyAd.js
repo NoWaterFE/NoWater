@@ -134,6 +134,7 @@ $.ajax({
     var status = result.status,
         data = result.data[0];
     if(status==200){
+        if(!data) return;
         var photo = data.photo;
         $applyAd[0].price.value=data.price.toFixed(2);
         $applyAd.data("fileUrl", photo)
@@ -142,7 +143,7 @@ $.ajax({
             .height(200)
             .find("img")
             .attr("src", photo);
-        if(data.allow==0) {
+        if(result.allow==0) {
             $applyAd.find("input").addClass("disabled")
                 .prop("disabled", true);
         }
@@ -150,7 +151,7 @@ $.ajax({
 }).fail(function (result) {
     tipsAlert("Server error!");
     result = {
-        "allow": 0,
+        "allow": 1,
         "status": 200,
         "startId": -1,
         "data": [
@@ -160,7 +161,7 @@ $.ajax({
                 "showTime": "2016-12-26",
                 "shopId": 1,
                 "price": 1500,
-                "photo": "http://koprvhdix117-10038234.file.myqcloud.com/test",
+                "photo": "../customer/imgs/adshop02.jpg",
                 "status": 2
             }
         ]
@@ -168,6 +169,7 @@ $.ajax({
     var status = result.status,
         data = result.data[0];
     if(status==200){
+        if(!data) return;
         var photo = data.photo;
         $applyAd[0].price.value=data.price.toFixed(2);
         $applyAd.data("fileUrl", photo)
@@ -176,14 +178,14 @@ $.ajax({
             .height(200)
             .find("img")
             .attr("src", photo);
-        if(data.allow==0) {
+        if(result.allow==0) {
             $applyAd.find("input").addClass("disabled")
                 .prop("disabled", true);
         }
     }
 });
 
-function applyAd(_this, loading) {
+function applyAd(_this, loading, amount) {
     $.ajax({
         method: "post",
         url: "/proxy/shop-owner/shop/ad/apply",
@@ -194,8 +196,10 @@ function applyAd(_this, loading) {
         _this.data("submit", false);
         var status = result.status;
         if(status==200) {
-            showSpinner("Success");
-            _this.find("input").addClass("disabled").attr("disabled", true);
+            var orderId = result.orderId,
+                arr = [];
+            arr.push(orderId);
+            location.href = "pay.html?type=1&sumPrice="+amount+"&orderIdList="+JSON.stringify(arr);
         } else if(status==300){
             location.href = loginUrl;
         } else if(status==600) {
@@ -206,22 +210,24 @@ function applyAd(_this, loading) {
     }).fail(function (result) {
         if (loading) loading.remove();
         _this.data("submit", false);
-        _this.data("submit", false);
         tipsAlert("Server error!");
-        /*result = {
-            status: 200
+        result = {
+            status: 200,
+            orderId: 23
         };
         var status = result.status;
         if(status==200) {
-            showSpinner("Success");
-            _this.find("input").addClass("disabled").attr("disabled", true);
+            var orderId = result.orderId,
+                arr = [];
+            arr.push(orderId);
+            location.href = "pay.html?type=1&sumPrice="+amount+"&orderIdList="+JSON.stringify(arr);
         } else if(status==300){
             location.href = loginUrl;
         } else if(status==600) {
             tipsAlert("Fail, it has been exceeded the specified deadline today.");
         } else {
             tipsAlert("Server error!");
-        }*/
+        }
     });
 }
 
@@ -261,7 +267,7 @@ $applyAd.on("submit", function (e) {
             var filename = fileUrl.substr(index+1);
             $input.val(filename);
         }
-        applyAd(_this, loading);
+        applyAd(_this, loading, amount);
     } else {
         var formData = new FormData();
         formData.append("goodsPic[]", this.adImage.files[0]);
@@ -278,7 +284,7 @@ $applyAd.on("submit", function (e) {
                 $input.val(url);
                 _this.data("fileUrl", url)
                     .data("change", "false");
-                applyAd(_this, loading);
+                applyAd(_this, loading, amount);
             } else if(result.status==300){
                 location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
             } else {
@@ -288,20 +294,21 @@ $applyAd.on("submit", function (e) {
             if (loading) loading.remove();
             _this.data("submit", false);
             tipsAlert("server error");
-            /*result = {
-                status: 200
+            result = {
+                status: 200,
+                data: ["1"]
             };
             if(result.status==200){
-                var url = JSON.stringify(result.data);
+                var url = result.data[0];
                 $input.val(url);
                 _this.data("fileUrl", url)
                     .data("change", "false");
-                applyAd(_this, loading);
+                applyAd(_this, loading, amount);
             } else if(result.status==300){
                 location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
             } else {
                 tipsAlert("upload file fail");
-            }*/
+            }
         });
     }
 });

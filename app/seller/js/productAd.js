@@ -143,6 +143,7 @@ function　createShowItem(data){
     } else if(data.status==-2){
         data.statusText = "Bidding failure";
     }
+    var product = data.product;
     return $('<tbody class="showItem"> ' +
         '<tr class="mr20"></tr> ' +
         '<tr class="showHeader"> ' +
@@ -156,10 +157,14 @@ function　createShowItem(data){
         '</tr> ' +
         '<tr class="showData"> ' +
             '<td class="product"> ' +
-                '<a href="'+data.photo+'" target="_blank" class="pictureLink"> ' +
-                    '<img src="'+data.photo+'"> ' +
+                '<a href="../customer/productDetail.html?id='+product.productId+'" target="_blank" class="clearfix productLink"> ' +
+                '<img src="'+product.photo[0]+'"> ' +
+                '<span class="productName">'+product.productName+'</span> ' +
                 '</a> ' +
             '</td> ' +
+            '<td class="productId"> ' +
+                product.productId +
+            '</td>' +
             '<td class="price">HK$'+data.price.toFixed(2)+'</td> ' +
             '<td class="displayTimee">'+data.showTime+'</td> ' +
             '<td class="status"> ' +
@@ -181,7 +186,7 @@ var postShow = (function(){
         var reqData = "count=10&startId="+startId;
         $.ajax({
             method: "get",
-            url: "/proxy/shop-owner/shop/ad/list",
+            url: "/proxy/shop-owner/product/ad/list",
             dataType: "json",
             data: reqData
         }).done(function(result){
@@ -223,7 +228,14 @@ var postShow = (function(){
                         shopId: 2,
                         photo: "../customer/imgs/adshop01.jpg",
                         price: 333,
-                        showTime: "2016-09-06"
+                        showTime: "2016-09-06",
+                        product: {
+                            "productId": 3,
+                            "productName": "iPhone 7",
+                            "photo": [
+                                "http://koprvhdix117-10038234.file.myqcloud.com/d59d569e-47f3-4df4-aedd-9e0feabe44e7.jpg"
+                            ]
+                        }
                     },
                     {
                         time: "2016-09-05 16:30:06",
@@ -232,7 +244,14 @@ var postShow = (function(){
                         shopId: 2,
                         photo: "../customer/imgs/adshop01.jpg",
                         price: 333,
-                        showTime: "2016-09-06"
+                        showTime: "2016-09-06",
+                        product: {
+                            "productId": 3,
+                            "productName": "iPhone 7",
+                            "photo": [
+                                "http://koprvhdix117-10038234.file.myqcloud.com/d59d569e-47f3-4df4-aedd-9e0feabe44e7.jpg"
+                            ]
+                        }
                     },
                     {
                         time: "2016-09-05 16:30:06",
@@ -241,7 +260,14 @@ var postShow = (function(){
                         shopId: 2,
                         photo: "../customer/imgs/adshop01.jpg",
                         price: 333,
-                        showTime: "2016-09-06"
+                        showTime: "2016-09-06",
+                        product: {
+                            "productId": 3,
+                            "productName": "iPhone 7",
+                            "photo": [
+                                "http://koprvhdix117-10038234.file.myqcloud.com/d59d569e-47f3-4df4-aedd-9e0feabe44e7.jpg"
+                            ]
+                        }
                     },
                     {
                         time: "2016-09-05 16:30:06",
@@ -250,7 +276,14 @@ var postShow = (function(){
                         shopId: 2,
                         photo: "../customer/imgs/adshop01.jpg",
                         price: 333,
-                        showTime: "2016-09-06"
+                        showTime: "2016-09-06",
+                        product: {
+                            "productId": 3,
+                            "productName": "iPhone 7",
+                            "photo": [
+                                "http://koprvhdix117-10038234.file.myqcloud.com/d59d569e-47f3-4df4-aedd-9e0feabe44e7.jpg"
+                            ]
+                        }
                     },
                     {
                         time: "2016-09-05 16:30:06",
@@ -259,7 +292,14 @@ var postShow = (function(){
                         shopId: 3,
                         photo: "../customer/imgs/adshop01.jpg",
                         price: 333,
-                        showTime: "2016-09-06"
+                        showTime: "2016-09-06",
+                        product: {
+                            "productId": 3,
+                            "productName": "iPhone 7",
+                            "photo": [
+                                "http://koprvhdix117-10038234.file.myqcloud.com/d59d569e-47f3-4df4-aedd-9e0feabe44e7.jpg"
+                            ]
+                        }
                     }
                 ]
             };
