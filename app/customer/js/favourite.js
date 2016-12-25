@@ -147,6 +147,7 @@ function getResult() {
                 status: 200,
                 data: [
                     {
+                        favoriteId: 1,
                         productId: 1,
                         shopId: 1,
                         classId: 1,
@@ -157,6 +158,7 @@ function getResult() {
                         isDel: false
                     },
                     {
+                        favoriteId: 2,
                         productId: 2,
                         shopId: 1,
                         classId: 1,
@@ -167,6 +169,7 @@ function getResult() {
                         isDel: false
                     },
                     {
+                        favoriteId: 3,
                         productId: 3,
                         shopId: 1,
                         classId: 1,
@@ -177,6 +180,7 @@ function getResult() {
                         isDel: false
                     },
                     {
+                        favoriteId: 4,
                         productId: 4,
                         shopId: 1,
                         classId: 1,
@@ -187,6 +191,7 @@ function getResult() {
                         isDel: false
                     },
                     {
+                        favoriteId: 5,
                         productId: 5,
                         shopId: 1,
                         classId: 1,
@@ -197,6 +202,7 @@ function getResult() {
                         isDel: false
                     },
                     {
+                        favoriteId: 6,
                         productId: 6,
                         shopId: 1,
                         classId: 1,
@@ -207,6 +213,7 @@ function getResult() {
                         isDel: false
                     },
                     {
+                        favoriteId: 7,
                         productId: 7,
                         shopId: 1,
                         classId: 1,
@@ -217,6 +224,7 @@ function getResult() {
                         isDel: false
                     },
                     {
+                        favoriteId: 8,
                         productId: 8,
                         shopId: 1,
                         classId: 1,
@@ -227,6 +235,7 @@ function getResult() {
                         isDel: false
                     },
                     {
+                        favoriteId: 9,
                         productId: 9,
                         shopId: 1,
                         classId: 1,
@@ -237,6 +246,7 @@ function getResult() {
                         isDel: false
                     },
                     {
+                        favoriteId: 10,
                         productId: 10,
                         shopId: 1,
                         classId: 1,
@@ -264,6 +274,7 @@ function getResult() {
                 } else {
                     result.data = [
                         {
+                            favoriteId: 1,
                             shopId: 1,
                             shopName: "Apple store",
                             ownerId: 1,
@@ -272,6 +283,7 @@ function getResult() {
                             status: 1
                         },
                         {
+                            favoriteId: 2,
                             shopId: 2,
                             shopName: "Apple store",
                             ownerId: 1,
@@ -280,6 +292,7 @@ function getResult() {
                             status: 1
                         },
                         {
+                            favoriteId: 3,
                             shopId: 3,
                             shopName: "Apple store",
                             ownerId: 1,
@@ -288,6 +301,7 @@ function getResult() {
                             status: 1
                         },
                         {
+                            favoriteId: 4,
                             shopId: 4,
                             shopName: "Apple store",
                             ownerId: 1,
@@ -296,6 +310,7 @@ function getResult() {
                             status: 1
                         },
                         {
+                            favoriteId: 5,
                             shopId: 5,
                             shopName: "Apple store",
                             ownerId: 1,
@@ -304,6 +319,7 @@ function getResult() {
                             status: 1
                         },
                         {
+                            favoriteId: 6,
                             shopId: 6,
                             shopName: "Apple store",
                             ownerId: 1,
@@ -312,6 +328,7 @@ function getResult() {
                             status: 1
                         },
                         {
+                            favoriteId: 7,
                             shopId: 7,
                             shopName: "Apple store",
                             ownerId: 1,
@@ -320,6 +337,7 @@ function getResult() {
                             status: 1
                         },
                         {
+                            favoriteId: 8,
                             shopId: 8,
                             shopName: "Apple store",
                             ownerId: 1,
@@ -328,6 +346,7 @@ function getResult() {
                             status: 1
                         },
                         {
+                            favoriteId: 9,
                             shopId: 9,
                             shopName: "Apple store",
                             ownerId: 1,
@@ -402,7 +421,7 @@ function createShopItem(data) {
         '<div class="removeShop"> ' +
         '<button id="removeShop">REMOVE</button> ' +
         '</div> ' +
-        '</li>').data("productId", data.favoriteId);
+        '</li>').data("favoritetId", data.favoriteId);
 }
 
 function GetQueryString(name) {
@@ -471,6 +490,7 @@ var remove = (function(){
             var _this = $(this);
             if (loading) return;
             var $goods = _this.parents(".goods-item");
+            if(!$goods) { $goods = _this.parents(".shop-item"); }
             loading = showLoading($goods);
             var data = "favoriteId=" + $goods.data("favoriteId");
             $.ajax({
