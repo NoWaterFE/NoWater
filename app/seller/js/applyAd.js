@@ -131,21 +131,10 @@ $.ajax({
     method: "get",
     url: "/proxy/shop-owner/current/apply"
 }).done(function (result){
-
-}).fail(function (result) {
-    /*result = {
-        status: 300,
-        data: [
-            {
-                photo: ["imgs/product01a.jpg"],
-                price: 999
-            }
-        ]
-    };
     var status = result.status,
-        data = result.data[0],
-        photo = data.photo[0];
-    if(status==300){
+        data = result.data[0];
+    if(status==200){
+        var photo = data.photo;
         $applyAd[0].price.value=data.price.toFixed(2);
         $applyAd.data("fileUrl", photo)
             .data("change", "false")
@@ -153,9 +142,45 @@ $.ajax({
             .height(200)
             .find("img")
             .attr("src", photo);
-        $applyAd.find("input").addClass("disabled")
-            .prop("disabled", true);
-    }*/
+        if(data.allow==0) {
+            $applyAd.find("input").addClass("disabled")
+                .prop("disabled", true);
+        }
+    }
+}).fail(function (result) {
+    tipsAlert("Server error!");
+    result = {
+        "allow": 0,
+        "status": 200,
+        "startId": -1,
+        "data": [
+            {
+                "orderId": 1,
+                "time": "2016-12-25 09:52:34",
+                "showTime": "2016-12-26",
+                "shopId": 1,
+                "price": 1500,
+                "photo": "http://koprvhdix117-10038234.file.myqcloud.com/test",
+                "status": 2
+            }
+        ]
+    };
+    var status = result.status,
+        data = result.data[0];
+    if(status==200){
+        var photo = data.photo;
+        $applyAd[0].price.value=data.price.toFixed(2);
+        $applyAd.data("fileUrl", photo)
+            .data("change", "false")
+            .find(".imagesPreview")
+            .height(200)
+            .find("img")
+            .attr("src", photo);
+        if(data.allow==0) {
+            $applyAd.find("input").addClass("disabled")
+                .prop("disabled", true);
+        }
+    }
 });
 
 function applyAd(_this, loading) {
