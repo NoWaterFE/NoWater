@@ -599,7 +599,7 @@ function createGoodsItem(data) {
     return $('<li class="goods-item"> ' +
         '<a class="item-detail" href="productDetail.html?id='+data.productId+'"> ' +
         '<div class="item-image"> ' +
-        '<img src="'+data.photoUrl+'"> ' +
+        '<img src="'+data.photoUrl[0]+'"> ' +
         '</div> ' +
         '<div class="item-name"> ' +
         data.productName +
