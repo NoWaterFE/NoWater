@@ -206,7 +206,7 @@ function enter() {
     var keyWord = $("#keyWordInStore").val();
     var e= window.event;
     if (e.keyCode == 13 && keyWord) {
-        location.href = "store.html?shopId=" + encodeURIComponent(shopId) + "&keyWord=" + encodeURIComponent(keyWord);
+        location.href = "store.html?shopId=" + shopId + "&keyWord=" + encodeURIComponent(keyWord);
     }
 }
 
@@ -218,7 +218,7 @@ $("#searchInStore").click(function(e){
         e.returnValue = false;
     }
     if (keyWord) {
-        location.href = "store.html?shopId=" + encodeURIComponent(shopId) + "&keyWord=" + encodeURIComponent(keyWord);
+        location.href = "store.html?shopId=" + shopId + "&keyWord=" + encodeURIComponent(keyWord);
     }
 });
 
@@ -292,7 +292,7 @@ function getClass() {
         $adGoods = null;
     })
         .fail(function(result){
-            /*result = {
+            result = {
                 status: 200,
                 actualCount: 10,
                 startId: 2,
@@ -425,7 +425,7 @@ function getClass() {
                 $noResult.text("No class found,please try another class name.");
                 $noResult.css('display','block');
                 return;
-            }*/
+            }
             $adGoods = null;
         });
 }
@@ -599,7 +599,7 @@ function createGoodsItem(data) {
     return $('<li class="goods-item"> ' +
         '<a class="item-detail" href="productDetail.html?id='+data.productId+'"> ' +
         '<div class="item-image"> ' +
-        '<img src="'+data.photoUrl+'"> ' +
+        '<img src="'+data.photoUrl[0]+'"> ' +
         '</div> ' +
         '<div class="item-name"> ' +
         data.productName +

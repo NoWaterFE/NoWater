@@ -4,8 +4,6 @@ $(function () {
        header.css("left", -_this.scrollLeft());
     });
 
-
-	var host = "http://123.206.100.98:16120";
     var login = $("#login");
 
 	login.on("submit", function (e) {

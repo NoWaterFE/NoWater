@@ -515,6 +515,14 @@ $orderList.on("click", ".more .showMore", function(e){
 
 $orderList.on("click", ".orderItem .payNow", payNow);
 $orderList.on("click", ".orderItem .confirmR", confirmR);
+$orderList.on("click", ".orderItem .comment", function () {
+    var _this = $(this),
+        $orderItem = _this.parents(".orderItem"),
+        info = $orderItem.data("info"),
+        $commentPop = $(".commentPop");
+    $commentPop.show()
+        .find(".commentForm")[0].orderId.value = info.orderId;
+});
 $orderList.on("click", ".orderItem .cancel", function () {
     var self = this;
     tipsConfirm("Are you sure want to cancel the order?", function(){
@@ -543,3 +551,100 @@ $orderMain.find(".orderTab")
     .addClass("active");
 
 postOrder(orderStatus);
+
+//输入错误提示
+function addError(item, msg){
+    item.addClass("error")
+        .find("input")
+        .focus()
+        .end()
+        .find(".tips")
+        .text(msg);
+}
+
+var $commentForm = $("#commentForm");
+
+$commentForm.on("input", ".input-item textarea", function () {
+    var _this = $(this);
+    _this.parent().removeClass('error');
+});
+
+$commentForm.on("mousemove", ".star", function(e){
+    var _this = $(this);
+    if(_this.hasClass("active")) return;
+    var cX = e.clientX,
+        left = _this.offset().left,
+        width = _this.width(),
+        rate = Math.ceil((cX - left)/width*5);
+    _this.find(".full")
+        .width(rate*20+"%");
+});
+
+$commentForm.on("mouseout", ".star", function(e){
+    var _this = $(this),
+        width = _this.find(".starInput").val()*20 + "%";
+    _this.find(".full")
+        .width(width);
+});
+
+$commentForm.on("click", ".star", function(e){
+    var _this = $(this),
+        cX = e.clientX,
+        left = _this.offset().left,
+        width = _this.width(),
+        rate = Math.ceil((cX - left + 1)/width*5);
+    _this.addClass("active")
+    _this.find(".full")
+        .width(rate*20+"%")
+        .end()
+        .find(".starInput")
+        .val(rate)
+        .parents(".starDiv")
+        .removeClass("error");
+});
+
+$commentForm.on("click", ".cancel", function (e) {
+    var $delegateTarget = $(e.delegateTarget);
+    $delegateTarget[0].reset();
+    $delegateTarget
+        .find(".full")
+        .width(0)
+        .end()
+        .find(".star")
+        .removeClass("active")
+        .find(".starInput")
+        .val(0)
+        .end()
+        .end()
+        .parent()
+        .hide();
+});
+
+$commentForm.on("submit", function (e) {
+    var _this = $(this);
+    e.preventDefault();
+    var $starDiv = _this.find(".starDiv"),
+        $comment = _this.find(".comment");
+    if (this.star.value==0) {
+        addError($starDiv, "Please choose a star-rating!");
+        return;
+    }
+    if (!this.comment.value) {
+        addError($comment, "Please input your reviews!");
+        return;
+    }
+    if(_this.data("submit")) return ;
+    _this.data("submit", true);
+    var loading = showLoading(_this);
+    $.ajax({
+        method: "post",
+        url: "/proxy/",
+        data: _this.serialize()
+    }).done(function(result){
+
+    }).fail(function(result){
+        if(loading) loading.remove();
+        _this.data("submit", false);
+    });
+
+});

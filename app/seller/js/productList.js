@@ -37,7 +37,7 @@ function createProductList(info){
         '<input type="button" value="Off" class="delete"> ' +
     '</div> ' :
     '<div class="off"> ' +
-        'under the shelf' +
+        'off the shelf' +
     '</div>';
     return $('<tr class="productItem"> ' +
         '<td> ' +

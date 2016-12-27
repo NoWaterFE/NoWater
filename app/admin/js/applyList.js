@@ -157,9 +157,11 @@ function createApplyList(info) {
         '</div> ' +
         '</li>').data("shopId", info.shopId);
     var $img = $applyList.find("img");
-    $img.ready(function () {
+    var img = new Image();
+    img.src = info.photo[0];
+    img.onload = function () {
        imgAuto($img);
-    });
+    };
     return $applyList;
 }
 

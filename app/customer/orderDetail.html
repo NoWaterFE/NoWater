@@ -151,6 +151,34 @@
         © Copyright NoWaterFE
     </div>
 </footer>
+<div class="commentPop">
+    <div class="shadow"></div>
+    <form class="commentForm" id="commentForm" novalidate>
+        <input type="hidden" name="orderId">
+        <i class="cancel close"></i>
+        <h2 class="title">Comment Product</h2>
+        <div class="input-item starDiv">
+            <label class="redStar">Star:</label>
+            <div class="star">
+                <span class="blank"></span>
+                <div class="full">
+                    <span></span>
+                </div>
+                <input type="hidden" name="star" class="starInput" value="0">
+            </div>
+            <span class="tips"></span>
+        </div>
+        <div class="input-item comment">
+            <label for="comment" class="redStar">Reviews:</label>
+            <textarea name="comment" id="comment" rows="4" placeholder="your reviews (no more than 200 characters)"></textarea>
+            <span class="tips"></span>
+        </div>
+        <div class="submit">
+            <input type="submit" value="CONFIRM">
+            <input type="button" value="CANCEL" class="cancel">
+        </div>
+    </form>
+</div>
 <script type="text/javascript" src="js/orderDetail.js"></script>
 </body>
 

@@ -210,13 +210,43 @@ function createSImageList(imgArray){
     return $(sImage);
 }
 
+function createReviewList(data) {
+    return $('<li class="reviewList clearfix"> ' +
+        '<div class="userName">' +
+            data.userName +
+        '</div> ' +
+        '<div class="comment"> ' +
+            '<div class="star"> ' +
+                '<span class="blank"></span> ' +
+                '<div class="full l'+data.star+'"> ' +
+                    '<span></span> ' +
+                '</div> ' +
+            '</div> ' +
+            '<div class="text">' +
+                data.commentContent +
+                '</div> ' +
+            '<div class="time">' +
+                data.time +
+            '</div> ' +
+        '</div> ' +
+        '</li>');
+}
+
 function enter() {
     var keyWord = $("#keyWordInStore").val();
     var e= window.event;
     if (e.keyCode == 13 && keyWord) {
-        location.href = "store.html?shopId=" + encodeURIComponent(shopId) + "&keyWord=" + encodeURIComponent(keyWord);
+        location.href = "store.html?shopId=" + shopId + "&keyWord=" + encodeURIComponent(keyWord);
     }
 }
+
+$("#searchInStore").click(function(e){
+    var keyWord = $("#keyWordInStore").val();
+    e.preventDefault();
+    if (keyWord) {
+        location.href = "store.html?shopId=" + shopId + "&keyWord=" + encodeURIComponent(keyWord);
+    }
+});
 
 var shopId = 1;
 
@@ -264,12 +294,25 @@ var shopId = 1;
             $product.show();
             var $num = $productForm.find('.num');
             checkState($num);
+            var comment = data.comment,
+                avgPoint = comment.avgPoint,
+                commentList = comment.commentList,
+                $reviews = $("#reviews"),
+                $reviewSet = $reviews.find(".reviewSet");
+            $reviews.find(".avgStar")
+                .find(".full")
+                .width(avgPoint*20+"%").end()
+                .find(".num")
+                .text(avgPoint +" out of 5 stars");
+            for(len=commentList.length, i=0; i<len; i++){
+                $reviewSet.append(createReviewList(commentList[i]));
+            }
         } else if(status==400){
             $product.html("The product doesn't exist.").show();
         }
     }).fail(function (result) {
-        tipsAlert("server error!");
-        /*result = {
+        //tipsAlert("server error!");
+        result = {
             status: 200,
             data: {
                 shop: {
@@ -289,13 +332,48 @@ var shopId = 1;
                 productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
                 price: 199,
                 quantityStock: 50,
-                idDel: 0,
+                isDel: 1,
                 photo: [
                     "imgs/product01a.jpg",
                     "imgs/product02a.jpg",
                     "imgs/product03a.jpg",
                     "imgs/product04a.jpg"
-                ]
+                ],
+                "comment": {
+                    "avgPoint": 4,
+                    "commentList": [
+                        {
+                            "productId": 1,
+                            "star": 4,
+                            "orderId": 1,
+                            "commentContent": "good",
+                            "userName": "w*****",
+                            "userId": 3,
+                            "commentId": 1,
+                            "time": "2016-12-27 16:29:48"
+                        },
+                        {
+                            "productId": 1,
+                            "star": 3,
+                            "orderId": 1,
+                            "commentContent": "good",
+                            "userName": "w*****",
+                            "userId": 3,
+                            "commentId": 1,
+                            "time": "2016-12-27 16:29:48"
+                        },
+                        {
+                            "productId": 1,
+                            "star": 5,
+                            "orderId": 1,
+                            "commentContent": "good",
+                            "userName": "w*****",
+                            "userId": 3,
+                            "commentId": 1,
+                            "time": "2016-12-27 16:29:48"
+                        }
+                    ]
+                }
             }
         };
         var status = result.status;
@@ -305,6 +383,7 @@ var shopId = 1;
                 shop = data.shop;
             shopId = shop.shopId;
             $("#shopName").text(shop.shopName);
+            $("#detail").html("Telephone: " + shop.telephone + "<br>" + "E-mail: " +shop.email);
             var classList = shop.classList,
                 len = classList.length,
                 $menuList = $("#menuList"),
@@ -328,9 +407,29 @@ var shopId = 1;
                 .end()
                 .find(".smallImages").append(createSImageList(data.photo));
             $product.show();
+            var $num = $productForm.find('.num');
+            checkState($num);
+            var comment = data.comment,
+                avgPoint = comment.avgPoint,
+                commentList = comment.commentList,
+                $reviews = $("#reviews"),
+                $reviewSet = $reviews.find(".reviewSet");
+            $reviews.find(".avgStar")
+                .find(".full")
+                .width(avgPoint*20+"%").end()
+                .find(".num")
+                .text(avgPoint +" out of 5 stars");
+            for(len=commentList.length, i=0; i<len; i++){
+                $reviewSet.append(createReviewList(commentList[i]));
+            }
+            if(data.isDel==1) {
+                var $operate = $product.find(".operate");
+                $operate.addClass("off")
+                    .text("Off the shelf");
+            }
         } else if(status==400){
             $product.html("The product doesn't exist.").show();
-        }*/
+        }
     });
 
     var $storeMenu = $("#menuBar");

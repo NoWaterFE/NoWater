@@ -7,11 +7,18 @@
         dataType: "json"
     });
     getStoreAd.done(function (result) {
-        if(result.status==200){
-            var adLi = $adStore.find(".carousel li");
-            for(var i=result.data.length-1; i>=0; i--){
-                adLi.eq(i).data("shopId", result.data[i].shopId);
-                adLi.eq(i).find("img").attr({src: result.data[i].adPhotoUrl});
+        if (result.status == 200) {
+            var $carousel = $adStore.find(".carousel"),
+                $spot = $adStore.find(".spot"),
+                data = result.data,
+                len = data.length,
+                shopItem = createShopItem(data);
+            if(shopItem) {
+                $carousel.append(shopItem)
+                    .css('width', len*100+"%");
+                $spot.append(createSpot(len));
+            } else {
+                $adStore.hide();
             }
         }
         $adStore = null;
@@ -44,10 +51,17 @@
             ]
         };
         if (result.status == 200) {
-            var adLi = $adStore.find(".carousel li");
-            for (var i = result.data.length - 1; i >= 0; i--) {
-                adLi.eq(i).data("shopId", result.data[i].shopId);
-                adLi.eq(i).find("img").attr({src: result.data[i].adPhotoUrl});
+            var $carousel = $adStore.find(".carousel"),
+                $spot = $adStore.find(".spot"),
+                data = result.data,
+                len = data.length,
+                shopItem = createShopItem(data);
+            if(shopItem) {
+                $carousel.append(shopItem)
+                    .css('width', len*100+"%");
+                $spot.append(createSpot(len));
+            } else {
+                $adStore.hide();
             }
         }
         $adStore = null;
@@ -186,6 +200,24 @@ function createGoodsItem(data) {
             '</div> ' +
         '</div> ' +
         '</li>').data("productId", data.productId);
+}
+
+function createShopItem(data) {
+    var len = data.length;
+    if(len == 0) return ;
+    var shop = '<li class="active"><a href="store.html?shopId='+data[0].shopId+'"><img src="'+data[0].adPhotoUrl+'"></a></li>';
+    for(var i=1; i<len; i++){
+        shop += '<li class="active"><a href="store.html?shopId='+data[i].shopId+'"><img src="'+data[i].adPhotoUrl+'"></a></li>';
+    }
+    return $(shop);
+}
+
+function createSpot(len) {
+    var spot = '<li class="active"></li>';
+    for(var i=1; i<len; i++){
+        spot += '<li></li>';
+    }
+    return $(spot);
 }
 
 
@@ -342,12 +374,6 @@ $adStore.on("click", ".spot li", function (event) {
     event.cancelBubble = true;
     var index = $(this).index();
     goAd(index);
-});
-$adStore.on("click", ".carousel li", function (event) {
-    if(event && event.stopPropagation) event.stopPropagation();
-    event.cancelBubble = true;
-    var id = $(this).data("shopId");
-    location.href="store.html?shopId="+id;
 });
 $adStore.on("mouseover", function () {
     if (adTimer) clearInterval(adTimer);
