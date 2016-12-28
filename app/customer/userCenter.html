@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>PARKnSHOP</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="stylesheet" type="text/css" href="style/userCenter.css">
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+</head>
+
+<body>
+<header>
+    <div class="header">
+        <div class="menu" id="headMenu">
+            <i></i><span>PRODUCT</span>
+            <ul class="menuList">
+                <li data-pt="1">TV & Home Theater</li>
+                <li data-pt="2">Computers & Tablets</li>
+                <li data-pt="3">Cell Phones</li>
+                <li data-pt="4">Cameras & Camcorders</li>
+                <li data-pt="5">Audio</li>
+                <li data-pt="6">Car Electronics & GPS</li>
+                <li data-pt="7">Video, Games, Movies & Music</li>
+                <li data-pt="8">Health, Fitness & Sports</li>
+                <li data-pt="9">Home & Office</li>
+            </ul>
+        </div>
+        <div class="logo">
+            <a href="index.html">
+                <img src="imgs/head_icon/logo.png" alt="logo">
+            </a>
+        </div>
+        <div class="search">
+            <form novalidate="novalidate" id="searchForm">
+                <div class="search-input">
+                    <input type="text" name="keyWord" placeholder="Search your goods here">
+                    <span class="searchBtn"></span>
+                </div>
+            </form>
+        </div>
+        <ul class="quick-menu" id="quickMenu">
+            <li class="seller-center">
+                <a href="../seller">
+                    <i></i><span>SELLER CENTER</span>
+                </a>
+            </li>
+            <li class="account">
+                <a href="javascript:;">
+                    <i></i><span>ACCOUNT</span>
+                </a>
+                <ul class="accountOperate noLogin active">
+                    <li><a href="register.html">Register</a></li>
+                    <li><a href="login.html">Login</a></li>
+                </ul>
+                <ul class="accountOperate hasLogin">
+                    <li><a href="userCenter.html">Account Info</a></li>
+                    <li><a href="order.html">My Orders</a></li>
+                    <li><a href="javascript:;" class="logout">Logout</a></li>
+                </ul>
+            </li>
+            <li class="favorites">
+                <a href="favourite.html">
+                    <i></i><span>FAVORITES</span>
+                </a>
+            </li>
+            <li class="my-cart">
+                <a href="cart.html">
+                    <i><em class="count">0</em></i><span>MY CART</span>
+                </a>
+            </li>
+        </ul>
+    </div>
+</header>
+<div class="content clearfix">
+    <!--页面写在这-->
+    <div class="nav">
+        <h3 class="title">Your Account</h3>
+        <ul>
+            <li class="category active"><a href="userCenter.html">Personal Details</a></li>
+            <li class="category"><a href="modifyAddress.html">Modify Address</a></li>
+            <li class="category"><a href="changePassword.html">Change Password</a></li>
+        </ul>
+    </div>
+    <div class="page">
+        <form id="infoForm" class="infoForm" novalidate>
+            <h2 class="title">Personal Details</h2>
+            <div class="input-item name">
+                <label for="name" class="redStar">Username</label>
+                <input type="text" name="name" id="name" maxlength="30" disabled required>
+                <span class="tips"></span>
+            </div>
+            <div class="input-item firstName">
+                <label for="firstName" class="redStar">First Name</label>
+                <input type="text" name="firstName" id="firstName" maxlength="30" required>
+                <span class="tips"></span>
+            </div>
+            <div class="input-item lastName">
+                <label for="lastName" class="redStar">Last Name</label>
+                <input type="text" name="lastName" id="lastName" maxlength="30" required>
+                <span class="tips"></span>
+            </div>
+            <div class="input-item telephone">
+                <label for="telephone" class="redStar">Telephone</label>
+                <input type="tel" name="telephone" id="telephone" maxlength="10" required>
+                <span class="tips"></span>
+            </div>
+            <div class="input-item postCode">
+                <label for="postCode" class="redStar">Post Code</label>
+                <input type="text" name="postCode" id="postCode" maxlength="50" required>
+                <span class="tips"></span>
+            </div>
+            <div class="input-item area">
+                <label for="area" class="redStar">Area</label>
+                <select id="area" name="address1" ></select>
+            </div>
+            <div class="input-item district">
+                <label for="district" class="redStar">District</label>
+                <select id="district" name="address2" ></select>
+            </div>
+
+            <div class="input-item address">
+                <label for="address" class="redStar">Address</label>
+                <input type="text" name="address3" id="address" maxlength="50" required>
+                <span class="tips"></span>
+            </div>
+
+            <div class="register">
+            </div>
+            <div class="submit">
+                <input type="submit" value="SAVE">
+            </div>
+        </form>
+    </div>
+</div>
+<footer>
+    <div class="footer">
+        © Copyright NoWaterFE
+    </div>
+</footer>
+<script type="text/javascript" src="js/userCenter.js"></script>
+</body>
+
+</html>

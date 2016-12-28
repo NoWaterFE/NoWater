@@ -25,8 +25,97 @@
             }
         }
     }
+    .filter {
+        margin: 14px 0;
+        .inputItems {
+            float: left;
+        }
+        .search {
+            input {
+                float: left;
+                height: 20px;
+                font-size: 14px;
+                padding: 2px 4px;
+                border: 1px solid #bfbfbf;
+            }
+            .searchBtn {
+                width: 40px;
+                height: 26px;
+                background: url(../imgs/head_icon/search.png) no-repeat center;
+                margin-left: -1px;
+                font-size: 0;
+                cursor: pointer;
+            }
+            .moreFilter {
+                font-size: 13px;
+                line-height: 26px;
+                margin-left: 20px;
+                float: left;
+                cursor: pointer;
+                user-select: none;
+                .down {
+                    border: 1px solid #000;
+                    border-top-color: transparent;
+                    border-right-color: transparent;
+                    width: 6px;
+                    height: 6px;
+                    display: inline-block;
+                    transform: rotate(-45deg) translate(4px, 0);
+                }
+                .lessText {
+                    display: none;
+                }
+                &.less {
+                    .down {
+                        transform: rotate(135deg) translate(0, -4px);
+                    }
+                    .lessText {
+                        display: inline-block;
+                    }
+                    .moreText {
+                        display: none;
+                    }
+                }
+            }
+        }
+        .timeSub {
+            display: none;
+            .searchBtn {
+                background: #292d84;
+                border: none;
+                color: #fff;
+                border-radius: 4px;
+                padding: 6px 10px;
+                cursor: pointer;
+            }
+        }
+        .time {
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        .timeSelect {
+            height: 26px;
+            font-size: 14px;
+            border: 1px solid #bfbfbf;
+            float: left;
+            padding-left: 4px;
+        }
+        .detailTime {
+            margin-left: 10px;
+            font-size: 13px;
+            display: none;
+            float: left;
+        }
+        .selectTime {
+            width: 120px;
+            height: 20px;
+            font-size: 14px;
+            padding: 2px 4px;
+            border: 1px solid #bfbfbf;
+        }
+    }
     .orderList {
-        margin: 20px 0;
+        margin: 14px 0;
         color: #3c3c3c;
         .orderTable {
             width: 100%;

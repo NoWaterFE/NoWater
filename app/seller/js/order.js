@@ -383,3 +383,59 @@ $deliverForm.on("click", ".cancel", function (e) {
     $delegateTarget.parent()
         .hide();
 });
+
+var $orderFilter = $("#orderFilter"),
+    $orderForm = $orderFilter.find(".orderForm");
+$orderFilter.on("click", ".moreFilter", function(){
+    $(this).toggleClass("less")
+        .parent()
+        .siblings(".timeSub")
+        .slideToggle(200);
+});
+$orderFilter.on("change", ".timeSelect", function () {
+    var _this = $(this);
+    if(_this.val()=="5"){
+        _this.siblings('.detailTime').show();
+        $('.selectTime').datepicker({
+            format: 'yyyy-mm-dd'
+        }).datepicker(
+            "setDate", new Date()
+        ).blur(function(){
+            var _this = $(this);
+            _this.datepicker("setDate", _this.datepicker("getDate"));
+        });
+    } else {
+        _this.siblings('.detailTime').hide();
+    }
+});
+$orderForm.on("submit", (function(){
+    return function(e){
+        e.preventDefault();
+        var _this = $(this),
+            isShow = _this.find(".moreFilter").hasClass("less"),
+            searchKey = _this[0].search.value,
+            param = null;
+        if(isShow) {
+            var time = _this[0].time.value;
+            if(time!="5") {
+                param = {
+                    time: time,
+                    searchKey: searchKey
+                };
+            } else {
+                param = {
+                    time: time,
+                    searchKey: searchKey,
+                    startTime: _this.find(".startTime").val(),
+                    endTime: _this.find(".endTime").val()
+                };
+            }
+        } else {
+            if(searchKey==="") return;
+            param = {
+                searchKey: searchKey
+            };
+        }
+        if(param) postOrder(orderStatus, param);
+    };
+})());

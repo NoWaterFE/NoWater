@@ -272,9 +272,13 @@ function　createOrderItem(data){
 
 var postOrder = (function(){
     var loading = null;
-    return function (orderStatus) {
+    return function (orderStatus, param) {
         if(loading) return ;
-        loading = showLoading($(".more"));
+        if(param) {
+            loading = showLoading($orderForm);
+        } else {
+            loading = showLoading($(".more"));
+        }
         var reqData = "status="+orderStatus;
         $.ajax({
             method: "get",
@@ -334,11 +338,17 @@ var postOrder = (function(){
             };
             var status = result.status;
             if(status==200){
-                var len = result.data.length,
+                var data = result.data,
+                    len = data.length,
                     $orderTable = $orderList.find('.orderTable');
+                if(param) {
+                    $orderTable.find(".orderItem").remove();
+                    data = data.concat(data);
+                    len = data.length;
+                }
                 for(var i=0; i<len; i++){
-                    if(orderStatus!=0) { result.data[i].status=orderStatus }
-                    $orderTable.append(createOrderItem(result.data[i]));
+                    if(orderStatus!=0) { data[i].status=orderStatus }
+                    $orderTable.append(createOrderItem(data[i]));
                 }
             } else if(status==300) {
                 location.href = loginUrl;
@@ -648,3 +658,59 @@ $commentForm.on("submit", function (e) {
     });
 
 });
+
+var $orderFilter = $("#orderFilter"),
+    $orderForm = $orderFilter.find(".orderForm");
+$orderFilter.on("click", ".moreFilter", function(){
+   $(this).toggleClass("less")
+       .parent()
+       .siblings(".timeSub")
+       .slideToggle(200);
+});
+$orderFilter.on("change", ".timeSelect", function () {
+   var _this = $(this);
+   if(_this.val()=="5"){
+       _this.siblings('.detailTime').show();
+       $('.selectTime').datepicker({
+           format: 'yyyy-mm-dd'
+       }).datepicker(
+           "setDate", new Date()
+       ).blur(function(){
+           var _this = $(this);
+           _this.datepicker("setDate", _this.datepicker("getDate"));
+       });
+   } else {
+       _this.siblings('.detailTime').hide();
+   }
+});
+$orderForm.on("submit", (function(){
+    return function(e){
+        e.preventDefault();
+        var _this = $(this),
+            isShow = _this.find(".moreFilter").hasClass("less"),
+            searchKey = _this[0].search.value,
+            param = null;
+        if(isShow) {
+            var time = _this[0].time.value;
+            if(time!="5") {
+                param = {
+                    time: time,
+                    searchKey: searchKey
+                };
+            } else {
+                param = {
+                    time: time,
+                    searchKey: searchKey,
+                    startTime: _this.find(".startTime").val(),
+                    endTime: _this.find(".endTime").val()
+                };
+            }
+        } else {
+            if(searchKey==="") return;
+            param = {
+                searchKey: searchKey
+            };
+        }
+        if(param) postOrder(orderStatus, param);
+    };
+})());

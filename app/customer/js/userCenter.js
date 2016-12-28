@@ -191,4 +191,3 @@ function showSpinner(msg, config){
         if(callback) callback();
     }, def.timeout);
 }
-showSpinner("add success");
