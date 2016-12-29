@@ -1,4 +1,3 @@
-var host="http://123.206.100.98:16120";
 var loginForm = $("#loginForm");
 loginForm.on("submit", function (e) {
     var _this = $(this); 
@@ -26,11 +25,8 @@ loginForm.on("submit", function (e) {
 
     $.ajax({
         type: "post",
-        url: host+"/customer/login",
+        url: "/proxy/customer/login",
         dataType: "json",
-        xhrFields: {
-            withCredentials: true
-        },
         data: data     //序列化
     }).done(function(result){
         if(tips) tips.remove();
@@ -42,7 +38,7 @@ loginForm.on("submit", function (e) {
            if(url) {
             location.href = decodeURIComponent(url);
            } else {
-            location.href = "index.html";
+            location.href = "modifyInfo.html";
            }
        }
     }).fail(function(result) {
@@ -58,7 +54,7 @@ loginForm.on("submit", function (e) {
        //     if(url) {
        //      location.href = url;
        //     } else {
-       //      location.href = "index.html";
+       //      location.href = "modifyInfo.html";
        //     }
        // }
     });

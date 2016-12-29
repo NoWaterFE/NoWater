@@ -7,7 +7,7 @@
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="js/userInfo.js"></script>
-    <link rel="stylesheet" type="text/css" href="style/index.css">
+    <link rel="stylesheet" type="text/css" href="style/productList.css">
 </head>
 <body>
 <header>
@@ -22,12 +22,8 @@
                 <a href="javascript:;">
                     <i></i><span>ACCOUNT</span>
                 </a>
-                <ul class="accountOperate noLogin">
-                    <li><a href="register.html">Register</a></li>
-                    <li><a href="login.html">Login</a></li>
-                </ul>
                 <ul class="accountOperate hasLogin active">
-                    <li><a href="userCenter.html">Account Info</a></li>
+                    <li><a href="../customer/userCenter.html">Account Info</a></li>
                     <li><a href="javascript:;" class="logout">Logout</a></li>
                 </ul>
             </li>
@@ -52,18 +48,24 @@
                 <h2 class="title">Advertising Management</h2>
                 <ul>
                     <li class="navList">
-                        <a href="applyAd.html">Apply Advertisement</a>
+                        <a href="applyAd.html">Shop Advertising</a>
                     </li>
                     <li class="navList">
-                        <a href="#">Homepage Design</a>
+                        <a href="adHistory.html">Advertising History</a>
+                    </li>
+                    <li class="navList">
+                        <a href="homepageDesign.html">Homepage Design</a>
                     </li>
                 </ul>
             </li>
             <li class="category">
-                <h2 class="title">Order Management</h2>
+                <h2 class="title">Sale Management</h2>
                 <ul>
                     <li class="navList">
                         <a href="order.html">All Order</a>
+                    </li>
+                    <li class="navList">
+                        <a href="shopIncome.html">Shop Income</a>
                     </li>
                 </ul>
             </li>
@@ -71,42 +73,96 @@
                 <h2 class="title">Shop Management</h2>
                 <ul>
                     <li class="navList">
-                        <a href="index.html">Modify shop information</a>
+                        <a href="modifyInfo.html">Modify shop information</a>
                     </li>
                 </ul>
             </li>
         </ul>
     </div>
     <div class="page">
-        <form id="infoForm" novalidate>
-            <h2 class="title">Your Shop Information</h2>
-            <div class="shopName shopInfo">
-                <label for="shopName" class="redStar">Shop name</label>
-                <input type="text" name="shopName" id="shopName" maxlength="50" class="disabled" disabled>
+        <h2 class="title">Product List</h2>
+        <div class="productList" id="productList">
+            <table>
+                <tbody>
+                <tr class="productTitle">
+                    <th class="id">Product ID</th>
+                    <th class="image">Product Image</th>
+                    <th class="name">Product Name</th>
+                    <th class="categories">Product Categories</th>
+                    <th class="price">Product Price(HK$)</th>
+                    <th class="stock">Product Stock</th>
+                    <th class="operate">Operate</th>
+                </tr>
+                </tbody>
+            </table>
+            <div class="more">
+                <div class="showMore hidden">
+                    <span>SHOW MORE</span>
+                    <span class="down"></span>
+                </div>
             </div>
-            <div class="shopEmail shopInfo">
-                <label for="shopEmail" class="redStar">Email</label>
-                <input type="email" name="email" id="shopEmail" required>
-            </div>
-            <div class="shopTel shopInfo">
-                <label for="shopTel" class="redStar">Telephone</label>
-                <input type="tel" name="telephone" id="shopTel" required>
-            </div>
-            <!--<div class="alipay shopInfo">
-                <label for="alipay" class="redStar">Alipay</label>
-                <input type="text" name="alipay" id="alipay" required>
-            </div>-->
-            <div class="submit">
-                <input type="submit" value="SAVE">
-            </div>
-        </form>
+        </div>
     </div>
+</div>
+<div class="modifyPop">
+    <div class="shadow"></div>
+    <form class="modifyProduct" id="modifyProduct" novalidate>
+        <input type="hidden" name="productId">
+        <input type="hidden" name="detailPhotoList">
+        <i class="cancel close"></i>
+        <h2 class="title">Modify Your Product</h2>
+        <div class="input-item productName">
+            <label for="productName" class="redStar">Product Name:</label>
+            <input type="text" name="productName" id="productName" maxlength="240" required>
+            <span class="tips"></span>
+        </div>
+        <div class="input-item productCategories">
+            <label for="productCategories" class="redStar">Product Categories:</label>
+            <select name="classId" id="productCategories">
+                <option value="1">TV & Home Theater</option>
+                <option value="2">Computers & Tablets</option>
+                <option value="3">Cell Phones</option>
+                <option value="4">Cameras & Camcorders</option>
+                <option value="5">Audio</option>
+                <option value="6">Car Electronics & GPS</option>
+                <option value="7">Video, Games, Movies & Music</option>
+                <option value="8">Health, Fitness & Sports</option>
+                <option value="9">Home & Office</option>
+            </select>
+            <span class="tips"></span>
+        </div>
+        <div class="input-item productPrice">
+            <label for="productPrice" class="redStar">Product Price(HK):</label>
+            <input type="text" name="price" id="productPrice" maxlength="10" required>
+            <span class="tips"></span>
+        </div>
+        <div class="input-item productStock">
+            <label for="productStock" class="redStar">Product Stock:</label>
+            <input type="text" name="quantityStock" id="productStock" maxlength="10" required>
+            <span class="tips"></span>
+        </div>
+        <div class="input-item productImages">
+            <label for="productImages" class="redStar">Product Images:</label>
+            <input type="file" name="productImages" id="productImages" accept="image/gif,image/jpeg,image/jpg,image/png" required>
+            <i>Add Images</i>
+            <span class="tips"></span>
+        </div>
+        <div class="preview">
+            <h2>IMAGES PREVIEW (the best images size is 600px*600px)</h2>
+            <ul class="imagesPreview clearfix">
+            </ul>
+        </div>
+        <div class="submit">
+            <input type="submit" value="CONFIRM">
+            <input type="button" value="CANCEL" class="cancel">
+        </div>
+    </form>
 </div>
 <footer>
     <div class="footer">
         © Copyright NoWaterFE
     </div>
 </footer>
-<script type="text/javascript" src="js/index.js"></script>
+<script type="text/javascript" src="js/productList.js"></script>
 </body>
 </html>

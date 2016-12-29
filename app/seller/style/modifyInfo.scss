@@ -7,13 +7,14 @@
         border: 1px solid #E0E0E0;
         padding: 40px;
         border-radius: 4px;
+        min-height: 360px;
         .title {
             border-bottom: 1px solid #E0E0E0;
             font-size: 24px;
             line-height: 34px;
             color: #292d84;
         }
-        .shopInfo {
+        .input-item {
             margin: 20px 0;
             label {
                 display: inline-block;
@@ -31,23 +32,23 @@
                     box-shadow: 0 0 10px #4349C5;
                 }
             }
-        }
-        .shopContacts {
-            textarea {
-                width: 230px;
-                padding: 5px 5px;
+            .tips {
                 font-size: 14px;
-                border: 1px solid #cecece;
-                resize: none;
-                &:focus {
-                    border-color: #4349C5;
-                    box-shadow: 0 0 10px #4349C5;
+                color: red;
+                display: none;
+            }
+            &.error {
+                input {
+                    border-color: red;
+                }
+                .tips {
+                    display: inline-block;
                 }
             }
         }
         .submit {
             padding-left: 180px;
-            margin-top: 40px;
+            margin: 40px 0;
             input[type=submit] {
                 width: 120px;
                 height: 40px;
@@ -57,6 +58,11 @@
                 background: #292d84;
                 color: #fff;
             }
+        }
+        .applying {
+            color: red;
+            font-size: 16px;
+            line-height: 24px;
         }
     }
 }

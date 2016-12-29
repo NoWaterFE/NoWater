@@ -15,10 +15,10 @@
             url: "/proxy/customer/loginout"
         }).done(function(){
             delCookie("token");
-            location.href = "../customer/index.html"
+            location.href = "../customer/modifyInfo.html"
         }).fail(function () {
             delCookie("token");
-            location.href = "../customer/index.html"
+            location.href = "../customer/modifyInfo.html"
         });
     });
 })();
@@ -109,11 +109,4 @@ function showSpinner(msg, config){
         var callback = def.callback;
         if(callback) callback();
     }, def.timeout);
-}
-
-if(userInfo) {
-    var infoForm = $("#infoForm");
-    infoForm[0].shopName.value = userInfo.shopName;
-    infoForm[0].email.value = userInfo.email;
-    infoForm[0].telephone.value = userInfo.telephone;
 }

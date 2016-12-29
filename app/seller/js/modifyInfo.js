@@ -111,90 +111,91 @@ function showSpinner(msg, config){
     }, def.timeout);
 }
 
-function getUrlParam(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-    var r = window.location.search.substr(1).match(reg); //匹配目标参数
-    if (r != null) return decodeURIComponent(r[2]); return null; //返回参数值
-}
-
-var loginUrl = "../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
-
-var orderIdList = getUrlParam("orderIdList"),
-    sumPrice = getUrlParam("sumPrice"),
-    adType = getUrlParam("type"),
-    $payForm = $("#payForm");
-if(orderIdList && sumPrice && adType){
-    $payForm.find(".price").text(parseFloat(sumPrice).toFixed(2));
+if(userInfo) {
+    var infoForm = $("#infoForm");
+    infoForm[0].shopName.value = userInfo.shopName;
+    infoForm[0].email.value = userInfo.email;
+    infoForm[0].telephone.value = userInfo.telephone;
 } else {
-    location.href = "modifyInfo.html";
+    tipsAlert("Server error!");
 }
 
-var confirmPay = (function(){
-    var loading = null;
-    return function (e) {
-        var _this = $(this);
-        e.preventDefault();
-        if(loading) return ;
-        loading = showLoading(_this);
-        var reqData = "orderIdList="+orderIdList;
-        $.ajax({
-            method: "post",
-            url: "/proxy/order/price",
-            dataType: "json",
-            data: reqData
-        }).done(function (result) {
-            if(loading){
-                loading.remove();
-                loading = null;
-            }
-            var status = result.status;
-            if(status==200){
-                showSpinner("Success", {
-                    callback: function() {
-                        if(adType=="1")
-                            location.href = "adHistory.html";
-                        else {
-                            location.href = "productAd.html"
-                        }
-                    }
-                });
-            } else if(status==300){
-                location.href = loginUrl;
-            } else {
-                tipsAlert("SERVER ERROR!");
-            }
-        }).fail(function (result) {
-            if(loading){
-                loading.remove();
-                loading = null;
-            }
-            tipsAlert("server error!");
-            result = {
-                status: 200
-            };
-            var status = result.status;
-            if(status==200){
-                showSpinner("Success", {
-                    callback: function() {
-                        if(adType=="1")
-                            location.href = "adHistory.html";
-                        else {
-                            location.href = "productAd.html"
-                        }
-                    }
-                });
-            } else if(status==300){
-                location.href = loginUrl;
-            } else {
-                tipsAlert("SERVER ERROR!");
-            }
-        });
-    }
-})();
+var $infoForm = $("#infoForm"),
+    emailReg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/i,
+    telReg = /^\d{8}$/,
+    loginUrl = "../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
 
-$payForm.on("submit", confirmPay);
+//输入错误提示
+function addError(item, msg){
+    item.addClass("error")
+        .find(".tips")
+        .text(msg)
+        .end()
+        .find("input")
+        .focus()
+        [0].scrollIntoView();
+}
 
-$payForm.on("input", ".input-item input", function () {
+$infoForm.on("input", ".input-item input", function () {
     var _this = $(this);
     _this.parent().removeClass('error');
 });
+
+$infoForm.on("submit", (function(){
+    var loading = null;
+    return function(e){
+        e.preventDefault();
+        if(loading) return;
+        var _this = $(this),
+            $shopEmail = _this.find(".shopEmail"),
+            $shopTel = _this.find(".shopTel");
+        if (!emailReg.test(this.email.value)) {
+            addError($shopEmail, "error email!");
+            return;
+        }
+        if (!telReg.test(this.telephone.value)) {
+            addError($shopTel, "error telephone!");
+            return;
+        }
+        loading = showLoading(_this);
+        $.ajax({
+            method: "post",
+            url: "/proxy/shop-owner/info/edit",
+            data: _this.serialize()
+        }).done(function(result){
+            if(loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status == 200) {
+                var msg = "Successful, the changes will take effect after you verify your email";
+                showSpinner(msg);
+                _this.find(".applying").text(msg);
+            } else if (status == 300) {
+                location.href = loginUrl;
+            } else {
+                showSpinner("Unknown error!");
+            }
+        }).fail(function(result){
+            if(loading) {
+                loading.remove();
+                loading = null;
+            }
+            tipsAlert("Server error!");
+            /*result = {
+                status: 200
+            };
+            var status = result.status;
+            if(status == 200) {
+                var msg = "Successful, the changes will take effect after you verify your email";
+                showSpinner(msg);
+                _this.find(".applying").text(msg);
+            } else if (status == 300) {
+                location.href = loginUrl;
+            } else {
+                showSpinner("Unknown error!");
+            }*/
+        });
+    };
+})());

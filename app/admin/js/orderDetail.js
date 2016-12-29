@@ -1,27 +1,23 @@
-// header添加事件
-(function () {
-    function delCookie(name){
-        var t = new Date();
-        t.setTime(t.getTime()-1);
-        document.cookie= name + "=null;path=/;expires="+t.toGMTString();
-    }
+var $logoutBtn = $("#logoutBtn");
 
-    var quickMenu = $("#quickMenu");
-
-    quickMenu.on("click", ".logout", function () {
-        var _this = $(this);
-        $.ajax({
-            method: "post",
-            url: "/proxy/customer/loginout"
-        }).done(function(){
-            delCookie("token");
-            location.href = "../customer/modifyInfo.html"
-        }).fail(function () {
-            delCookie("token");
-            location.href = "../customer/modifyInfo.html"
-        });
+$logoutBtn.click(function () {
+    $.ajax({
+        method: "get",
+        url: "/proxy/admin/logout"
+    }).done(function(){
+        delCookie("admin_token");
+        location.href = "login.html";
+    }).fail(function () {
+        delCookie("admin_token");
+        location.href = "login.html";
     });
-})();
+});
+
+function delCookie(name){
+    var t = new Date();
+    t.setTime(t.getTime()-1);
+    document.cookie= name + "=null;path=/;expires="+t.toGMTString();
+}
 
 
 function showLoading($relative) {
@@ -60,7 +56,12 @@ function tipsAlert(msg, callback){
     $alert.appendTo($("body"));
 }
 
-function tipsConfirm(msg, callback){
+function tipsConfirm(msg, callback, config){
+    var def = {
+        "ok": "OK",
+        "cancel": "Cancel"
+    };
+    $.extend(def, config);
     var $confirm = $(".tipsConfirm");
     if ($confirm.length > 0) $confirm.remove();
     $confirm = $("<div class='tipsConfirm'></div>");
@@ -68,8 +69,8 @@ function tipsConfirm(msg, callback){
     var $content = $("<div class='content'></div>");
     var $msg = $("<div class='msg'>"+ msg +"</div>");
     var $btn = $('<div class="btn2"> ' +
-        '<div class="cancel">Cancel</div> ' +
-        '<div class="ok">Ok</div> </div>');
+        '<div class="cancel">'+def.cancel+'</div> ' +
+        '<div class="ok">'+def.ok+'</div> </div>');
 
     $btn.on("click", ".cancel", function () {
         $(this).parents(".tipsConfirm").remove();
@@ -95,7 +96,7 @@ function showSpinner(msg, config){
     var def = {
         timeout: 1500
     };
-    $.extend(def, config);
+    config = $.extend(def, config);
     $spinner.appendTo($("body"))
         .ready(function () {
             $spinner.css({
@@ -106,10 +107,12 @@ function showSpinner(msg, config){
         });
     setTimeout(function(){
         if($spinner) $spinner.remove();
-        var callback = def.callback;
+        var callback = config.callback;
         if(callback) callback();
-    }, def.timeout);
+    }, config.timeout);
 }
+
+var $orderList = $("#orderList");
 
 function getUrlParam(name) {
     var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
@@ -118,20 +121,23 @@ function getUrlParam(name) {
 }
 
 function　createOrderItem(data){
-    var pendingPay = '<div class="payNow">' +
+    var pendingPay = '<div class="timeTips">' +
+        data.countdown +
+        '</div>' +
+        '<div class="payNow">' +
         'Pay now' +
         '</div> ' +
         '<div class="cancel">' +
         'Cancel order' +
         '</div> ';
     var confirmReceived = '<div class="confirmR">' +
+        data.countdown +
         'Confirm received' +
         '</div> ';
-    var toBeComment = '<div class="comment">' +
+    var toBeComment = '<div class="timeTips">' +
+        '</div>' +
+        '<div class="comment">' +
         'Comment' +
-        '</div>';
-    var delived = '<div class="alreadyDelivered">' +
-        'Already delivered ' +
         '</div>';
 
     var operate = "";
@@ -139,7 +145,6 @@ function　createOrderItem(data){
         data.statusText = "Waiting for payment";
     } else if(data.status==2){
         data.statusText = "Waiting for delivery";
-        operate = delived;
     } else if(data.status==3){
         data.statusText = "Waiting for receiving";
     } else if(data.status==4){
@@ -167,39 +172,41 @@ function　createOrderItem(data){
         data.statusText +
         '</div> ' +
         '</td> ' +
-        '<td class="operate">' +
+        /*'<td class="operate">' +
         operate +
-        '</td> ' +
+        '</td> ' +*/
         '</tr> ';
     return $('<tbody class="orderItem"> ' +
         orderData +
-        '</tbody>')
+        '</tbody>').data('info', data);
 }
 
 function setOrderInfo(data) {
     var $info = $("#info");
     var shop = data.product.shop;
-    $info.find(".receiver .value").text(data.address).end()
+    $info.find(".customerId .value").text(data.initiatorId).end()
+        .find(".receiver .value").text(data.address).end()
         .find(".orderTime .value").text(data.time).end()
         .find(".orderId .value").text(data.orderId).end()
         .find(".shopName .value").text(shop.shopName).end()
+        .find(".shopId .value").text(shop.shopId).end()
         .find(".shopTel .value").text(shop.telephone).end()
         .find(".shopEmail .value").text(shop.email).end()
         .find(".express .value").text(data.express).end()
         .find(".expressNo .value").text(data.expressCode);
 }
 
+var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
+
 var postOrder = (function(){
     var loading = null;
-    return function (orderId, orderStatus) {
+    return function (orderId) {
         if(loading) return ;
         loading = showLoading($(".more"));
-        var arr = [];
-        arr.push(orderId);
-        var reqData = "orderIdList="+JSON.stringify(arr)+"&status="+orderStatus;
+        var reqData = "orderId="+orderId;
         $.ajax({
             method: "get",
-            url: "/proxy/shop-owner/order/detail",
+            url: "/proxy/admin/order/detail",
             dataType: "json",
             data: reqData
         }).done(function(result){
@@ -226,16 +233,17 @@ var postOrder = (function(){
                 loading.remove();
                 loading = null;
             }
-            tipsAlert("Server error!");
-            /*result = {
+            tipsAlert("server error!");
+            result = {
                 status: 200,
                 data: [
                     {
                         time: "2016-09-05 16:30:06",
                         orderId: "2662774641999118",
                         targetId: 12,
+                        initiatorId: 1,
                         countdown: "left 23 Hour",
-                        status: 2,
+                        status: 4,
                         address: "Dhgan, 18789427353, HongkongIsland(HK) Chai Wan Wanli",
                         product: {
                             productId: 10,
@@ -247,6 +255,7 @@ var postOrder = (function(){
                                 "imgs/product04a.jpg"
                             ],
                             shop: {
+                                shopId: 2,
                                 shopName: "Tom's shop",
                                 telephone: 62937498,
                                 email: "nowater@nowater.com"
@@ -273,7 +282,7 @@ var postOrder = (function(){
                 tipsAlert("unknown error!", function () {
                     location.href = "modifyInfo.html";
                 });
-            }*/
+            }
         });
     };
 })();
@@ -283,85 +292,5 @@ var orderId = getUrlParam("orderId"),
 if(orderId&&status){
     postOrder(orderId, status);
 } else {
-    location.href = "order.html";
+    location.href = "modifyInfo.html";
 }
-
-var $orderList = $("#orderList");
-
-$orderList.on("click", ".orderItem .alreadyDelivered", function(){
-    var $deliverPop = $(".deliverPop"),
-        $deliverForm = $("#deliverForm");
-    $deliverForm[0].orderId.value = orderId;
-    $deliverPop.show();
-});
-
-var $deliverForm = $("#deliverForm");
-
-//输入错误提示
-function addError(item, msg){
-    item.addClass("error")
-        .find("input")
-        .focus()
-        .end()
-        .find(".tips")
-        .text(msg);
-}
-
-function deliverProduct(_this, loading){
-    $.ajax({
-        method: "post",
-        url: "/proxy/shop-owner/order/delivery",
-        dataType: "json",
-        data: _this.serialize()
-    }).done(function (result) {
-        if (loading) loading.remove();
-        _this.data("submit", false);
-        var status = result.status;
-        if(status == 200){
-            showSpinner("Success", {
-                callback: function(){
-                    location.reload();
-                }
-            });
-        } else if(status == 300) {
-            location.href = loginUrl;
-        } else {
-            tipsAlert("server error!");
-        }
-    }).fail(function () {
-        if (loading) loading.remove();
-        _this.data("submit", false);
-        tipsAlert("server error");
-    });
-}
-
-$deliverForm.on("submit", function (e) {
-    var _this = $(this);
-    e.preventDefault();
-    var $express = _this.find(".express"),
-        $expressNo = _this.find(".expressCode");
-    if (!this.express.value) {
-        addError($express, "Express can't be empty!");
-        return;
-    }
-    if (!this.expressCode.value) {
-        addError($expressNo, "Express No can't be empty!");
-        return;
-    }
-    if(_this.data("submit")) return ;
-    _this.data("submit", true);
-    var loading = showLoading(_this);
-    deliverProduct(_this, loading);
-});
-
-$deliverForm.on("input", ".input-item input", function () {
-    var _this = $(this);
-    _this.parent().removeClass('error');
-});
-
-$deliverForm.on("click", ".cancel", function (e) {
-    var $delegateTarget = $(e.delegateTarget);
-    $delegateTarget[0].reset();
-    $delegateTarget.parent()
-        .hide();
-});

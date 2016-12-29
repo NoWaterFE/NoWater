@@ -252,9 +252,10 @@ var shopId = 1;
 
 (function(){
     var productId = getUrlParam("id"),
-        $product = $("#product");
+        $product = $("#product"),
+        $content = $(".content");
     if(productId==undefined) {
-        $product.html("The product doesn't exist.")
+        $content.html("<div class='noResult' >The product doesn't exist.</div>");
     }
     $.ajax({
         method: "post",
@@ -303,12 +304,17 @@ var shopId = 1;
                 .find(".full")
                 .width(avgPoint*20+"%").end()
                 .find(".num")
-                .text(avgPoint +" out of 5 stars");
+                .text(avgPoint.toFixed(1) +" out of 5 stars");
             for(len=commentList.length, i=0; i<len; i++){
                 $reviewSet.append(createReviewList(commentList[i]));
             }
+            if(data.isDel==1) {
+                var $operate = $product.find(".operate");
+                $operate.addClass("off")
+                    .text("Off the shelf");
+            }
         } else if(status==400){
-            $product.html("The product doesn't exist.").show();
+            $content.html("<div class='noResult' >The product doesn't exist.</div>");
         }
     }).fail(function (result) {
         //tipsAlert("server error!");
@@ -418,7 +424,7 @@ var shopId = 1;
                 .find(".full")
                 .width(avgPoint*20+"%").end()
                 .find(".num")
-                .text(avgPoint +" out of 5 stars");
+                .text(avgPoint.toFixed(1) +" out of 5 stars");
             for(len=commentList.length, i=0; i<len; i++){
                 $reviewSet.append(createReviewList(commentList[i]));
             }
@@ -428,7 +434,7 @@ var shopId = 1;
                     .text("Off the shelf");
             }
         } else if(status==400){
-            $product.html("The product doesn't exist.").show();
+            $content.html("<div class='noResult' >The product doesn't exist.</div>");
         }
     });
 
@@ -500,7 +506,7 @@ var addToFavo = (function(){
         var info = $productForm.data("info");
         if(loading) return;
         loading = showLoading($productForm);
-        var data = "id="+info.productId+"&favoriteType=0";
+        var data = "id="+info.productId+"&type=2";
         $.ajax({
             method: "post",
             url: "/proxy/customer/favorite/adding",
@@ -511,11 +517,11 @@ var addToFavo = (function(){
                 loading = null;
             }
             var status = result.status;
-            if(status==200){
+            if(status==200 || status==400){
                 showSpinner("Add success");
             } else if(status==300){
                 location.href = loginUrl;
-            } else {
+            }else {
                 tipsAlert("server error!");
             }
         }).fail(function(result){
@@ -528,7 +534,7 @@ var addToFavo = (function(){
                 status: 200
             };
             var status = result.status;
-            if(status==200){
+            if(status==200 || status==400){
                 showSpinner("Add success");
             } else if(status==300){
                 location.href = loginUrl;

@@ -7,7 +7,7 @@
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="js/userInfo.js"></script>
-    <link rel="stylesheet" type="text/css" href="style/adHistory.css">
+    <link rel="stylesheet" type="text/css" href="style/modifyInfo.css">
 </head>
 <body>
 <header>
@@ -80,38 +80,33 @@
         </ul>
     </div>
     <div class="page">
-        <div class="showDiv">
-            <ul class="showMain clearfix" id="showMain">
-                <li><a href="adHistory.html"  class="showTab active">Shop AD</a></li>
-                <li><a href="productAd.html"  class="showTab">Product AD</a></li>
-            </ul>
-            <div class="showList" id="showList">
-                <table class="showTable">
-                    <colgroup>
-                        <col class="col1">
-                        <col class="col2">
-                        <col class="col3">
-                        <col class="col4">
-                        <col class="col5">
-                    </colgroup>
-                    <tbody class="showTh">
-                    <tr>
-                        <th>Picture</th>
-                        <th>Bid price</th>
-                        <th>Display time</th>
-                        <th>Status</th>
-                        <th>Operate</th>
-                    </tr>
-                    </tbody>
-                </table>
-                <div class="more">
-                    <div class="showMore hidden">
-                        <span>SHOW MORE</span>
-                        <span class="down"></span>
-                    </div>
-                </div>
+        <form id="infoForm" novalidate>
+            <h2 class="title">Your Shop Information</h2>
+            <div class="input-item shopName">
+                <label for="shopName" class="redStar">Shop name</label>
+                <input type="text" name="shopName" id="shopName" disabled="disabled" placeholder="Your shop name" maxlength="50" required>
+                <span class="tips"></span>
             </div>
-        </div>
+            <div class="input-item shopEmail">
+                <label for="shopEmail" class="redStar">Email</label>
+                <input type="email" name="email" id="shopEmail" placeholder="Your email address">
+                <span class="tips"></span>
+            </div>
+            <div class="input-item shopTel">
+                <label for="shopTel" class="redStar">Telephone</label>
+                <input type="tel" name="telephone" id="shopTel" placeholder="Telephone number(HK)">
+                <span class="tips"></span>
+            </div>
+            <!--<div class="alipay shopInfo">
+                <label for="alipay" class="redStar">Alipay</label>
+                <input type="text" name="alipay" id="alipay" required>
+            </div>-->
+            <div class="submit">
+                <input type="submit" value="SAVE">
+            </div>
+            <div class="applying">
+            </div>
+        </form>
     </div>
 </div>
 <footer>
@@ -119,6 +114,6 @@
         © Copyright NoWaterFE
     </div>
 </footer>
-<script type="text/javascript" src="js/adHistory.js"></script>
+<script type="text/javascript" src="js/modifyInfo.js"></script>
 </body>
 </html>

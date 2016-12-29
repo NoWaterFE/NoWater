@@ -60,7 +60,7 @@ function tipsConfirm(msg, callback, config){
         "ok": "OK",
         "cancel": "Cancel"
     };
-    config = $.extend(def, config);
+    $.extend(def, config);
     var $confirm = $(".tipsConfirm");
     if ($confirm.length > 0) $confirm.remove();
     $confirm = $("<div class='tipsConfirm'></div>");
@@ -68,8 +68,8 @@ function tipsConfirm(msg, callback, config){
     var $content = $("<div class='content'></div>");
     var $msg = $("<div class='msg'>"+ msg +"</div>");
     var $btn = $('<div class="btn2"> ' +
-        '<div class="cancel">'+config.cancel+'</div> ' +
-        '<div class="ok">'+config.ok+'</div> </div>');
+        '<div class="cancel">'+def.cancel+'</div> ' +
+        '<div class="ok">'+def.ok+'</div> </div>');
 
     $btn.on("click", ".cancel", function () {
         $(this).parents(".tipsConfirm").remove();

@@ -133,7 +133,12 @@ function tipsAlert(msg, callback){
     $alert.appendTo($("body"));
 }
 
-function tipsConfirm(msg, callback){
+function tipsConfirm(msg, callback, config){
+    var def = {
+        "ok": "OK",
+        "cancel": "Cancel"
+    };
+    $.extend(def, config);
     var $confirm = $(".tipsConfirm");
     if ($confirm.length > 0) $confirm.remove();
     $confirm = $("<div class='tipsConfirm'></div>");
@@ -141,8 +146,8 @@ function tipsConfirm(msg, callback){
     var $content = $("<div class='content'></div>");
     var $msg = $("<div class='msg'>"+ msg +"</div>");
     var $btn = $('<div class="btn2"> ' +
-        '<div class="cancel">Cancel</div> ' +
-        '<div class="ok">Ok</div> </div>');
+        '<div class="cancel">'+def.cancel+'</div> ' +
+        '<div class="ok">'+def.ok+'</div> </div>');
 
     $btn.on("click", ".cancel", function () {
         $(this).parents(".tipsConfirm").remove();
@@ -274,12 +279,18 @@ var postOrder = (function(){
     var loading = null;
     return function (orderStatus, param) {
         if(loading) return ;
+        var reqData = "status="+orderStatus;
         if(param) {
             loading = showLoading($orderForm);
+            var timeFilter = param.timeFilter || 0;
+            reqData += "&timeFilter=" + timeFilter + "&searchKey=" + param.searchKey;
+            if (timeFilter == 5) {
+                reqData += "&beginTime="+param.beginTime+"&endTime="+param.endTime;
+            }
         } else {
             loading = showLoading($(".more"));
+            reqData += "&timeFilter=0";
         }
-        var reqData = "status="+orderStatus;
         $.ajax({
             method: "get",
             url: "/proxy/order/list",
@@ -294,6 +305,9 @@ var postOrder = (function(){
             if(status==200){
                 var len = result.data.length,
                     $orderTable = $orderList.find('.orderTable');
+                if(param) {
+                    $orderTable.find(".orderItem").remove();
+                }
                 for(var i=0; i<len; i++){
                     $orderTable.append(createOrderItem(result.data[i]));
                 }
@@ -343,8 +357,6 @@ var postOrder = (function(){
                     $orderTable = $orderList.find('.orderTable');
                 if(param) {
                     $orderTable.find(".orderItem").remove();
-                    data = data.concat(data);
-                    len = data.length;
                 }
                 for(var i=0; i<len; i++){
                     if(orderStatus!=0) { data[i].status=orderStatus }
@@ -392,7 +404,6 @@ var confirmR = (function(){
             }
             var status = result.status;
             if(status==200){
-                $orderItem.remove();
                 showSpinner("Success!", {
                     "callback": function () {
                         location.reload();
@@ -418,7 +429,6 @@ var confirmR = (function(){
              };
              var status = result.status;
              if(status==200){
-             $orderItem.remove();
              showSpinner("Add Success!", {
              "callback": function () {
              location.reload();
@@ -464,7 +474,6 @@ var orderCancel = (function(){
             }
             var status = result.status;
             if(status==200){
-                $orderItem.remove();
                 showSpinner("Success!", {
                     "callback": function () {
                         location.reload();
@@ -490,7 +499,6 @@ var orderCancel = (function(){
              };
              var status = result.status;
              if(status==200){
-             $orderItem.remove();
              showSpinner("Add Success!", {
              "callback": function () {
              location.reload();
@@ -537,6 +545,9 @@ $orderList.on("click", ".orderItem .cancel", function () {
     var self = this;
     tipsConfirm("Are you sure want to cancel the order?", function(){
         orderCancel.apply(self);
+    }, {
+        "ok": "YES",
+        "cancel": "NO"
     });
 });
 
@@ -648,19 +659,53 @@ $commentForm.on("submit", function (e) {
     var loading = showLoading(_this);
     $.ajax({
         method: "post",
-        url: "/proxy/",
+        url: "/proxy/order/comment",
         data: _this.serialize()
     }).done(function(result){
-
+        if(loading) loading.remove();
+        _this.data("submit", false);
+        var status = result.status;
+        if(status==200){
+            showSpinner("Comment success", {
+                callback: function () {
+                    location.reload()
+                }
+            })
+        } else {
+            tipsAlert("Server error!");
+        }
     }).fail(function(result){
         if(loading) loading.remove();
         _this.data("submit", false);
+        tipsAlert("Server error!");
+        /*result = {
+            status: 200
+        };
+        var status = result.status;
+        if(status==200){
+            showSpinner("Comment success", {
+                callback: function () {
+                    location.reload()
+                }
+            })
+        } else {
+            tipsAlert("Server error!");
+        }*/
     });
 
 });
 
 var $orderFilter = $("#orderFilter"),
     $orderForm = $orderFilter.find(".orderForm");
+
+$orderForm.find('.selectTime').datepicker({
+    format: 'yyyy-mm-dd',
+    autoPick: true
+}).blur(function(){
+    var _this = $(this);
+    _this.datepicker("pick");
+});
+
 $orderFilter.on("click", ".moreFilter", function(){
    $(this).toggleClass("less")
        .parent()
@@ -671,14 +716,6 @@ $orderFilter.on("change", ".timeSelect", function () {
    var _this = $(this);
    if(_this.val()=="5"){
        _this.siblings('.detailTime').show();
-       $('.selectTime').datepicker({
-           format: 'yyyy-mm-dd'
-       }).datepicker(
-           "setDate", new Date()
-       ).blur(function(){
-           var _this = $(this);
-           _this.datepicker("setDate", _this.datepicker("getDate"));
-       });
    } else {
        _this.siblings('.detailTime').hide();
    }
@@ -694,23 +731,22 @@ $orderForm.on("submit", (function(){
             var time = _this[0].time.value;
             if(time!="5") {
                 param = {
-                    time: time,
+                    timeFilter: time,
                     searchKey: searchKey
                 };
             } else {
                 param = {
-                    time: time,
+                    timeFilter: time,
                     searchKey: searchKey,
-                    startTime: _this.find(".startTime").val(),
+                    beginTime: _this.find(".startTime").val(),
                     endTime: _this.find(".endTime").val()
                 };
             }
         } else {
-            if(searchKey==="") return;
             param = {
                 searchKey: searchKey
             };
         }
-        if(param) postOrder(orderStatus, param);
+        postOrder(orderStatus, param);
     };
 })());

@@ -9,7 +9,7 @@ $.ajax({
     }
 }).fail(function (result) {
     /*alert("server error");
-    location.href = "../customer/index.html";*/
+    location.href = "../customer/modifyInfo.html";*/
     /*result = {
         status: 200,
         data: [{

@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>PARKnSHOP</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="stylesheet" type="text/css" href="style/orderDetail.css">
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="js/status.js"></script>
+</head>
+
+<body>
+<div class="nav">
+    <ul>
+        <li class="navList"><a href="customerList.html">Customer Management</a></li>
+        <li class="navList"><a href="shopList.html">Shop Management</a></li>
+        <li class="navList"><a href="applyList.html">Shop Application List</a></li>
+        <li class="navList"><a href="shopAd.html">AD Management</a></li>
+        <li class="navList"><a href="order.html">All Orders</a></li>
+    </ul>
+</div>
+<div class="content">
+    <header>
+        <div class="header">
+            <div class="logo">
+                <a href="index.html">
+                    Administrator System
+                </a>
+            </div>
+            <div class="logout">
+                <span class="logoutBtn" id="logoutBtn">
+                    Logout
+                </span>
+            </div>
+        </div>
+    </header>
+    <div class="main">
+        <!--页面在这写-->
+        <div class="orderDetail">
+            <h2 class="title">Order Detail</h2>
+            <div class="orderInfo">
+                <h2 class="orderInfoTitle">
+                    Order Information
+                </h2>
+                <div class="info" id="info">
+                    <div class="orderInfoItem orderTime">
+                        <span class="key">Order time:</span>
+                        <span class="value"></span>
+                    </div>
+                    <div class="orderInfoItem orderId">
+                        <span class="key">Order ID:</span>
+                        <span class="value"></span>
+                    </div>
+                    <br />
+                    <div class="orderInfoItem customerId">
+                        <span class="key">Customer ID:</span>
+                        <span class="value"></span>
+                    </div>
+                    <div class="orderInfoItem receiver">
+                        <span class="key">Receiver:</span>
+                        <span class="value"></span>
+                    </div>
+                    <br />
+                    <div class="orderInfoItem shopId">
+                        <span class="key">Shop ID:</span>
+                        <span class="value"></span>
+                    </div>
+                    <div class="orderInfoItem shopName">
+                        <span class="key">Shop name:</span>
+                        <span class="value"></span>
+                    </div>
+                    <div class="orderInfoItem shopTel">
+                        <span class="key">Shop tel:</span>
+                        <span class="value"></span>
+                    </div>
+                    <div class="orderInfoItem shopEmail">
+                        <span class="key">Shop email:</span>
+                        <span class="value"></span>
+                    </div>
+                    <br />
+                    <div class="orderInfoItem express">
+                        <span class="key">Express:</span>
+                        <span class="value"></span>
+                    </div>
+                    <div class="orderInfoItem expressNo">
+                        <span class="key">Express No:</span>
+                        <span class="value"></span>
+                    </div>
+                </div>
+            </div>
+            <div class="orderList" id="orderList">
+                <table class="orderTable">
+                    <colgroup>
+                        <col class="col1">
+                        <col class="col2">
+                        <col class="col3">
+                        <col class="col4">
+                        <col class="col5">
+                        <!--<col class="col6">-->
+                    </colgroup>
+                    <tbody class="orderTh">
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                        <!--<th>Operate</th>-->
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="more">
+                    <div class="showMore hidden">
+                        <span>SHOW MORE</span>
+                        <span class="down"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="js/orderDetail.js"></script>
+</body>
+
+</html>

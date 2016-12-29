@@ -15,10 +15,10 @@
             url: "/proxy/customer/loginout"
         }).done(function(){
             delCookie("token");
-            location.href = "../customer/index.html"
+            location.href = "../customer/modifyInfo.html"
         }).fail(function () {
             delCookie("token");
-            location.href = "../customer/index.html"
+            location.href = "../customer/modifyInfo.html"
         });
     });
 })();

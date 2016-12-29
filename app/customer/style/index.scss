@@ -1,10 +1,15 @@
 @import "reset";
 @import "base";
 
+.content {
+	min-height: 420px;
+	width: 1200px;
+	margin: 0 auto;
+}
+
 //店铺广告
 .ad-store {
 	height: 400px;
-	width: 1200px;
 	margin: 20px auto 0;
 	overflow: hidden;
 	position: relative;
@@ -92,7 +97,6 @@
 
 //商品广告
 .ad-goods {
-	width: 1200px;
 	margin: 40px auto;
 	.goods-item {
 		float: left;

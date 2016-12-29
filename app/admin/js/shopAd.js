@@ -3,7 +3,7 @@ var $logoutBtn = $("#logoutBtn");
 $logoutBtn.click(function () {
     $.ajax({
         method: "get",
-        url: "/proxy/admin/loginout"
+        url: "/proxy/admin/logout"
     }).done(function(){
         delCookie("admin_token");
         location.href = "login.html";
@@ -13,6 +13,11 @@ $logoutBtn.click(function () {
     });
 });
 
+function delCookie(name){
+    var t = new Date();
+    t.setTime(t.getTime()-1);
+    document.cookie= name + "=null;path=/;expires="+t.toGMTString();
+}
 
 function showLoading($relative) {
     var $tips = $relative.siblings(".loadingImg");
@@ -50,7 +55,12 @@ function tipsAlert(msg, callback){
     $alert.appendTo($("body"));
 }
 
-function tipsConfirm(msg, callback){
+function tipsConfirm(msg, callback, config){
+    var def = {
+        "ok": "OK",
+        "cancel": "Cancel"
+    };
+    $.extend(def, config);
     var $confirm = $(".tipsConfirm");
     if ($confirm.length > 0) $confirm.remove();
     $confirm = $("<div class='tipsConfirm'></div>");
@@ -58,8 +68,8 @@ function tipsConfirm(msg, callback){
     var $content = $("<div class='content'></div>");
     var $msg = $("<div class='msg'>"+ msg +"</div>");
     var $btn = $('<div class="btn2"> ' +
-        '<div class="cancel">Cancel</div> ' +
-        '<div class="ok">Ok</div> </div>');
+        '<div class="cancel">'+def.cancel+'</div> ' +
+        '<div class="ok">'+def.ok+'</div> </div>');
 
     $btn.on("click", ".cancel", function () {
         $(this).parents(".tipsConfirm").remove();
@@ -107,7 +117,7 @@ function getUrlParam(name) {
     if (r != null) return r[2]; return null; //返回参数值
 }
 
-var loginUrl = "../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
+var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
 
 function　createShowItem(data){
     var pendingPay = '<div class="timeTips">' +
@@ -119,20 +129,22 @@ function　createShowItem(data){
         '<div class="cancel">' +
         'Cancel bidding' +
         '</div> ';
+    var approve = '<div class="approve">APPROVE</div>';
 
     var operate = "";
     if(data.status==1){
         data.statusText = "Waiting for payment";
-        operate  = pendingPay;
     } else if(data.status==2){
         data.statusText = "Waiting for result";
+        operate = approve;
     } else if(data.status==5){
         data.statusText = "Bidding success";
-    } else if(data.status==-1){
+    } else if(data.status==10){
         data.statusText = "Closed";
     } else if(data.status==-2){
         data.statusText = "Bidding failure";
     }
+    var shop = data.shop;
     return $('<tbody class="showItem"> ' +
         '<tr class="mr20"></tr> ' +
         '<tr class="showHeader"> ' +
@@ -150,9 +162,9 @@ function　createShowItem(data){
         '<img src="'+data.photo+'"> ' +
         '</a> ' +
         '</td> ' +
-        '<td class="shopAd">'+data.shopId+'</td> ' +
+        '<td class="shopAd">'+shop.shopId+'</td> ' +
         '<td class="price">HK$'+data.price.toFixed(2)+'</td> ' +
-        '<td class="displayTimee">'+data.showTime+'</td> ' +
+        '<td class="displayTime">'+data.showTime+'</td> ' +
         '<td class="status"> ' +
         '<div class="showStatus">'+data.statusText+'</div> ' +
         '</td> ' +
@@ -169,12 +181,11 @@ var postShow = (function(){
     return function () {
         if(loading) return ;
         loading = showLoading($(".more"));
-        var reqData = "count=10&startId="+startId;
+        //var reqData = "count=10&startId="+startId;
         $.ajax({
             method: "get",
-            url: "/proxy/shop-owner/shop/ad/list",
-            dataType: "json",
-            data: reqData
+            url: "/proxy/admin/shop/ad/list",
+            dataType: "json"
         }).done(function(result){
             if(loading){
                 loading.remove();
@@ -188,10 +199,10 @@ var postShow = (function(){
                 for (var i = 0; i < len; i++) {
                     $showTable.append(createShowItem(result.data[i]));
                 }
-                startId = result.startId;
+                /*startId = result.startId;
                 if(startId!=-1){
                     $showList.find(".more .showMore").removeClass("hidden");
-                }
+                }*/
             } else if (status == 300) {
                 location.href = loginUrl;
             } else {
@@ -211,7 +222,9 @@ var postShow = (function(){
                         time: "2016-09-05 16:30:06",
                         orderId: "2662774641999118",
                         status: 1,
-                        shopId: 2,
+                        shop: {
+                            shopId: 2
+                        },
                         photo: "../customer/imgs/adshop01.jpg",
                         price: 333,
                         showTime: "2016-09-06"
@@ -220,36 +233,44 @@ var postShow = (function(){
                         time: "2016-09-05 16:30:06",
                         orderId: "2662774641999118",
                         status: 2,
-                        shopId: 2,
-                        photo: "../customer/imgs/adshop01.jpg",
+                        shop: {
+                            shopId: 2
+                        },
                         price: 333,
+                        photo: "../customer/imgs/adshop01.jpg",
                         showTime: "2016-09-06"
                     },
                     {
                         time: "2016-09-05 16:30:06",
                         orderId: "2662774641999118",
                         status: 5,
-                        shopId: 2,
-                        photo: "../customer/imgs/adshop01.jpg",
+                        shop: {
+                            shopId: 2
+                        },
                         price: 333,
+                        photo: "../customer/imgs/adshop01.jpg",
                         showTime: "2016-09-06"
                     },
                     {
                         time: "2016-09-05 16:30:06",
                         orderId: "2662774641999118",
-                        status: -1,
-                        shopId: 2,
-                        photo: "../customer/imgs/adshop01.jpg",
+                        status: 10,
+                        shop: {
+                            shopId: 2
+                        },
                         price: 333,
+                        photo: "../customer/imgs/adshop01.jpg",
                         showTime: "2016-09-06"
                     },
                     {
                         time: "2016-09-05 16:30:06",
                         orderId: "2662774641999118",
                         status: -2,
-                        shopId: 3,
-                        photo: "../customer/imgs/adshop01.jpg",
+                        shop: {
+                            shopId: 2
+                        },
                         price: 333,
+                        photo: "../customer/imgs/adshop01.jpg",
                         showTime: "2016-09-06"
                     }
                 ]
@@ -262,10 +283,10 @@ var postShow = (function(){
                 for (var i = 0; i < len; i++) {
                     $showTable.append(createShowItem(result.data[i]));
                 }
-                startId = result.startId;
+                /*startId = result.startId;
                 if(startId!=-1){
                     $showList.find(".more .showMore").removeClass("hidden");
-                }
+                }*/
             } else if (status == 300) {
                 location.href = loginUrl;
             } else {
@@ -275,31 +296,19 @@ var postShow = (function(){
     };
 })();
 
-function payNow() {
-    var _this = $(this),
-        $showItem = _this.parents(".showItem"),
-        info = $showItem.data("info"),
-        orderId = info.orderId,
-        sumPrice = info.price,
-        arr = [];
-    arr.push(orderId);
-    location.href = "pay.html?type=1&orderIdList="+JSON.stringify(arr)+"&sumPrice="+sumPrice;
-}
-
-var orderCancel = (function(){
+var approveAd = (function () {
     var loading = null;
     return function () {
+        if(loading) return;
         var _this = $(this),
             $showItem = _this.parents(".showItem"),
             info = $showItem.data("info"),
             orderId = info.orderId,
             reqData = "orderId="+orderId;
-        if(loading) return ;
         loading = showLoading(_this.parent());
         $.ajax({
             method: "post",
-            url: "/proxy/order/cancel",
-            dataType: "json",
+            url: "/proxy/admin/shop/ad/approve",
             data: reqData
         }).done(function(result){
             if (loading) {
@@ -307,21 +316,26 @@ var orderCancel = (function(){
                 loading = null;
             }
             var status = result.status;
-            if(status==200){
-                $showItem.remove();
+            if (status == 200) {
                 showSpinner("Success!", {
                     "callback": function () {
                         location.reload();
                     }
                 });
-            } else if(status==300){
+            } else if (status == 300) {
                 location.href = loginUrl;
-            } else {
-                showSpinner("Unknown error!", {
+            } else if (status == 400) {
+                showSpinner("Server error!", {
                     "callback": function () {
                         location.reload();
                     }
                 });
+            } else if (status == 500){
+                tipsAlert("Failure, there is no ad slots left", function () {
+                    location.reload();
+                });
+            } else if (status == 600) {
+                tipsAlert("Failure, you must approve after the deadline!");
             }
         }).fail(function(result){
             tipsAlert("server error");
@@ -333,25 +347,31 @@ var orderCancel = (function(){
                 status: 200
             };
             var status = result.status;
-            if(status==200){
-                $showItem.remove();
+            if (status == 200) {
                 showSpinner("Success!", {
                     "callback": function () {
                         location.reload();
                     }
                 });
-            } else if(status==300){
+            } else if (status == 300) {
                 location.href = loginUrl;
-            } else {
-                showSpinner("Unknown error!", {
+            } else if (status == 400) {
+                showSpinner("Server error!", {
                     "callback": function () {
                         location.reload();
                     }
                 });
+            } else if (status == 500){
+                tipsAlert("Failure, there is no ad slots left", function () {
+                    location.reload();
+                });
+            } else if (status == 600) {
+                tipsAlert("Failure, you must approve after the deadline!");
             }
         });
-    }
+    };
 })();
+
 
 var $showList = $("#showList");
 
@@ -361,11 +381,13 @@ $showList.on("click", ".more .showMore", function(e){
     postShow();
 });
 
-$showList.on("click", ".showItem .payNow", payNow);
-$showList.on("click", ".showItem .cancel", function () {
+$showList.on("click", ".showItem .approve", function () {
     var self = this;
-    tipsConfirm("Are you sure want to cancel the order?", function(){
-        orderCancel.apply(self);
+    tipsConfirm("Are you sure want to approve the advertising applications?", function(){
+        approveAd.apply(self);
+    }, {
+        "ok": "YES",
+        "cancel": "NO"
     });
 });
 

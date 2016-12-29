@@ -15,10 +15,10 @@
             url: "/proxy/customer/loginout"
         }).done(function(){
             delCookie("token");
-            location.href = "../customer/index.html"
+            location.href = "../customer/modifyInfo.html"
         }).fail(function () {
             delCookie("token");
-            location.href = "../customer/index.html"
+            location.href = "../customer/modifyInfo.html"
         });
     });
 })();
@@ -32,7 +32,7 @@ var productClass = ["TV & Home Theater", "Computers & Tablets", "Cell Phones",
 function createProductList(info){
     var op = info.isDel == 0 ?
     '<div class="operate"> ' +
-        '<input type="button" value="Bidding ad" class="bid"> ' +
+        '<input type="button" value="Bid for ad" class="bid"> ' +
         '<input type="button" value="Modify" class="modify"> ' +
         '<input type="button" value="Off" class="delete"> ' +
     '</div> ' :
@@ -144,7 +144,7 @@ function createBid(productId) {
             '<form class="bidForm" id="bidForm" novalidate>' +
             '<input type="hidden" name="productId" class="productId" value="'+productId+'">' +
             '<i class="cancel close"></i>' +
-            '<h2 class="title">Bidding for tomorrow\'s product ad slot</h2>' +
+            '<h2 class="title">Bidding for tomorrow\'s product ad space</h2>' +
             '<div class="input-item price">' +
                 '<label for="price" class="redStar">Bid Price(HK$): </label>' +
                 '<input type="text" name="price" id="price"  placeholder="At least 1000" maxlength="10">' +
@@ -196,8 +196,8 @@ function createBid(productId) {
         if (!price) {
             addError($price, "Bidding price can't be empty!");
             return;
-        } else if (parseFloat(price) < 500) {
-            addError($price, "Bidding price can't be less than HK$500!");
+        } else if (parseFloat(price) < 1000) {
+            addError($price, "Bidding price can't be less than HK$1000!");
             return;
         }
         if(_this.data("submit")) return;
@@ -220,7 +220,9 @@ function createBid(productId) {
             } else if(status==300){
                 location.href = loginUrl;
             } else if(status==600) {
-                tipsAlert("Fail, it has been exceeded the specified deadline today.");
+                tipsAlert("Failure, it has been exceeded the specified deadline today.");
+            } else if(status==700) {
+                tipsAlert("Failure, this product are biding for ad.");
             } else {
                 tipsAlert("Server error!");
             }
@@ -241,7 +243,9 @@ function createBid(productId) {
             } else if(status==300){
                 location.href = loginUrl;
             } else if(status==600) {
-                tipsAlert("Fail, it has been exceeded the specified deadline today.");
+                tipsAlert("Failure, it has been exceeded the specified deadline today.");
+            } else if(status==700) {
+                tipsAlert("Failure, this product are biding for ad.");
             } else {
                 tipsAlert("Server error!");
             }
@@ -277,22 +281,56 @@ $productList.on("click", ".delete", (function () {
         var _this = $(this);
         tipsConfirm("Are you sure to removed the product from shelves?", function(){
             loading = showLoading(_this.parent());
+            var $productItem = _this.parents(".productItem"),
+                info = $productItem.data("info"),
+                productId = info.productId;
             $.ajax({
                 method: "post",
-                url: "/proxy/shop-owner/products/edit",
+                url: "/proxy/shop-owner/products/delete",
                 dataType: "json",
-                data: ""
+                data: "productId="+productId
             }).done(function(result){
                 if(loading) {
                     loading.remove();
                     loading = null;
+                }
+                var status = result.status;
+                if(status == 200){
+                    showSpinner("Success", {
+                        callback: function () {
+                            location.reload();
+                        }
+                    })
+                } else if(status == 300) {
+                    location.href = loginUrl;
+                } else {
+                    showSpinner("Unknown error!");
                 }
             }).fail(function(result){
                 if(loading) {
                     loading.remove();
                     loading = null;
                 }
+                tipsAlert("Server error!");
+                result = {
+                    status: 200
+                };
+                var status = result.status;
+                if(status == 200){
+                    showSpinner("Success", {
+                        callback: function () {
+                            location.reload();
+                        }
+                    })
+                } else if(status == 300) {
+                    location.href = loginUrl;
+                } else {
+                    showSpinner("Unknown error!");
+                }
             });
+        }, {
+            "ok": "YES",
+            "cancel": "NO"
         });
     }
 })());
@@ -352,7 +390,12 @@ function tipsAlert(msg, callback){
     $alert.appendTo($("body"));
 }
 
-function tipsConfirm(msg, callback){
+function tipsConfirm(msg, callback, config){
+    var def = {
+        "ok": "OK",
+        "cancel": "Cancel"
+    };
+    $.extend(def, config);
     var $confirm = $(".tipsConfirm");
     if ($confirm.length > 0) $confirm.remove();
     $confirm = $("<div class='tipsConfirm'></div>");
@@ -360,8 +403,8 @@ function tipsConfirm(msg, callback){
     var $content = $("<div class='content'></div>");
     var $msg = $("<div class='msg'>"+ msg +"</div>");
     var $btn = $('<div class="btn2"> ' +
-        '<div class="cancel">Cancel</div> ' +
-        '<div class="ok">Ok</div> </div>');
+        '<div class="cancel">'+def.cancel+'</div> ' +
+        '<div class="ok">'+def.ok+'</div> </div>');
 
     $btn.on("click", ".cancel", function () {
         $(this).parents(".tipsConfirm").remove();

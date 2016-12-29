@@ -276,7 +276,7 @@ function getClass() {
             }
         }
         if(result.status==500){
-            $noResult.text("No shop found,please try another shop name.");
+            $noResult.text("No shop found, please try another shop name.");
             $noResult.css('display','block');
             $("#storeHeader").css('display','none');
             $("#storeMenu").css('display','none');
@@ -285,7 +285,7 @@ function getClass() {
         }
         if(result.status==600) {
             setText();
-            $noResult.text("No class found,please try another class name.");
+            $noResult.text("No class found, please try another class name.");
             $noResult.css('display','block');
             return;
         }

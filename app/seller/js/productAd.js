@@ -15,10 +15,10 @@
             url: "/proxy/customer/loginout"
         }).done(function(){
             delCookie("token");
-            location.href = "../customer/index.html"
+            location.href = "../customer/modifyInfo.html"
         }).fail(function () {
             delCookie("token");
-            location.href = "../customer/index.html"
+            location.href = "../customer/modifyInfo.html"
         });
     });
 })();
@@ -60,7 +60,12 @@ function tipsAlert(msg, callback){
     $alert.appendTo($("body"));
 }
 
-function tipsConfirm(msg, callback){
+function tipsConfirm(msg, callback, config){
+    var def = {
+        "ok": "OK",
+        "cancel": "Cancel"
+    };
+    $.extend(def, config);
     var $confirm = $(".tipsConfirm");
     if ($confirm.length > 0) $confirm.remove();
     $confirm = $("<div class='tipsConfirm'></div>");
@@ -68,8 +73,8 @@ function tipsConfirm(msg, callback){
     var $content = $("<div class='content'></div>");
     var $msg = $("<div class='msg'>"+ msg +"</div>");
     var $btn = $('<div class="btn2"> ' +
-        '<div class="cancel">Cancel</div> ' +
-        '<div class="ok">Ok</div> </div>');
+        '<div class="cancel">'+def.cancel+'</div> ' +
+        '<div class="ok">'+def.ok+'</div> </div>');
 
     $btn.on("click", ".cancel", function () {
         $(this).parents(".tipsConfirm").remove();
@@ -138,7 +143,7 @@ function　createShowItem(data){
         data.statusText = "Waiting for result";
     } else if(data.status==5){
         data.statusText = "Bidding success";
-    } else if(data.status==-1){
+    } else if(data.status==10){
         data.statusText = "Closed";
     } else if(data.status==-2){
         data.statusText = "Bidding failure";
@@ -166,7 +171,7 @@ function　createShowItem(data){
                 product.productId +
             '</td>' +
             '<td class="price">HK$'+data.price.toFixed(2)+'</td> ' +
-            '<td class="displayTimee">'+data.showTime+'</td> ' +
+            '<td class="displayTime">'+data.showTime+'</td> ' +
             '<td class="status"> ' +
                 '<div class="showStatus">'+data.statusText+'</div> ' +
             '</td> ' +
@@ -347,7 +352,7 @@ var orderCancel = (function(){
         loading = showLoading(_this.parent());
         $.ajax({
             method: "post",
-            url: "/proxy/order/cancel",
+            url: "/proxy/shop-owner/ad/cancel",
             dataType: "json",
             data: reqData
         }).done(function(result){
@@ -357,7 +362,6 @@ var orderCancel = (function(){
             }
             var status = result.status;
             if(status==200){
-                $showItem.remove();
                 showSpinner("Success!", {
                     "callback": function () {
                         location.reload();
@@ -383,7 +387,6 @@ var orderCancel = (function(){
             };
             var status = result.status;
             if(status==200){
-                $showItem.remove();
                 showSpinner("Success!", {
                     "callback": function () {
                         location.reload();
@@ -415,6 +418,9 @@ $showList.on("click", ".showItem .cancel", function () {
     var self = this;
     tipsConfirm("Are you sure want to cancel the order?", function(){
         orderCancel.apply(self);
+    }, {
+        "ok": "YES",
+        "cancel": "NO"
     });
 });
 

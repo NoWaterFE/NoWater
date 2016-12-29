@@ -132,7 +132,12 @@ function tipsAlert(msg, callback){
     $alert.appendTo($("body"));
 }
 
-function tipsConfirm(msg, callback){
+function tipsConfirm(msg, callback, config){
+    var def = {
+        "ok": "OK",
+        "cancel": "Cancel"
+    };
+    $.extend(def, config);
     var $confirm = $(".tipsConfirm");
     if ($confirm.length > 0) $confirm.remove();
     $confirm = $("<div class='tipsConfirm'></div>");
@@ -140,8 +145,8 @@ function tipsConfirm(msg, callback){
     var $content = $("<div class='content'></div>");
     var $msg = $("<div class='msg'>"+ msg +"</div>");
     var $btn = $('<div class="btn2"> ' +
-        '<div class="cancel">Cancel</div> ' +
-        '<div class="ok">Ok</div> </div>');
+        '<div class="cancel">'+def.cancel+'</div> ' +
+        '<div class="ok">'+def.ok+'</div> </div>');
 
     $btn.on("click", ".cancel", function () {
         $(this).parents(".tipsConfirm").remove();
@@ -297,7 +302,7 @@ var postOrder = (function(){
                 location.href = loginUrl;
             } else {
                 tipsAlert("unknown error!", function () {
-                    location.href = "index.html";
+                    location.href = "modifyInfo.html";
                 });
             }
         }).fail(function(result){
@@ -307,6 +312,7 @@ var postOrder = (function(){
             }
             tipsAlert("server error!");
             result = {
+                status: 200,
                 data: [
                     {
                         time: "2016-09-05 16:30:06",
@@ -338,11 +344,20 @@ var postOrder = (function(){
                     }
                 ]
             };
-            var $orderList = $("#orderList"),
-                $orderTable = $orderList.find(".orderTable"),
-                data = result.data[0];
-            setOrderInfo(data);
-            $orderTable.append(createOrderItem(data));
+            var status = result.status;
+            if(status==200){
+                var $orderList = $("#orderList"),
+                    $orderTable = $orderList.find(".orderTable"),
+                    data = result.data[0];
+                setOrderInfo(data);
+                $orderTable.append(createOrderItem(data));
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                tipsAlert("unknown error!", function () {
+                    location.href = "modifyInfo.html";
+                });
+            }
         });
     };
 })();
@@ -407,7 +422,6 @@ var confirmR = (function(){
              };
              var status = result.status;
              if(status==200){
-             $orderItem.remove();
              showSpinner("Add Success!", {
              "callback": function () {
              location.reload();
@@ -478,7 +492,6 @@ var orderCancel = (function(){
              };
              var status = result.status;
              if(status==200){
-             $orderItem.remove();
              showSpinner("Add Success!", {
              "callback": function () {
              location.reload();
@@ -512,11 +525,14 @@ $orderList.on("click", ".orderItem .comment", function () {
         $commentPop = $(".commentPop");
     $commentPop.show()
         .find(".commentForm")[0].orderId.value = info.orderId;
-})
+});
 $orderList.on("click", ".orderItem .cancel", function () {
     var self = this;
     tipsConfirm("Are you sure want to cancel the order?", function(){
         orderCancel.apply(self);
+    }, {
+        "ok": "YES",
+        "cancel": "NO"
     });
 });
 
@@ -525,7 +541,7 @@ var orderId = getUrlParam("orderId"),
 if(orderId&&status){
     postOrder(orderId, status);
 } else {
-    location.href = "index.html";
+    location.href = "modifyInfo.html";
 }
 
 //输入错误提示
@@ -614,13 +630,38 @@ $commentForm.on("submit", function (e) {
     var loading = showLoading(_this);
     $.ajax({
         method: "post",
-        url: "/proxy/",
+        url: "/proxy/order/comment",
         data: _this.serialize()
     }).done(function(result){
-
+        if(loading) loading.remove();
+        _this.data("submit", false);
+        var status = result.status;
+        if(status==200){
+            showSpinner("Comment success", {
+                callback: function () {
+                    location.reload()
+                }
+            })
+        } else {
+            tipsAlert("Server error!");
+        }
     }).fail(function(result){
         if(loading) loading.remove();
         _this.data("submit", false);
+        tipsAlert("Server error!");
+        /*result = {
+         status: 200
+         };
+         var status = result.status;
+         if(status==200){
+         showSpinner("Comment success", {
+         callback: function () {
+         location.reload()
+         }
+         })
+         } else {
+         tipsAlert("Server error!");
+         }*/
     });
 
 });

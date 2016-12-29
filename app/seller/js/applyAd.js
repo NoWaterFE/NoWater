@@ -15,10 +15,10 @@
             url: "/proxy/customer/loginout"
         }).done(function(){
             delCookie("token");
-            location.href = "../customer/index.html"
+            location.href = "../customer/modifyInfo.html"
         }).fail(function () {
             delCookie("token");
-            location.href = "../customer/index.html"
+            location.href = "../customer/modifyInfo.html"
         });
     });
 })();
@@ -203,7 +203,7 @@ function applyAd(_this, loading, amount) {
         } else if(status==300){
             location.href = loginUrl;
         } else if(status==600) {
-            tipsAlert("Fail, it has been exceeded the specified deadline today.");
+            tipsAlert("Failure, it has been exceeded the specified deadline today.");
         } else {
             tipsAlert("Server error!");
         }
@@ -224,7 +224,7 @@ function applyAd(_this, loading, amount) {
         } else if(status==300){
             location.href = loginUrl;
         } else if(status==600) {
-            tipsAlert("Fail, it has been exceeded the specified deadline today.");
+            tipsAlert("Failure, it has been exceeded the specified deadline today.");
         } else {
             tipsAlert("Server error!");
         }

@@ -17,9 +17,8 @@ function addError(item, msg){
         .find("input")
         .focus()
         [0].scrollIntoView();
-
-
 }
+
 var $applyForm = $("#applyForm");
 $applyForm.on("submit", function (e) {
     var _this = $(this);
