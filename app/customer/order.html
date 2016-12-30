@@ -7,7 +7,9 @@
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
     <link rel="icon" type="image/x-icon" href="../favicon.ico" >
     <link rel="stylesheet" type="text/css" href="style/order.css">
+    <link rel="stylesheet" type="text/css" href="style/datepicker.css">
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="js/datepicker.min.js"></script>
 </head>
 
 <body>
@@ -61,7 +63,7 @@
                 </ul>
             </li>
             <li class="favorites">
-                <a href="favorites.html">
+                <a href="favourite.html">
                     <i></i><span>FAVORITES</span>
                 </a>
             </li>
@@ -83,6 +85,41 @@
             <li class="orderTab">Shipped</li>
             <li class="orderTab">Waiting for Comment</li>
         </ul>
+        <div class="filter" id="orderFilter">
+            <form class="orderForm">
+                <div class="search clearfix">
+                    <div class="inputItems clearfix">
+                        <input type="text" name="search" class="searchInput" maxlength="40" placeholder="By order ID or product name">
+                        <input type="submit" class="searchBtn">
+                    </div>
+                    <div class="moreFilter">
+                        <span class="moreText">More filter</span>
+                        <span class="lessText">Less filter</span>
+                        <span class="down"></span>
+                    </div>
+                </div>
+                <div class="timeSub">
+                    <div class="time clearfix">
+                        <select name="time" class="timeSelect">
+                            <option value="1">Last day</option>
+                            <option value="2">Last week</option>
+                            <option value="3">Last month</option>
+                            <option value="4">Last year</option>
+                            <option value="5">More</option>
+                        </select>
+                        <div class="detailTime">
+                            <span>Order Time: </span>
+                            <input data-toggle="datepicker" class="selectTime startTime">
+                            -
+                            <input data-toggle="datepicker" class="selectTime endTime">
+                        </div>
+                    </div>
+                    <div class="submit">
+                        <input type="submit" value="Search" class="searchBtn">
+                    </div>
+                </div>
+            </form>
+        </div>
         <div class="orderList" id="orderList">
             <table class="orderTable">
                 <colgroup>
@@ -118,6 +155,35 @@
         © Copyright NoWaterFE
     </div>
 </footer>
+
+<div class="commentPop">
+    <div class="shadow"></div>
+    <form class="commentForm" id="commentForm" novalidate>
+        <input type="hidden" name="orderId">
+        <i class="cancel close"></i>
+        <h2 class="title">Comment Product</h2>
+        <div class="input-item starDiv">
+            <label class="redStar">Star:</label>
+            <div class="star">
+                <span class="blank"></span>
+                <div class="full">
+                    <span></span>
+                </div>
+                <input type="hidden" name="star" class="starInput" value="0">
+            </div>
+            <span class="tips"></span>
+        </div>
+        <div class="input-item comment">
+            <label for="comment" class="redStar">Reviews:</label>
+            <textarea name="comment" id="comment" rows="4" placeholder="your reviews (no more than 200 characters)"></textarea>
+            <span class="tips"></span>
+        </div>
+        <div class="submit">
+            <input type="submit" value="CONFIRM">
+            <input type="button" value="CANCEL" class="cancel">
+        </div>
+    </form>
+</div>
 <script type="text/javascript" src="js/order.js"></script>
 </body>
 

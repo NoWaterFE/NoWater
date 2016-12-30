@@ -1,0 +1,116 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>PARKnSHOP</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="stylesheet" type="text/css" href="style/order.css">
+    <link rel="stylesheet" type="text/css" href="style/datepicker.css">
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="js/status.js"></script>
+    <script type="text/javascript" src="js/datepicker.min.js"></script>
+</head>
+
+<body>
+<div class="nav">
+    <ul>
+        <li class="navList"><a href="customerList.html">Customer Management</a></li>
+        <li class="navList"><a href="shopList.html">Shop Management</a></li>
+        <li class="navList"><a href="applyList.html">Shop Application List</a></li>
+        <li class="navList"><a href="shopAd.html">AD Management</a></li>
+        <li class="navList active"><a href="order.html">All Orders</a></li>
+    </ul>
+</div>
+<div class="content">
+    <header>
+        <div class="header">
+            <div class="logo">
+                <a href="index.html">
+                    Administrator System
+                </a>
+            </div>
+            <div class="logout">
+                <span class="logoutBtn" id="logoutBtn">
+                    Logout
+                </span>
+            </div>
+        </div>
+    </header>
+    <div class="main">
+        <!--页面在这写-->
+        <div class="orderDiv">
+            <ul class="orderMain clearfix" id="orderMain">
+                <li class="orderTab active">All Orders</li>
+            </ul>
+            <div class="filter" id="orderFilter">
+                <form class="orderForm">
+                    <div class="search clearfix">
+                        <div class="inputItems clearfix">
+                            <input type="text" name="search" class="searchInput" maxlength="40" placeholder="By order ID or product name">
+                            <input type="submit" class="searchBtn">
+                        </div>
+                        <div class="moreFilter">
+                            <span class="moreText">More filter</span>
+                            <span class="lessText">Less filter</span>
+                            <span class="down"></span>
+                        </div>
+                    </div>
+                    <div class="timeSub">
+                        <div class="time clearfix">
+                            <select name="time" class="timeSelect">
+                                <option value="1">Last day</option>
+                                <option value="2">Last week</option>
+                                <option value="3">Last month</option>
+                                <option value="4">Last year</option>
+                                <option value="5">More</option>
+                            </select>
+                            <div class="detailTime">
+                                <span>Order Time: </span>
+                                <input data-toggle="datepicker" class="selectTime startTime">
+                                -
+                                <input data-toggle="datepicker" class="selectTime endTime">
+                            </div>
+                        </div>
+                        <div class="submit">
+                            <input type="submit" value="Search" class="searchBtn">
+                        </div>
+                    </div>
+                </form>
+            </div>
+            <div class="orderList" id="orderList">
+                <table class="orderTable">
+                    <colgroup>
+                        <col class="col1">
+                        <col class="col2">
+                        <col class="col3">
+                        <col class="col4">
+                        <col class="col5">
+                        <!--<col class="col6">-->
+                    </colgroup>
+                    <tbody class="orderTh">
+                    <tr>
+                        <th>Product</th>
+                        <th>Price</th>
+                        <th>Quantity</th>
+                        <th>Total Price</th>
+                        <th>Status</th>
+                        <!--<th>Operate</th>-->
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="more">
+                    <div class="showMore hidden">
+                        <span>SHOW MORE</span>
+                        <span class="down"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="js/order.js"></script>
+</body>
+
+</html>

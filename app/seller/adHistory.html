@@ -22,12 +22,8 @@
                 <a href="javascript:;">
                     <i></i><span>ACCOUNT</span>
                 </a>
-                <ul class="accountOperate noLogin">
-                    <li><a href="register.html">Register</a></li>
-                    <li><a href="login.html">Login</a></li>
-                </ul>
                 <ul class="accountOperate hasLogin active">
-                    <li><a href="userCenter.html">Account Info</a></li>
+                    <li><a href="../customer/userCenter.html">Account Info</a></li>
                     <li><a href="javascript:;" class="logout">Logout</a></li>
                 </ul>
             </li>
@@ -52,18 +48,24 @@
                 <h2 class="title">Advertising Management</h2>
                 <ul>
                     <li class="navList">
-                        <a href="applyAd.html">Apply Advertisement</a>
+                        <a href="applyAd.html">Shop Advertising</a>
                     </li>
                     <li class="navList">
-                        <a href="#">Homepage Design</a>
+                        <a href="adHistory.html">Advertising History</a>
+                    </li>
+                    <li class="navList">
+                        <a href="homepageDesign.html">Homepage Design</a>
                     </li>
                 </ul>
             </li>
             <li class="category">
-                <h2 class="title">Order Management</h2>
+                <h2 class="title">Sale Management</h2>
                 <ul>
                     <li class="navList">
                         <a href="order.html">All Order</a>
+                    </li>
+                    <li class="navList">
+                        <a href="shopIncome.html">Shop Income</a>
                     </li>
                 </ul>
             </li>
@@ -71,7 +73,7 @@
                 <h2 class="title">Shop Management</h2>
                 <ul>
                     <li class="navList">
-                        <a href="index.html">Modify shop information</a>
+                        <a href="modifyInfo.html">Modify shop information</a>
                     </li>
                 </ul>
             </li>
@@ -80,11 +82,8 @@
     <div class="page">
         <div class="showDiv">
             <ul class="showMain clearfix" id="showMain">
-                <li class="showTab">All</li>
-                <li class="showTab">Processing Order</li>
-                <li class="showTab">Preparing for Shipment</li>
-                <li class="showTab">Shipped</li>
-                <li class="showTab">Waiting for Comment</li>
+                <li><a href="adHistory.html"  class="showTab active">Shop AD</a></li>
+                <li><a href="productAd.html"  class="showTab">Product AD</a></li>
             </ul>
             <div class="showList" id="showList">
                 <table class="showTable">
@@ -102,37 +101,6 @@
                         <th>Display time</th>
                         <th>Status</th>
                         <th>Operate</th>
-                    </tr>
-                    </tbody>
-                    <tbody class="showItem">
-                    <tr class="mr20"></tr>
-                    <tr class="showHeader">
-                        <td colspan="6"><span class="showTime">2016-09-05 16:30:06</span> <span class="showId">Bid ID: 2662774641999118</span>
-                            <span class="shopName"> <a href="../customer/store.html?shopId=12" target="_blank">Tom's shop</a> </span>
-                        </td>
-                    </tr>
-                    <tr class="showData">
-                        <td class="product">
-                            <a href="../customer/imgs/adshop01.jpg" target="_blank" class="pictureLink">
-                                <img src="../customer/imgs/adshop01.jpg">
-                            </a>
-                        </td>
-                        <td class="price">HK$333.00</td>
-                        <td class="displayTimee">2016-12-25</td>
-                        <td class="status">
-                            <div class="showStatus">Waiting for payment</div>
-                        </td>
-                        <td class="operate">
-                            <div class="timeTips">
-                            Leave 12 Hours
-                            </div>
-                            <div class="payNow">
-                                Pay now
-                            </div>
-                            <div class="cancel">
-                            Cancel Bid
-                            </div>
-                        </td>
                     </tr>
                     </tbody>
                 </table>

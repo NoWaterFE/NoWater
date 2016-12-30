@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PARKnSHOP</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="js/userInfo.js"></script>
+    <link rel="stylesheet" type="text/css" href="style/pay.css">
+</head>
+<body>
+<header>
+    <div class="header">
+        <div class="logo">
+            <a href="../customer/index.html">
+                <img src="imgs/head_icon/logo.png" alt="logo">
+            </a>
+        </div>
+        <ul class="quick-menu" id="quickMenu">
+            <li class="account">
+                <a href="javascript:;">
+                    <i></i><span>ACCOUNT</span>
+                </a>
+                <ul class="accountOperate hasLogin active">
+                    <li><a href="../customer/userCenter.html">Account Info</a></li>
+                    <li><a href="javascript:;" class="logout">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</header>
+<div class="content clearfix">
+    <div class="nav">
+        <ul>
+            <li class="category">
+                <h2 class="title">Products Management</h2>
+                <ul>
+                    <li class="navList">
+                        <a href="productList.html">Product List</a>
+                    </li>
+                    <li class="navList">
+                        <a href="addProduct.html">Add Product</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="category">
+                <h2 class="title">Advertising Management</h2>
+                <ul>
+                    <li class="navList">
+                        <a href="applyAd.html">Shop Advertising</a>
+                    </li>
+                    <li class="navList">
+                        <a href="adHistory.html">Advertising History</a>
+                    </li>
+                    <li class="navList">
+                        <a href="homepageDesign.html">Homepage Design</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="category">
+                <h2 class="title">Sale Management</h2>
+                <ul>
+                    <li class="navList">
+                        <a href="order.html">All Order</a>
+                    </li>
+                    <li class="navList">
+                        <a href="shopIncome.html">Shop Income</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="category">
+                <h2 class="title">Shop Management</h2>
+                <ul>
+                    <li class="navList">
+                        <a href="modifyInfo.html">Modify shop information</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="page">
+        <div class="pay clearfix">
+            <div class="payWay">
+                <div class="tips">Scan the QR code to pay by Alipay app.</div>
+                <div class="qrCode">
+                    <img src="http://koprvhdix117-10038234.cos.myqcloud.com/pay.jpg">
+                </div>
+            </div>
+            <div class="confirmPay">
+                <form action="javascript:" id="payForm" class="payForm" novalidate>
+                    <h2 class="title">Confirm Payment</h2>
+                    <div class="amount">
+                        <span class="key">Amount:</span>
+                        <span class="hk">HK$</span>
+                        <span class="price"></span>
+                    </div>
+                    <div class="submit">
+                        <input type="submit" value="CHECKOUT">
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+<footer>
+    <div class="footer">
+        © Copyright NoWaterFE
+    </div>
+</footer>
+<script type="text/javascript" src="js/pay.js"></script>
+</body>
+</html>

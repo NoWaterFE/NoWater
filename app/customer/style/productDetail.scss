@@ -2,25 +2,33 @@
 @import "base";
 
 .content {
-    min-height: 420px;
+    min-height: 400px;
     margin: 20px auto;
-    width: 1000px;
+    width: 1200px;
+    .noResult {
+        text-align: center;
+        margin: 80px auto;
+        color: grey;
+        font-size: 24px;
+    }
     .storeHeader {
         height: 60px;
-        margin-top: 30px;
+        margin-top: 40px;
         .storeInfo {
             float: left;
-            margin-top: 15px;
+            padding-left: 10px;
             .shopName {
-                width: 200px;
-                font-size: 30px;
-                float: left;
+                width: 600px;
+                font-size: 20px;
+                color: #292d84;
+                white-space: nowrap;
+                text-overflow: ellipsis;
+                overflow: hidden;
             }
             .detail {
-                font-size: 15px;
-                float: right;
+                font-size: 13px;
                 color: darkgrey;
-                line-height: 20px;
+                margin-top: 8px;
             }
         }
         .storeSearch {
@@ -99,8 +107,17 @@
     .product {
         display: none;
     }
+    .productDetail {
+        width: 1000px;
+        margin: 0 auto;
+    }
     .productForm {
         padding-left: 40px;
+        .operate.off {
+            color: #aaa;
+            font-size: 20px;
+            margin: 60px 0;
+        }
     }
     .productImages {
         float: left;
@@ -219,17 +236,147 @@
         }
     }
     .reviews {
-        padding: 50px 0;
+        padding-top: 50px;
+        width: 1000px;
+        margin: 0 auto;
         .reviewTitle {
             border-bottom: 1px solid #E0E0E0;
             font-size: 20px;
             line-height: 30px;
-            color: #484848;
+            color: #292d84;
+        }
+        .avgStar {
+            margin: 20px;
+            .star {
+                height: 22px;
+                position: relative;
+                width: 116px;
+                float: left;
+                .blank {
+                    background: url(../imgs/blank.png) no-repeat;
+                    background-size: contain;
+                    display: inline-block;
+                    height: 22px;
+                    width: 116px;
+                }
+                .full {
+                    position: absolute;
+                    z-index: 1;
+                    height: 22px;
+                    width: 90%;
+                    left: 0;
+                    top: 0;
+                    overflow: hidden;
+                    span {
+                        background: url(../imgs/full.png) no-repeat;
+                        background-size: contain;
+                        display: inline-block;
+                        height: 22px;
+                        width: 116px;
+                    }
+                }
+            }
+            .num {
+                float: left;
+                line-height: 22px;
+                padding-left: 10px;
+                color: #292d84;
+            }
         }
         .reviewList {
-            margin: 20px;
             font-size: 14px;
             color: #333;
+            border-bottom: 1px dashed #e5e5e5;
+            padding: 10px 0;
+            &:first-child {
+                border-top: 1px dashed #e5e5e5;
+            }
+            .userName {
+                width: 100px;
+                float: left;
+            }
+            .comment {
+                float: left;
+                .star {
+                    height: 14px;
+                    position: relative;
+                    width: 74px;
+                    .blank {
+                        background: url(../imgs/blank.png) no-repeat;
+                        background-size: contain;
+                        display: inline-block;
+                        height: 14px;
+                        width: 74px;
+                    }
+                    .full {
+                        position: absolute;
+                        z-index: 1;
+                        height: 14px;
+                        width: 90%;
+                        left: 0;
+                        top: 0;
+                        overflow: hidden;
+                        &.l1 {
+                            width: 20%;
+                        }
+                        &.l2 {
+                            width: 40%;
+                        }
+                        &.l3 {
+                            width: 60%;
+                        }
+                        &.l4 {
+                            width: 80%;
+                        }
+                        &.l5 {
+                            width: 100%;
+                        }
+                        span {
+                            background: url(../imgs/full.png) no-repeat;
+                            background-size: contain;
+                            display: inline-block;
+                            height: 14px;
+                            width: 74px;
+                        }
+                    }
+                }
+                .text {
+                    line-height: 20px;
+                    font-size: 14px;
+                    margin: 8px 0;
+                }
+                .time {
+                    font-size: 12px;
+                    color: #999;
+                }
+            }
+        }
+        .more {
+            text-align: center;
+            margin-top: 10px;
+            height: 40px;
+            position: relative;
+            .showMore{
+                cursor: pointer;
+                display: inline-block;
+                padding: 10px 40px;
+                font-size: 14px;
+                text-align: center;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                &.hidden {
+                    display: none;
+                }
+                .down {
+                    border: 1px solid #000;
+                    border-top-color: transparent;
+                    border-right-color: transparent;
+                    width: 10px;
+                    height: 10px;
+                    display: inline-block;
+                    transform: rotate(-45deg) translate(6px, 2px);
+                }
+            }
         }
     }
 }

@@ -133,7 +133,12 @@ function tipsAlert(msg, callback){
     $alert.appendTo($("body"));
 }
 
-function tipsConfirm(msg, callback){
+function tipsConfirm(msg, callback, config){
+    var def = {
+        "ok": "OK",
+        "cancel": "Cancel"
+    };
+    $.extend(def, config);
     var $confirm = $(".tipsConfirm");
     if ($confirm.length > 0) $confirm.remove();
     $confirm = $("<div class='tipsConfirm'></div>");
@@ -141,8 +146,8 @@ function tipsConfirm(msg, callback){
     var $content = $("<div class='content'></div>");
     var $msg = $("<div class='msg'>"+ msg +"</div>");
     var $btn = $('<div class="btn2"> ' +
-        '<div class="cancel">Cancel</div> ' +
-        '<div class="ok">Ok</div> </div>');
+        '<div class="cancel">'+def.cancel+'</div> ' +
+        '<div class="ok">'+def.ok+'</div> </div>');
 
     $btn.on("click", ".cancel", function () {
         $(this).parents(".tipsConfirm").remove();
@@ -272,10 +277,20 @@ function　createOrderItem(data){
 
 var postOrder = (function(){
     var loading = null;
-    return function (orderStatus) {
+    return function (orderStatus, param) {
         if(loading) return ;
-        loading = showLoading($(".more"));
         var reqData = "status="+orderStatus;
+        if(param) {
+            loading = showLoading($orderForm);
+            var timeFilter = param.timeFilter || 0;
+            reqData += "&timeFilter=" + timeFilter + "&searchKey=" + param.searchKey;
+            if (timeFilter == 5) {
+                reqData += "&beginTime="+param.beginTime+"&endTime="+param.endTime;
+            }
+        } else {
+            loading = showLoading($(".more"));
+            reqData += "&timeFilter=0";
+        }
         $.ajax({
             method: "get",
             url: "/proxy/order/list",
@@ -290,6 +305,9 @@ var postOrder = (function(){
             if(status==200){
                 var len = result.data.length,
                     $orderTable = $orderList.find('.orderTable');
+                if(param) {
+                    $orderTable.find(".orderItem").remove();
+                }
                 for(var i=0; i<len; i++){
                     $orderTable.append(createOrderItem(result.data[i]));
                 }
@@ -334,11 +352,15 @@ var postOrder = (function(){
             };
             var status = result.status;
             if(status==200){
-                var len = result.data.length,
+                var data = result.data,
+                    len = data.length,
                     $orderTable = $orderList.find('.orderTable');
+                if(param) {
+                    $orderTable.find(".orderItem").remove();
+                }
                 for(var i=0; i<len; i++){
-                    if(orderStatus!=0) { result.data[i].status=orderStatus }
-                    $orderTable.append(createOrderItem(result.data[i]));
+                    if(orderStatus!=0) { data[i].status=orderStatus }
+                    $orderTable.append(createOrderItem(data[i]));
                 }
             } else if(status==300) {
                 location.href = loginUrl;
@@ -357,7 +379,7 @@ function payNow() {
         sumPrice = info.sumPrice,
         arr = [];
     arr.push(orderId);
-    location.href = "pay?orderIdList="+JSON.stringify(arr)+"&sumPrice="+sumPrice;
+    location.href = "pay.html?orderIdList="+JSON.stringify(arr)+"&sumPrice="+sumPrice;
 }
 
 var confirmR = (function(){
@@ -382,7 +404,6 @@ var confirmR = (function(){
             }
             var status = result.status;
             if(status==200){
-                $orderItem.remove();
                 showSpinner("Success!", {
                     "callback": function () {
                         location.reload();
@@ -408,7 +429,6 @@ var confirmR = (function(){
              };
              var status = result.status;
              if(status==200){
-             $orderItem.remove();
              showSpinner("Add Success!", {
              "callback": function () {
              location.reload();
@@ -454,7 +474,6 @@ var orderCancel = (function(){
             }
             var status = result.status;
             if(status==200){
-                $orderItem.remove();
                 showSpinner("Success!", {
                     "callback": function () {
                         location.reload();
@@ -480,7 +499,6 @@ var orderCancel = (function(){
              };
              var status = result.status;
              if(status==200){
-             $orderItem.remove();
              showSpinner("Add Success!", {
              "callback": function () {
              location.reload();
@@ -515,7 +533,23 @@ $orderList.on("click", ".more .showMore", function(e){
 
 $orderList.on("click", ".orderItem .payNow", payNow);
 $orderList.on("click", ".orderItem .confirmR", confirmR);
-$orderList.on("click", ".orderItem .cancel", orderCancel);
+$orderList.on("click", ".orderItem .comment", function () {
+    var _this = $(this),
+        $orderItem = _this.parents(".orderItem"),
+        info = $orderItem.data("info"),
+        $commentPop = $(".commentPop");
+    $commentPop.show()
+        .find(".commentForm")[0].orderId.value = info.orderId;
+});
+$orderList.on("click", ".orderItem .cancel", function () {
+    var self = this;
+    tipsConfirm("Are you sure want to cancel the order?", function(){
+        orderCancel.apply(self);
+    }, {
+        "ok": "YES",
+        "cancel": "NO"
+    });
+});
 
 var $orderMain = $("#orderMain");
 $orderMain.on("click", ".orderTab", function () {
@@ -538,3 +572,181 @@ $orderMain.find(".orderTab")
     .addClass("active");
 
 postOrder(orderStatus);
+
+//输入错误提示
+function addError(item, msg){
+    item.addClass("error")
+        .find("input")
+        .focus()
+        .end()
+        .find(".tips")
+        .text(msg);
+}
+
+var $commentForm = $("#commentForm");
+
+$commentForm.on("input", ".input-item textarea", function () {
+    var _this = $(this);
+    _this.parent().removeClass('error');
+});
+
+$commentForm.on("mousemove", ".star", function(e){
+    var _this = $(this);
+    if(_this.hasClass("active")) return;
+    var cX = e.clientX,
+        left = _this.offset().left,
+        width = _this.width(),
+        rate = Math.ceil((cX - left)/width*5);
+    _this.find(".full")
+        .width(rate*20+"%");
+});
+
+$commentForm.on("mouseout", ".star", function(e){
+    var _this = $(this),
+        width = _this.find(".starInput").val()*20 + "%";
+    _this.find(".full")
+        .width(width);
+});
+
+$commentForm.on("click", ".star", function(e){
+    var _this = $(this),
+        cX = e.clientX,
+        left = _this.offset().left,
+        width = _this.width(),
+        rate = Math.ceil((cX - left + 1)/width*5);
+    _this.addClass("active")
+    _this.find(".full")
+        .width(rate*20+"%")
+        .end()
+        .find(".starInput")
+        .val(rate)
+        .parents(".starDiv")
+        .removeClass("error");
+});
+
+$commentForm.on("click", ".cancel", function (e) {
+    var $delegateTarget = $(e.delegateTarget);
+    $delegateTarget[0].reset();
+    $delegateTarget
+        .find(".full")
+        .width(0)
+        .end()
+        .find(".star")
+        .removeClass("active")
+        .find(".starInput")
+        .val(0)
+        .end()
+        .end()
+        .parent()
+        .hide();
+});
+
+$commentForm.on("submit", function (e) {
+    var _this = $(this);
+    e.preventDefault();
+    var $starDiv = _this.find(".starDiv"),
+        $comment = _this.find(".comment");
+    if (this.star.value==0) {
+        addError($starDiv, "Please choose a star-rating!");
+        return;
+    }
+    if (!this.comment.value) {
+        addError($comment, "Please input your reviews!");
+        return;
+    }
+    if(_this.data("submit")) return ;
+    _this.data("submit", true);
+    var loading = showLoading(_this);
+    $.ajax({
+        method: "post",
+        url: "/proxy/order/comment",
+        data: _this.serialize()
+    }).done(function(result){
+        if(loading) loading.remove();
+        _this.data("submit", false);
+        var status = result.status;
+        if(status==200){
+            showSpinner("Comment success", {
+                callback: function () {
+                    location.reload()
+                }
+            })
+        } else {
+            tipsAlert("Server error!");
+        }
+    }).fail(function(result){
+        if(loading) loading.remove();
+        _this.data("submit", false);
+        tipsAlert("Server error!");
+        /*result = {
+            status: 200
+        };
+        var status = result.status;
+        if(status==200){
+            showSpinner("Comment success", {
+                callback: function () {
+                    location.reload()
+                }
+            })
+        } else {
+            tipsAlert("Server error!");
+        }*/
+    });
+
+});
+
+var $orderFilter = $("#orderFilter"),
+    $orderForm = $orderFilter.find(".orderForm");
+
+$orderForm.find('.selectTime').datepicker({
+    format: 'yyyy-mm-dd',
+    autoPick: true
+}).blur(function(){
+    var _this = $(this);
+    _this.datepicker("pick");
+});
+
+$orderFilter.on("click", ".moreFilter", function(){
+   $(this).toggleClass("less")
+       .parent()
+       .siblings(".timeSub")
+       .slideToggle(200);
+});
+$orderFilter.on("change", ".timeSelect", function () {
+   var _this = $(this);
+   if(_this.val()=="5"){
+       _this.siblings('.detailTime').show();
+   } else {
+       _this.siblings('.detailTime').hide();
+   }
+});
+$orderForm.on("submit", (function(){
+    return function(e){
+        e.preventDefault();
+        var _this = $(this),
+            isShow = _this.find(".moreFilter").hasClass("less"),
+            searchKey = _this[0].search.value,
+            param = null;
+        if(isShow) {
+            var time = _this[0].time.value;
+            if(time!="5") {
+                param = {
+                    timeFilter: time,
+                    searchKey: searchKey
+                };
+            } else {
+                param = {
+                    timeFilter: time,
+                    searchKey: searchKey,
+                    beginTime: _this.find(".startTime").val(),
+                    endTime: _this.find(".endTime").val()
+                };
+            }
+        } else {
+            param = {
+                searchKey: searchKey
+            };
+        }
+        postOrder(orderStatus, param);
+    };
+})());

@@ -18,7 +18,7 @@ var sass = require('gulp-sass'), //sass->css
 
 
 /*原路径*/
-var app = "app"
+var app = "app";
 
 var paths = {
     scripts: "app/**/js/**/*.js",

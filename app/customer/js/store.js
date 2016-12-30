@@ -206,7 +206,7 @@ function enter() {
     var keyWord = $("#keyWordInStore").val();
     var e= window.event;
     if (e.keyCode == 13 && keyWord) {
-        location.href = "store.html?shopId=" + encodeURIComponent(shopId) + "&keyWord=" + encodeURIComponent(keyWord);
+        location.href = "store.html?shopId=" + shopId + "&keyWord=" + encodeURIComponent(keyWord);
     }
 }
 
@@ -218,7 +218,7 @@ $("#searchInStore").click(function(e){
         e.returnValue = false;
     }
     if (keyWord) {
-        location.href = "store.html?shopId=" + encodeURIComponent(shopId) + "&keyWord=" + encodeURIComponent(keyWord);
+        location.href = "store.html?shopId=" + shopId + "&keyWord=" + encodeURIComponent(keyWord);
     }
 });
 
@@ -276,7 +276,7 @@ function getClass() {
             }
         }
         if(result.status==500){
-            $noResult.text("No shop found,please try another shop name.");
+            $noResult.text("No shop found, please try another shop name.");
             $noResult.css('display','block');
             $("#storeHeader").css('display','none');
             $("#storeMenu").css('display','none');
@@ -285,14 +285,14 @@ function getClass() {
         }
         if(result.status==600) {
             setText();
-            $noResult.text("No class found,please try another class name.");
+            $noResult.text("No class found, please try another class name.");
             $noResult.css('display','block');
             return;
         }
         $adGoods = null;
     })
         .fail(function(result){
-            /*result = {
+            result = {
                 status: 200,
                 actualCount: 10,
                 startId: 2,
@@ -425,7 +425,7 @@ function getClass() {
                 $noResult.text("No class found,please try another class name.");
                 $noResult.css('display','block');
                 return;
-            }*/
+            }
             $adGoods = null;
         });
 }

@@ -13,20 +13,20 @@
             quickMenu.find(".my-cart .count").text(userInfo.cartNum);
         }
     }).fail(function (result) {
-        console.log(result.statusText);
+        /*console.log(result.statusText);
         result = {
-         status: 200,
-         userInformation: [{
-         name: "gdh",
-         cartNum: 33
-         }]
-         };
-         if(result.status==200){
-         var userInfo = result.userInformation[0];
-         var quickMenu = $("#quickMenu");
-         quickMenu.find(".accountOperate").toggleClass("active");
-         quickMenu.find(".my-cart .count").text(userInfo.cartNum);
-         }
+            status: 200,
+            userInformation: [{
+                name: "gdh",
+                cartNum: 33
+            }]
+        };
+        if (result.status == 200) {
+            var userInfo = result.userInformation[0];
+            var quickMenu = $("#quickMenu");
+            quickMenu.find(".accountOperate").toggleClass("active");
+            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+        }*/
     });
 
     //headMenu添加事件
@@ -176,7 +176,7 @@ function showSpinner(msg, config){
     var def = {
         timeout: 1500
     };
-    config = $.extend(config, def);
+    $.extend(def, config);
     $spinner.appendTo($("body"))
         .ready(function () {
             $spinner.css({
@@ -187,8 +187,8 @@ function showSpinner(msg, config){
         });
     setTimeout(function(){
         if($spinner) $spinner.remove();
-        var callback = config.callback;
+        var callback = def.callback;
         if(callback) callback();
-    }, config.timeout);
+    }, def.timeout);
 }
 showSpinner("add success");

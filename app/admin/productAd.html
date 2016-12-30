@@ -1,0 +1,82 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>PARKnSHOP</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="stylesheet" type="text/css" href="style/productAd.css">
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="js/status.js"></script>
+</head>
+
+<body>
+<div class="nav">
+    <ul>
+        <li class="navList"><a href="customerList.html">Customer Management</a></li>
+        <li class="navList"><a href="shopList.html">Shop Management</a></li>
+        <li class="navList"><a href="applyList.html">Shop Application List</a></li>
+        <li class="navList active"><a href="shopAd.html">AD Management</a></li>
+        <li class="navList"><a href="order.html">All Orders</a></li>
+    </ul>
+</div>
+<div class="content">
+    <header>
+        <div class="header">
+            <div class="logo">
+                <a href="index.html">
+                    Administrator System
+                </a>
+            </div>
+            <div class="logout">
+                <span class="logoutBtn" id="logoutBtn">
+                    Logout
+                </span>
+            </div>
+        </div>
+    </header>
+    <div class="main">
+        <!--页面在这写-->
+        <div class="showDiv">
+            <ul class="showMain clearfix" id="showMain">
+                <li><a href="shopAd.html"  class="showTab">Shop AD</a></li>
+                <li><a href="productAd.html"  class="showTab active">Product AD</a></li>
+            </ul>
+            <div class="showList" id="showList">
+                <table class="showTable">
+                    <colgroup>
+                        <col class="col1">
+                        <col class="col2">
+                        <col class="col3">
+                        <col class="col4">
+                        <col class="col5">
+                        <col class="col6">
+                        <col class="col7">
+                    </colgroup>
+                    <tbody class="showTh">
+                    <tr>
+                        <th>Product</th>
+                        <th>Product ID</th>
+                        <th>Shop ID</th>
+                        <th>Bid price</th>
+                        <th>Display time</th>
+                        <th>Status</th>
+                        <th>Operate</th>
+                    </tr>
+                    </tbody>
+                </table>
+                <div class="more">
+                    <div class="showMore hidden">
+                        <span>SHOW MORE</span>
+                        <span class="down"></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript" src="js/productAd.js"></script>
+</body>
+
+</html>

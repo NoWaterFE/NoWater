@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>PARKnSHOP</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico">
+    <link rel="icon" type="image/x-icon" href="../favicon.ico">
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="js/userInfo.js"></script>
+    <link rel="stylesheet" type="text/css" href="style/modifyInfo.css">
+</head>
+<body>
+<header>
+    <div class="header">
+        <div class="logo">
+            <a href="../customer/index.html">
+                <img src="imgs/head_icon/logo.png" alt="logo">
+            </a>
+        </div>
+        <ul class="quick-menu" id="quickMenu">
+            <li class="account">
+                <a href="javascript:;">
+                    <i></i><span>ACCOUNT</span>
+                </a>
+                <ul class="accountOperate hasLogin active">
+                    <li><a href="../customer/userCenter.html">Account Info</a></li>
+                    <li><a href="javascript:;" class="logout">Logout</a></li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+</header>
+<div class="content clearfix">
+    <div class="nav">
+        <ul>
+            <li class="category">
+                <h2 class="title">Products Management</h2>
+                <ul>
+                    <li class="navList">
+                        <a href="productList.html">Product List</a>
+                    </li>
+                    <li class="navList">
+                        <a href="addProduct.html">Add Product</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="category">
+                <h2 class="title">Advertising Management</h2>
+                <ul>
+                    <li class="navList">
+                        <a href="applyAd.html">Shop Advertising</a>
+                    </li>
+                    <li class="navList">
+                        <a href="adHistory.html">Advertising History</a>
+                    </li>
+                    <li class="navList">
+                        <a href="homepageDesign.html">Homepage Design</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="category">
+                <h2 class="title">Sale Management</h2>
+                <ul>
+                    <li class="navList">
+                        <a href="order.html">All Order</a>
+                    </li>
+                    <li class="navList">
+                        <a href="shopIncome.html">Shop Income</a>
+                    </li>
+                </ul>
+            </li>
+            <li class="category">
+                <h2 class="title">Shop Management</h2>
+                <ul>
+                    <li class="navList">
+                        <a href="modifyInfo.html">Modify shop information</a>
+                    </li>
+                </ul>
+            </li>
+        </ul>
+    </div>
+    <div class="page">
+        <form id="infoForm" novalidate>
+            <h2 class="title">Your Shop Information</h2>
+            <div class="input-item shopName">
+                <label for="shopName" class="redStar">Shop name</label>
+                <input type="text" name="shopName" id="shopName" disabled="disabled" placeholder="Your shop name" maxlength="50" required>
+                <span class="tips"></span>
+            </div>
+            <div class="input-item shopEmail">
+                <label for="shopEmail" class="redStar">Email</label>
+                <input type="email" name="email" id="shopEmail" placeholder="Your email address">
+                <span class="tips"></span>
+            </div>
+            <div class="input-item shopTel">
+                <label for="shopTel" class="redStar">Telephone</label>
+                <input type="tel" name="telephone" id="shopTel" placeholder="Telephone number(HK)">
+                <span class="tips"></span>
+            </div>
+            <!--<div class="alipay shopInfo">
+                <label for="alipay" class="redStar">Alipay</label>
+                <input type="text" name="alipay" id="alipay" required>
+            </div>-->
+            <div class="submit">
+                <input type="submit" value="SAVE">
+            </div>
+            <div class="applying">
+            </div>
+        </form>
+    </div>
+</div>
+<footer>
+    <div class="footer">
+        © Copyright NoWaterFE
+    </div>
+</footer>
+<script type="text/javascript" src="js/modifyInfo.js"></script>
+</body>
+</html>

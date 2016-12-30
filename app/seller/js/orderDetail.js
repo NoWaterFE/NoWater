@@ -152,7 +152,7 @@ function　createOrderItem(data){
     var product = data.product;
     var orderData = '<tr class="orderData"> ' +
         '<td class="product"> ' +
-        '<a href="productDetail.html?id='+product.productId+'" target="_blank" class="clearfix productLink"> ' +
+        '<a href="../customer/productDetail.html?id='+product.productId+'" target="_blank" class="clearfix productLink"> ' +
         '<img src="'+product.photo[0]+'"> ' +
         '<span class="productName">'+product.productName+'</span> ' +
         '</a> ' +

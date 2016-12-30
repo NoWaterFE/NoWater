@@ -61,7 +61,7 @@
                 </ul>
             </li>
             <li class="favorites">
-                <a href="favorites.html">
+                <a href="favourite.html">
                     <i></i><span>FAVORITES</span>
                 </a>
             </li>
@@ -77,9 +77,9 @@
     <!--页面写在这-->
     <div class="storeHeader" id="storeHeader">
         <div class="storeInfo" id="storeInfo">
-            <span class="shopName" id="shopName"></span>
+            <div class="shopName" id="shopName"></div>
 
-            <span class="detail" id="detail"></span>
+            <div class="detail" id="detail"></div>
         </div>
 
         <div class="storeSearch" id="storeSearch">
@@ -110,32 +110,48 @@
                 <div class="productInfo">
                     <h2 class="productName"></h2>
                     <div class="price"><span>HK$</span><span class="priceSpan"></span></div>
-                    <div class="quantity">
-                        <label>Quantity:</label>
-                        <div class="quantityOp clearfix">
-                            <span class="minus disabled"></span>
-                            <input type="text" name="num" value="1" class="num">
-                            <span class="plus"></span>
-                            <span class="stockText">Pieces <span class="stockSpan"></span> available</span>
-                            <input type="hidden" name="stock" class="stock" value="50">
+                    <div class="operate">
+                        <div class="quantity">
+                            <label>Quantity:</label>
+                            <div class="quantityOp clearfix">
+                                <span class="minus disabled"></span>
+                                <input type="text" name="num" value="1" class="num">
+                                <span class="plus"></span>
+                                <span class="stockText">Pieces <span class="stockSpan"></span> available</span>
+                                <input type="hidden" name="stock" class="stock" value="50">
+                            </div>
                         </div>
-                    </div>
-                    <div class="buyNow">
-                        <a href="javascript:" class="buy">Buy Now</a>
-                    </div>
-                    <div class="otherOp">
-                        <a href="javascript:" class="addToCart">Add To Cart</a>
-                        <a href="javascript:" class="addToFavo">Add To Favorites</a>
+                        <div class="buyNow">
+                            <a href="javascript:" class="buy">Buy Now</a>
+                        </div>
+                        <div class="otherOp">
+                            <a href="javascript:" class="addToCart">Add To Cart</a>
+                            <a href="javascript:" class="addToFavo">Add To Favorites</a>
+                        </div>
                     </div>
                 </div>
             </form>
         </div>
-        <div class="reviews">
-            <h3 class="reviewTitle">reviews</h3>
+        <div class="reviews" id="reviews">
+            <h3 class="reviewTitle">Customer Reviews</h3>
+            <div class="avgStar clearfix">
+                <div class="star">
+                    <span class="blank"></span>
+                    <div class="full">
+                        <span></span>
+                    </div>
+                </div>
+                <div class="num">
+                </div>
+            </div>
             <ul class="reviewSet">
-                <li class="reviewList">
-                </li>
             </ul>
+            <div class="more">
+                <div class="showMore hidden">
+                    <span>SHOW MORE</span>
+                    <span class="down"></span>
+                </div>
+            </div>
         </div>
     </div>
 </div>

@@ -7,12 +7,22 @@
         dataType: "json"
     });
     getStoreAd.done(function (result) {
-        if(result.status==200){
-            var adLi = $adStore.find(".carousel li");
-            for(var i=result.data.length-1; i>=0; i--){
-                adLi.eq(i).data("shopId", result.data[i].shopId);
-                adLi.eq(i).find("img").attr({src: result.data[i].adPhotoUrl});
+        var status = result.status;
+        if (status == 200) {
+            var $carousel = $adStore.find(".carousel"),
+                $spot = $adStore.find(".spot"),
+                data = result.data,
+                len = data.length,
+                shopItem = createShopItem(data);
+            if(shopItem) {
+                $carousel.append(shopItem)
+                    .css('width', len*100+"%");
+                $spot.append(createSpot(len));
+            } else {
+                $adStore.hide();
             }
+        } else if(status == 400) {
+            $adStore.hide();
         }
         $adStore = null;
     }).fail(function(result){
@@ -44,11 +54,20 @@
             ]
         };
         if (result.status == 200) {
-            var adLi = $adStore.find(".carousel li");
-            for (var i = result.data.length - 1; i >= 0; i--) {
-                adLi.eq(i).data("shopId", result.data[i].shopId);
-                adLi.eq(i).find("img").attr({src: result.data[i].adPhotoUrl});
+            var $carousel = $adStore.find(".carousel"),
+                $spot = $adStore.find(".spot"),
+                data = result.data,
+                len = data.length,
+                shopItem = createShopItem(data);
+            if(shopItem) {
+                $carousel.append(shopItem)
+                    .css('width', len*100+"%");
+                $spot.append(createSpot(len));
+            } else {
+                $adStore.hide();
             }
+        } else if(status == 400) {
+            $adStore.hide();
         }
         $adStore = null;
     });
@@ -186,6 +205,24 @@ function createGoodsItem(data) {
             '</div> ' +
         '</div> ' +
         '</li>').data("productId", data.productId);
+}
+
+function createShopItem(data) {
+    var len = data.length;
+    if(len == 0) return ;
+    var shop = '<li class="active"><a href="store.html?shopId='+data[0].shopId+'"><img src="'+data[0].adPhotoUrl+'"></a></li>';
+    for(var i=1; i<len; i++){
+        shop += '<li class="active"><a href="store.html?shopId='+data[i].shopId+'"><img src="'+data[i].adPhotoUrl+'"></a></li>';
+    }
+    return $(shop);
+}
+
+function createSpot(len) {
+    var spot = '<li class="active"></li>';
+    for(var i=1; i<len; i++){
+        spot += '<li></li>';
+    }
+    return $(spot);
 }
 
 
@@ -343,12 +380,6 @@ $adStore.on("click", ".spot li", function (event) {
     var index = $(this).index();
     goAd(index);
 });
-$adStore.on("click", ".carousel li", function (event) {
-    if(event && event.stopPropagation) event.stopPropagation();
-    event.cancelBubble = true;
-    var id = $(this).data("shopId");
-    location.href="store.html?shopId="+id;
-});
 $adStore.on("mouseover", function () {
     if (adTimer) clearInterval(adTimer);
 });
@@ -418,41 +449,41 @@ var addToFavo = (function(){
         if(loading) return;
         var $goods = _this.parents(".goods-item");
         loading = showLoading($goods);
-        var data = "id="+$goods.data("productId")+"&favoriteType=0";
+        var data = "id="+$goods.data("productId")+"&type=2";
         $.ajax({
             method: "post",
             url: "/proxy/customer/favorite/adding",
             data: data
-        }).done(function(){
+        }).done(function(result){
             if(loading) {
                 loading.remove();
                 loading = null;
             }
             var status = result.status;
-            if(status==200){
-                showSpinner("Add success")
+            if(status==200 || status==400){
+                showSpinner("Add success");
             } else if(status==300){
                 location.href = loginUrl;
-            } else {
+            }else {
                 tipsAlert("server error!");
             }
         }).fail(function(result){
+            tipsAlert("server error!");
             if(loading) {
                 loading.remove();
                 loading = null;
             }
-            //tipsAlert("server error");
-            result = {
+            /*result = {
                 status: 200
             };
             var status = result.status;
-            if(status==200){
-                showSpinner("Add success")
-            } else if(status==300){
+            if (status == 200 || status == 400) {
+                showSpinner("Add success");
+            } else if (status == 300) {
                 location.href = loginUrl;
             } else {
                 tipsAlert("server error!");
-            }
+            }*/
         });
     };
 })();

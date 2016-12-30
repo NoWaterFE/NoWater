@@ -32,11 +32,12 @@ var productClass = ["TV & Home Theater", "Computers & Tablets", "Cell Phones",
 function createProductList(info){
     var op = info.isDel == 0 ?
     '<div class="operate"> ' +
-        '<input type="button" value="modify" class="modify"> ' +
-        '<input type="button" value="off" class="delete"> ' +
+        '<input type="button" value="Bid for ad" class="bid"> ' +
+        '<input type="button" value="Modify" class="modify"> ' +
+        '<input type="button" value="Off" class="delete"> ' +
     '</div> ' :
     '<div class="off"> ' +
-        'under the shelf' +
+        'off the shelf' +
     '</div>';
     return $('<tr class="productItem"> ' +
         '<td> ' +
@@ -72,7 +73,7 @@ function createProductList(info){
         '<td> ' +
             　op +
         '</td> ' +
-        '</tr>');
+        '</tr>').data("info", info);
 }
 
 var $productList = $("#productList");
@@ -103,7 +104,6 @@ var  postProductList = (function() {
                 var $tbody = $productList.find("tbody");
                 for(var i=0; i<len; i++){
                     createProductList(data[i])
-                        .data("info", data[i])
                         .appendTo($tbody);
                 }
                 if(startId!=-1){
@@ -138,6 +138,124 @@ var  postProductList = (function() {
 
 postProductList();
 
+function createBid(productId) {
+    var $bid = $('<div class="bidPop">' +
+        '<div class="shadow"></div>' +
+            '<form class="bidForm" id="bidForm" novalidate>' +
+            '<input type="hidden" name="productId" class="productId" value="'+productId+'">' +
+            '<i class="cancel close"></i>' +
+            '<h2 class="title">Bidding for tomorrow\'s product ad space</h2>' +
+            '<div class="input-item price">' +
+                '<label for="price" class="redStar">Bid Price(HK$): </label>' +
+                '<input type="text" name="price" id="price"  placeholder="At least 1000" maxlength="10">' +
+                '<span class="tips"></span>' +
+                '</div>' +
+            '<div class="submit">' +
+                '<input type="submit" value="CONFIRM">' +
+                '<input type="button" value="CANCEL" class="cancel">' +
+            '</div>' +
+        '</form>' +
+        '</div>');
+
+    var $bidForm = $bid.find(".bidForm");
+
+    $bidForm.on("input", ".input-item input", function () {
+        var _this = $(this);
+        _this.parent().removeClass('error');
+    });
+
+    $bidForm.on("input", ".price input", function (e) {
+        var val = this.value;
+        for(var i=val.length-1; i>=0; i--){
+            var char = val.charAt(i);
+            if(!(char>="0"&&char<="9"||char==".")){
+                val = val.substr(0, i)+val.substr(i+1);
+            }
+        }
+        var si = val.indexOf("."),
+            ei = val.lastIndexOf(".");
+        if(ei!==si){
+            val = val.substr(0, ei);
+        }
+        if(si!==-1) this.value = val.substr(0, si+3);
+        else this.value = val;
+    });
+
+    $bidForm.on("click", ".cancel", function (e) {
+        var $delegateTarget = $(e.delegateTarget);
+        $delegateTarget[0].reset();
+        $delegateTarget.parent()
+            .hide();
+    });
+
+    $bidForm.on("submit", function (e) {
+        var _this = $(this);
+        e.preventDefault();
+        var $price = _this.find(".price"),
+            price = this.price.value;
+        if (!price) {
+            addError($price, "Bidding price can't be empty!");
+            return;
+        } else if (parseFloat(price) < 1000) {
+            addError($price, "Bidding price can't be less than HK$1000!");
+            return;
+        }
+        if(_this.data("submit")) return;
+        var loading = showLoading(_this);
+        _this.data("submit", true);
+        $.ajax({
+            method: "post",
+            url: "/proxy/shop-owner/product/ad/apply",
+            dataType: "json",
+            data: _this.serialize()
+        }).done(function (result) {
+            if (loading) loading.remove();
+            _this.data("submit", false);
+            var status = result.status;
+            if(status==200) {
+                var orderId = result.orderId,
+                    arr = [];
+                arr.push(orderId);
+                location.href = "pay.html?type=2&sumPrice="+price+"&orderIdList="+JSON.stringify(arr);
+            } else if(status==300){
+                location.href = loginUrl;
+            } else if(status==600) {
+                tipsAlert("Failure, it has been exceeded the specified deadline today.");
+            } else if(status==700) {
+                tipsAlert("Failure, this product are biding for ad.");
+            } else {
+                tipsAlert("Server error!");
+            }
+        }).fail(function (result) {
+            if (loading) loading.remove();
+            _this.data("submit", false);
+            tipsAlert("Server error!");
+            result = {
+                status: 200,
+                orderId: 23
+            };
+            var status = result.status;
+            if(status==200) {
+                var orderId = result.orderId,
+                    arr = [];
+                arr.push(orderId);
+                location.href = "pay.html?type=2&sumPrice="+price+"&orderIdList="+JSON.stringify(arr);
+            } else if(status==300){
+                location.href = loginUrl;
+            } else if(status==600) {
+                tipsAlert("Failure, it has been exceeded the specified deadline today.");
+            } else if(status==700) {
+                tipsAlert("Failure, this product are biding for ad.");
+            } else {
+                tipsAlert("Server error!");
+            }
+        });
+
+    });
+
+    return $bid;
+}
+
 $productList.on("click", ".modify", function (e) {
     var $productItem = $(this).parents(".productItem");
     var $modifyPop = $(".modifyPop"),
@@ -163,25 +281,72 @@ $productList.on("click", ".delete", (function () {
         var _this = $(this);
         tipsConfirm("Are you sure to removed the product from shelves?", function(){
             loading = showLoading(_this.parent());
+            var $productItem = _this.parents(".productItem"),
+                info = $productItem.data("info"),
+                productId = info.productId;
             $.ajax({
                 method: "post",
-                url: "/proxy/shop-owner/products/edit",
+                url: "/proxy/shop-owner/products/delete",
                 dataType: "json",
-                data: ""
+                data: "productId="+productId
             }).done(function(result){
                 if(loading) {
                     loading.remove();
                     loading = null;
+                }
+                var status = result.status;
+                if(status == 200){
+                    showSpinner("Success", {
+                        callback: function () {
+                            location.reload();
+                        }
+                    })
+                } else if(status == 300) {
+                    location.href = loginUrl;
+                } else {
+                    showSpinner("Unknown error!");
                 }
             }).fail(function(result){
                 if(loading) {
                     loading.remove();
                     loading = null;
                 }
+                tipsAlert("Server error!");
+                result = {
+                    status: 200
+                };
+                var status = result.status;
+                if(status == 200){
+                    showSpinner("Success", {
+                        callback: function () {
+                            location.reload();
+                        }
+                    })
+                } else if(status == 300) {
+                    location.href = loginUrl;
+                } else {
+                    showSpinner("Unknown error!");
+                }
             });
+        }, {
+            "ok": "YES",
+            "cancel": "NO"
         });
     }
 })());
+
+$productList.on("click", ".bid", function (e) {
+    var $productItem = $(this).parents(".productItem"),
+        info = $productItem.data("info"),
+        productId = info.productId,
+        $bidPop = $(".bidPop");
+    if($bidPop.length==0) {
+        createBid(productId).appendTo($("body"));
+    } else {
+        $bidPop.show()
+            .find(".productId").val(productId);
+    }
+});
 
 $productList.on("click", ".more .showMore", function(e){
     var _this = $(this);
@@ -225,7 +390,12 @@ function tipsAlert(msg, callback){
     $alert.appendTo($("body"));
 }
 
-function tipsConfirm(msg, callback){
+function tipsConfirm(msg, callback, config){
+    var def = {
+        "ok": "OK",
+        "cancel": "Cancel"
+    };
+    $.extend(def, config);
     var $confirm = $(".tipsConfirm");
     if ($confirm.length > 0) $confirm.remove();
     $confirm = $("<div class='tipsConfirm'></div>");
@@ -233,8 +403,8 @@ function tipsConfirm(msg, callback){
     var $content = $("<div class='content'></div>");
     var $msg = $("<div class='msg'>"+ msg +"</div>");
     var $btn = $('<div class="btn2"> ' +
-        '<div class="cancel">Cancel</div> ' +
-        '<div class="ok">Ok</div> </div>');
+        '<div class="cancel">'+def.cancel+'</div> ' +
+        '<div class="ok">'+def.ok+'</div> </div>');
 
     $btn.on("click", ".cancel", function () {
         $(this).parents(".tipsConfirm").remove();

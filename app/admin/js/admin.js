@@ -4,19 +4,11 @@ $(function () {
        header.css("left", -_this.scrollLeft());
     });
 
-
-	var host = "http://123.206.100.98:16120";
     var login = $("#login");
 
 	login.on("submit", function (e) {
 	    var _this = $(this);
-	    var tips = showLoading(_this);
-	    e = window.event || e;
-	    if (e && e.preventDefault) {
-	        e.preventDefault();
-	    } else {
-	        e.returnValue = false;
-	    };
+		e.preventDefault();
 	 
 	    var warnInfo=_this.find("span").eq(0);
 	    var name = $('#idmName').val();
@@ -24,10 +16,11 @@ $(function () {
         
         warnInfo.text('');
 	    if(name == '' ){	
-	        warnInfo.text('warning:username error!');	 
+	        warnInfo.text('Username can\'t be empty!');
 	  	}else if(pwd == ''){
-            warnInfo.text('warning:password error!');
+            warnInfo.text('Password can\'t be empty!');
 	    }else{
+            var tips = showLoading(_this);
 	  	    $.ajax({
 		        type: "post",
 		        url: "/proxy/admin/login",

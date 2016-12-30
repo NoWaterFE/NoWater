@@ -196,10 +196,20 @@ function　createOrderItem(data){
 
 var postOrder = (function(){
     var loading = null;
-    return function (orderStatus) {
+    return function (orderStatus, param) {
         if(loading) return ;
-        loading = showLoading($(".more"));
         var reqData = "status="+orderStatus;
+        if(param) {
+            loading = showLoading($orderForm);
+            var timeFilter = param.timeFilter || 0;
+            reqData += "&timeFilter=" + timeFilter + "&searchKey=" + param.searchKey;
+            if (timeFilter == 5) {
+                reqData += "&beginTime="+param.beginTime+"&endTime="+param.endTime;
+            }
+        } else {
+            loading = showLoading($(".more"));
+            reqData += "&timeFilter=0";
+        }
         $.ajax({
             method: "get",
             url: "/proxy/shop-owner/order/list",
@@ -214,6 +224,9 @@ var postOrder = (function(){
             if(status==200){
                 var len = result.data.length,
                     $orderTable = $orderList.find('.orderTable');
+                if(param) {
+                    $orderTable.find(".orderItem").remove();
+                }
                 for(var i=0; i<len; i++){
                     $orderTable.append(createOrderItem(result.data[i]));
                 }
@@ -260,8 +273,10 @@ var postOrder = (function(){
             if(status==200){
                 var len = result.data.length,
                     $orderTable = $orderList.find('.orderTable');
+                if(param) {
+                    $orderTable.find(".orderItem").remove();
+                }
                 for(var i=0; i<len; i++){
-                    if(orderStatus!=0) { result.data[i].status=orderStatus }
                     $orderTable.append(createOrderItem(result.data[i]));
                 }
             } else if(status==300) {
@@ -383,3 +398,59 @@ $deliverForm.on("click", ".cancel", function (e) {
     $delegateTarget.parent()
         .hide();
 });
+
+var $orderFilter = $("#orderFilter"),
+    $orderForm = $orderFilter.find(".orderForm");
+
+$orderForm.find('.selectTime').datepicker({
+    format: 'yyyy-mm-dd',
+    autoPick: true
+}).blur(function(){
+    var _this = $(this);
+    _this.datepicker("pick");
+});
+
+$orderFilter.on("click", ".moreFilter", function(){
+    $(this).toggleClass("less")
+        .parent()
+        .siblings(".timeSub")
+        .slideToggle(200);
+});
+$orderFilter.on("change", ".timeSelect", function () {
+    var _this = $(this);
+    if(_this.val()=="5"){
+        _this.siblings('.detailTime').show();
+    } else {
+        _this.siblings('.detailTime').hide();
+    }
+});
+$orderForm.on("submit", (function(){
+    return function(e){
+        e.preventDefault();
+        var _this = $(this),
+            isShow = _this.find(".moreFilter").hasClass("less"),
+            searchKey = _this[0].search.value,
+            param = null;
+        if(isShow) {
+            var time = _this[0].time.value;
+            if(time!="5") {
+                param = {
+                    timeFilter: time,
+                    searchKey: searchKey
+                };
+            } else {
+                param = {
+                    timeFilter: time,
+                    searchKey: searchKey,
+                    beginTime: _this.find(".startTime").val(),
+                    endTime: _this.find(".endTime").val()
+                };
+            }
+        } else {
+            param = {
+                searchKey: searchKey
+            };
+        }
+        postOrder(orderStatus, param);
+    };
+})());

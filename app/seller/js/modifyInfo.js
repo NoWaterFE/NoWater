@@ -116,4 +116,86 @@ if(userInfo) {
     infoForm[0].shopName.value = userInfo.shopName;
     infoForm[0].email.value = userInfo.email;
     infoForm[0].telephone.value = userInfo.telephone;
+} else {
+    tipsAlert("Server error!");
 }
+
+var $infoForm = $("#infoForm"),
+    emailReg = /^\w+([-+.]\w+)*@\w+([-.]\w+)*\.\w+([-.]\w+)*$/i,
+    telReg = /^\d{8}$/,
+    loginUrl = "../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
+
+//输入错误提示
+function addError(item, msg){
+    item.addClass("error")
+        .find(".tips")
+        .text(msg)
+        .end()
+        .find("input")
+        .focus()
+        [0].scrollIntoView();
+}
+
+$infoForm.on("input", ".input-item input", function () {
+    var _this = $(this);
+    _this.parent().removeClass('error');
+});
+
+$infoForm.on("submit", (function(){
+    var loading = null;
+    return function(e){
+        e.preventDefault();
+        if(loading) return;
+        var _this = $(this),
+            $shopEmail = _this.find(".shopEmail"),
+            $shopTel = _this.find(".shopTel");
+        if (!emailReg.test(this.email.value)) {
+            addError($shopEmail, "error email!");
+            return;
+        }
+        if (!telReg.test(this.telephone.value)) {
+            addError($shopTel, "error telephone!");
+            return;
+        }
+        loading = showLoading(_this);
+        $.ajax({
+            method: "post",
+            url: "/proxy/shop-owner/info/edit",
+            data: _this.serialize()
+        }).done(function(result){
+            if(loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status == 200) {
+                var msg = "Successful, the changes will take effect after you verify your email";
+                showSpinner(msg);
+                _this.find(".applying").text(msg);
+            } else if (status == 300) {
+                location.href = loginUrl;
+            } else {
+                showSpinner("Unknown error!");
+            }
+        }).fail(function(result){
+            if(loading) {
+                loading.remove();
+                loading = null;
+            }
+            tipsAlert("Server error!");
+            /*result = {
+                status: 200
+            };
+            var status = result.status;
+            if(status == 200) {
+                var msg = "Successful, the changes will take effect after you verify your email";
+                showSpinner(msg);
+                _this.find(".applying").text(msg);
+            } else if (status == 300) {
+                location.href = loginUrl;
+            } else {
+                showSpinner("Unknown error!");
+            }*/
+        });
+    };
+})());

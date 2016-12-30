@@ -1,0 +1,304 @@
+@import "reset";
+@import "base";
+
+.main {
+    padding: 20px 27px;
+    .orderMain {
+        border-bottom: 2px solid #aaa;
+        .orderTab {
+            float: left;
+            padding: 10px 15px;
+            margin-bottom: -2px;
+            border-bottom: 2px solid transparent;
+            font-weight: 700;
+            &.active {
+                border-color: blue;
+                color: blue;
+            }
+            &:hover {
+                color: blue;
+            }
+        }
+    }
+    .filter {
+        margin: 14px 0;
+        .inputItems {
+            float: left;
+        }
+        .search {
+            input {
+                float: left;
+                height: 20px;
+                font-size: 14px;
+                padding: 2px 4px;
+                border: 1px solid #bfbfbf;
+            }
+            .searchBtn {
+                width: 40px;
+                height: 26px;
+                background: url(../imgs/head_icon/search.png) no-repeat center;
+                margin-left: -1px;
+                font-size: 0;
+                cursor: pointer;
+            }
+            .moreFilter {
+                font-size: 13px;
+                line-height: 26px;
+                margin-left: 20px;
+                float: left;
+                cursor: pointer;
+                user-select: none;
+                .down {
+                    border: 1px solid #000;
+                    border-top-color: transparent;
+                    border-right-color: transparent;
+                    width: 6px;
+                    height: 6px;
+                    display: inline-block;
+                    transform: rotate(-45deg) translate(4px, 0);
+                }
+                .lessText {
+                    display: none;
+                }
+                &.less {
+                    .down {
+                        transform: rotate(135deg) translate(0, -4px);
+                    }
+                    .lessText {
+                        display: inline-block;
+                    }
+                    .moreText {
+                        display: none;
+                    }
+                }
+            }
+        }
+        .timeSub {
+            display: none;
+            .searchBtn {
+                background: #292d84;
+                border: none;
+                color: #fff;
+                border-radius: 4px;
+                padding: 6px 10px;
+                cursor: pointer;
+            }
+        }
+        .time {
+            margin: 15px 0;
+            font-size: 14px;
+        }
+        .timeSelect {
+            height: 26px;
+            font-size: 14px;
+            border: 1px solid #bfbfbf;
+            float: left;
+            padding-left: 4px;
+        }
+        .detailTime {
+            margin-left: 10px;
+            font-size: 13px;
+            display: none;
+            float: left;
+        }
+        .selectTime {
+            width: 120px;
+            height: 20px;
+            font-size: 14px;
+            padding: 2px 4px;
+            border: 1px solid #bfbfbf;
+        }
+    }
+    .orderList {
+        margin: 14px 0;
+        color: #3c3c3c;
+        .orderTable {
+            width: 100%;
+            th {
+                text-align: center;
+                background: #f5f5f5;
+                padding: 5px 0;
+            }
+            colgroup {
+                .col1 {
+                    width: 38%;
+                }
+                .col2 {
+                    width: 16%;
+                }
+                .col3 {
+                    width: 10%;
+                }
+                .col4 {
+                    width: 18%;
+                }
+                .col5 {
+                    width: 17%;
+                }
+                /*.col6 {
+                    width: 14%;
+                }*/
+            }
+            .orderTh {
+                border: 1px solid #e5e5e5;
+            }
+            .orderItem {
+                border: 1px solid #e5e5e5;
+                .mr20 {
+                    height: 20px;
+                }
+                .orderHeader {
+                    font-size: 12px;
+                    background: #f5f5f5;
+                    line-height: 36px;
+                    height: 36px;
+                    border: 1px solid #e5e5e5;
+                    &>td>span {
+                        float: left;
+                    }
+                    .orderTime {
+                        padding: 0 14px;
+                        color: #000;
+                    }
+                    .orderId {
+                        margin-right: 20px;
+                        width: 220px;
+                        display: inline-block;
+                    }
+                    .shopName {
+                        a {
+                            display: block;
+                            width: 200px;
+                            color: #3c3c3c;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            white-space: nowrap;
+                            &:hover {
+                                color: blue;
+                                text-decoration: underline;
+                            }
+                        }
+                    }
+                }
+                .orderData {
+                    font-size: 14px;
+                    margin: 20px 0;
+                    td {
+                        padding: 10px 0;
+                        text-align: center;
+                        vertical-align: top;
+                    }
+                    .product {
+                        text-align: left;
+                        font-size: 12px;
+                        border-bottom: 1px solid #e5e5e5;
+                        .productLink {
+                            display: block;
+                            margin-left: 96px;
+                            color: #3c3c3c;
+                            &:hover {
+                                color: blue;
+                                text-decoration: underline;
+                            }
+                            img {
+                                margin-left: -86px;
+                                float: left;
+                                width: 80px;
+                                height: 80px;
+                            }
+                        }
+                    }
+                    .price {
+                        border-bottom: 1px solid #e5e5e5;
+                    }
+                    .amount {
+                        border-right: 1px solid #e5e5e5;
+                        border-bottom: 1px solid #e5e5e5;
+                    }
+                    .totalPrice {
+                        color: red;
+                        border-right: 1px solid #e5e5e5;
+                    }
+                    .status {
+                        border-right: 1px solid #e5e5e5;
+                        &>div {
+                            line-height: 20px;
+                            padding: 5px 0;
+                        }
+                        .orderDetail {
+                            a{
+                                color: #3c3c3c;
+                                &:hover {
+                                    color: blue;
+                                    text-decoration: underline;
+                                }
+                            }
+                        }
+                    }
+                    .operate{
+                        &>div {
+                            margin: 10px;
+                            cursor: pointer;
+                            line-height: 22px;
+                            color: #3c3c3c;
+                            &:hover {
+                                color: blue;
+                            }
+                        }
+                        .comment, .payNow, .confirmR {
+                            color: #292d84;
+                            line-height: 30px;
+                            border: 1px solid #292d84;
+                            border-radius: 4px;
+                            &:hover {
+                                background: #292d84;
+                                color: #fff;
+                            }
+                        }
+                        .confirmR {
+                            line-height: 18px;
+                            padding: 4px 0;
+                        }
+                        .timeTips {
+                            font-size: 13px;
+                            text-align: left;
+                            line-height: 1;
+                            margin-bottom: -5px;
+                            color: #666;
+                            &:hover {
+                                color: #666;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .more {
+            text-align: center;
+            margin-top: 10px;
+            height: 40px;
+            position: relative;
+            .showMore{
+                cursor: pointer;
+                display: inline-block;
+                padding: 10px 40px;
+                font-size: 14px;
+                text-align: center;
+                border: 1px solid #ddd;
+                border-radius: 4px;
+                &.hidden {
+                    display: none;
+                }
+                .down {
+                    border: 1px solid #000;
+                    border-top-color: transparent;
+                    border-right-color: transparent;
+                    width: 10px;
+                    height: 10px;
+                    display: inline-block;
+                    transform: rotate(-45deg) translate(6px, 2px);
+                }
+            }
+        }
+    }
+}

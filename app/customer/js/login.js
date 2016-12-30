@@ -1,4 +1,3 @@
-var host="http://123.206.100.98:16120";
 var loginForm = $("#loginForm");
 loginForm.on("submit", function (e) {
     var _this = $(this); 
@@ -26,11 +25,8 @@ loginForm.on("submit", function (e) {
 
     $.ajax({
         type: "post",
-        url: host+"/customer/login",
+        url: "/proxy/customer/login",
         dataType: "json",
-        xhrFields: {
-            withCredentials: true
-        },
         data: data     //序列化
     }).done(function(result){
         if(tips) tips.remove();

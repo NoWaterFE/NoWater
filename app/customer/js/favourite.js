@@ -1,4 +1,3 @@
-var host="http://123.206.100.98:16120";
 var startId = 0;
 var favoriteType = GetQueryString("kind");
 var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
@@ -24,6 +23,37 @@ getResult();
 
 // header添加事件
 (function () {
+
+    //获取登录信息可能不需要
+    $.ajax({
+        method: "get",
+        url: "/proxy/customer/isLogin",
+        dataType: "json"
+    }).done(function (result) {
+        if(result.status==200){
+            var userInfo = result.userInformation[0];
+            var quickMenu = $("#quickMenu");
+            quickMenu.find(".accountOperate").toggleClass("active");
+            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+        }
+    }).fail(function (result) {
+        /*console.log(result.statusText);
+        result = {
+            status: 200,
+            userInformation: [{
+                name: "gdh",
+                cartNum: 33
+            }]
+        };
+        if(result.status==200){
+            var userInfo = result.userInformation[0];
+            var quickMenu = $("#quickMenu");
+            quickMenu.find(".accountOperate").toggleClass("active");
+            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+        }*/
+    });
+
+
     //headMenu添加事件
     var $headMenu = $("#headMenu");
     var navTimer;
@@ -138,12 +168,12 @@ function getResult() {
                 $("#showMore").css('display', 'none');
             }
         } else if (result.status == 300) {
-            location.href = "login.html";
+            location.href = loginUrl;
         }
         $adGoods = null;
     })
         .fail(function (result) {
-            result = {
+            /*result = {
                 status: 200,
                 data: [
                     {
@@ -371,8 +401,8 @@ function getResult() {
                     $("#showMore").css('display', 'none');
                 }
             } else if (result.status == 300) {
-                location.href = "login.html";
-            }
+                location.href = loginUrl;
+            }*/
             $adGoods = null;
         });
 }
@@ -506,7 +536,7 @@ var remove = (function(){
                 if (status == 200) {
                     location.reload();
                 } else if (status == 300) {
-                    location.href = "login.html";
+                    location.href = loginUrl;
                 } else {
                     tipsAlert("server error!");
                 }
@@ -515,28 +545,30 @@ var remove = (function(){
                     loading.remove();
                     loading = null;
                 }
-                //tipsAlert("server error");
-                result = {
+                tipsAlert("server error");
+                /*result = {
                     status: 200
                 };
                 var status = result.status;
                 if (status == 200) {
                     location.reload();
                 } else if (status == 300) {
-                    location.href = "login.html";
+                    location.href = loginUrl;
                 } else {
                     tipsAlert("server error!");
-                }
+                }*/
             });
         });
     };
 })();
 
-$("#adGoods").on("click", ".goods-item .add-to-cart", addToCart);
+var $addGoods = $("#adGoods");
 
-$("#adGoods").on("click", ".goods-item .remove", remove);
+$addGoods.on("click", ".goods-item .add-to-cart", addToCart);
 
-$("#adGoods").on("click", ".shop-item .removeShop", remove);
+$addGoods.on("click", ".goods-item .remove", remove);
+
+$addGoods.on("click", ".shop-item .removeShop", remove);
 
 function showSpinner(msg, config){
     var $spinner = $(".spinner");
@@ -601,7 +633,12 @@ function tipsAlert(msg, callback){
     $alert.appendTo($("body"));
 }
 
-function tipsConfirm(msg, callback){
+function tipsConfirm(msg, callback, config){
+    var def = {
+        "ok": "OK",
+        "cancel": "Cancel"
+    };
+    $.extend(def, config);
     var $confirm = $(".tipsConfirm");
     if ($confirm.length > 0) $confirm.remove();
     $confirm = $("<div class='tipsConfirm'></div>");
@@ -609,8 +646,8 @@ function tipsConfirm(msg, callback){
     var $content = $("<div class='content'></div>");
     var $msg = $("<div class='msg'>"+ msg +"</div>");
     var $btn = $('<div class="btn2"> ' +
-        '<div class="cancel">Cancel</div> ' +
-        '<div class="ok">Ok</div> </div>');
+        '<div class="cancel">'+def.cancel+'</div> ' +
+        '<div class="ok">'+def.ok+'</div> </div>');
 
     $btn.on("click", ".cancel", function () {
         $(this).parents(".tipsConfirm").remove();
