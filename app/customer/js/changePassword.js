@@ -1,3 +1,5 @@
+var host="http://123.206.100.98:16120";
+var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
 // header添加事件
 (function () {
     //获取登录信息可能不需要
@@ -104,6 +106,88 @@
 
 })();
 
+var infoForm = $("#infoForm");
+infoForm.on("submit", function (e) {
+    var _this = $(this);
+    e = window.event || e;
+    if (e && e.preventDefault) {
+        e.preventDefault();
+    } else {
+        e.returnValue = false;
+    }
+    var $confirm = _this.find(".confirm"),
+        $newPassword = _this.find(".newPassword"),
+        $oldPassword = _this.find(".oldPassword");
+    var oldPassword = this.oldPassword.value,
+        newPassword = this.newPassword.value,
+        confirm = this.confirm.value;
+    if (!oldPassword) {
+        addError($oldPassword, "old password can't be empty!");
+        return;
+    }
+    if (!newPassword) {
+        addError($newPassword, "please input legal password!");
+        return;
+    }
+    if (confirm != newPassword) {
+        addError($confirm, "please input the same password!");
+        return;
+    }
+
+    var sendData = "oldPassword=" + $.md5(oldPassword) + "&newPassword=" + $.md5(newPassword);
+    var tips = showLoading(_this);
+
+    $.ajax({
+        type: "post",
+        url: host+"/proxy/customer/password/changing",
+        dataType: "json",
+        xhrFields: {
+            withCredentials: true
+        },
+        data: sendData
+    }).done(function(result){
+        if(tips) tips.remove();
+        if(result.status==200){
+            _this.find(".register").text("register successful.");
+            var url = getUrlParam("redirectUrl");
+            if(url) {
+                location.href = decodeURIComponent(url);
+            } else {
+                location.href = "login.html";
+            }
+        } else if(result.status==300){
+            addError($name, "user name has been used!");
+        } else if(result.status==400) {
+            addError($telephone, "illegal telephone number!");
+        } else if (result.status==500) {
+            addError($address, "illegal address!");
+        }
+    }).fail(function(result) {
+        if(tips) tips.remove();
+        result = {
+            status: 200
+        };
+        if (result.status == 200) {
+            tipsAlert("Change Successful.",function () {
+                location.reload();
+            });
+        } else if (result.status == 300) {
+            tipsAlert("Please login first.",function () {
+                location.href = loginUrl;
+            });
+        } else if (result.status == 400) {
+            addError($oldPassword, "old password is wrong!");
+        } else {
+            tipsAlert("server error!");
+        }
+    });
+
+});
+
+infoForm.on("input", ".input-item input", function () {
+    var _this = $(this);
+    _this.parent().removeClass('error');
+});
 
 function showLoading($relative) {
     var $tips = $relative.siblings(".loadingImg");
@@ -191,3 +275,13 @@ function showSpinner(msg, config){
         if(callback) callback();
     }, def.timeout);
 }
+
+function addError(item, msg){
+    item.addClass("error")
+        .find("input")
+        .focus()
+        .end()
+        .find(".tips")
+        .text(msg);
+}
+
