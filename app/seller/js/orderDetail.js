@@ -15,10 +15,10 @@
             url: "/proxy/customer/loginout"
         }).done(function(){
             delCookie("token");
-            location.href = "../customer/modifyInfo.html"
+            location.href = "../customer/index.html"
         }).fail(function () {
             delCookie("token");
-            location.href = "../customer/modifyInfo.html"
+            location.href = "../customer/index.html"
         });
     });
 })();
@@ -218,7 +218,7 @@ var postOrder = (function(){
                 location.href = loginUrl;
             } else {
                 tipsAlert("unknown error!", function () {
-                    location.href = "modifyInfo.html";
+                    location.href = "index.html";
                 });
             }
         }).fail(function(result){
@@ -271,7 +271,7 @@ var postOrder = (function(){
                 location.href = loginUrl;
             } else {
                 tipsAlert("unknown error!", function () {
-                    location.href = "modifyInfo.html";
+                    location.href = "index.html";
                 });
             }*/
         });

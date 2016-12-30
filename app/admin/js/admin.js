@@ -33,7 +33,7 @@ $(function () {
 		   	    if(url){
 		   	   	    location.href = decodeURIComponent(url);
 		   	    }else{
-		   	   	    location.href = "./modifyInfo.html";
+		   	   	    location.href = "./index.html";
 		   	    }
 		    }else if(result.status == 300){
 			    warnInfo.text('username or password error!');

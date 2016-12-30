@@ -215,7 +215,7 @@ var orderIdList = getUrlParam("orderIdList"),
 if(orderIdList&&sumPrice){
     $payForm.find(".price").text(parseFloat(sumPrice).toFixed(2));
 } else {
-    location.href = "modifyInfo.html";
+    location.href = "index.html";
 }
 
 

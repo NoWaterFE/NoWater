@@ -15,10 +15,10 @@
             url: "/proxy/customer/loginout"
         }).done(function(){
             delCookie("token");
-            location.href = "../customer/modifyInfo.html"
+            location.href = "../customer/index.html"
         }).fail(function () {
             delCookie("token");
-            location.href = "../customer/modifyInfo.html"
+            location.href = "../customer/index.html"
         });
     });
 })();
@@ -126,7 +126,7 @@ var orderIdList = getUrlParam("orderIdList"),
 if(orderIdList && sumPrice && adType){
     $payForm.find(".price").text(parseFloat(sumPrice).toFixed(2));
 } else {
-    location.href = "modifyInfo.html";
+    location.href = "index.html";
 }
 
 var confirmPay = (function(){

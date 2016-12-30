@@ -225,7 +225,7 @@ var postOrder = (function(){
                 location.href = loginUrl;
             } else {
                 tipsAlert("unknown error!", function () {
-                    location.href = "modifyInfo.html";
+                    location.href = "index.html";
                 });
             }
         }).fail(function(result){
@@ -280,7 +280,7 @@ var postOrder = (function(){
                 location.href = loginUrl;
             } else {
                 tipsAlert("unknown error!", function () {
-                    location.href = "modifyInfo.html";
+                    location.href = "index.html";
                 });
             }
         });
@@ -292,5 +292,5 @@ var orderId = getUrlParam("orderId"),
 if(orderId&&status){
     postOrder(orderId, status);
 } else {
-    location.href = "modifyInfo.html";
+    location.href = "index.html";
 }

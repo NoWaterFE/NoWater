@@ -14,7 +14,7 @@ $.ajax({
     }
 }).fail(function (result) {
     //alert("server error");
-    //location.href = "../customer/modifyInfo.html";
+    //location.href = "../customer/index.html";
     /*result = {
         status: 200,
         data: [{

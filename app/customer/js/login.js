@@ -38,7 +38,7 @@ loginForm.on("submit", function (e) {
            if(url) {
             location.href = decodeURIComponent(url);
            } else {
-            location.href = "modifyInfo.html";
+            location.href = "index.html";
            }
        }
     }).fail(function(result) {
@@ -54,7 +54,7 @@ loginForm.on("submit", function (e) {
        //     if(url) {
        //      location.href = url;
        //     } else {
-       //      location.href = "modifyInfo.html";
+       //      location.href = "index.html";
        //     }
        // }
     });
