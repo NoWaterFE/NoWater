@@ -1,27 +1,18 @@
-var favoriteType = GetQueryString("kind");
+var favoriteType = GetQueryString("kind") || 2;
 var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
 
-if(!GetQueryString("kind")) {
-    location.href = "favourite.html?kind="+ encodeURIComponent("1");
-}
 
 var $favMain = $("#favMain");
 $favMain.on("click", ".favTab", function () {
     var _this = $(this);
-    var i =_this.index() + 1;
-    location.href = "favourite.html?kind="+i;
+    var i = _this.data("type");
+    location.href = "favorites.html?kind="+i;
 });
-$favMain.find(".favTab").eq(favoriteType-1).addClass("active");
-if (favoriteType == 2) {
-    $("#adGoods").css('width','800px');
-} else {
-    $("#adGoods").css('width','1200px');
-}
+$favMain.find(".favTab").eq(2 - favoriteType).addClass("active");
 getResult();
 
 // header添加事件
 (function () {
-
     //获取登录信息可能不需要
     $.ajax({
         method: "get",
@@ -36,21 +27,20 @@ getResult();
         }
     }).fail(function (result) {
         /*console.log(result.statusText);
-        result = {
-            status: 200,
-            userInformation: [{
-                name: "gdh",
-                cartNum: 33
-            }]
-        };
-        if(result.status==200){
-            var userInfo = result.userInformation[0];
-            var quickMenu = $("#quickMenu");
-            quickMenu.find(".accountOperate").toggleClass("active");
-            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
-        }*/
+         result = {
+         status: 200,
+         userInformation: [{
+         name: "gdh",
+         cartNum: 33
+         }]
+         };
+         if (result.status == 200) {
+         var userInfo = result.userInformation[0];
+         var quickMenu = $("#quickMenu");
+         quickMenu.find(".accountOperate").toggleClass("active");
+         quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+         }*/
     });
-
 
     //headMenu添加事件
     var $headMenu = $("#headMenu");
@@ -90,23 +80,19 @@ getResult();
         var _this = $(this);
         $.ajax({
             method: "post",
-            url: "/proxy/customer/loginout"
+            url: "/proxy/customer/loginout",
         }).done(function(){
             delCookie("token");
-            location.reload();
+            location.href = "index.html";
         }).fail(function () {
             delCookie("token");
-            location.reload();
+            location.href = "index.html";
         });
     });
 
     var $searchForm = $("#searchForm");
     $searchForm.on("submit", function(e){
-        if (e && e.preventDefault) {
-            e.preventDefault();
-        } else {
-            e.returnValue = false;
-        }
+        e.preventDefault();
         var keyWord = this.keyWord.value;
         if(keyWord!=""){
             location.href = "search.html?keyWord="+ encodeURIComponent(keyWord);
@@ -124,6 +110,7 @@ getResult();
             cart.text(num);
         }
     }
+
 })();
 
 function getResult() {
@@ -137,10 +124,9 @@ function getResult() {
         data: sendData
     }).done(function (result) {
         if (result.status == 200) {
-            startId = result.startId;
-            if (favoriteType == 0) {
+            if (favoriteType == 2) {
                 if (result.data.length == 0) {
-                    $noResult.text("You haven't collected one goods yet.")
+                    $noResult.text("You haven't collected one product yet.");
                     $noResult.css('display', 'block');
                     return;
                 }
@@ -165,7 +151,7 @@ function getResult() {
         $adGoods = null;
     })
         .fail(function (result) {
-            result = {
+            /*result = {
                 status: 200,
                 data: [
                     {
@@ -283,7 +269,7 @@ function getResult() {
             };
             if (result.status == 200) {
                 startId = result.startId;
-                if (favoriteType == 1) {
+                if (favoriteType == 2) {
                     if (result.data.length == 0) {
                         $noResult.text("You haven't collected one goods yet.")
                         $noResult.css('display', 'block');
@@ -380,7 +366,8 @@ function getResult() {
                 }
             } else if (result.status == 300) {
                 location.href = loginUrl;
-            }
+            }*/
+            tipsAlert("Server error!");
             $adGoods = null;
         });
 }
@@ -389,7 +376,7 @@ function createGoodsItem(data) {
     return $('<li class="goods-item"> ' +
         '<a class="item-detail" href="productDetail.html?id='+data.productId+'"> ' +
         '<div class="item-image"> ' +
-        '<img src="'+data.photoUrl[0]+'"> ' +
+        '<img src="'+data.photo[0]+'"> ' +
         '</div> ' +
         '<div class="item-name"> ' +
         data.productName +
@@ -406,15 +393,17 @@ function createGoodsItem(data) {
         '<i></i><span>REMOVE</span> ' +
         '</div> ' +
         '</div> ' +
-        '</li>').data("favoriteId", data.favoriteId);
+        '</li>').data("favoriteId", data.favoriteId)
+                .data("productId", data.productId);
 }
 
 function createShopItem(data) {
-    return $('<li class="shop-item"> ' +
-        '<a class="item-detail" href="store.html?shopId='+data.shopId+'"> ' +
+    return $('<li class="shop-item">' +
         '<div class="shop-name"> ' +
+        '<a class="item-detail" href="store.html?shopId='+ data.shopId +'">' +
         data.shopName +
-        '</div> ' +
+        '</a>' +
+        '</div>' +
         '<div class="detail"> ' +
         '<div class="email"> ' +
         'E-mail: ' +
@@ -426,8 +415,7 @@ function createShopItem(data) {
         '</div> ' +
         '</div> ' +
         '</a> ' +
-        '<div class="removeShop"> ' +
-        '<button id="removeShop">REMOVE</button> ' +
+        '<div class="remove"> ' +
         '</div> ' +
         '</li>').data("favoriteId", data.favoriteId);
 }
@@ -474,45 +462,49 @@ var addToCart = (function(){
                 loading = null;
             }
             tipsAlert("server error!");
-            // result = {
-            //  status: 200,
-            //  num: 1000
-            //  };
-            //  var status = result.status;
-            //  if(status==200){
-            //  setCart(result.num);
-            //  showSpinner("Add success")
-            //  } else if(status==300){
-            //  location.href = loginUrl;
-            //  } else {
-            //  tipsAlert("server error!");
-            //  }
+            /*result = {
+             status: 200,
+             num: 1000
+             };
+             var status = result.status;
+             if(status==200){
+             setCart(result.num);
+             showSpinner("Add success")
+             } else if(status==300){
+             location.href = loginUrl;
+             } else {
+             tipsAlert("server error!");
+             }*/
         });
     };
 })();
 
 var remove = (function(){
     var loading = null;
-    return function(e){
+    return function(){
+        if (loading) return;
+        var _this = $(this);
         tipsConfirm("Sure to delete?", function () {
-            var _this = $(this);
-            if (loading) return;
             var $goods = _this.parents(".goods-item");
-            if(!$goods) { $goods = _this.parents(".shop-item"); }
+            if($goods.length == 0) { $goods = _this.parents(".shop-item"); }
             loading = showLoading($goods);
             var data = "favoriteId=" + $goods.data("favoriteId");
             $.ajax({
                 method: "post",
                 url: "/proxy/customer/favorite/deleting",
                 data: data
-            }).done(function () {
+            }).done(function (result) {
                 if (loading) {
                     loading.remove();
                     loading = null;
                 }
                 var status = result.status;
                 if (status == 200) {
-                    location.reload();
+                    showSpinner("Deleted", {
+                        callback: function () {
+                            location.reload();
+                        }
+                    });
                 } else if (status == 300) {
                     location.href = loginUrl;
                 } else {
@@ -529,13 +521,20 @@ var remove = (function(){
                 };
                 var status = result.status;
                 if (status == 200) {
-                    location.reload();
+                    showSpinner("Deleted", {
+                        callback: function () {
+                            location.reload();
+                        }
+                    });
                 } else if (status == 300) {
                     location.href = loginUrl;
                 } else {
-                    tipsAlert("server error!");
+                    tipsAlert("Server error!");
                 }*/
             });
+        }, {
+            "ok": "YES",
+            "cancel": "NO"
         });
     };
 })();
@@ -546,7 +545,7 @@ $addGoods.on("click", ".goods-item .add-to-cart", addToCart);
 
 $addGoods.on("click", ".goods-item .remove", remove);
 
-$addGoods.on("click", ".shop-item .removeShop", remove);
+$addGoods.on("click", ".shop-item .remove", remove);
 
 function showSpinner(msg, config){
     var $spinner = $(".spinner");
@@ -559,7 +558,7 @@ function showSpinner(msg, config){
     var def = {
         timeout: 1500
     };
-    config = $.extend(config, def);
+    $.extend(def, config);
     $spinner.appendTo($("body"))
         .ready(function () {
             $spinner.css({
@@ -570,9 +569,9 @@ function showSpinner(msg, config){
         });
     setTimeout(function(){
         if($spinner) $spinner.remove();
-        var callback = config.callback;
+        var callback = def.callback;
         if(callback) callback();
-    }, config.timeout);
+    }, def.timeout);
 }
 
 function showLoading($relative) {

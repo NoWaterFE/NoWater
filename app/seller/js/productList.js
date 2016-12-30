@@ -32,6 +32,7 @@ var productClass = ["TV & Home Theater", "Computers & Tablets", "Cell Phones",
 function createProductList(info){
     var op = info.isDel == 0 ?
     '<div class="operate"> ' +
+        '<input type="button" value="add to homepage" class="delete"> ' +
         '<input type="button" value="Bid for ad" class="bid"> ' +
         '<input type="button" value="Modify" class="modify"> ' +
         '<input type="button" value="Off" class="delete"> ' +
@@ -68,6 +69,11 @@ function createProductList(info){
         '<td> ' +
             '<div class="stock">' +
                 info.quantityStock +
+            '</div> ' +
+        '</td> ' +
+        '<td> ' +
+            '<div class="date">' +
+                info.updateTime +
             '</div> ' +
         '</td> ' +
         '<td> ' +
@@ -119,19 +125,36 @@ var  postProductList = (function() {
             }
             //tipsAlert("server error");
             result = {
-                productId: 1234,
-                photo: ["imgs/1.jpg"],
-                productName: "INFRUITION CLASSIC WATER BOTTLE - GREEN",
-                class: "Video, Games, Movies & Music",
-                classId: 6,
-                price: 99,
-                quantityStock: 798,
-                isDel: 0
+                status: 200,
+                startId: -1,
+                data: [{
+                    productId: 1234,
+                    photo: ["imgs/1.jpg"],
+                    productName: "INFRUITION CLASSIC WATER BOTTLE - GREEN",
+                    class: "Video, Games, Movies & Music",
+                    classId: 6,
+                    price: 99,
+                    quantityStock: 798,
+                    isDel: 0,
+                    updateTime: "2016-12-29 15:55:37"
+                }]
             };
-            for(var i=0; i<10; i++){
-                createProductList(result).data("info", result).appendTo($productList.find("tbody"));
+            var status = result.status;
+            if(status==200){
+                var data = result.data,
+                    len = data.length;
+                startId = result.endId;
+                var $tbody = $productList.find("tbody");
+                for(var i=0; i<len; i++){
+                    createProductList(data[i])
+                        .appendTo($tbody);
+                }
+                if(startId!=-1){
+                    $productList.find(".more .showMore").removeClass("hidden");
+                }
+            } else if(status==300) {
+                location.href = loginUrl;
             }
-            $productList.find(".more .showMore").removeClass("hidden");
         });
     };
 })();
@@ -279,7 +302,7 @@ $productList.on("click", ".delete", (function () {
     return function(e){
         if(loading) return;
         var _this = $(this);
-        tipsConfirm("Are you sure to removed the product from shelves?", function(){
+        tipsConfirm("Are you sure want to remove the product from shelves?", function(){
             loading = showLoading(_this.parent());
             var $productItem = _this.parents(".productItem"),
                 info = $productItem.data("info"),

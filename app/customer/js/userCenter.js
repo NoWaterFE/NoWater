@@ -1,4 +1,3 @@
-var host="http://123.206.100.98:16120";
 var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
 var oldData;
 // header添加事件
@@ -17,19 +16,19 @@ var oldData;
         }
     }).fail(function (result) {
         /*console.log(result.statusText);
-        result = {
-            status: 200,
-            userInformation: [{
-                name: "gdh",
-                cartNum: 33
-            }]
-        };
-        if (result.status == 200) {
-            var userInfo = result.userInformation[0];
-            var quickMenu = $("#quickMenu");
-            quickMenu.find(".accountOperate").toggleClass("active");
-            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
-        }*/
+         result = {
+         status: 200,
+         userInformation: [{
+         name: "gdh",
+         cartNum: 33
+         }]
+         };
+         if (result.status == 200) {
+         var userInfo = result.userInformation[0];
+         var quickMenu = $("#quickMenu");
+         quickMenu.find(".accountOperate").toggleClass("active");
+         quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+         }*/
     });
 
     //headMenu添加事件
@@ -73,20 +72,16 @@ var oldData;
             url: "/proxy/customer/loginout",
         }).done(function(){
             delCookie("token");
-            location.reload();
+            location.href = "index.html";
         }).fail(function () {
             delCookie("token");
-            location.reload();
+            location.href = "index.html";
         });
     });
 
     var $searchForm = $("#searchForm");
     $searchForm.on("submit", function(e){
-        if (e && e.preventDefault) {
-            e.preventDefault();
-        } else {
-            e.returnValue = false;
-        }
+        e.preventDefault();
         var keyWord = this.keyWord.value;
         if(keyWord!=""){
             location.href = "search.html?keyWord="+ encodeURIComponent(keyWord);
@@ -111,11 +106,11 @@ function Dsy(){
 }
 Dsy.prototype.add = function(id,iArray){
     this.Items[id] = iArray;
-}
+};
 Dsy.prototype.Exists = function(id){
     if(typeof(this.Items[id]) == "undefined") return false;
     return true;
-}
+};
 
 var dsy = new Dsy();
 
@@ -126,15 +121,15 @@ dsy.add("0_2",["Cheung Sha Wan", "Choi Wan", "Diamond Hill", "Ho Man Tin", "Hung
 
 var s=["area","district"];
 
-showInfo();
 _init_area();
-$("#save").click(save);
+
+var $infoForm = $("#infoForm");
 
 function change(v){
     var str="0";
-    for(i=0;i<v;i++){
+    for(var i=0;i<v;i++){
         str+=("_"+(document.getElementById(s[i]).selectedIndex));
-    };
+    }
     var ss=document.getElementById(s[v]);
     with(ss){
         length = 0;
@@ -150,7 +145,7 @@ function change(v){
 }
 
 function _init_area(){
-    for(i=0;i<s.length-1;i++){
+    for(var i=0;i<s.length-1;i++){
         document.getElementById(s[i]).onchange=new Function("change("+(i+1)+")");
     }
     change(0);
@@ -162,87 +157,166 @@ function showInfo() {
         url: "/proxy/customer/info/detail",
         dataType: "json"
     }).done(function (result) {
-        $("#name").val(result.name);
-        $("#firstName").val(result.firstName);
-        $("#lastName").val(result.lastName);
-        $("#telephone").val(result.telephone);
-        $("#postCode").val(result.postCode);
-        $("#address").val(result.address3);
-        $("#area").val(result.address1);
-        change(1);
-        $("#district").val(result.address2);
+        var status = result.status;
+        if(status == 200) {
+            var data = result.data;
+            $infoForm[0].name.value = data.name;
+            $infoForm[0].firstName.value = data.firstName;
+            $infoForm[0].lastName.value = data.lastName;
+            $infoForm[0].telephone.value = data.phone;
+            $infoForm[0].postCode.value = data.postCode;
+            $infoForm[0].address3.value = data.address3;
+            $infoForm[0].address1.value = data.address1;
+            change(1);
+            $infoForm[0].address2.value = data.address2;
+            oldData = $infoForm.serialize();
+        } else if(status == 300) {
+            location.href = loginUrl;
+        }
     }).fail(function (result) {
-        result = {
-            userId: 1,
-            name: "ghs",
-            telephone: 1234568,
-            address1: "Kowloon(KLN)",
-            address2: "Jordan Road",
-            address3: "Xidian",
-            postCode: 710100,
-            firstName: "gao",
-            lastName: "haishuo",
-            status: 200
+        tipsAlert("Server error!", function () {
+            location.href = "index.html";
+        });
+        /*result = {
+            status: 200,
+            data: {
+                userId: 1,
+                name: "ghs",
+                phone: 1234568,
+                address1: "Kowloon(KLN)",
+                address2: "Jordan Road",
+                address3: "Xidian",
+                postCode: 710100,
+                firstName: "gao",
+                lastName: "haishuo",
+            }
         };
-        $("#name").val(result.name);
-        $("#firstName").val(result.firstName);
-        $("#lastName").val(result.lastName);
-        $("#telephone").val(result.telephone);
-        $("#postCode").val(result.postCode);
-        $("#address").val(result.address3);
-        $("#area").val(result.address1);
-        change(1);
-        $("#district").val(result.address2);
-
-        oldData = $("#infoForm").serialize();
+        var status = result.status;
+        if(status == 200) {
+            var data = result.data;
+            $infoForm[0].name.value = data.name;
+            $infoForm[0].firstName.value = data.firstName;
+            $infoForm[0].lastName.value = data.lastName;
+            $infoForm[0].telephone.value = data.telephone;
+            $infoForm[0].postCode.value = data.postCode;
+            $infoForm[0].address3.value = data.address3;
+            $infoForm[0].address1.value = data.address1;
+            change(1);
+            $infoForm[0].address2.value = data.address2;
+            oldData = $infoForm.serialize();
+        } else if(status == 300) {
+            location.href = loginUrl;
+        }*/
     });
 }
 
-function save() {
-    var sendData = $("#infoForm").serialize();
-    var tips = showLoading($(this));
-    if (sendData != oldData) {
-        $.ajax({
-            type: "post",
-            url: host+"/proxy/customer/info/edit",
-            dataType: "json",
-            xhrFields: {
-                withCredentials: true
-            },
-            data: sendData
-        }).done(function(result){
-            if(tips) tips.remove();
-            result = {
-                status: 200
-            };
-            if (result.status == 200) {
-                tipsAlert("Edit Successful.",function () {
-                    location.reload();
-                });
-            } else if (result.status == 300) {
-                tipsAlert("Please login first.",function () {
-                    location.href = loginUrl;
-                });
-            }
-        }).fail(function(result) {
-            if(tips) tips.remove();
-            result = {
-                status: 200
-            };
-            if (result.status == 200) {
-                tipsAlert("Edit Successful.",function () {
-                    location.reload();
-                });
-            } else if (result.status == 300) {
-                tipsAlert("Please login first.",function () {
-                    location.href = loginUrl;
-                });
-            }
-        });
-    } else {
-        tipsAlert("You didn't modify anything!");
-    }
+showInfo();
+
+var telReg = /^\d{8}$/;
+
+function addError(item, msg){
+    item.addClass("error")
+        .find("input")
+        .focus()
+        .end()
+        .find(".tips")
+        .text(msg);
 }
+
+$infoForm.on("input", ".input-item input", function () {
+    var _this = $(this);
+    _this.parent().removeClass('error');
+});
+
+var save = (function(){
+    var tips = null;
+    return function(e) {
+        e.preventDefault();
+        if(tips) return;
+        var _this = $(this),
+            $firstName = _this.find(".firstName"),
+            $lastName = _this.find(".lastName"),
+            $tel = _this.find(".telephone"),
+            $postCode = _this.find(".postCode"),
+            $address = _this.find(".address"),
+            telephone = this.telephone.value,
+            firstName = this.firstName.value,
+            lastName = this.lastName.value,
+            postCode = this.postCode.value,
+            address3 = this.address3.value;	//address from input
+        if(!firstName) {
+            addError($firstName, "First name can't be empty!");
+            return;
+        }
+        if(!lastName) {
+            addError($lastName, "Last name can't be empty!");
+            return;
+        }
+        if(!telephone) {
+            addError($tel, "Telephone can't be empty!");
+            return;
+        }
+        if(!telReg.test(telephone)) {
+            addError($tel, "Error telephone!");
+            return;
+        }
+        if(!postCode) {
+            addError($postCode, "Post Code can't be empty!");
+            return;
+        }
+        if(!address3) {
+            addError($address, "Address can't be empty!");
+            return;
+        }
+        var sendData = _this.serialize();
+        if (sendData != oldData) {
+            tips = showLoading($(this));
+            $.ajax({
+                type: "post",
+                url: "/proxy/customer/info/edit",
+                dataType: "json",
+                data: sendData
+            }).done(function (result) {
+                if (tips) {
+                    tips.remove();
+                    tips = null;
+                }
+                if (result.status == 200) {
+                    showSpinner("Edit Successful.", {
+                        callback: function () {
+                            location.reload();
+                        }
+                    });
+                } else if (result.status == 300) {
+                    location.href = loginUrl;
+                }
+            }).fail(function (result) {
+                if (tips) {
+                    tips.remove();
+                    tips = null;
+                }
+                tipsAlert("Server error!");
+                /*result = {
+                    status: 200
+                };
+                if (result.status == 200) {
+                    showSpinner("Edit Successful.", {
+                        callback: function () {
+                            location.reload();
+                        }
+                    });
+                } else if (result.status == 300) {
+                    location.href = loginUrl;
+                }*/
+            });
+        } else {
+            tipsAlert("You didn't modify anything!");
+        }
+    }
+})();
+
+
+$infoForm.on("submit", save);
 
 function showLoading($relative) {
     var $tips = $relative.siblings(".loadingImg");

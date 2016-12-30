@@ -6,7 +6,7 @@
         url: "/proxy/customer/isLogin",
         dataType: "json"
     }).done(function (result) {
-        if (result.status == 200) {
+        if(result.status==200){
             var userInfo = result.userInformation[0];
             var quickMenu = $("#quickMenu");
             quickMenu.find(".accountOperate").toggleClass("active");
@@ -14,19 +14,19 @@
         }
     }).fail(function (result) {
         /*console.log(result.statusText);
-        result = {
-            status: 200,
-            userInformation: [{
-                name: "gdh",
-                cartNum: 33
-            }]
-        };
-        if (result.status == 200) {
-            var userInfo = result.userInformation[0];
-            var quickMenu = $("#quickMenu");
-            quickMenu.find(".accountOperate").toggleClass("active");
-            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
-        }*/
+         result = {
+         status: 200,
+         userInformation: [{
+         name: "gdh",
+         cartNum: 33
+         }]
+         };
+         if (result.status == 200) {
+         var userInfo = result.userInformation[0];
+         var quickMenu = $("#quickMenu");
+         quickMenu.find(".accountOperate").toggleClass("active");
+         quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+         }*/
     });
 
     //headMenu添加事件
@@ -66,24 +66,20 @@
     quickMenu.on("click", ".logout", function () {
         var _this = $(this);
         $.ajax({
-            method: "get",
-            url: "/proxy/customer/loginout"
+            method: "post",
+            url: "/proxy/customer/loginout",
         }).done(function(){
             delCookie("token");
-            location.reload();
+            location.href = "index.html";
         }).fail(function () {
             delCookie("token");
-            location.reload();
+            location.href = "index.html";
         });
     });
 
     var $searchForm = $("#searchForm");
     $searchForm.on("submit", function(e){
-        if (e && e.preventDefault) {
-            e.preventDefault();
-        } else {
-            e.returnValue = false;
-        }
+        e.preventDefault();
         var keyWord = this.keyWord.value;
         if(keyWord!=""){
             location.href = "search.html?keyWord="+ encodeURIComponent(keyWord);
@@ -266,10 +262,18 @@ var shopId = 1;
         if(status==200 || status==500){
             var $productForm = $("#productForm");
             var data = result.data,
-                shop = data.shop;
+                shop = data.shop,
+                shopName = shop.shopName,
+                tel = shop.telephone,
+                email = shop.email;
             shopId = shop.shopId;
-            $("#shopName").text(shop.shopName);
-            $("#detail").html("Telephone: " + shop.telephone + "<br>" + "E-mail: " +shop.email);
+            $("#shopName").text(shopName).attr("title", shopName);
+            $("#shopName").text(shopName).attr("title", shopName);
+            $("#detail").find(".tel").html("Telephone: " + tel ).attr("title", tel)
+                .end()
+                .find(".email").html("E-mail: " +email).attr("title", email)
+                .end()
+                .siblings(".addToFavo").show();
             var classList = shop.classList,
                 len = classList.length,
                 $menuList = $("#menuList"),
@@ -338,7 +342,7 @@ var shopId = 1;
                 productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
                 price: 199,
                 quantityStock: 50,
-                isDel: 1,
+                isDel: 0,
                 photo: [
                     "imgs/product01a.jpg",
                     "imgs/product02a.jpg",
@@ -386,10 +390,17 @@ var shopId = 1;
         if(status==200 || status==500){
             var $productForm = $("#productForm");
             var data = result.data,
-                shop = data.shop;
+                shop = data.shop,
+                shopName = shop.shopName,
+                tel = shop.telephone,
+                email = shop.email;
             shopId = shop.shopId;
-            $("#shopName").text(shop.shopName);
-            $("#detail").html("Telephone: " + shop.telephone + "<br>" + "E-mail: " +shop.email);
+            $("#shopName").text(shopName).attr("title", shopName);
+            $("#detail").find(".tel").html("Telephone: " + tel ).attr("title", tel)
+                .end()
+                .find(".email").html("E-mail: " +email).attr("title", email)
+                .end()
+                .siblings(".addToFavo").show();
             var classList = shop.classList,
                 len = classList.length,
                 $menuList = $("#menuList"),
@@ -470,7 +481,7 @@ var addToCart = (function(){
             var status = result.status;
             if(status==200){
                 setCart(result.userInformation[0].cartNum);
-                showSpinner("Add success");
+                showSpinner("Add successful");
             } else if(status==300){
                 location.href = loginUrl;
             } else if (status==600){
@@ -491,7 +502,7 @@ var addToCart = (function(){
             var status = result.status;
             if(status==200){
                 setCart(result.num);
-                showSpinner("Add success");
+                showSpinner("Add successful");
             } else if(status==300){
                 location.href = loginUrl;
             } else {
@@ -502,11 +513,18 @@ var addToCart = (function(){
 })();
 var addToFavo = (function(){
     var loading = null;
-    return function(e){
-        var info = $productForm.data("info");
+    return function(){
         if(loading) return;
-        loading = showLoading($productForm);
-        var data = "id="+info.productId+"&type=2";
+        var _this = $(this),
+            data = null;
+        if(_this.hasClass("shop")){
+            data = "id="+shopId+"&type=1";
+            loading = showLoading($storeHeader);
+        } else {
+            var info = $productForm.data("info");
+            loading = showLoading($productForm);
+            data = "id="+info.productId+"&type=2";
+        }
         $.ajax({
             method: "post",
             url: "/proxy/customer/favorite/adding",
@@ -518,7 +536,7 @@ var addToFavo = (function(){
             }
             var status = result.status;
             if(status==200 || status==400){
-                showSpinner("Add success");
+                showSpinner("Add successful");
             } else if(status==300){
                 location.href = loginUrl;
             }else {
@@ -535,7 +553,7 @@ var addToFavo = (function(){
             };
             var status = result.status;
             if(status==200 || status==400){
-                showSpinner("Add success");
+                showSpinner("Add successful");
             } else if(status==300){
                 location.href = loginUrl;
             } else {
@@ -684,3 +702,6 @@ $productForm.on("click", ".buy", buy);
 $productForm.on("click", ".addToCart", addToCart);
 
 $productForm.on("click", ".addToFavo", addToFavo);
+
+var $storeHeader = $("#storeHeader");
+$storeHeader.on("click", ".addToFavo", addToFavo);

@@ -46,7 +46,6 @@ function _init_area(){
 
 _init_area();
 
-var host="http://123.206.100.98:16120";
 var telReg = /^\d{8}$/;
 
 function addError(item, msg){
@@ -55,95 +54,145 @@ function addError(item, msg){
         .focus()
         .end()
         .find(".tips")
-        .text(msg);
+        .text(msg)
+        .end();
 }
 
 var registerForm = $("#registerForm");
-registerForm.on("submit", function (e) {
-    var _this = $(this);
-    e = window.event || e;
-    if (e && e.preventDefault) {
+registerForm.on("submit", (function(){
+    var tips = null;
+    return function (e) {
+        var _this = $(this);
         e.preventDefault();
-    } else {
-        e.returnValue = false;
-    }
-    var $confirm = _this.find(".confirm"),
-        $name = _this.find(".name"),
-        $address = _this.find(".address"),
-        $telephone = _this.find(".telephone");
+        var $confirm = _this.find(".confirm"),
+            $name = _this.find(".name"),
+            $password = _this.find(".password"),
+            $address = _this.find(".address"),
+            $firstName = _this.find(".firstName"),
+            $lastName = _this.find(".lastName"),
+            $tel = _this.find(".telephone"),
+            $postCode = _this.find(".postCode");
 
-    var name = this.name.value,	//userName
-        password = this.password.value,
-        confirm = this.confirm.value,
-        telephone = this.telephone.value,
-        firstName = this.firstName.value,
-        lastName = this.lastName.value,
-        postCode = this.postCode.value,
-        address1 = this.area.value,	//area
-        address2 = this.district.value,	//district
-        address3 = this.address.value;	//address from input
+        var name = this.name.value,	//userName
+            password = this.password.value,
+            confirm = this.confirm.value,
+            telephone = this.telephone.value,
+            firstName = this.firstName.value,
+            lastName = this.lastName.value,
+            postCode = this.postCode.value,
+            address1 = this.address1.value,
+            address2 = this.address2.value,
+            address3 = this.address3.value;	//address from input
 
-    if (confirm != password) {
-    	addError($confirm, "Please input the same password!");
-    	return;
-    }
-    if (!name) {
-        addError($name, "user name can't be empty!");
-        return;
-    }
-    if (!telReg.test(telephone)) {
-        addError($telephone, "error telephone!");
-        return;
-    }
-
-    var data = "name=" + name + "&password=" + $.md5(password) +"&telephone=" + telephone 
-        + "&address1=" + address1 +"&address2=" + address2 +"&address3=" + address3
-        +"&firstName=" + firstName +"&lastName=" + lastName +"&postCode=" + postCode;
-
-    var tips = showLoading(_this);
- 
-    $.ajax({
-        type: "post",
-        url: host+"/customer/register",
-        dataType: "json",
-        xhrFields: {
-            withCredentials: true
-        },
-        data: data
-    }).done(function(result){
-        if(tips) tips.remove();
-        if(result.status==200){
-            _this.find(".register").text("register successful.");
-            var url = getUrlParam("redirectUrl");
-           if(url) {
-            location.href = decodeURIComponent(url);
-           } else {
-            location.href = "login.html";
-           }
-        } else if(result.status==300){
-            addError($name, "user name has been used!");
-        } else if(result.status==400) {
-        	addError($telephone, "illegal telephone number!");
-        } else if (result.status==500) {
-        	addError($address, "illegal address!");
+        if (!name) {
+            addError($name, "User name can't be empty!");
+            return;
         }
-    }).fail(function(result) {
-        if(tips) tips.remove();
-       //  result = {
-       //      status: 200
-       //  };
-       // if(result.status==200){
-       //      _this.find(".register").text("register successful.");
-       //  } else if(result.status==300){
-       //      addError($name, "user name has been used!");
-       //  } else if(result.status==400) {
-       //    addError($telephone, "illegal telephone number!");
-       //  } else if (result.status==500) {
-       //    addError($address, "illegal address!");
-       //  }
-    });
+        if (!password) {
+            addError($password, "Password can't be empty!");
+            return;
+        }
 
-});
+        if (confirm != password) {
+            addError($confirm, "Please input the same password!");
+            return;
+        }
+
+        if(!firstName) {
+            addError($firstName, "First name can't be empty!");
+            return;
+        }
+        if(!lastName) {
+            addError($lastName, "Last name can't be empty!");
+            return;
+        }
+        if(!telephone) {
+            addError($tel, "Telephone can't be empty!");
+            return;
+        }
+
+        if (!telReg.test(telephone)) {
+            addError($tel, "Error telephone!");
+            return;
+        }
+
+        if(!postCode) {
+            addError($postCode, "Post Code can't be empty!");
+            return;
+        }
+
+        if(!address3) {
+            addError($address, "Address can't be empty!");
+            return;
+        }
+
+
+        var data = "name=" + name + "&password=" + $.md5(password) +"&telephone=" + telephone
+            + "&address1=" + address1 +"&address2=" + address2 +"&address3=" + address3
+            +"&firstName=" + firstName +"&lastName=" + lastName +"&postCode=" + postCode;
+
+        tips = showLoading(_this);
+
+        $.ajax({
+            type: "post",
+            url: "/proxy/customer/register",
+            dataType: "json",
+            data: data
+        }).done(function(result){
+            if(tips) {
+                tips.remove();
+                tips = null;
+            }
+            if(result.status==200){
+                var url = getUrlParam("redirectUrl");
+                showSpinner("register successful.", {
+                    callback: function () {
+                        if(url) {
+                            location.href = decodeURIComponent(url+"");
+                        } else {
+                            location.href = "login.html";
+                        }
+                    },
+                    timeout: 1000
+                });
+            } else if(result.status==300){
+                addError($name, "User name has been used!");
+            } else if(result.status==400) {
+                addError($tel, "Illegal telephone number!");
+            } else if (result.status==500) {
+                addError($address, "Illegal address!");
+            }
+        }).fail(function(result) {
+            if(tips) {
+                tips.remove();
+                tips = null;
+            }
+            tipsAlert("Server error!");
+            /*result = {
+             status: 200
+            };
+            if(result.status==200){
+                var url = getUrlParam("redirectUrl");
+                showSpinner("register successful.", {
+                    callback: function () {
+                        if(url) {
+                            location.href = decodeURIComponent(url+"");
+                        } else {
+                            location.href = "login.html";
+                        }
+                    },
+                    timeout: 1000
+                });
+            } else if(result.status==300){
+                addError($name, "User name has been used!");
+            } else if(result.status==400) {
+                addError($tel, "Illegal telephone number!");
+            } else if (result.status==500) {
+                addError($address, "Illegal address!");
+            }*/
+        });
+    }
+})());
 
 registerForm.on("input", ".input-item input", function () {
    var _this = $(this);
@@ -170,6 +219,75 @@ function showLoading($relative) {
             });
         });
     return $tips;
+}
+
+function tipsAlert(msg, callback){
+    var $alert = $(".tipsAlert");
+    if ($alert.length > 0) $alert.remove();
+    $alert = $("<div class='tipsAlert'></div>");
+    var $shadow = $("<div class='shadow'></div>");
+    var $content = $("<div class='content'></div>");
+    var $msg = $("<div class='msg'>"+ msg +"</div>");
+    var $btn = $("<div class='btn'>OK</div>");
+    $btn.on("click", function () {
+        $(this).parents(".tipsAlert").remove();
+        if(callback) callback();
+    });
+    $content.append($msg).append($btn);
+    $alert.append($shadow);
+    $alert.append($content);
+    $alert.appendTo($("body"));
+}
+
+function tipsConfirm(msg, callback){
+    var $confirm = $(".tipsConfirm");
+    if ($confirm.length > 0) $confirm.remove();
+    $confirm = $("<div class='tipsConfirm'></div>");
+    var $shadow = $("<div class='shadow'></div>");
+    var $content = $("<div class='content'></div>");
+    var $msg = $("<div class='msg'>"+ msg +"</div>");
+    var $btn = $('<div class="btn2"> ' +
+        '<div class="cancel">Cancel</div> ' +
+        '<div class="ok">Ok</div> </div>');
+
+    $btn.on("click", ".cancel", function () {
+        $(this).parents(".tipsConfirm").remove();
+    });
+    $btn.on("click", ".ok", function () {
+        $(this).parents(".tipsConfirm").remove();
+        if(callback) callback();
+    });
+    $content.append($msg).append($btn);
+    $confirm.append($shadow)
+        .append($content)
+        .appendTo($("body"));
+}
+
+function showSpinner(msg, config){
+    var $spinner = $(".spinner");
+    if($spinner) $spinner.remove();
+    $spinner = $('<div class="spinner"> ' +
+        '<div class="tips"> ' +
+        msg +
+        '</div> ' +
+        '</div>');
+    var def = {
+        timeout: 1500
+    };
+    $.extend(def, config);
+    $spinner.appendTo($("body"))
+        .ready(function () {
+            $spinner.css({
+                "margin-left": -$spinner.width() / 2,
+                "margin-top": -$spinner.width() / 2,
+                "visibility": "visible"
+            });
+        });
+    setTimeout(function(){
+        if($spinner) $spinner.remove();
+        var callback = def.callback;
+        if(callback) callback();
+    }, def.timeout);
 }
 
 $(window).on("scroll", function(){

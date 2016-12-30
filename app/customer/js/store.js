@@ -1,4 +1,3 @@
-var host="http://123.206.100.98:16120";
 var value = "Products about ";
 var data;
 var shopId = GetQueryString("shopId");
@@ -21,11 +20,18 @@ $.ajax({
 }).done(function (result) {
     if(result.status==200){
         var data = result.data,
+            shopName = data.shopName,
+            tel = data.telephone,
+            email = data.email,
             classId = 0,
             menuList = "",
             $menuList = $("#menuList");
-        $("#shopName").text(data.shopName);
-        $("#detail").html("Telephone: " + data.telephone + "<br>" + "E-mail: " +data.email);
+        $("#shopName").text(shopName).attr("title", shopName);
+        $("#detail").find(".tel").html("Telephone: " + tel ).attr("title", tel)
+            .end()
+            .find(".email").html("E-mail: " +email).attr("title", email)
+            .end()
+            .siblings(".addToFavo").show();
         for (var i=0; i<data.classList.length; i++) {
             classId = data.classList[i];
             menuList = '<li data-pt="' + classId +' ">' +className[classId] + '</li>';
@@ -42,37 +48,29 @@ $.ajax({
             email: "apple@icloud.com",
             telephone: "123456",
             classList: [
-                {
-                    classId: 1,
-                    className: "Video, Games, Movies & Music"
-                },
-                {
-                    classId: 2,
-                    className: "iPod"
-                },
-                {
-                    classId: 3,
-                    className: "macBook"
-                },
-                {
-                    classId: 4,
-                    className: "Watch"
-                },
-                {
-                    classId: 5,
-                    className: "iPhone"
-                }
+                1, 2, 3, 4
             ]
         }
 
     };
     if(result.status==200){
-        var data = result.data;
-        $("#shopName").text(data.shopName);
-        $("#detail").html("Telephone: " + data.telephone + "<br>" + "E-mail: " +data.email);
+        var data = result.data,
+            shopName = data.shopName,
+            tel = data.telephone,
+            email = data.email,
+            classId = 0,
+            menuList = "",
+            $menuList = $("#menuList");
+        $("#shopName").text(shopName).attr("title", shopName);
+        $("#detail").find(".tel").html("Telephone: " + tel ).attr("title", tel)
+            .end()
+            .find(".email").html("E-mail: " +email).attr("title", email)
+            .end()
+            .siblings(".addToFavo").show();
         for (var i=0; i<data.classList.length; i++) {
-            var menuList = '<li data-pt="' + data.classList[i].classId +' ">' + data.classList[i].className + '</li>';
-            $("#menuList").append(menuList);
+            classId = data.classList[i];
+            menuList = '<li data-pt="' + classId +' ">' +className[classId] + '</li>';
+            $menuList.append(menuList);
         }
     }
 });
@@ -112,19 +110,19 @@ getResult();
         }
     }).fail(function (result) {
         /*console.log(result.statusText);
-        result = {
-            status: 200,
-            userInformation: [{
-                name: "gdh",
-                cartNum: 33
-            }]
-        };
-        if(result.status==200){
-            var userInfo = result.userInformation[0];
-            var quickMenu = $("#quickMenu");
-            quickMenu.find(".accountOperate").toggleClass("active");
-            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
-        }*/
+         result = {
+         status: 200,
+         userInformation: [{
+         name: "gdh",
+         cartNum: 33
+         }]
+         };
+         if (result.status == 200) {
+         var userInfo = result.userInformation[0];
+         var quickMenu = $("#quickMenu");
+         quickMenu.find(".accountOperate").toggleClass("active");
+         quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+         }*/
     });
 
     //headMenu添加事件
@@ -164,24 +162,20 @@ getResult();
     quickMenu.on("click", ".logout", function () {
         var _this = $(this);
         $.ajax({
-            type: "post",
+            method: "post",
             url: "/proxy/customer/loginout",
         }).done(function(){
             delCookie("token");
-            location.reload();
+            location.href = "index.html";
         }).fail(function () {
             delCookie("token");
-            location.reload();
+            location.href = "index.html";
         });
     });
 
     var $searchForm = $("#searchForm");
     $searchForm.on("submit", function(e){
-        if (e && e.preventDefault) {
-            e.preventDefault();
-        } else {
-            e.returnValue = false;
-        }
+        e.preventDefault();
         var keyWord = this.keyWord.value;
         if(keyWord!=""){
             location.href = "search.html?keyWord="+ encodeURIComponent(keyWord);
@@ -265,6 +259,11 @@ function getClass() {
         if(result.status==200 || result.status==300){
             startId = result.startId;
             setText();
+            if (result.data.length == 0) {
+                $noResult.text("No product found,please try another key words.");
+                $noResult.css('display','block');
+                return;
+            }
             if(startId != -1) {
                 $("#showMore").css('display','block');
             } else {
@@ -292,7 +291,7 @@ function getClass() {
         $adGoods = null;
     })
         .fail(function(result){
-            result = {
+            /*result = {
                 status: 200,
                 actualCount: 10,
                 startId: 2,
@@ -425,7 +424,7 @@ function getClass() {
                 $noResult.text("No class found,please try another class name.");
                 $noResult.css('display','block');
                 return;
-            }
+            }*/
             $adGoods = null;
         });
 }
@@ -639,7 +638,7 @@ var addToCart = (function(){
             var status = result.status;
             if(status==200){
                 setCart(result.userInformation[0].cartNum);
-                showSpinner("Add success")
+                showSpinner("Add successful")
             } else if(status==300){
                 location.href = loginUrl;
             } else if (status==600){
@@ -660,7 +659,7 @@ var addToCart = (function(){
              var status = result.status;
              if(status==200){
              setCart(result.num);
-             showSpinner("Add success")
+             showSpinner("Add successful")
              } else if(status==300){
              location.href = loginUrl;
              } else {
@@ -673,11 +672,17 @@ var addToCart = (function(){
 var addToFavo = (function(){
     var loading = null;
     return function(e){
-        var _this = $(this);
         if(loading) return;
-        var $goods = _this.parents(".goods-item");
-        loading = showLoading($goods);
-        var data = "id="+$goods.data("productId")+"&type=2";
+        var _this = $(this),
+            data = null;
+        if(_this.hasClass("shop")){
+            data = "id="+shopId+"&type=1";
+            loading = showLoading($storeHeader);
+        } else {
+            var $goods = _this.parents(".goods-item");
+            loading = showLoading($goods);
+            data = "id="+$goods.data("productId")+"&type=2";
+        }
         $.ajax({
             method: "post",
             url: "/proxy/customer/favorite/adding",
@@ -689,7 +694,7 @@ var addToFavo = (function(){
             }
             var status = result.status;
             if(status==200 || status==400){
-                showSpinner("Add success");
+                showSpinner("Add successful");
             } else if(status==300){
                 location.href = loginUrl;
             }else {
@@ -706,7 +711,7 @@ var addToFavo = (function(){
              };
              var status = result.status;
              if (status == 200 || status == 400) {
-             showSpinner("Add success");
+             showSpinner("Add successful");
              } else if (status == 300) {
              location.href = loginUrl;
              } else {
@@ -720,6 +725,9 @@ var addToFavo = (function(){
 $("#adGoods").on("click", ".goods-item .add-to-cart", addToCart);
 // 添加到收藏
 $("#adGoods").on("click", ".goods-item .add-to-favorites", addToFavo);
+
+var $storeHeader = $("#storeHeader");
+$storeHeader.on("click", ".addToFavo", addToFavo);
 
 function showSpinner(msg, config){
     var $spinner = $(".spinner");

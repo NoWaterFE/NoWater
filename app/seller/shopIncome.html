@@ -7,7 +7,9 @@
     <link rel="icon" type="image/x-icon" href="../favicon.ico">
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
     <script type="text/javascript" src="js/userInfo.js"></script>
-    <link rel="stylesheet" type="text/css" href="style/example.css">
+    <link rel="stylesheet" type="text/css" href="style/shopIncome.css">
+    <link rel="stylesheet" type="text/css" href="style/datepicker.css">
+    <script type="text/javascript" src="js/datepicker.min.js"></script>
 </head>
 <body>
 <header>
@@ -80,7 +82,35 @@
         </ul>
     </div>
     <div class="page">
-
+        <h2 class="title">Shop Income</h2>
+        <div class="filter" id="orderFilter">
+            <form class="orderForm">
+                <div class="timeSub">
+                    <div class="time clearfix">
+                        <select name="time" class="timeSelect">
+                            <option value="1">Last day</option>
+                            <option value="2">Last week</option>
+                            <option value="3">Last month</option>
+                            <option value="4">Last year</option>
+                            <option value="5">More</option>
+                        </select>
+                        <div class="detailTime">
+                            <span>Time: </span>
+                            <input data-toggle="datepicker" class="selectTime startTime">
+                            -
+                            <input data-toggle="datepicker" class="selectTime endTime">
+                        </div>
+                    </div>
+                    <div class="submit">
+                        <input type="submit" value="Search" class="searchBtn">
+                    </div>
+                </div>
+            </form>
+            <div class="income">
+                <span>Income(HK$):</span>
+                <span class="num">0.00</span>
+            </div>
+        </div>
     </div>
 </div>
 <footer>
@@ -88,6 +118,6 @@
         © Copyright NoWaterFE
     </div>
 </footer>
-<script type="text/javascript" src="js/example.js"></script>
+<script type="text/javascript" src="js/shopIncome.js"></script>
 </body>
 </html>

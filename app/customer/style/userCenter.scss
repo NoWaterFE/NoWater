@@ -1,6 +1,16 @@
 @import "reset";
 @import "base";
 
+.redStar {
+    position: relative;
+    &:before {
+        content: "*";
+        color: red;
+        position: absolute;
+        left: -0.8em;
+    }
+}
+
 .content {
     min-height: 400px;
     width: 1200px;
@@ -90,7 +100,7 @@
         .submit {
             padding-left: 180px;
             margin-top: 40px;
-            input[type=button] {
+            input {
                 width: 120px;
                 height: 40px;
                 border: none;

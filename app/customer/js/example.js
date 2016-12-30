@@ -70,20 +70,16 @@
             url: "/proxy/customer/loginout",
         }).done(function(){
             delCookie("token");
-            location.reload();
+            location.href = "index.html";
         }).fail(function () {
             delCookie("token");
-            location.reload();
+            location.href = "index.html";
         });
     });
 
     var $searchForm = $("#searchForm");
     $searchForm.on("submit", function(e){
-        if (e && e.preventDefault) {
-            e.preventDefault();
-        } else {
-            e.returnValue = false;
-        }
+        e.preventDefault();
         var keyWord = this.keyWord.value;
         if(keyWord!=""){
             location.href = "search.html?keyWord="+ encodeURIComponent(keyWord);

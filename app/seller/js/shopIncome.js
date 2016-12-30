@@ -110,3 +110,91 @@ function showSpinner(msg, config){
         if(callback) callback();
     }, def.timeout);
 }
+
+var $orderFilter = $("#orderFilter"),
+    $orderForm = $orderFilter.find(".orderForm");
+
+$orderForm.find('.selectTime').datepicker({
+    format: 'yyyy-mm-dd',
+    autoPick: true
+}).blur(function(){
+    var _this = $(this);
+    _this.datepicker("pick");
+});
+$orderFilter.on("change", ".timeSelect", function () {
+    var _this = $(this);
+    if(_this.val()=="5"){
+        _this.siblings('.detailTime').show();
+    } else {
+        _this.siblings('.detailTime').hide();
+    }
+});
+$orderForm.on("submit", (function(){
+    return function(e){
+        e.preventDefault();
+        var _this = $(this),
+            param = null;
+        var time = _this[0].time.value;
+        if(time!="5") {
+            param = {
+                timeFilter: time
+            };
+        } else {
+            param = {
+                timeFilter: time,
+                beginTime: _this.find(".startTime").val(),
+                endTime: _this.find(".endTime").val()
+            };
+        }
+        postIncome(param);
+    };
+})());
+
+var postIncome = (function(){
+    var loading = null;
+    return function (param) {
+        if(loading) return;
+        var reqData = "";
+        if(param) {
+            reqData += "timeFilter="+param.timeFilter+"&beginTime="+param.beginTime+
+            "&endTime="+param.endTime;
+        } else {
+            reqData += "timeFilter=1";
+        }
+        loading = showLoading($orderForm);
+        $.ajax({
+            method: "post",
+            url: "/proxy/shop-owner/income",
+            data: reqData
+        }).done(function (result) {
+            if(loading) {
+                loading.remove();
+                loading = null;
+            }
+            var status = result.status;
+            if(status==200) {
+                $orderFilter.find(".income .num").text(result.income);
+            } else if(status==300){
+                location.href = loginUrl;
+            }
+        }).fail(function (result) {
+            if(loading) {
+                loading.remove();
+                loading = null;
+            }
+            tipsAlert("Server error!");
+            /*result = {
+                "status":200,
+                "income":243.999994546175
+            };
+            var status = result.status;
+            if(status==200) {
+                $orderFilter.find(".income .num").text(result.income);
+            } else if(status==300){
+                location.href = loginUrl;
+            }*/
+        });
+    };
+})();
+
+postIncome();

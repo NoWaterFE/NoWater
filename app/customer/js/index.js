@@ -228,9 +228,9 @@ function createSpot(len) {
 
 // header添加事件
 (function () {
-    //获取登录信息
+    //获取登录信息可能不需要
     $.ajax({
-        method: "post",
+        method: "get",
         url: "/proxy/customer/isLogin",
         dataType: "json"
     }).done(function (result) {
@@ -241,14 +241,15 @@ function createSpot(len) {
             quickMenu.find(".my-cart .count").text(userInfo.cartNum);
         }
     }).fail(function (result) {
-        /*result = {
+        /*console.log(result.statusText);
+         result = {
          status: 200,
          userInformation: [{
          name: "gdh",
          cartNum: 33
          }]
          };
-         if(result.status==200){
+         if (result.status == 200) {
          var userInfo = result.userInformation[0];
          var quickMenu = $("#quickMenu");
          quickMenu.find(".accountOperate").toggleClass("active");
@@ -294,23 +295,19 @@ function createSpot(len) {
         var _this = $(this);
         $.ajax({
             method: "post",
-            url: "/proxy/customer/loginout"
+            url: "/proxy/customer/loginout",
         }).done(function(){
             delCookie("token");
-            location.reload();
+            location.href = "index.html";
         }).fail(function () {
             delCookie("token");
-            location.reload();
+            location.href = "index.html";
         });
     });
 
     var $searchForm = $("#searchForm");
     $searchForm.on("submit", function(e){
-        if (e && e.preventDefault) {
-            e.preventDefault();
-        } else {
-            e.returnValue = false;
-        }
+        e.preventDefault();
         var keyWord = this.keyWord.value;
         if(keyWord!=""){
             location.href = "search.html?keyWord="+ encodeURIComponent(keyWord);

@@ -1,4 +1,3 @@
-var host="http://123.206.100.98:16120";
 var value = "Results for ";
 var keyWord = GetQueryString("keyWord");
 if (!keyWord) {
@@ -27,19 +26,19 @@ getResult();
         }
     }).fail(function (result) {
         /*console.log(result.statusText);
-        result = {
-            status: 200,
-            userInformation: [{
-                name: "gdh",
-                cartNum: 33
-            }]
-        };
-        if(result.status==200){
-            var userInfo = result.userInformation[0];
-            var quickMenu = $("#quickMenu");
-            quickMenu.find(".accountOperate").toggleClass("active");
-            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
-        }*/
+         result = {
+         status: 200,
+         userInformation: [{
+         name: "gdh",
+         cartNum: 33
+         }]
+         };
+         if (result.status == 200) {
+         var userInfo = result.userInformation[0];
+         var quickMenu = $("#quickMenu");
+         quickMenu.find(".accountOperate").toggleClass("active");
+         quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+         }*/
     });
 
     //headMenu添加事件
@@ -80,23 +79,19 @@ getResult();
         var _this = $(this);
         $.ajax({
             method: "post",
-            url: "/proxy/customer/loginout"
+            url: "/proxy/customer/loginout",
         }).done(function(){
             delCookie("token");
-            location.reload();
+            location.href = "index.html";
         }).fail(function () {
             delCookie("token");
-            location.reload();
+            location.href = "index.html";
         });
     });
 
     var $searchForm = $("#searchForm");
     $searchForm.on("submit", function(e){
-        if (e && e.preventDefault) {
-            e.preventDefault();
-        } else {
-            e.returnValue = false;
-        }
+        e.preventDefault();
         var keyWord = this.keyWord.value;
         if(keyWord!=""){
             location.href = "search.html?keyWord="+ encodeURIComponent(keyWord);
@@ -114,6 +109,7 @@ getResult();
             cart.text(num);
         }
     }
+
 })();
 
 function getResult() {
@@ -513,7 +509,7 @@ var addToCart = (function(){
             var status = result.status;
             if(status==200){
                 setCart(result.userInformation[0].cartNum);
-                showSpinner("Add success")
+                showSpinner("Add successful")
             } else if(status==300){
                 location.href = loginUrl;
             } else if (status==600){
@@ -534,7 +530,7 @@ var addToCart = (function(){
              var status = result.status;
              if(status==200){
              setCart(result.num);
-             showSpinner("Add success")
+             showSpinner("Add successful")
              } else if(status==300){
              location.href = loginUrl;
              } else {
@@ -563,7 +559,7 @@ var addToFavo = (function(){
             }
             var status = result.status;
             if(status==200 || status==400){
-                showSpinner("Add success");
+                showSpinner("Add successful");
             } else if(status==300){
                 location.href = loginUrl;
             }else {
@@ -580,7 +576,7 @@ var addToFavo = (function(){
              };
              var status = result.status;
              if (status == 200 || status == 400) {
-             showSpinner("Add success");
+             showSpinner("Add successful");
              } else if (status == 300) {
              location.href = loginUrl;
              } else {

@@ -79,48 +79,28 @@
         </ul>
     </div>
     <div class="page">
-        <form class="homepageDesign" novalidate>
-            <h2 class="title">Homepage Design</h2>
-            <ul>
-                <li>
-                    <div>AREA 1</div>
-                    <table>
-                        <tbody>
-                        <tr>
-                            <td>
-                                <select name="productId">
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                </select>
-                            </td>
-                            <td>
-                                <div class="img">
-                                    <span>choose or modify product picture</span>
-                                    <input type="file" name="img">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="adImgPreview">
-                                    <img src="" alt="">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="operate">
-                                    <input type="button" value="set">
-                                    <input type="button" value="confirm">
-                                    <input type="button" value="modify">
-                                    <input type="button" value="cancel">
-                                    <input type="button" value="clear">
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </li>
-            </ul>
-        </form>
+        <h2 class="title">Homepage Product List<a href="javascript:" class="add">ADD</a></h2>
+        <div class="productList" id="productList">
+            <table>
+                <tbody>
+                <tr class="productTitle">
+                    <th class="id">Product ID</th>
+                    <th class="image">Product Image</th>
+                    <th class="name">Product Name</th>
+                    <th class="categories">Product Categories</th>
+                    <th class="price">Product Price(HK$)</th>
+                    <th class="stock">Product Stock</th>
+                    <th class="operate">Operate</th>
+                </tr>
+                </tbody>
+            </table>
+            <div class="more">
+                <div class="showMore hidden">
+                    <span>SHOW MORE</span>
+                    <span class="down"></span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <footer>
