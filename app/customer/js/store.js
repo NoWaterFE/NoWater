@@ -677,44 +677,45 @@ var addToFavo = (function(){
         if(loading) return;
         var $goods = _this.parents(".goods-item");
         loading = showLoading($goods);
-        var data = "id="+$goods.data("productId")+"&favoriteType=0";
+        var data = "id="+$goods.data("productId")+"&type=2";
         $.ajax({
             method: "post",
             url: "/proxy/customer/favorite/adding",
             data: data
-        }).done(function(){
+        }).done(function(result){
             if(loading) {
                 loading.remove();
                 loading = null;
             }
             var status = result.status;
-            if(status==200){
-                showSpinner("Add success")
+            if(status==200 || status==400){
+                showSpinner("Add success");
             } else if(status==300){
                 location.href = loginUrl;
-            } else {
+            }else {
                 tipsAlert("server error!");
             }
         }).fail(function(result){
+            tipsAlert("server error!");
             if(loading) {
                 loading.remove();
                 loading = null;
             }
-            //tipsAlert("server error");
-            result = {
-                status: 200
-            };
-            var status = result.status;
-            if(status==200){
-                showSpinner("Add success")
-            } else if(status==300){
-                location.href = loginUrl;
-            } else {
-                tipsAlert("server error!");
-            }
+            /*result = {
+             status: 200
+             };
+             var status = result.status;
+             if (status == 200 || status == 400) {
+             showSpinner("Add success");
+             } else if (status == 300) {
+             location.href = loginUrl;
+             } else {
+             tipsAlert("server error!");
+             }*/
         });
     };
 })();
+
 // 添加到购物车
 $("#adGoods").on("click", ".goods-item .add-to-cart", addToCart);
 // 添加到收藏

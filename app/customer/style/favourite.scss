@@ -164,22 +164,3 @@
   color: grey;
   display: none;
 }
-
-.showMore {
-  text-align: center;
-  margin: 40px auto;
-  display: none;
-  input[type=button] {
-    width: 200px;
-    height: 40px;
-    border: none;
-    cursor: pointer;
-    border-radius: 5px;
-    background: #292d84;
-    color: #fff;
-    &.disabled{
-      background: #DCDEE3;
-      color: #999;
-    }
-  }
-}

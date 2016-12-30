@@ -1,20 +1,18 @@
-var startId = 0;
 var favoriteType = GetQueryString("kind");
 var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
-$("#showMoreButton").click(getResult);
 
 if(!GetQueryString("kind")) {
-    location.href = "favourite.html?kind="+ encodeURIComponent("0");
+    location.href = "favourite.html?kind="+ encodeURIComponent("1");
 }
 
 var $favMain = $("#favMain");
 $favMain.on("click", ".favTab", function () {
     var _this = $(this);
-    var i =_this.index();
+    var i =_this.index() + 1;
     location.href = "favourite.html?kind="+i;
 });
-$favMain.find(".favTab").eq(favoriteType).addClass("active");
-if (favoriteType == 1) {
+$favMain.find(".favTab").eq(favoriteType-1).addClass("active");
+if (favoriteType == 2) {
     $("#adGoods").css('width','800px');
 } else {
     $("#adGoods").css('width','1200px');
@@ -131,8 +129,7 @@ getResult();
 function getResult() {
     var $adGoods = $("#adGoods");
     var $noResult = $("#noResult");
-    var count = 30;
-    var sendData = "favoriteType=" + favoriteType + "&count=" + count + "&startId=" + startId;
+    var sendData = "type=" + favoriteType;
     $.ajax({
         method: "get",
         url: "/proxy/customer/favorite/list",
@@ -162,18 +159,13 @@ function getResult() {
                     $adGoods.append(shopItem);
                 }
             }
-            if (startId != -1) {
-                $("#showMore").css('display', 'block');
-            } else {
-                $("#showMore").css('display', 'none');
-            }
         } else if (result.status == 300) {
             location.href = loginUrl;
         }
         $adGoods = null;
     })
         .fail(function (result) {
-            /*result = {
+            result = {
                 status: 200,
                 data: [
                     {
@@ -291,7 +283,7 @@ function getResult() {
             };
             if (result.status == 200) {
                 startId = result.startId;
-                if (favoriteType == 0) {
+                if (favoriteType == 1) {
                     if (result.data.length == 0) {
                         $noResult.text("You haven't collected one goods yet.")
                         $noResult.css('display', 'block');
@@ -304,7 +296,6 @@ function getResult() {
                 } else {
                     result.data = [
                         {
-                            favoriteId: 1,
                             shopId: 1,
                             shopName: "Apple store",
                             ownerId: 1,
@@ -313,7 +304,6 @@ function getResult() {
                             status: 1
                         },
                         {
-                            favoriteId: 2,
                             shopId: 2,
                             shopName: "Apple store",
                             ownerId: 1,
@@ -322,7 +312,6 @@ function getResult() {
                             status: 1
                         },
                         {
-                            favoriteId: 3,
                             shopId: 3,
                             shopName: "Apple store",
                             ownerId: 1,
@@ -331,7 +320,6 @@ function getResult() {
                             status: 1
                         },
                         {
-                            favoriteId: 4,
                             shopId: 4,
                             shopName: "Apple store",
                             ownerId: 1,
@@ -340,7 +328,6 @@ function getResult() {
                             status: 1
                         },
                         {
-                            favoriteId: 5,
                             shopId: 5,
                             shopName: "Apple store",
                             ownerId: 1,
@@ -349,7 +336,6 @@ function getResult() {
                             status: 1
                         },
                         {
-                            favoriteId: 6,
                             shopId: 6,
                             shopName: "Apple store",
                             ownerId: 1,
@@ -358,7 +344,6 @@ function getResult() {
                             status: 1
                         },
                         {
-                            favoriteId: 7,
                             shopId: 7,
                             shopName: "Apple store",
                             ownerId: 1,
@@ -367,7 +352,6 @@ function getResult() {
                             status: 1
                         },
                         {
-                            favoriteId: 8,
                             shopId: 8,
                             shopName: "Apple store",
                             ownerId: 1,
@@ -376,7 +360,6 @@ function getResult() {
                             status: 1
                         },
                         {
-                            favoriteId: 9,
                             shopId: 9,
                             shopName: "Apple store",
                             ownerId: 1,
@@ -395,14 +378,9 @@ function getResult() {
                         $adGoods.append(shopItem);
                     }
                 }
-                if (startId != -1) {
-                    $("#showMore").css('display', 'block');
-                } else {
-                    $("#showMore").css('display', 'none');
-                }
             } else if (result.status == 300) {
                 location.href = loginUrl;
-            }*/
+            }
             $adGoods = null;
         });
 }
@@ -451,7 +429,7 @@ function createShopItem(data) {
         '<div class="removeShop"> ' +
         '<button id="removeShop">REMOVE</button> ' +
         '</div> ' +
-        '</li>').data("favoritetId", data.favoriteId);
+        '</li>').data("favoriteId", data.favoriteId);
 }
 
 function GetQueryString(name) {
