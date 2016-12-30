@@ -123,16 +123,17 @@ function addError(item, msg){
 
 
 }
-var $applyAd = $("#applyAd");
+var $applyAd = $("#applyAd"),
+    loginUrl = "../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
 
 //请求广告信息
 $.ajax({
     method: "get",
-    url: "/proxy/2"
+    url: "/proxy/shop-owner/current/apply"
 }).done(function (result){
 
 }).fail(function (result) {
-    result = {
+    /*result = {
         status: 300,
         data: [
             {
@@ -154,25 +155,48 @@ $.ajax({
             .attr("src", photo);
         $applyAd.find("input").addClass("disabled")
             .prop("disabled", true);
-    }
+    }*/
 });
 
 function applyAd(_this, loading) {
     $.ajax({
         method: "post",
-        url: "/proxy/1",
+        url: "/proxy/shop-owner/shop/ad/apply",
         dataType: "json",
         data: _this.serialize()
     }).done(function (result) {
         if (loading) loading.remove();
         _this.data("submit", false);
         var status = result.status;
+        if(status==200) {
+            showSpinner("Success");
+            _this.find("input").addClass("disabled").attr("disabled", true);
+        } else if(status==300){
+            location.href = loginUrl;
+        } else if(status==600) {
+            tipsAlert("Fail, it has been exceeded the specified deadline today.");
+        } else {
+            tipsAlert("Server error!");
+        }
     }).fail(function (result) {
         if (loading) loading.remove();
         _this.data("submit", false);
         _this.data("submit", false);
+        tipsAlert("Server error!");
+        /*result = {
+            status: 200
+        };
         var status = result.status;
-
+        if(status==200) {
+            showSpinner("Success");
+            _this.find("input").addClass("disabled").attr("disabled", true);
+        } else if(status==300){
+            location.href = loginUrl;
+        } else if(status==600) {
+            tipsAlert("Fail, it has been exceeded the specified deadline today.");
+        } else {
+            tipsAlert("Server error!");
+        }*/
     });
 }
 
@@ -201,18 +225,16 @@ $applyAd.on("submit", function (e) {
     if(_this.data("submit")) return ;
     _this.data("submit", true);
     var loading = showLoading(_this);
-    var $input=_this.find("input[name='fileNameList']");
+    var $input=_this.find("input[name='filename']");
     if($input.length==0) {
-        $input = $("<input type='hidden' name='fileNameList'>");
+        $input = $("<input type='hidden' name='filename'>");
         $input.appendTo(_this);
     }
     if(fileUrl && _this.data("change") == "false") {
         if(!$input.val()) {
             var index = fileUrl.lastIndexOf("/");
-            var fileNameList = fileUrl.substr(index+1);
-            var arr = [];
-            arr.push(fileNameList);
-            $input.val(JSON.stringify(arr));
+            var filename = fileUrl.substr(index+1);
+            $input.val(filename);
         }
         applyAd(_this, loading);
     } else {
@@ -227,7 +249,7 @@ $applyAd.on("submit", function (e) {
             data: formData
         }).done(function(result){
             if(result.status==200){
-                var url = JSON.stringify(result.data);
+                var url = result.data[0];
                 $input.val(url);
                 _this.data("fileUrl", url)
                     .data("change", "false");
@@ -240,8 +262,8 @@ $applyAd.on("submit", function (e) {
         }).fail(function(result){
             if (loading) loading.remove();
             _this.data("submit", false);
-            //tipsAlert("server error");
-            result = {
+            tipsAlert("server error");
+            /*result = {
                 status: 200
             };
             if(result.status==200){
@@ -254,7 +276,7 @@ $applyAd.on("submit", function (e) {
                 location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
             } else {
                 tipsAlert("upload file fail");
-            }
+            }*/
         });
     }
 });
