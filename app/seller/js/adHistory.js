@@ -25,7 +25,7 @@
 
 
 function showLoading($relative) {
-    var $tips = $relative.siblings(".loadingImg");
+    var $tips = $relative.find(".loadingImg");
     if ($tips.length > 0) $tips.remove();
     $tips = $("<div class='loadingImg'></div>");
     if($relative.css("position")=="static") $relative.css('position', "relative");
@@ -251,7 +251,7 @@ var postShow = (function(){
                     {
                         time: "2016-09-05 16:30:06",
                         orderId: "2662774641999118",
-                        status: -1,
+                        status: 10,
                         shopId: 2,
                         photo: "../customer/imgs/adshop01.jpg",
                         price: 333,

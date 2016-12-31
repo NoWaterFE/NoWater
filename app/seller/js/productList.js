@@ -32,10 +32,10 @@ var productClass = ["TV & Home Theater", "Computers & Tablets", "Cell Phones",
 function createProductList(info){
     var op = info.isDel == 0 ?
     '<div class="operate"> ' +
-        '<input type="button" value="add to homepage" class="delete"> ' +
-        '<input type="button" value="Bid for ad" class="bid"> ' +
-        '<input type="button" value="Modify" class="modify"> ' +
-        '<input type="button" value="Off" class="delete"> ' +
+        '<input type="button" value="Add to homepage" class="addToHomepage"> ' +
+        '<input type="button" value="Bid for AD space" class="bid"> ' +
+        '<input type="button" value="Modify it" class="modify"> ' +
+        '<input type="button" value="Off the shelf" class="delete"> ' +
     '</div> ' :
     '<div class="off"> ' +
         'off the shelf' +
@@ -279,7 +279,7 @@ function createBid(productId) {
     return $bid;
 }
 
-$productList.on("click", ".modify", function (e) {
+$productList.on("click", ".modify", function () {
     var $productItem = $(this).parents(".productItem");
     var $modifyPop = $(".modifyPop"),
         $modifyProduct = $modifyPop.find(".modifyProduct"),
@@ -299,7 +299,7 @@ $productList.on("click", ".modify", function (e) {
 
 $productList.on("click", ".delete", (function () {
     var loading = null;
-    return function(e){
+    return function(){
         if(loading) return;
         var _this = $(this);
         tipsConfirm("Are you sure want to remove the product from shelves?", function(){
@@ -357,6 +357,70 @@ $productList.on("click", ".delete", (function () {
         });
     }
 })());
+$productList.on("click", ".addToHomepage", (function () {
+    var loading = null;
+    return function(){
+        if(loading) return;
+        var _this = $(this);
+        tipsConfirm("Are you sure want to add the product to the homepage?", function(){
+            loading = showLoading(_this.parent());
+            var $productItem = _this.parents(".productItem"),
+                info = $productItem.data("info"),
+                productId = info.productId;
+            $.ajax({
+                method: "post",
+                url: "/proxy/shop-owner/homepage/product/adding",
+                dataType: "json",
+                data: "productId="+productId
+            }).done(function(result){
+                if(loading) {
+                    loading.remove();
+                    loading = null;
+                }
+                var status = result.status;
+                if(status == 200){
+                    showSpinner("Add successful")
+                } else if(status == 300) {
+                    location.href = loginUrl;
+                } else if(status == 600) {
+                    tipsAlert("The product has been added to homepage, and can't add again!");
+                } else {
+                    showSpinner("Unknown error!", {
+                        callback: function () {
+                            location.reload();
+                        }
+                    });
+                }
+            }).fail(function(result){
+                if(loading) {
+                    loading.remove();
+                    loading = null;
+                }
+                tipsAlert("Server error!");
+                /*result = {
+                    status: 200
+                };
+                var status = result.status;
+                if(status == 200){
+                    showSpinner("Add successful")
+                } else if(status == 300) {
+                    location.href = loginUrl;
+                } else if(status == 600) {
+                    tipsAlert("The product has been added to homepage, and can't add again!");
+                } else {
+                    showSpinner("Unknown error!", {
+                        callback: function () {
+                            location.reload();
+                        }
+                    });
+                }*/
+            });
+        }, {
+            "ok": "YES",
+            "cancel": "NO"
+        });
+    }
+})());
 
 $productList.on("click", ".bid", function (e) {
     var $productItem = $(this).parents(".productItem"),
@@ -371,6 +435,7 @@ $productList.on("click", ".bid", function (e) {
     }
 });
 
+
 $productList.on("click", ".more .showMore", function(e){
     var _this = $(this);
     _this.addClass("hidden");
@@ -378,15 +443,15 @@ $productList.on("click", ".more .showMore", function(e){
 });
 
 function showLoading($relative) {
-    var $tips = $relative.siblings(".loadingImg");
+    var $tips = $relative.find(".loadingImg");
     if ($tips.length > 0) $tips.remove();
     $tips = $("<div class='loadingImg'></div>");
     if($relative.css("position")=="static") $relative.css('position', "relative");
     $tips.appendTo($relative)
         .ready(function () {
             $tips.css({
-                "top": $relative.innerHeight() / 2,
-                "left": $relative.innerWidth() / 2,
+                "top": $relative.outerHeight() / 2,
+                "left": $relative.outerWidth() / 2,
                 "margin-left": -$tips.outerWidth() / 2,
                 "margin-top": -$tips.outerHeight() / 2,
                 "visibility": "visible"

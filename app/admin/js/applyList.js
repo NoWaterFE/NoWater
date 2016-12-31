@@ -20,7 +20,7 @@ function delCookie(name){
 }
 
 function showLoading($relative) {
-    var $tips = $relative.siblings(".loadingImg");
+    var $tips = $relative.find(".loadingImg");
     if ($tips.length > 0) $tips.remove();
     $tips = $("<div class='loadingImg'></div>");
     if($relative.css("position")=="static") $relative.css('position', "relative");
@@ -174,8 +174,7 @@ var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
 
 
 var getApplyItem = (function(){
-    var loading = null,
-        startId = 0;
+    var loading = null;
     return function () {
         if(loading) return ;
         loading = showLoading($(".more"));

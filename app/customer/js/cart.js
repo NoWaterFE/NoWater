@@ -1,4 +1,4 @@
-// header添加事件
+// header添加事件 (有点不同，注意购物车数)
 (function () {
     //获取登录信息可能不需要
     $.ajax({
@@ -9,8 +9,7 @@
         if(result.status==200){
             var userInfo = result.userInformation[0];
             var quickMenu = $("#quickMenu");
-            quickMenu.find(".accountOperate").toggleClass("active");
-            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+            setCart(userInfo.cartNum);
         }
     }).fail(function (result) {
         /*console.log(result.statusText);
@@ -24,8 +23,7 @@
          if (result.status == 200) {
          var userInfo = result.userInformation[0];
          var quickMenu = $("#quickMenu");
-         quickMenu.find(".accountOperate").toggleClass("active");
-         quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+         setCart(userInfo.cartNum);
          }*/
     });
 
@@ -89,20 +87,23 @@
         $searchForm.trigger("submit");
     });
 
-    window.setCart = function(num){
-        var cart = quickMenu.find(".my-cart .count");
-        if(num > 99) {
+    window.setCart = function (num) {
+        var cart = quickMenu.find(".my-cart .count"),
+            $count = $(".cartMain").find(".count");
+        if (num > 99) {
             cart.text("99+");
+            $count.text("99+");
         } else {
             cart.text(num);
+            $count.text(num);
+
         }
     }
-
 })();
 
 
 function showLoading($relative) {
-    var $tips = $relative.siblings(".loadingImg");
+    var $tips = $relative.find(".loadingImg");
     if ($tips.length > 0) $tips.remove();
     $tips = $("<div class='loadingImg'></div>");
     if($relative.css("position")=="static") $relative.css('position', "relative");
@@ -867,10 +868,10 @@ $cartList.on("click", ".allCart", function(){
     var _this = $(this),
         $allCart = $cartList.find(".allCart");
     if(_this.prop("checked")){
-        calculateSum(1)
+        calculateSum(1);
         $allCart.prop("checked", true);
     } else {
-        calculateSum(2)
+        calculateSum(2);
         $allCart.prop("checked", false);
     }
 });

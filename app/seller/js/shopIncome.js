@@ -25,7 +25,7 @@
 
 
 function showLoading($relative) {
-    var $tips = $relative.siblings(".loadingImg");
+    var $tips = $relative.find(".loadingImg");
     if ($tips.length > 0) $tips.remove();
     $tips = $("<div class='loadingImg'></div>");
     if($relative.css("position")=="static") $relative.css('position', "relative");
@@ -112,7 +112,8 @@ function showSpinner(msg, config){
 }
 
 var $orderFilter = $("#orderFilter"),
-    $orderForm = $orderFilter.find(".orderForm");
+    $orderForm = $orderFilter.find(".orderForm"),
+    loginUrl = "../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
 
 $orderForm.find('.selectTime').datepicker({
     format: 'yyyy-mm-dd',

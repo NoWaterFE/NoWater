@@ -1,0 +1,257 @@
+@import "reset";
+@import "base";
+
+.redStar {
+    position: relative;
+    &:before {
+        content: "*";
+        color: red;
+        position: absolute;
+        left: -0.8em;
+    }
+}
+
+.content {
+    width: 1200px;
+    margin: 40px auto;
+    .nav {
+        width: 200px;
+        border: 1px solid #EEE;
+        float: left;
+        margin-right: 20px;
+        border-radius: 2px;
+        .title {
+            font-size: 14px;
+            line-height: 40px;
+            background: #f7f7f7;
+            padding-left: 10px;
+            border-bottom: 1px solid #EEEEEE;
+        }
+        .category {
+            font-size: 14px;
+            &:not(:last-child) {
+                border-bottom: 1px solid #EEE;
+            }
+            &.active {
+                a:link, a:hover, a:active, a:visited {
+                    border-left: 4px solid #4078c0;
+                }
+            }
+            a {
+                color: #4078c0;
+                padding: 10px;
+                font-size: 13px;
+                line-height: 16px;
+                display: block;
+            }
+            a:hover{
+                background: #f9f9f9;
+            }
+        }
+    }
+    .page {
+        margin-left: 222px;
+        border: 1px solid #E0E0E0;
+        padding: 40px;
+        border-radius: 4px;
+        min-height: 360px;
+        .title {
+            border-bottom: 1px solid #E0E0E0;
+            font-size: 24px;
+            line-height: 34px;
+            color: #292d84;
+        }
+        .addAddress {
+            color: #e17100;
+            border: 1px solid #e17100;
+            background: #fff;
+            display: inline-block;
+            text-align: center;
+            cursor: pointer;
+            border-radius: 6px;
+            padding: 10px;
+            margin: 14px 0;
+        }
+        .addressList {
+            .addressTable {
+                width: 100%;
+                colgroup {
+                    .col1 {
+                        width: 14%;
+                    }
+                    .col2 {
+                        width: 10%;
+                    }
+                    .col3 {
+                        width: 10%;
+                    }
+                    .col4 {
+                        width: 20%;
+                    }
+                    .col5 {
+                        width: 10%;
+                    }
+                    .col6 {
+                        width: 14%;
+                    }
+                }
+                tr {
+                    border: 1px solid #e5e5e5;
+                }
+                .addressTh {
+                    th {
+                        text-align: center;
+                        background: #f5f5f5;
+                        padding: 5px 10px;
+                    }
+                }
+                .addressItem {
+                    font-size: 14px;
+                    &:nth-child(even){
+                        background: #fff;
+                    }
+                    td {
+                        padding: 10px 10px;
+                        text-align: center;
+                        word-wrap: break-word;
+                    }
+                    .address {
+                        text-align: left;
+                    }
+                    .modify, .del, .removeBlack {
+                        user-select: none;
+                        cursor: pointer;
+                        color: #292d84;
+                        padding: 8px 0;
+                        border: 1px solid #292d84;
+                        border-radius: 4px;
+                        width: 124px;
+                        display: block;
+                        text-align: center;
+                        margin: 5px auto;
+                        &:hover {
+                            background: #292d84;
+                            color: #fff;
+                        }
+                    }
+                }
+            }
+            .more {
+                text-align: center;
+                margin-top: 10px;
+                height: 40px;
+                position: relative;
+                .showMore{
+                    cursor: pointer;
+                    display: inline-block;
+                    padding: 10px 40px;
+                    font-size: 14px;
+                    text-align: center;
+                    border: 1px solid #ddd;
+                    border-radius: 4px;
+                    &.hidden {
+                        display: none;
+                    }
+                    .down {
+                        border: 1px solid #000;
+                        border-top-color: transparent;
+                        border-right-color: transparent;
+                        width: 10px;
+                        height: 10px;
+                        display: inline-block;
+                        transform: rotate(-45deg) translate(6px, 2px);
+                    }
+                }
+            }
+        }
+    }
+}
+
+.modifyPop {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    display: none;
+    .shadow {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+    }
+    .modifyAddress {
+        padding: 20px 20px 20px 100px;
+        width: 686px;
+        margin: 20px auto;
+        background: #fff;
+        position: relative;
+        border-radius: 4px;
+        .close {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            right: 10px;
+            top: 5px;
+            cursor: pointer;
+            background-image: url(../imgs/close.png);
+            &:hover {
+                background-image: url(../imgs/close_hover.png);
+            }
+        }
+    }
+    .title {
+        border-bottom: 1px solid #E0E0E0;
+        font-size: 24px;
+        line-height: 34px;
+        color: #292d84;
+    }
+    .input-item {
+        margin: 20px 0;
+        label {
+            display: inline-block;
+            width: 120px;
+            font-size: 14px;
+        }
+        input {
+            width: 230px;
+            height: 30px;
+            font-size: 14px;
+            padding: 0 5px;
+            border: 1px solid #aaa;
+        }
+        select {
+            height: 30px;
+            width: 240px;
+        }
+        .tips {
+            font-size: 14px;
+            color: red;
+            display: none;
+        }
+        &.error {
+            input {
+                border-color: red;
+            }
+            .tips {
+                display: inline-block;
+            }
+        }
+    }
+    .submit {
+        padding-left: 180px;
+        margin-top: 40px;
+        input {
+            width: 120px;
+            height: 40px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            background: #292d84;
+            color: #fff;
+        }
+    }
+}

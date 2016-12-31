@@ -105,7 +105,7 @@ var className = ["ALL", "TV & Home Theater", "Computers & Tablets", "Cell Phones
     "Video, Games, Movies & Music", "Health, Fitness & Sports", "Home & Offic"];
 
 function showLoading($relative) {
-    var $tips = $relative.siblings(".loadingImg");
+    var $tips = $relative.find(".loadingImg");
     if ($tips.length > 0) $tips.remove();
     $tips = $("<div class='loadingImg'></div>");
     if($relative.css("position")=="static") $relative.css('position', "relative");

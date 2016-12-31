@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <title>PARKnSHOP</title>
+    <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="icon" type="image/x-icon" href="../favicon.ico" >
+    <link rel="stylesheet" type="text/css" href="style/income.css">
+    <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
+    <script type="text/javascript" src="js/status.js"></script>
+</head>
+
+<body>
+<div class="nav">
+    <ul>
+        <li class="navList"><a href="customerList.html">Customer Management</a></li>
+        <li class="navList"><a href="shopList.html">Shop Management</a></li>
+        <li class="navList"><a href="applyList.html">Shop Application List</a></li>
+        <li class="navList"><a href="shopAd.html">AD Management</a></li>
+        <li class="navList"><a href="order.html">All Orders</a></li>
+        <li class="navList active"><a href="income.html">Income & Commission</a></li>
+    </ul>
+</div>
+<div class="content">
+    <header>
+        <div class="header">
+            <div class="logo">
+                <a href="index.html">
+                    Administrator System
+                </a>
+            </div>
+            <div class="logout">
+                <span class="logoutBtn" id="logoutBtn">
+                    Logout
+                </span>
+            </div>
+        </div>
+    </header>
+    <div class="main">
+        <!--页面在这写-->
+        <div class="commission" id="commissionDiv">
+            <span class="text">Commission Rates: </span>
+            <span class="rate"></span>
+            <span class="edit">edit</span>
+        </div>
+        <h2 class="title">Sales Commission Income</h2>
+        <div class="filter" id="orderFilter">
+            <form class="orderForm">
+                <div class="timeSub">
+                    <div class="time clearfix">
+                        <select name="time" class="timeSelect">
+                            <option value="1">Last day</option>
+                            <option value="2">Last week</option>
+                            <option value="3">Last month</option>
+                            <option value="4">Last year</option>
+                            <option value="5">More</option>
+                        </select>
+                        <div class="detailTime">
+                            <span>Date: </span>
+                            <input data-toggle="datepicker" class="selectTime startTime">
+                            -
+                            <input data-toggle="datepicker" class="selectTime endTime">
+                        </div>
+                    </div>
+                    <div class="submit">
+                        <input type="submit" value="Search" class="searchBtn">
+                    </div>
+                </div>
+            </form>
+            <div class="income">
+                <span>Income(HK$):</span>
+                <span class="num">0.00</span>
+            </div>
+        </div>
+    </div>
+</div>
+<link rel="stylesheet" type="text/css" href="style/datepicker.css">
+<script type="text/javascript" src="js/datepicker.min.js"></script>
+<script type="text/javascript" src="js/income.js"></script>
+</body>
+
+</html>

@@ -21,7 +21,7 @@ function delCookie(name){
 
 
 function showLoading($relative) {
-    var $tips = $relative.siblings(".loadingImg");
+    var $tips = $relative.find(".loadingImg");
     if ($tips.length > 0) $tips.remove();
     $tips = $("<div class='loadingImg'></div>");
     if($relative.css("position")=="static") $relative.css('position', "relative");
@@ -110,6 +110,16 @@ function showSpinner(msg, config){
         var callback = def.callback;
         if(callback) callback();
     }, def.timeout);
+}
+
+//输入错误提示
+function addError(item, msg){
+    item.addClass("error")
+        .find("input")
+        .focus()
+        .end()
+        .find(".tips")
+        .text(msg);
 }
 
 function getUrlParam(name) {
@@ -232,10 +242,8 @@ var postShow = (function(){
                         status: 1,
                         price: 333,
                         showTime: "2016-09-06",
-                        shop: {
-                            shopId: 2,
-                        },
                         product: {
+                            shopId: 2,
                             "productId": 3,
                             "productName": "iPhone 7",
                             "photo": [
@@ -249,10 +257,8 @@ var postShow = (function(){
                         status: 2,
                         price: 333,
                         showTime: "2016-09-06",
-                        shop: {
-                            shopId: 2,
-                        },
                         product: {
+                            shopId: 2,
                             "productId": 3,
                             "productName": "iPhone 7",
                             "photo": [
@@ -266,10 +272,8 @@ var postShow = (function(){
                         status: 5,
                         price: 333,
                         showTime: "2016-09-06",
-                        shop: {
-                            shopId: 2,
-                        },
                         product: {
+                            shopId: 2,
                             "productId": 3,
                             "productName": "iPhone 7",
                             "photo": [
@@ -280,13 +284,11 @@ var postShow = (function(){
                     {
                         time: "2016-09-05 16:30:06",
                         orderId: "2662774641999118",
-                        status: -1,
+                        status: 10,
                         price: 333,
                         showTime: "2016-09-06",
-                        shop: {
-                            shopId: 2,
-                        },
                         product: {
+                            shopId: 2,
                             "productId": 3,
                             "productName": "iPhone 7",
                             "photo": [
@@ -298,10 +300,10 @@ var postShow = (function(){
                         time: "2016-09-05 16:30:06",
                         orderId: "2662774641999118",
                         status: -2,
-                        shopId: 3,
                         price: 333,
                         showTime: "2016-09-06",
                         product: {
+                            shopId: 2,
                             "productId": 3,
                             "productName": "iPhone 7",
                             "photo": [
@@ -427,3 +429,156 @@ $showList.on("click", ".showItem .approve", function () {
 });
 
 postShow();
+
+var $limitTime = $("#limitTime");
+function getLimitTime() {
+    $.ajax({
+        method: "get",
+        url: "/proxy/admin/apply/limit/time/show"
+    }).done(function (result) {
+        var status = result.status;
+        if(status == 200) {
+            var limitTime = result.applyLimitTime;
+            $limitTime.data("limitTime", limitTime).show()
+                .find(".time").text(limitTime);
+        } else if(status == 300) {
+            location.href = loginUrl;
+        } else {
+            tipsAlert("Server error!");
+        }
+    }).fail(function (result) {
+        tipsAlert("Server error!");
+        result = {
+         "applyLimitTime": "16:00:00",
+         "status": 200
+         };
+         var status = result.status;
+         if(status == 200) {
+         var limitTime = result.applyLimitTime;
+         $limitTime.data("limitTime", limitTime).show()
+         .find(".time").text(limitTime);
+         } else if(status == 300) {
+         location.href = loginUrl;
+         } else {
+         tipsAlert("Server error!");
+         }
+    })
+}
+getLimitTime();
+
+$limitTime.on("click", ".edit", function () {
+    var $limitPop = $(".limitPop"),
+        limitTime = $limitTime.data("limitTime");
+    if($limitPop.length==0) {
+        createEdit(limitTime).appendTo($("body"));
+    } else {
+        $limitPop.show().find("#applyLimitTime").val(limitTime);
+    }
+});
+function createEdit(time) {
+    var $limit = $('<div class="limitPop">' +
+        '<div class="shadow"></div>' +
+        '<form class="limitForm" id="limitForm" novalidate>' +
+        '<i class="cancel close"></i>' +
+        '<h2 class="title">Edit deadline</h2>' +
+        '<div class="input-item applyLimitTime">' +
+        '<label for="applyLimitTime" class="redStar">Deadline: </label>' +
+        '<input type="text" name="applyLimitTime" value="'+time+'" id="applyLimitTime" placeholder="Format: hh:mm:ss" maxlength="9">' +
+        '<span class="tips"></span>' +
+        '</div>' +
+        '<div class="submit">' +
+        '<input type="submit" value="CONFIRM">' +
+        '<input type="button" value="CANCEL" class="cancel">' +
+        '</div>' +
+        '</form>' +
+        '</div>');
+
+    var $limitForm = $limit.find(".limitForm");
+
+    $limitForm.on("input", ".input-item input", function () {
+        var _this = $(this);
+        _this.parent().removeClass('error');
+    });
+
+    $limitForm.on("click", ".cancel", function (e) {
+        var $delegateTarget = $(e.delegateTarget);
+        $delegateTarget[0].reset();
+        $delegateTarget.parent()
+            .hide();
+    });
+
+    $limitForm.on("submit", function (e) {
+        var _this = $(this);
+        e.preventDefault();
+        if(_this.data("submit")) return;
+        var $applyLimitTime = _this.find(".applyLimitTime"),
+            applyLimitTime = this.applyLimitTime.value;
+        if (!applyLimitTime) {
+            addError($applyLimitTime, "Deadline can't be empty!");
+            return;
+        }
+        var arr = applyLimitTime.split(":"),
+            len = arr.length;
+        if(len!=3) {
+            addError($applyLimitTime, "Error time format(hh:mm:ss)!");
+            return;
+        }
+        var num = /^\s*\d+\s*$/,
+            h = parseInt(arr[0]),
+            m = parseInt(arr[1]),
+            s = parseInt(arr[2]);
+        if( !num.test(arr[0]) || h>=24 || h<0 || arr[0].length >=3 ) {
+            addError($applyLimitTime, "Error time!");
+            return;
+        }
+        if( !num.test(arr[1]) || m>=60 || m<0 || arr[1].length >=3 ) {
+            addError($applyLimitTime, "Error time!");
+            return;
+        }
+        if( !num.test(arr[2]) || s>=60 || s<0 || arr[2].length >=3 ) {
+            addError($applyLimitTime, "Error time!");
+            return;
+        }
+        var loading = showLoading(_this);
+        _this.data("submit", true);
+        $.ajax({
+            method: "post",
+            url: "/proxy/admin/apply/limit/time/changing",
+            dataType: "json",
+            data: "applyLimitTime="+h+":"+("0"+m).slice(-2)+":"+("0"+s).slice(-2)
+        }).done(function (result) {
+            if (loading) loading.remove();
+            _this.data("submit", false);
+            var status = result.status;
+            if(status==200) {
+                $limit.hide();
+                $limitTime.find(".time").text(applyLimitTime);
+                showSpinner("Edit Successful");
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                tipsAlert("Server error!");
+            }
+        }).fail(function (result) {
+            if (loading) loading.remove();
+            _this.data("submit", false);
+            tipsAlert("Server error!");
+            /*result = {
+             status: 200
+             };
+             var status = result.status;
+             if(status==200) {
+             $limit.hide();
+             $limitTime.find(".time").text(applyLimitTime);
+             showSpinner("Edit Successful");
+             } else if(status==300){
+             location.href = loginUrl;
+             } else {
+             tipsAlert("Server error!");
+             }*/
+        });
+
+    });
+
+    return $limit;
+}

@@ -25,7 +25,7 @@
 
 
 function showLoading($relative) {
-    var $tips = $relative.siblings(".loadingImg");
+    var $tips = $relative.find(".loadingImg");
     if ($tips.length > 0) $tips.remove();
     $tips = $("<div class='loadingImg'></div>");
     if($relative.css("position")=="static") $relative.css('position', "relative");
@@ -153,9 +153,14 @@ function createProductList(info){
         '</div> ' +
         '</td> ' +
         '<td> ' +
+        '<div class="date">' +
+        info.updateTime +
+        '</div> ' +
+        '</td> ' +
+        '<td> ' +
         op +
         '</td> ' +
-        '</tr>').data("info", info);
+        '</tr>').data("productId", info.productId);
 }
 
 var $productList = $("#productList");
@@ -167,7 +172,7 @@ var  postProductList = (function() {
         loading = showLoading($(".more"));
         $.ajax({
             type: "get",
-            url: "/proxy/shop-owner/products/list",
+            url: "/proxy/shop-owner/homepage",
             dataType: "json"
         }).done(function (result) {
             if (loading) {
@@ -198,11 +203,11 @@ var  postProductList = (function() {
                     productId: 1234,
                     photo: ["imgs/1.jpg"],
                     productName: "INFRUITION CLASSIC WATER BOTTLE - GREEN",
-                    class: "Video, Games, Movies & Music",
                     classId: 6,
                     price: 99,
                     quantityStock: 798,
-                    isDel: 0
+                    isDel: 0,
+                    updateTime: "2016-12-31 10:47:48"
                 }]
             };
             var status = result.status;
@@ -231,8 +236,7 @@ $productList.on("click", ".del", (function () {
         tipsConfirm("Are you sure want to remove the product from homepage?", function(){
             loading = showLoading(_this.parent());
             var $productItem = _this.parents(".productItem"),
-                info = $productItem.data("info"),
-                productId = info.productId;
+                productId = $productItem.data("productId");
             $.ajax({
                 method: "post",
                 url: "/proxy/shop-owner/homepage/product/deleting",
@@ -245,11 +249,8 @@ $productList.on("click", ".del", (function () {
                 }
                 var status = result.status;
                 if(status == 200){
-                    showSpinner("Success", {
-                        callback: function () {
-                            location.reload();
-                        }
-                    })
+                    $productItem.remove();
+                    showSpinner("Deleted")
                 } else if(status == 300) {
                     location.href = loginUrl;
                 } else {
@@ -266,11 +267,8 @@ $productList.on("click", ".del", (function () {
                 };
                 var status = result.status;
                 if(status == 200){
-                    showSpinner("Success", {
-                        callback: function () {
-                            location.reload();
-                        }
-                    })
+                    $productItem.remove();
+                    showSpinner("Deleted")
                 } else if(status == 300) {
                     location.href = loginUrl;
                 } else {

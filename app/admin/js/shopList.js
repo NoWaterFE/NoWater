@@ -20,7 +20,7 @@ function delCookie(name){
 }
 
 function showLoading($relative) {
-    var $tips = $relative.siblings(".loadingImg");
+    var $tips = $relative.find(".loadingImg");
     if ($tips.length > 0) $tips.remove();
     $tips = $("<div class='loadingImg'></div>");
     if($relative.css("position")=="static") $relative.css('position', "relative");
@@ -117,6 +117,23 @@ function getUrlParam(name) {
     if (r != null) return r[2]; return null; //返回参数值
 }
 
+function imgAuto($img) {
+    var imgW=$img[0].naturalWidth;
+    var imgH=$img[0].naturalHeight;
+    var constW=$img.parent().width();
+    if(imgH>=imgW){
+        $img.css({
+            "width": "auto",
+            "height": constW
+        });
+    } else {
+        $img.css({
+            "width": constW,
+            "height": "auto"
+        });
+    }
+}
+
 function createShopList(info) {
     var status = info.status,
         operate = "";
@@ -126,16 +143,38 @@ function createShopList(info) {
     } else {
         operate = '<span class="removeBlack">remove from blacklist</span> ';
     }
-    return $('<tr class="shopItem"> ' +
-        '<td class="id">'+info.shopId+'</td> ' +
-        '<td class="name">'+info.shopName+'</td> ' +
-        '<td class="ownerId">'+info.ownerId+'</td> ' +
-        '<td class="tel">'+info.telephone+'</td> ' +
-        '<td class="email">'+info.email+'</td> ' +
-        '<td class="operate"> ' +
-            operate +
-        '</td> ' +
-        '</tr>').data("shopId", info.shopId);
+    var $shopList = $('<li class="shopItem clearfix"> ' +
+        '<div class="photo"> ' +
+        '<img src="'+(info.photo && info.photo[0])+'"> ' +
+        '</div> ' +
+        '<ul class="info"> ' +
+        '<li class="infoItem">' +
+        'Shop ID: '+ info.shopId +
+        '</li> ' +
+        '<li class="infoItem">' +
+        'Shop Name: ' + info.shopName +
+        '</li> ' +
+        '<li class="infoItem">' +
+        'Owner ID: '+ info.ownerId +
+        '</li> ' +
+        '<li class="infoItem">' +
+        'Telephone: '+ info.telephone +
+        '</li> ' +
+        '<li class="infoItem">' +
+        'Email: '+ info.email +
+        '</li> ' +
+        '</ul> ' +
+        '<div class="operate"> ' +
+        operate +
+        '</div> ' +
+        '</li>').data("shopId", info.shopId);
+    var $img = $shopList.find("img");
+    var img = new Image();
+    img.src = info.photo && info.photo[0];
+    img.onload = function () {
+        imgAuto($img);
+    };
+    return $shopList;
 }
 
 var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
@@ -151,14 +190,26 @@ $shopMain.find(".shopTab")
     .eq(cStatus)
     .addClass("active");
 
+var $shopList = $("#shopList");
 
 var getShopItem = (function(){
     var loading = null,
         startId = 0;
-    return function (cStatus) {
-        var reqData = "count=20&startId="+startId+"&shopType="+(1-2*cStatus);
+    return function (cStatus, param) {
         if(loading) return ;
-        loading = showLoading($(".more"));
+        var reqData = "count=20&shopType="+(1-2*cStatus);
+        if(param){
+            reqData +="&searchKey="+param.searchKey;
+            loading = showLoading($shopForm);
+            if(!param.first) {
+                reqData += "&startId="+startId;
+            } else {
+                reqData += "&startId=0";
+            }
+        } else {
+            reqData += "&startId=" + startId;
+            loading = showLoading($(".more"));
+        }
         $.ajax({
             method: "get",
             url: "/proxy/admin/shop/list",
@@ -173,13 +224,16 @@ var getShopItem = (function(){
             if(status==200){
                 var data = result.data,
                     len = data.length;
-                var $tbody = $shopList.find(".shopTable tbody");
+                if(param && param.first){
+                    $shopList.empty();
+                    param.first = false;
+                }
                 for(var i=0; i<len; i++) {
-                    $tbody.append(createShopList(data[i]));
+                    $shopList.append(createShopList(data[i]));
                 }
                 startId = result.endId;
                 if(startId!=-1){
-                    $shopList.find(".more .showMore").removeClass("hidden");
+                    $shopList.siblings(".more .showMore").removeClass("hidden");
                 }
             } else if(status==300) {
                 location.href = loginUrl;
@@ -190,7 +244,7 @@ var getShopItem = (function(){
                 loading.remove();
                 loading = null;
             }
-            /*result = {
+            result = {
                 status: 200,
                 data: [
                     {
@@ -199,7 +253,8 @@ var getShopItem = (function(){
                         telephone: "238409324",
                         ownerId: 1,
                         email: "nowater@nowater.com",
-                        status: 1
+                        status: 1,
+                        photo: ["http://koprvhdix117-10038234.file.myqcloud.com/ebbb7295-edc0-47c8-823e-f4af70d8bdf1.jpg"]
                     }
                 ]
             };
@@ -207,29 +262,30 @@ var getShopItem = (function(){
             if(status==200){
                 var data = result.data,
                     len = data.length;
-                var $tbody = $shopList.find(".shopTable tbody");
+                if(param && param.first){
+                    $shopList.empty();
+                    param.first = false;
+                }
                 for(var i=0; i<len; i++) {
-                    $tbody.append(createShopList(data[i]));
+                    $shopList.append(createShopList(data[i]));
                 }
                 startId = result.endId;
                 if(startId!=-1){
-                    $shopList.find(".more .showMore").removeClass("hidden");
+                    $shopList.siblings(".more .showMore").removeClass("hidden");
                 }
             } else if(status==300) {
                 location.href = loginUrl;
-            }*/
+            }
         });
     }
 })();
 
 getShopItem(cStatus);
 
-var $shopList = $("#shopList");
-
 $shopList.on("click", ".more .showMore", function(){
     var _this = $(this);
     _this.addClass("hidden");
-    getShopItem(cStatus);
+    getShopItem(cStatus, param);
 });
 
 $shopList.on("click", ".shopItem .blackList", function(e){
@@ -481,3 +537,21 @@ var deleteCustomer = (function(){
         });
     }
 })();
+
+var $shopFilter = $("#shopFilter"),
+    $shopForm = $shopFilter.find(".shopForm");
+
+var param = null;
+$shopForm.on("submit", (function(){
+    return function(e){
+        e.preventDefault();
+        var _this = $(this),
+            searchKey = _this[0].search.value;
+        if(!searchKey) return;
+        param = {
+            searchKey: searchKey,
+            first: true
+        };
+        getShopItem(cStatus, param);
+    };
+})());

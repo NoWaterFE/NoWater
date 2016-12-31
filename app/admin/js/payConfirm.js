@@ -21,7 +21,7 @@ function delCookie(name){
 
 
 function showLoading($relative) {
-    var $tips = $relative.siblings(".loadingImg");
+    var $tips = $relative.find(".loadingImg");
     if ($tips.length > 0) $tips.remove();
     $tips = $("<div class='loadingImg'></div>");
     if($relative.css("position")=="static") $relative.css('position', "relative");
@@ -37,7 +37,6 @@ function showLoading($relative) {
         });
     return $tips;
 }
-
 function tipsAlert(msg, callback){
     var $alert = $(".tipsAlert");
     if ($alert.length > 0) $alert.remove();
