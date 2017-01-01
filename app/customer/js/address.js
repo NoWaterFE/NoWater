@@ -490,7 +490,7 @@ $modifyAddress.on("submit", (function(){
             addError($address, "Address can't be empty!");
             return;
         }
-        var sendData = _this.serialize();
+        var sendData = _this.serialize().replace(/^addressId=&/, "");
         loading = showLoading($(this));
         $.ajax({
             type: "post",

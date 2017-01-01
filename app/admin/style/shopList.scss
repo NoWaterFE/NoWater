@@ -79,11 +79,11 @@
             }
             .operate {
                 float: right;
-                .blackList, .del, .removeBlack  {
+                .blackList, .del, .removeBlack {
                     user-select: none;
                     cursor: pointer;
                     color: #292d84;
-                    line-height: 30px;
+                    padding: 8px 0;
                     border: 1px solid #292d84;
                     border-radius: 4px;
                     width: 124px;

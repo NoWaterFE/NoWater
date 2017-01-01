@@ -115,8 +115,8 @@
 
 .showMore {
   text-align: center;
-  margin: 40px auto;
-  display: none;
+  margin: 10px auto;
+  height: 40px;
   input[type=button] {
     width: 200px;
     height: 40px;
@@ -125,6 +125,9 @@
     border-radius: 5px;
     background: #292d84;
     color: #fff;
+    &.hidden {
+      display: none;
+    }
     &.disabled{
       background: #DCDEE3;
       color: #999;

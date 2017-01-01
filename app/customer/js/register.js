@@ -11,7 +11,7 @@ Dsy.prototype.Exists = function(id){
 
 function change(v){
 	var str="0";
-	for(i=0;i<v;i++){
+	for(var i=0;i<v;i++){
 		str+=("_"+(document.getElementById(s[i]).selectedIndex));
 	};
 	var ss=document.getElementById(s[v]);
@@ -38,7 +38,7 @@ dsy.add("0_2",["Cheung Sha Wan", "Choi Wan", "Diamond Hill", "Ho Man Tin", "Hung
 var s=["area","district"];
 
 function _init_area(){  
-	for(i=0;i<s.length-1;i++){
+	for(var i=0;i<s.length-1;i++){
 	  document.getElementById(s[i]).onchange=new Function("change("+(i+1)+")");
 	}
 	change(0);

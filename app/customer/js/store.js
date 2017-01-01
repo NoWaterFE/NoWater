@@ -1,14 +1,23 @@
 var value = "Products about ";
 var data;
-var shopId = GetQueryString("shopId");
+var shopId = GetQueryString("shopId"),
+    classId = GetQueryString("classId"),
+    keyWord = GetQueryString("keyWord");
 var className = ["ALL", "TV & Home Theater", "Computers & Tablets", "Cell Phones",
     "Cameras & Camcorders", "Audio", "Car Electronics & GPS",
     "Video, Games, Movies & Music", "Health, Fitness & Sports", "Home & Offic"];
 var startId = 0;
 var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
 
-$("#showMoreButton").click(getResult);
-if (!GetQueryString("shopId")) {
+var $adGoods = $("#adGoods"),
+    $noResult = $("#noResult");
+
+var $showMoreButton = $("#showMoreButton");
+$showMoreButton.click(function(){
+    $(this).addClass("hidden");
+    getResult();
+});
+if (!shopId) {
     location.href = "store.html?shopId="+ 1;
 }
 var sendShopId = "shopId=" + shopId;
@@ -32,6 +41,7 @@ $.ajax({
             .find(".email").html("E-mail: " +email).attr("title", email)
             .end()
             .siblings(".addToFavo").show();
+        $('#homepage').attr("href", "store.html?shopId="+data.shopId);
         for (var i=0; i<data.classList.length; i++) {
             classId = data.classList[i];
             menuList = '<li data-pt="' + classId +' ">' +className[classId] + '</li>';
@@ -39,10 +49,10 @@ $.ajax({
         }
     }
 }).fail(function(result) {
-    result = {
+    /*result = {
         status: 200,
         data: {
-            shopId: 1,
+            shopId: 2,
             shopName: "Apple store",
             ownerId: 1,
             email: "apple@icloud.com",
@@ -67,19 +77,22 @@ $.ajax({
             .find(".email").html("E-mail: " +email).attr("title", email)
             .end()
             .siblings(".addToFavo").show();
+        $('#homepage').attr("href", "store.html?shopId="+data.shopId);
         for (var i=0; i<data.classList.length; i++) {
             classId = data.classList[i];
             menuList = '<li data-pt="' + classId +' ">' +className[classId] + '</li>';
             $menuList.append(menuList);
         }
-    }
+    }*/
 });
 
 function getResult(){
-    if (!GetQueryString("keyWord")) {
+    if (classId) {
         getClass();
-    } else {
+    } else if(keyWord){
         search();
+    } else {
+        getHomepage();
     }
 }
 
@@ -229,7 +242,7 @@ function setText() {
         $("#tips").text(value+"\'"+keyWord+"\'");
         $("#keyWordInStore").val(keyWord);
     } else {
-        $("#tips").text("ALL PRODUCTS");
+        $("#tips").text("Home");
     }
 }
 
@@ -242,12 +255,9 @@ function GetQueryString(name) {
 }
 
 function getClass() {
-    var $adGoods = $("#adGoods");
-    var $noResult = $("#noResult");
-    var classId = GetQueryString("classId");
-    if (!shopId) { shopId = 0; }
-    if (!classId) { classId = 0; }
-    var count = 40;
+    if (!shopId) { shopId = 1; }
+    if (!classId) { classId = 1; }
+    var count = 30;
     var sendData = "shopId=" + shopId + "&classId=" + classId + "&count=" + count +"&startId=" + startId;
 
     $.ajax({
@@ -288,9 +298,8 @@ function getClass() {
             $noResult.css('display','block');
             return;
         }
-        $adGoods = null;
-    })
-        .fail(function(result){
+    }).fail(function(result){
+        tipsAlert("Server error!");
             /*result = {
                 status: 200,
                 actualCount: 10,
@@ -425,15 +434,11 @@ function getClass() {
                 $noResult.css('display','block');
                 return;
             }*/
-            $adGoods = null;
         });
 }
 
 function search() {
-    var keyWord = GetQueryString("keyWord");
-    var $adGoods = $("#adGoods");
-    var $noResult = $("#noResult");
-    var count = 40;
+    var count = 30;
     var sendData = "keyWord=" + keyWord + "&count=" + count + "&startId=" + startId + "&shopId=" + shopId;
     $.ajax({
         method: "get",
@@ -455,14 +460,12 @@ function search() {
                 $adGoods.append(goodItem);
             }
 
-            if (startId != -1) {
-                $("#showMore").css('display','block');
-            } else {
+            if (startId == -1) {
                 $("#showMore").css('display','none');
             }
         }
-        $adGoods = null;
     }).fail(function (result) {
+        tipsAlert("Server error!");
         /*result = {
             status: 200,
             actualCount: 10,
@@ -590,15 +593,73 @@ function search() {
                 $("#showMore").css('display','none');
             }
         }*/
-        $adGoods = null;
+    });
+}
+
+function getHomepage() {
+    $.ajax({
+        method: "get",
+        url: "/proxy/customer/shop/homepage",
+        data: "shopId="+shopId
+    }).done(function (result) {
+        if (result.status == 200) {
+            setText();
+            if (result.data.length == 0) {
+                $noResult.text("No product found,please try another key words.");
+                $noResult.css('display','block');
+                return;
+            }
+
+            for (var i = 0; i < result.data.length; i++) {
+                var goodItem = createGoodsItem(result.data[i]);
+                $adGoods.append(goodItem);
+            }
+
+            $("#showMore").css('display','none');
+        }
+    }).fail(function (result) {
+        result = {
+            status: 200,
+            data: [
+                {
+                    "classId": 5,
+                    "productId": 4,
+                    "quantityStock": 8,
+                    "price": 890,
+                    "num": 0,
+                    "updateTime": "2016-12-29 17:26:11",
+                    "shopId": 1,
+                    "isDel": 0,
+                    "productName": "beat",
+                    "photo": [
+                        "http://koprvhdix117-10038234.file.myqcloud.com/ac64205e-15d5-47c8-8de7-215a3284ddf3.jpg"
+                    ]
+                }
+            ]
+        };
+        if (result.status == 200) {
+            setText();
+            if (result.data.length == 0) {
+                $noResult.text("No product found,please try another key words.");
+                $noResult.css('display','block');
+                return;
+            }
+
+            for (var i = 0; i < result.data.length; i++) {
+                var goodItem = createGoodsItem(result.data[i]);
+                $adGoods.append(goodItem);
+            }
+            $("#showMore").css('display','none');
+        }
     });
 }
 
 function createGoodsItem(data) {
+    var photo = data.photoUrl || data.photo;
     return $('<li class="goods-item"> ' +
         '<a class="item-detail" href="productDetail.html?id='+data.productId+'"> ' +
         '<div class="item-image"> ' +
-        '<img src="'+data.photoUrl[0]+'"> ' +
+        '<img src="'+photo[0]+'"> ' +
         '</div> ' +
         '<div class="item-name"> ' +
         data.productName +
@@ -722,9 +783,9 @@ var addToFavo = (function(){
 })();
 
 // 添加到购物车
-$("#adGoods").on("click", ".goods-item .add-to-cart", addToCart);
+$adGoods.on("click", ".goods-item .add-to-cart", addToCart);
 // 添加到收藏
-$("#adGoods").on("click", ".goods-item .add-to-favorites", addToFavo);
+$adGoods.on("click", ".goods-item .add-to-favorites", addToFavo);
 
 var $storeHeader = $("#storeHeader");
 $storeHeader.on("click", ".addToFavo", addToFavo);

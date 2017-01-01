@@ -124,7 +124,7 @@ function createCustomerList(info) {
         operate = '<span class="blackList">add to blacklist</span> ' +
             '<span class="del">delete</span> ';
     } else {
-        operate = '<span class="removeBlack">remove from blacklist</span> ';
+        operate = '<span class="removeBlack">take it out of blacklist</span> ';
     }
     return $('<tr class="customerItem"> ' +
         '<td class="id">'+info.userId+'</td> ' +

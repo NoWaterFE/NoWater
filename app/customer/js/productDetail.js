@@ -268,12 +268,12 @@ var shopId = 1;
                 email = shop.email;
             shopId = shop.shopId;
             $("#shopName").text(shopName).attr("title", shopName);
-            $("#shopName").text(shopName).attr("title", shopName);
             $("#detail").find(".tel").html("Telephone: " + tel ).attr("title", tel)
                 .end()
                 .find(".email").html("E-mail: " +email).attr("title", email)
                 .end()
                 .siblings(".addToFavo").show();
+            $('#homepage').attr("href", "store.html?shopId="+shopId);
             var classList = shop.classList,
                 len = classList.length,
                 $menuList = $("#menuList"),
@@ -401,6 +401,7 @@ var shopId = 1;
                 .find(".email").html("E-mail: " +email).attr("title", email)
                 .end()
                 .siblings(".addToFavo").show();
+            $('#homepage').attr("href", "store.html?shopId="+shopId);
             var classList = shop.classList,
                 len = classList.length,
                 $menuList = $("#menuList"),
