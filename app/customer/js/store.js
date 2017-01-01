@@ -605,7 +605,7 @@ function getHomepage() {
         if (result.status == 200) {
             setText();
             if (result.data.length == 0) {
-                $noResult.text("No product found,please try another key words.");
+                $noResult.text("No result");
                 $noResult.css('display','block');
                 return;
             }

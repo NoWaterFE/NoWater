@@ -4,3 +4,42 @@
 .main {
     padding: 20px 27px;
 }
+
+.imagePop {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    .shadow {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+    }
+    .bigImage {
+        border: 10px solid #fff;
+        border-radius: 6px;
+        position: absolute;
+        margin: auto;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+    }
+    .close {
+        position: absolute;
+        border-radius: 50%;
+        width: 30px;
+        height: 30px;
+        background: #fff url(../imgs/close.png) no-repeat center;
+        color: #000;
+        background-size:  20px 20px;
+        cursor: pointer;
+        right: 10px;
+        bottom: -42px;
+    }
+}

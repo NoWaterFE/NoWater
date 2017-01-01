@@ -555,3 +555,50 @@ $shopForm.on("submit", (function(){
         getShopItem(cStatus, param);
     };
 })());
+
+function createBigImage(imgUrl, rate){
+    var $bigImage = $(".imagePop");
+    if($bigImage.length==0){
+        $bigImage = $('<div class="imagePop">' +
+            '<div class="shadow"></div> ' +
+            '<div class="bigImage"> ' +
+            '<img > ' +
+            '<div class="close"></div> ' +
+            '</div> ' +
+            '</div>');
+    }
+    $bigImage.find('img').attr("src", imgUrl);
+    $bigImage.on("click", ".close", function () {
+        $bigImage.hide();
+    });
+    var img = new Image(),
+        $img = $bigImage.find('.bigImage');
+    img.src = imgUrl;
+    img.onload = function () {
+        var imgW=img.naturalWidth;
+        var imgH=img.naturalHeight;
+        if(rate) {
+            $img.css({
+                "width": 1200,
+                "height": 400
+            });
+        } else {
+            if(imgW/imgH >=3){
+                $img.css({
+                    "width": 1200,
+                    "height": imgH/imgW * 1200
+                });
+            } else {
+                $img.css({
+                    "width": imgW/imgH * 400,
+                    "height": 400
+                });
+            }
+        }
+        $bigImage.appendTo($("body")).show();
+    };
+}
+
+$shopList.on("click", ".shopItem .photo img", function () {
+    createBigImage(this.src);
+});
