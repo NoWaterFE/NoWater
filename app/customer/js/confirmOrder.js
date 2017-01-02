@@ -605,7 +605,7 @@ $modifyAddress.on("submit", (function(){
             var status = result.status;
             if (status == 200) {
                 _this.parent().hide();
-                showSpinner("Success.");
+                showSpinner("Successful.");
                 getAddress();
             } else if (status == 300) {
                 location.href = loginUrl;
@@ -624,7 +624,7 @@ $modifyAddress.on("submit", (function(){
             var status = result.status;
             if (status == 200) {
                 _this.parent().hide();
-                showSpinner("Success.");
+                showSpinner("Successful.");
                 getAddress();
             } else if (status == 300) {
                 location.href = loginUrl;

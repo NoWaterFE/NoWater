@@ -134,6 +134,10 @@ $.ajax({
     var status = result.status,
         data = result.data[0];
     if(status==200){
+        if(result.allow==0) {
+            $applyAd.find("input").addClass("disabled")
+                .prop("disabled", true);
+        }
         if(!data) return;
         var photo = data.photo;
         $applyAd[0].price.value=data.price.toFixed(2);
@@ -143,10 +147,6 @@ $.ajax({
             .height(200)
             .find("img")
             .attr("src", photo);
-        if(result.allow==0) {
-            $applyAd.find("input").addClass("disabled")
-                .prop("disabled", true);
-        }
     }
 }).fail(function (result) {
     tipsAlert("Server error!");
@@ -170,6 +170,10 @@ $.ajax({
         data = result.data[0];
     if(status==200){
         if(!data) return;
+        if(result.allow==0) {
+            $applyAd.find("input").addClass("disabled")
+            .prop("disabled", true);
+        }
         var photo = data.photo;
         $applyAd[0].price.value=data.price.toFixed(2);
         $applyAd.data("fileUrl", photo)
@@ -178,10 +182,6 @@ $.ajax({
             .height(200)
             .find("img")
             .attr("src", photo);
-        if(result.allow==0) {
-            $applyAd.find("input").addClass("disabled")
-                .prop("disabled", true);
-        }
     }*/
 });
 

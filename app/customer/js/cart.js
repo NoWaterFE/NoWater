@@ -10,7 +10,7 @@
             var userInfo = result.userInformation[0];
             var quickMenu = $("#quickMenu");
             quickMenu.find(".accountOperate").toggleClass("active");
-            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+            setCart(userInfo.cartNum);
         }
     }).fail(function (result) {
         /*console.log(result.statusText);
@@ -25,7 +25,7 @@
          var userInfo = result.userInformation[0];
          var quickMenu = $("#quickMenu");
          quickMenu.find(".accountOperate").toggleClass("active");
-         quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+         setCart(userInfo.cartNum);
          }
          }*/
     });
@@ -1006,8 +1006,8 @@ $window.on("scroll resize", function(){
         $checkoutBox = $cartList.find(".checkoutBox");
     if($checkoutBox.height()+$checkoutBox.offset().top >$window.scrollTop()+$window.height()){
         $optionBox.addClass("fixed");
+        $optionBox.css("left", $cartList.offset().left - $window.scrollLeft());
     } else {
         $optionBox.removeClass("fixed");
     }
-    $optionBox.css("left", $cartList.offset().left - $window.scrollLeft());
 });
