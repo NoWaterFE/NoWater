@@ -199,3 +199,39 @@ var postIncome = (function(){
 })();
 
 postIncome();
+
+var $commissionDiv = $("#commissionDiv");
+function getCommission() {
+    $.ajax({
+        method: "get",
+        url: "/proxy/order/commission"
+    }).done(function (result) {
+        var status = result.status;
+        if(status == 200) {
+            var commission = result.commission;
+            $commissionDiv.data("commission", commission).show()
+                .find(".rate").text(commission*100+"%");
+        } else if(status == 300) {
+            location.href = loginUrl;
+        } else {
+            tipsAlert("Server error!");
+        }
+    }).fail(function (result) {
+        tipsAlert("Server error!");
+        /*result = {
+            "commission": "0.02",
+            "status": 200
+        };
+        var status = result.status;
+        if(status == 200) {
+            var commission = result.commission;
+            $commissionDiv.data("commission", commission).show()
+                .find(".rate").text(commission*100+"%");
+        } else if(status == 300) {
+            location.href = loginUrl;
+        } else {
+            tipsAlert("Server error!");
+        }*/
+    })
+}
+getCommission();
