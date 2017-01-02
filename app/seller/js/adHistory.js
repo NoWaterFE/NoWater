@@ -161,7 +161,7 @@ function　createShowItem(data){
         '</tr> ' +
         '<tr class="showData"> ' +
             '<td class="product"> ' +
-                '<a href="'+data.photo+'" target="_blank" class="pictureLink"> ' +
+                '<a href="javascript:" target="_blank" class="pictureLink"> ' +
                     '<img src="'+data.photo+'"> ' +
                 '</a> ' +
             '</td> ' +
@@ -217,7 +217,7 @@ var postShow = (function(){
                 loading = null;
             }
             tipsAlert("server error!");
-            result = {
+            /*result = {
                 status: 200,
                 startId: -1,
                 data: [
@@ -284,7 +284,7 @@ var postShow = (function(){
                 location.href = loginUrl;
             } else {
                 tipsAlert("server error!");
-            }
+            }*/
         });
     };
 })();
@@ -322,7 +322,7 @@ var orderCancel = (function(){
             }
             var status = result.status;
             if(status==200){
-                showSpinner("Success!", {
+                showSpinner("Successful!", {
                     "callback": function () {
                         location.reload();
                     }
@@ -342,12 +342,12 @@ var orderCancel = (function(){
                 loading.remove();
                 loading = null;
             }
-            result = {
+            /*result = {
                 status: 200
             };
             var status = result.status;
             if(status==200){
-                showSpinner("Success!", {
+                showSpinner("Successful!", {
                     "callback": function () {
                         location.reload();
                     }
@@ -360,7 +360,7 @@ var orderCancel = (function(){
                         location.reload();
                     }
                 });
-            }
+            }*/
         });
     }
 })();
@@ -385,3 +385,50 @@ $showList.on("click", ".showItem .cancel", function () {
 });
 
 postShow();
+
+function createBigImage(imgUrl, rate){
+    var $bigImage = $(".imagePop");
+    if($bigImage.length==0){
+        $bigImage = $('<div class="imagePop">' +
+            '<div class="shadow"></div> ' +
+            '<div class="bigImage"> ' +
+            '<img > ' +
+            '<div class="close"></div> ' +
+            '</div> ' +
+            '</div>');
+    }
+    $bigImage.find('img').attr("src", imgUrl);
+    $bigImage.on("click", ".close", function () {
+        $bigImage.hide();
+    });
+    var img = new Image(),
+        $img = $bigImage.find('.bigImage');
+    img.src = imgUrl;
+    img.onload = function () {
+        var imgW=img.naturalWidth;
+        var imgH=img.naturalHeight;
+        if(rate) {
+            $img.css({
+                "width": 1200,
+                "height": 400
+            });
+        } else {
+            if(imgW/imgH >=3){
+                $img.css({
+                    "width": 1200,
+                    "height": imgH/imgW * 1200
+                });
+            } else {
+                $img.css({
+                    "width": imgW/imgH * 400,
+                    "height": 400
+                });
+            }
+        }
+        $bigImage.appendTo($("body")).show();
+    };
+}
+
+$showList.on("click", ".showItem .pictureLink img", function () {
+    createBigImage(this.src, true);
+});

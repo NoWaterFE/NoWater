@@ -150,7 +150,7 @@ $.ajax({
     }
 }).fail(function (result) {
     tipsAlert("Server error!");
-    result = {
+    /*result = {
         "allow": 1,
         "status": 200,
         "startId": -1,
@@ -182,7 +182,7 @@ $.ajax({
             $applyAd.find("input").addClass("disabled")
                 .prop("disabled", true);
         }
-    }
+    }*/
 });
 
 function applyAd(_this, loading, amount) {
@@ -203,7 +203,7 @@ function applyAd(_this, loading, amount) {
         } else if(status==300){
             location.href = loginUrl;
         } else if(status==600) {
-            tipsAlert("Failure, it has been exceeded the specified deadline today.");
+            tipsAlert("Fail, it has been exceeded the specified deadline today.");
         } else {
             tipsAlert("Server error!");
         }
@@ -211,7 +211,7 @@ function applyAd(_this, loading, amount) {
         if (loading) loading.remove();
         _this.data("submit", false);
         tipsAlert("Server error!");
-        result = {
+        /*result = {
             status: 200,
             orderId: 23
         };
@@ -224,10 +224,10 @@ function applyAd(_this, loading, amount) {
         } else if(status==300){
             location.href = loginUrl;
         } else if(status==600) {
-            tipsAlert("Failure, it has been exceeded the specified deadline today.");
+            tipsAlert("Fail, it has been exceeded the specified deadline today.");
         } else {
             tipsAlert("Server error!");
-        }
+        }*/
     });
 }
 
@@ -293,8 +293,8 @@ $applyAd.on("submit", function (e) {
         }).fail(function(result){
             if (loading) loading.remove();
             _this.data("submit", false);
-            tipsAlert("server error");
-            result = {
+            tipsAlert("Server error");
+            /*result = {
                 status: 200,
                 data: ["1"]
             };
@@ -308,7 +308,7 @@ $applyAd.on("submit", function (e) {
                 location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
             } else {
                 tipsAlert("upload file fail");
-            }
+            }*/
         });
     }
 });

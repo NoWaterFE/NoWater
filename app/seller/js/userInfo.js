@@ -1,12 +1,16 @@
 var userInfo=null;
 $.ajax({
-    method: "get",
+    method: "post",
     url: "/proxy/shop-owner/status",
     dataType: "json",
     async: false
 }).done(function (result) {
     if(result.status==200) { //已注册
         userInfo = result.data[0];
+        $(document).ready(function () {
+            var $quickMenu = $("#quickMenu");
+            $quickMenu.find(".seller-center a").attr("href", "../customer/store.html?shopId="+userInfo.shopId);
+        });
     } else if(result.status==300){
         location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
     } else {

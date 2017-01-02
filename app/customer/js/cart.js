@@ -2,14 +2,15 @@
 (function () {
     //获取登录信息可能不需要
     $.ajax({
-        method: "get",
+        method: "post",
         url: "/proxy/customer/isLogin",
         dataType: "json"
     }).done(function (result) {
         if(result.status==200){
             var userInfo = result.userInformation[0];
             var quickMenu = $("#quickMenu");
-            setCart(userInfo.cartNum);
+            quickMenu.find(".accountOperate").toggleClass("active");
+            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
         }
     }).fail(function (result) {
         /*console.log(result.statusText);
@@ -20,10 +21,12 @@
          cartNum: 33
          }]
          };
-         if (result.status == 200) {
+         if(result.status==200){
          var userInfo = result.userInformation[0];
          var quickMenu = $("#quickMenu");
-         setCart(userInfo.cartNum);
+         quickMenu.find(".accountOperate").toggleClass("active");
+         quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+         }
          }*/
     });
 
@@ -96,7 +99,6 @@
         } else {
             cart.text(num);
             $count.text(num);
-
         }
     }
 })();
@@ -239,8 +241,8 @@ var postCart = (function(){
                 loading.remove();
                 loading = null;
             }
-            //tipsAlert("server error!");
-            result = {
+            tipsAlert("server error!");
+            /*result = {
                 status: 200,
                 startId: -1,
                 data: [
@@ -617,7 +619,7 @@ var postCart = (function(){
                 location.href = loginUrl;
             } else {
                 tipsAlert("server error!");
-            }
+            }*/
         });
     };
 })();
@@ -960,11 +962,11 @@ var deleteCart = (function () {
             var status = result.status;
             if(status==200){
                 $cartItem.remove();
-                showSpinner("Success", {
-                    callback: function(){
-                        location.reload();
-                    }
-                })
+                setTimeout(function(){
+                    $(window).trigger("scroll");
+                });
+                calculateSum();
+                showSpinner("Successful")
             } else if(status==300){
                 location.href = loginUrl;
             } else {
@@ -975,23 +977,23 @@ var deleteCart = (function () {
                 loading.remove();
                 loading = null;
             }
-            //tipsAlert("Server error!");
-            result = {
+            tipsAlert("Server error!");
+            /*result = {
                 status: 200
             };
             var status = result.status;
             if(status==200){
                 $cartItem.remove();
-                showSpinner("Success", {
-                    callback: function(){
-                        location.reload();
-                    }
-                })
+                 setTimeout(function(){
+                 $(window).trigger("scroll");
+                 });
+                calculateSum();
+                showSpinner("Successful")
             } else if(status==300){
                 location.href = loginUrl;
             } else {
                 tipsAlert("Server error!");
-            }
+            }*/
         });
     };
 })();

@@ -2,7 +2,7 @@
 (function () {
     //获取登录信息可能不需要
     $.ajax({
-        method: "get",
+        method: "post",
         url: "/proxy/customer/isLogin",
         dataType: "json"
     }).done(function (result) {
@@ -321,8 +321,8 @@ var shopId = 1;
             $content.html("<div class='noResult' >The product doesn't exist.</div>");
         }
     }).fail(function (result) {
-        //tipsAlert("server error!");
-        result = {
+        tipsAlert("server error!");
+        /*result = {
             status: 200,
             data: {
                 shop: {
@@ -447,7 +447,7 @@ var shopId = 1;
             }
         } else if(status==400){
             $content.html("<div class='noResult' >The product doesn't exist.</div>");
-        }
+        }*/
     });
 
     var $storeMenu = $("#menuBar");

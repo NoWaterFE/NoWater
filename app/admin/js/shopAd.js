@@ -224,7 +224,7 @@ var postShow = (function(){
                 loading = null;
             }
             tipsAlert("server error!");
-            result = {
+            /*result = {
                 status: 200,
                 startId: -1,
                 data: [
@@ -293,15 +293,15 @@ var postShow = (function(){
                 for (var i = 0; i < len; i++) {
                     $showTable.append(createShowItem(result.data[i]));
                 }
-                /*startId = result.startId;
+                /!*startId = result.startId;
                 if(startId!=-1){
                     $showList.find(".more .showMore").removeClass("hidden");
-                }*/
+                }*!/
             } else if (status == 300) {
                 location.href = loginUrl;
             } else {
                 tipsAlert("server error!");
-            }
+            }*/
         });
     };
 })();
@@ -327,11 +327,8 @@ var approveAd = (function () {
             }
             var status = result.status;
             if (status == 200) {
-                showSpinner("Success!", {
-                    "callback": function () {
-                        location.reload();
-                    }
-                });
+                $showItem.remove();
+                showSpinner("Successful!");
             } else if (status == 300) {
                 location.href = loginUrl;
             } else if (status == 400) {
@@ -353,16 +350,13 @@ var approveAd = (function () {
                 loading.remove();
                 loading = null;
             }
-            result = {
+            /*result = {
                 status: 200
             };
             var status = result.status;
             if (status == 200) {
-                showSpinner("Success!", {
-                    "callback": function () {
-                        location.reload();
-                    }
-                });
+                $showItem.remove();
+                showSpinner("Successful!");
             } else if (status == 300) {
                 location.href = loginUrl;
             } else if (status == 400) {
@@ -377,7 +371,7 @@ var approveAd = (function () {
                 });
             } else if (status == 600) {
                 tipsAlert("Failure, you must approve after the deadline!");
-            }
+            }*/
         });
     };
 })();

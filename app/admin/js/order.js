@@ -257,8 +257,8 @@ var postOrder = (function(){
                 loading.remove();
                 loading = null;
             }
-            //tipsAlert("server error!");
-            result = {
+            tipsAlert("server error!");
+            /*result = {
                 status: 200,
                 data: [
                     {
@@ -306,7 +306,7 @@ var postOrder = (function(){
                 location.href = loginUrl;
             } else {
                 tipsAlert("server error!");
-            }
+            }*/
         });
     };
 })();

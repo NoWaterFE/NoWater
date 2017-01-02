@@ -92,8 +92,8 @@ $applyForm.on("submit", function (e) {
         }).fail(function(result){
             if (loading) loading.remove();
             _this.data("submit", false);
-            //tipsAlert("server error");
-            result = {
+            tipsAlert("server error");
+            /*result = {
                 status: 200
             };
             if(result.status==200){
@@ -103,7 +103,7 @@ $applyForm.on("submit", function (e) {
                 location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
             } else {
                 tipsAlert("upload file fail");
-            }
+            }*/
         });
     }
 });

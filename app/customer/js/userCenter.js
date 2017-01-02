@@ -4,7 +4,7 @@ var oldData;
 (function () {
     //获取登录信息可能不需要
     $.ajax({
-        method: "get",
+        method: "post",
         url: "/proxy/customer/isLogin",
         dataType: "json"
     }).done(function (result) {
@@ -282,11 +282,7 @@ var save = (function(){
                     tips = null;
                 }
                 if (result.status == 200) {
-                    showSpinner("Edit Successful.", {
-                        callback: function () {
-                            location.reload();
-                        }
-                    });
+                    showSpinner("Edit Successful.");
                 } else if (result.status == 300) {
                     location.href = loginUrl;
                 }
@@ -300,11 +296,7 @@ var save = (function(){
                     status: 200
                 };
                 if (result.status == 200) {
-                    showSpinner("Edit Successful.", {
-                        callback: function () {
-                            location.reload();
-                        }
-                    });
+                    showSpinner("Edit Successful.");
                 } else if (result.status == 300) {
                     location.href = loginUrl;
                 }*/

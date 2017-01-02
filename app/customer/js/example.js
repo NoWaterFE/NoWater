@@ -2,7 +2,7 @@
 (function () {
     //获取登录信息可能不需要
     $.ajax({
-        method: "get",
+        method: "post",
         url: "/proxy/customer/isLogin",
         dataType: "json"
     }).done(function (result) {

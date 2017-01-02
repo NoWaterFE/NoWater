@@ -318,7 +318,7 @@ function deliverProduct(_this, loading){
         _this.data("submit", false);
         var status = result.status;
         if(status == 200){
-            showSpinner("Success", {
+            showSpinner("Successful", {
                 callback: function(){
                     location.reload();
                 }

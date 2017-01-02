@@ -196,8 +196,8 @@ var  postProductList = (function() {
                 loading.remove();
                 loading = null;
             }
-            //tipsAlert("server error");
-            result = {
+            tipsAlert("server error");
+            /*result = {
                 status: 200,
                 data: [{
                     productId: 1234,
@@ -221,7 +221,7 @@ var  postProductList = (function() {
                 }
             } else if(status==300) {
                 location.href = loginUrl;
-            }
+            }*/
         });
     };
 })();
@@ -262,7 +262,7 @@ $productList.on("click", ".del", (function () {
                     loading = null;
                 }
                 tipsAlert("Server error!");
-                result = {
+                /*result = {
                     status: 200
                 };
                 var status = result.status;
@@ -273,7 +273,7 @@ $productList.on("click", ".del", (function () {
                     location.href = loginUrl;
                 } else {
                     showSpinner("Unknown error!");
-                }
+                }*/
             });
         }, {
             "ok": "YES",

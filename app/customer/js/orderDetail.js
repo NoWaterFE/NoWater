@@ -2,7 +2,7 @@
 (function () {
     //获取登录信息可能不需要
     $.ajax({
-        method: "get",
+        method: "post",
         url: "/proxy/customer/isLogin",
         dataType: "json"
     }).done(function (result) {
@@ -209,8 +209,10 @@ function　createOrderItem(data){
         '<div class="cancel">' +
         'Cancel order' +
         '</div> ';
-    var confirmReceived = '<div class="confirmR">' +
+    var confirmReceived = '<div class="timeTips">' +
         data.countdown +
+        '</div>' +
+        '<div class="confirmR">' +
         'Confirm received' +
         '</div> ';
     var toBeComment = '<div class="timeTips">' +
@@ -306,8 +308,8 @@ var postOrder = (function(){
             } else if(status==300){
                 location.href = loginUrl;
             } else {
-                tipsAlert("unknown error!", function () {
-                    location.href = "modifyInfo.html";
+                tipsAlert("Unknown error!", function () {
+                    location.href = "index.html";
                 });
             }
         }).fail(function(result){
@@ -315,8 +317,8 @@ var postOrder = (function(){
                 loading.remove();
                 loading = null;
             }
-            tipsAlert("server error!");
-            result = {
+            tipsAlert("Server error!");
+            /*result = {
                 status: 200,
                 data: [
                     {
@@ -360,9 +362,9 @@ var postOrder = (function(){
                 location.href = loginUrl;
             } else {
                 tipsAlert("unknown error!", function () {
-                    location.href = "modifyInfo.html";
+                    location.href = "index.html";
                 });
-            }
+            }*/
         });
     };
 })();
@@ -401,7 +403,7 @@ var confirmR = (function(){
             }
             var status = result.status;
             if(status==200){
-                showSpinner("Success!", {
+                showSpinner("Successful!", {
                     "callback": function () {
                         location.reload();
                     },
@@ -427,7 +429,7 @@ var confirmR = (function(){
              };
              var status = result.status;
              if(status==200){
-             showSpinner("Add Success!", {
+             showSpinner("Add Successful!", {
              "callback": function () {
              location.reload();
              }
@@ -472,10 +474,11 @@ var orderCancel = (function(){
             }
             var status = result.status;
             if(status==200){
-                showSpinner("Success!", {
+                showSpinner("Canceled!", {
                     "callback": function () {
                         location.reload();
-                    }
+                    },
+                    timeout: 800
                 });
             } else if(status==300){
                 location.href = loginUrl;
@@ -546,7 +549,7 @@ var orderId = getUrlParam("orderId"),
 if(orderId&&status){
     postOrder(orderId, status);
 } else {
-    location.href = "modifyInfo.html";
+    location.href = "index.html";
 }
 
 //输入错误提示
@@ -645,7 +648,8 @@ $commentForm.on("submit", function (e) {
             showSpinner("Commented", {
                 callback: function () {
                     location.reload()
-                }
+                },
+                timeout: 800
             })
         } else {
             tipsAlert("Server error!");

@@ -233,7 +233,7 @@ var postOrder = (function(){
                 loading = null;
             }
             tipsAlert("server error!");
-            result = {
+            /*result = {
                 status: 200,
                 data: [
                     {
@@ -281,7 +281,7 @@ var postOrder = (function(){
                 tipsAlert("unknown error!", function () {
                     location.href = "index.html";
                 });
-            }
+            }*/
         });
     };
 })();

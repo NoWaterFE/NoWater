@@ -207,7 +207,7 @@ var getCustomerItem = (function(){
                 loading.remove();
                 loading = null;
             }
-            result = {
+            /*result = {
                 status: 200,
                 startId: 1,
                 data: [
@@ -243,7 +243,7 @@ var getCustomerItem = (function(){
                 }
             } else if(status==300){
                 location.href = loginUrl;
-            }
+            }*/
         });
     }
 })();
@@ -310,11 +310,7 @@ var addToBlackList = (function(){
             var status = result.status;
             if(status==200){
                 $customerItem.remove();
-                showSpinner("Add Success!", {
-                    "callback": function () {
-                        location.reload();
-                    }
-                });
+                showSpinner("Add Successful!");
             } else if(status==300){
                 location.href = loginUrl;
             } else if(status==400){
@@ -335,11 +331,7 @@ var addToBlackList = (function(){
             };
             var status = result.status;
             if(status==200){
-                showSpinner("Add Success!", {
-                    "callback": function () {
-                        location.reload();
-                    }
-                });
+                showSpinner("Add Successful!");
             } else if(status==300){
                 location.href = loginUrl;
             } else if(status==400){
@@ -374,11 +366,7 @@ var removeBlack = (function(){
             var status = result.status;
             if(status==200){
                 $customerItem.remove();
-                showSpinner("Success!", {
-                    "callback": function () {
-                        location.reload();
-                    }
-                });
+                showSpinner("Successful!");
             } else if(status==300){
                 location.href = loginUrl;
             } else if(status==400){
@@ -399,11 +387,7 @@ var removeBlack = (function(){
             };
             var status = result.status;
             if(status==200){
-                showSpinner("Success!", {
-                    "callback": function () {
-                        location.reload();
-                    }
-                });
+                showSpinner("Successful!");
             } else if(status==300){
                 location.href = loginUrl;
             } else if(status==400){
@@ -483,7 +467,6 @@ $customerForm.on("submit", (function(){
         e.preventDefault();
         var _this = $(this),
             searchKey = _this[0].search.value;
-        if(!searchKey) return;
         param = {
             searchKey: searchKey,
             first: true

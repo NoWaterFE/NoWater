@@ -2,7 +2,7 @@
 (function () {
     //获取登录信息可能不需要
     $.ajax({
-        method: "get",
+        method: "post",
         url: "/proxy/customer/isLogin",
         dataType: "json"
     }).done(function (result) {
@@ -235,7 +235,7 @@ var confirmPay = (function(){
             }
             var status = result.status;
             if(status==200){
-                showSpinner("Success", {
+                showSpinner("Successful", {
                     callback: function() {
                         location.href = "order.html?status=2";
                     }
@@ -256,7 +256,7 @@ var confirmPay = (function(){
             };
             var status = result.status;
             if(status==200){
-                showSpinner("Success", {
+                showSpinner("Successful", {
                     callback: function() {
                         location.href = "order.html?status=2";
                     }

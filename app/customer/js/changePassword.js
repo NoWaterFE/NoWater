@@ -3,7 +3,7 @@ var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
 (function () {
     //获取登录信息可能不需要
     $.ajax({
-        method: "get",
+        method: "post",
         url: "/proxy/customer/isLogin",
         dataType: "json"
     }).done(function (result) {
@@ -159,7 +159,8 @@ infoForm.on("submit", (function(){
                 tips.remove();
                 tips = null;
             }
-            result = {
+            tipsAlert("Server error!");
+            /*result = {
                 status: 200
             };
             if (result.status == 200) {
@@ -171,7 +172,7 @@ infoForm.on("submit", (function(){
                 addError($oldPassword, "old password is wrong!");
             } else {
                 tipsAlert("Server error!");
-            }
+            }*/
         });
 
     }

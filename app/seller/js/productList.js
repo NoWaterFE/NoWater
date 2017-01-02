@@ -123,8 +123,8 @@ var  postProductList = (function() {
                 loading.remove();
                 loading = null;
             }
-            //tipsAlert("server error");
-            result = {
+            tipsAlert("Server error");
+            /*result = {
                 status: 200,
                 startId: -1,
                 data: [{
@@ -154,7 +154,7 @@ var  postProductList = (function() {
                 }
             } else if(status==300) {
                 location.href = loginUrl;
-            }
+            }*/
         });
     };
 })();
@@ -319,7 +319,7 @@ $productList.on("click", ".delete", (function () {
                 }
                 var status = result.status;
                 if(status == 200){
-                    showSpinner("Success", {
+                    showSpinner("Successful", {
                         callback: function () {
                             location.reload();
                         }
@@ -335,12 +335,12 @@ $productList.on("click", ".delete", (function () {
                     loading = null;
                 }
                 tipsAlert("Server error!");
-                result = {
+                /*result = {
                     status: 200
                 };
                 var status = result.status;
                 if(status == 200){
-                    showSpinner("Success", {
+                    showSpinner("Successful", {
                         callback: function () {
                             location.reload();
                         }
@@ -349,7 +349,7 @@ $productList.on("click", ".delete", (function () {
                     location.href = loginUrl;
                 } else {
                     showSpinner("Unknown error!");
-                }
+                }*/
             });
         }, {
             "ok": "YES",
@@ -383,7 +383,7 @@ $productList.on("click", ".addToHomepage", (function () {
                 } else if(status == 300) {
                     location.href = loginUrl;
                 } else if(status == 600) {
-                    tipsAlert("The product has been added to homepage, and can't add again!");
+                    tipsAlert("The product has been added to homepage, and can't be added again!");
                 } else {
                     showSpinner("Unknown error!", {
                         callback: function () {
@@ -642,7 +642,7 @@ function modifyProduct(_this, loading){
         _this.data("submit", false);
         var status = result.status;
         if(status == 200){
-            showSpinner("modify success", {
+            showSpinner("Modify successful", {
                 callback: function(){
                     location.reload();
                 }

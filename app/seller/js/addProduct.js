@@ -259,7 +259,7 @@ $addProduct.on("submit", function (e) {
                 _this.data("submit", false);
                 var status = result.status;
                 if(status == 200){
-                    showSpinner("add product success");
+                    showSpinner("Add successful");
                     imagesArray.length = 0;
                     _this[0].reset();
                     _this.find(".imagesPreview")

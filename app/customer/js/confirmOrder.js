@@ -2,7 +2,7 @@
 (function () {
     //获取登录信息可能不需要
     $.ajax({
-        method: "get",
+        method: "post",
         url: "/proxy/customer/isLogin",
         dataType: "json"
     }).done(function (result) {
@@ -251,8 +251,8 @@ var $orderList = $("#orderList"),
             tipsAlert("server error!");
         }
     }).fail(function (result) {
-        //tipsAlert("server error!");
-        result = {
+        tipsAlert("server error!");
+        /*result = {
             status: 200,
             data: [
                 {
@@ -309,7 +309,7 @@ var $orderList = $("#orderList"),
             location.href = loginUrl;
         } else {
             tipsAlert("server error!");
-        }
+        }*/
     });
 }());
 
@@ -351,7 +351,7 @@ var submitOrder = (function(){
                 loading = null;
             }
             tipsAlert("server error!");
-            result = {
+            /*result = {
                 status: 200
             };
             var status = result.status;
@@ -361,7 +361,7 @@ var submitOrder = (function(){
                 location.href = loginUrl;
             } else {
                 tipsAlert("server error!");
-            }
+            }*/
         });
     };
 })();
@@ -414,8 +414,8 @@ function getAddress() {
             location.href = loginUrl;
         }
     }).fail(function(result){
-        //tipsAlert("server error");
-        if(loading) loading.remove();
+        tipsAlert("server error");
+        /*if(loading) loading.remove();
         result = {
             status: 200,
             data: [
@@ -457,7 +457,7 @@ function getAddress() {
             }
         } else if (status == 300) {
             location.href = loginUrl;
-        }
+        }*/
     });
 }
 getAddress();
@@ -618,7 +618,7 @@ $modifyAddress.on("submit", (function(){
                 loading = null;
             }
             tipsAlert("Server error!");
-            result = {
+            /*result = {
                 status: 200
             };
             var status = result.status;
@@ -630,7 +630,7 @@ $modifyAddress.on("submit", (function(){
                 location.href = loginUrl;
             } else {
                 tipsAlert("Server error!");
-            }
+            }*/
         });
     }
 })());

@@ -3,7 +3,7 @@ var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
 (function () {
     //获取登录信息可能不需要
     $.ajax({
-        method: "get",
+        method: "post",
         url: "/proxy/customer/isLogin",
         dataType: "json"
     }).done(function (result) {
@@ -80,11 +80,7 @@ var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
 
     var $searchForm = $("#searchForm");
     $searchForm.on("submit", function(e){
-        if (e && e.preventDefault) {
-            e.preventDefault();
-        } else {
-            e.returnValue = false;
-        }
+        e.preventDefault();
         var keyWord = this.keyWord.value;
         if(keyWord!=""){
             location.href = "search.html?keyWord="+ encodeURIComponent(keyWord);
@@ -503,7 +499,7 @@ $modifyAddress.on("submit", (function(){
                 loading = null;
             }
             if (result.status == 200) {
-                showSpinner("Success.", {
+                showSpinner("Successful.", {
                     callback: function () {
                         location.reload();
                     }
@@ -524,7 +520,7 @@ $modifyAddress.on("submit", (function(){
             };
             var status = result.status;
             if (status == 200) {
-                showSpinner("Success.", {
+                showSpinner("Successful.", {
                     callback: function () {
                         location.reload();
                     }

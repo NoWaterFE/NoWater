@@ -12,7 +12,7 @@ var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
 (function () {
     //获取登录信息可能不需要
     $.ajax({
-        method: "get",
+        method: "post",
         url: "/proxy/customer/isLogin",
         dataType: "json"
     }).done(function (result) {
@@ -606,9 +606,10 @@ var addToFavo = (function(){
 })();
 
 // 添加到购物车
-$("#adGoods").on("click", ".goods-item .add-to-cart", addToCart);
+var $addGoods = $("#adGoods");
+$addGoods.on("click", ".goods-item .add-to-cart", addToCart);
 // 添加到收藏
-$("#adGoods").on("click", ".goods-item .add-to-favorites", addToFavo);
+$addGoods.on("click", ".goods-item .add-to-favorites", addToFavo);
 
 function showSpinner(msg, config){
     var $spinner = $(".spinner");

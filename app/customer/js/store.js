@@ -111,7 +111,7 @@ getResult();
 (function () {
     //获取登录信息可能不需要
     $.ajax({
-        method: "get",
+        method: "post",
         url: "/proxy/customer/isLogin",
         dataType: "json"
     }).done(function (result) {
@@ -618,7 +618,8 @@ function getHomepage() {
             $("#showMore").css('display','none');
         }
     }).fail(function (result) {
-        result = {
+        tipsAlert("Server error!");
+        /*result = {
             status: 200,
             data: [
                 {
@@ -650,7 +651,7 @@ function getHomepage() {
                 $adGoods.append(goodItem);
             }
             $("#showMore").css('display','none');
-        }
+        }*/
     });
 }
 

@@ -149,227 +149,226 @@ function getResult() {
             location.href = loginUrl;
         }
         $adGoods = null;
-    })
-        .fail(function (result) {
-            /*result = {
-                status: 200,
-                data: [
-                    {
-                        favoriteId: 1,
-                        productId: 1,
-                        shopId: 1,
-                        classId: 1,
-                        productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photoUrl: ["imgs/product02a.jpg"],
-                        isDel: false
-                    },
-                    {
-                        favoriteId: 2,
-                        productId: 2,
-                        shopId: 1,
-                        classId: 1,
-                        productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photoUrl: ["imgs/product02a.jpg"],
-                        isDel: false
-                    },
-                    {
-                        favoriteId: 3,
-                        productId: 3,
-                        shopId: 1,
-                        classId: 1,
-                        productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photoUrl: ["imgs/product02a.jpg"],
-                        isDel: false
-                    },
-                    {
-                        favoriteId: 4,
-                        productId: 4,
-                        shopId: 1,
-                        classId: 1,
-                        productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photoUrl: ["imgs/product02a.jpg"],
-                        isDel: false
-                    },
-                    {
-                        favoriteId: 5,
-                        productId: 5,
-                        shopId: 1,
-                        classId: 1,
-                        productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photoUrl: ["imgs/product02a.jpg"],
-                        isDel: false
-                    },
-                    {
-                        favoriteId: 6,
-                        productId: 6,
-                        shopId: 1,
-                        classId: 1,
-                        productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photoUrl: ["imgs/product02a.jpg"],
-                        isDel: false
-                    },
-                    {
-                        favoriteId: 7,
-                        productId: 7,
-                        shopId: 1,
-                        classId: 1,
-                        productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photoUrl: ["imgs/product02a.jpg"],
-                        isDel: false
-                    },
-                    {
-                        favoriteId: 8,
-                        productId: 8,
-                        shopId: 1,
-                        classId: 1,
-                        productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photoUrl: ["imgs/product02a.jpg"],
-                        isDel: false
-                    },
-                    {
-                        favoriteId: 9,
-                        productId: 9,
-                        shopId: 1,
-                        classId: 1,
-                        productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photoUrl: ["imgs/product02a.jpg"],
-                        isDel: false
-                    },
-                    {
-                        favoriteId: 10,
-                        productId: 10,
-                        shopId: 1,
-                        classId: 1,
-                        productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
-                        price: "998.00",
-                        quantityStock: 11,
-                        photoUrl: ["imgs/product02a.jpg"],
-                        isDel: false
-                    }
-                ],
-                startId: 2
-            };
-            if (result.status == 200) {
-                startId = result.startId;
-                if (favoriteType == 2) {
-                    if (result.data.length == 0) {
-                        $noResult.text("You haven't collected one goods yet.")
-                        $noResult.css('display', 'block');
-                        return;
-                    }
-                    for (var i = 0; i < result.data.length; i++) {
-                        var goodItem = createGoodsItem(result.data[i]);
-                        $adGoods.append(goodItem);
-                    }
-                } else {
-                    result.data = [
-                        {
-                            shopId: 1,
-                            shopName: "Apple store",
-                            ownerId: 1,
-                            email: "apple@icloud.com",
-                            telephone: 123456,
-                            status: 1
-                        },
-                        {
-                            shopId: 2,
-                            shopName: "Apple store",
-                            ownerId: 1,
-                            email: "apple@icloud.com",
-                            telephone: 123456,
-                            status: 1
-                        },
-                        {
-                            shopId: 3,
-                            shopName: "Apple store",
-                            ownerId: 1,
-                            email: "apple@icloud.com",
-                            telephone: 123456,
-                            status: 1
-                        },
-                        {
-                            shopId: 4,
-                            shopName: "Apple store",
-                            ownerId: 1,
-                            email: "apple@icloud.com",
-                            telephone: 123456,
-                            status: 1
-                        },
-                        {
-                            shopId: 5,
-                            shopName: "Apple store",
-                            ownerId: 1,
-                            email: "apple@icloud.com",
-                            telephone: 123456,
-                            status: 1
-                        },
-                        {
-                            shopId: 6,
-                            shopName: "Apple store",
-                            ownerId: 1,
-                            email: "apple@icloud.com",
-                            telephone: 123456,
-                            status: 1
-                        },
-                        {
-                            shopId: 7,
-                            shopName: "Apple store",
-                            ownerId: 1,
-                            email: "apple@icloud.com",
-                            telephone: 123456,
-                            status: 1
-                        },
-                        {
-                            shopId: 8,
-                            shopName: "Apple store",
-                            ownerId: 1,
-                            email: "apple@icloud.com",
-                            telephone: 123456,
-                            status: 1
-                        },
-                        {
-                            shopId: 9,
-                            shopName: "Apple store",
-                            ownerId: 1,
-                            email: "apple@icloud.com",
-                            telephone: 123456,
-                            status: 1
-                        }
-                    ];
-                    if (result.data.length == 0) {
-                        $noResult.text("You haven't collected one shop yet.");
-                        $noResult.css('display', 'block');
-                        return;
-                    }
-                    for (var i = 0; i < result.data.length; i++) {
-                        var shopItem = createShopItem(result.data[i]);
-                        $adGoods.append(shopItem);
-                    }
+    }).fail(function (result) {
+        /*result = {
+            status: 200,
+            data: [
+                {
+                    favoriteId: 1,
+                    productId: 1,
+                    shopId: 1,
+                    classId: 1,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: "998.00",
+                    quantityStock: 11,
+                    photoUrl: ["imgs/product02a.jpg"],
+                    isDel: false
+                },
+                {
+                    favoriteId: 2,
+                    productId: 2,
+                    shopId: 1,
+                    classId: 1,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: "998.00",
+                    quantityStock: 11,
+                    photoUrl: ["imgs/product02a.jpg"],
+                    isDel: false
+                },
+                {
+                    favoriteId: 3,
+                    productId: 3,
+                    shopId: 1,
+                    classId: 1,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: "998.00",
+                    quantityStock: 11,
+                    photoUrl: ["imgs/product02a.jpg"],
+                    isDel: false
+                },
+                {
+                    favoriteId: 4,
+                    productId: 4,
+                    shopId: 1,
+                    classId: 1,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: "998.00",
+                    quantityStock: 11,
+                    photoUrl: ["imgs/product02a.jpg"],
+                    isDel: false
+                },
+                {
+                    favoriteId: 5,
+                    productId: 5,
+                    shopId: 1,
+                    classId: 1,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: "998.00",
+                    quantityStock: 11,
+                    photoUrl: ["imgs/product02a.jpg"],
+                    isDel: false
+                },
+                {
+                    favoriteId: 6,
+                    productId: 6,
+                    shopId: 1,
+                    classId: 1,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: "998.00",
+                    quantityStock: 11,
+                    photoUrl: ["imgs/product02a.jpg"],
+                    isDel: false
+                },
+                {
+                    favoriteId: 7,
+                    productId: 7,
+                    shopId: 1,
+                    classId: 1,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: "998.00",
+                    quantityStock: 11,
+                    photoUrl: ["imgs/product02a.jpg"],
+                    isDel: false
+                },
+                {
+                    favoriteId: 8,
+                    productId: 8,
+                    shopId: 1,
+                    classId: 1,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: "998.00",
+                    quantityStock: 11,
+                    photoUrl: ["imgs/product02a.jpg"],
+                    isDel: false
+                },
+                {
+                    favoriteId: 9,
+                    productId: 9,
+                    shopId: 1,
+                    classId: 1,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: "998.00",
+                    quantityStock: 11,
+                    photoUrl: ["imgs/product02a.jpg"],
+                    isDel: false
+                },
+                {
+                    favoriteId: 10,
+                    productId: 10,
+                    shopId: 1,
+                    classId: 1,
+                    productName: "MOOGOO MILK SHAMPOO - SCALP FRIENDLY",
+                    price: "998.00",
+                    quantityStock: 11,
+                    photoUrl: ["imgs/product02a.jpg"],
+                    isDel: false
                 }
-            } else if (result.status == 300) {
-                location.href = loginUrl;
-            }*/
-            tipsAlert("Server error!");
-            $adGoods = null;
-        });
+            ],
+            startId: 2
+        };
+        if (result.status == 200) {
+            startId = result.startId;
+            if (favoriteType == 2) {
+                if (result.data.length == 0) {
+                    $noResult.text("You haven't collected one goods yet.")
+                    $noResult.css('display', 'block');
+                    return;
+                }
+                for (var i = 0; i < result.data.length; i++) {
+                    var goodItem = createGoodsItem(result.data[i]);
+                    $adGoods.append(goodItem);
+                }
+            } else {
+                result.data = [
+                    {
+                        shopId: 1,
+                        shopName: "Apple store",
+                        ownerId: 1,
+                        email: "apple@icloud.com",
+                        telephone: 123456,
+                        status: 1
+                    },
+                    {
+                        shopId: 2,
+                        shopName: "Apple store",
+                        ownerId: 1,
+                        email: "apple@icloud.com",
+                        telephone: 123456,
+                        status: 1
+                    },
+                    {
+                        shopId: 3,
+                        shopName: "Apple store",
+                        ownerId: 1,
+                        email: "apple@icloud.com",
+                        telephone: 123456,
+                        status: 1
+                    },
+                    {
+                        shopId: 4,
+                        shopName: "Apple store",
+                        ownerId: 1,
+                        email: "apple@icloud.com",
+                        telephone: 123456,
+                        status: 1
+                    },
+                    {
+                        shopId: 5,
+                        shopName: "Apple store",
+                        ownerId: 1,
+                        email: "apple@icloud.com",
+                        telephone: 123456,
+                        status: 1
+                    },
+                    {
+                        shopId: 6,
+                        shopName: "Apple store",
+                        ownerId: 1,
+                        email: "apple@icloud.com",
+                        telephone: 123456,
+                        status: 1
+                    },
+                    {
+                        shopId: 7,
+                        shopName: "Apple store",
+                        ownerId: 1,
+                        email: "apple@icloud.com",
+                        telephone: 123456,
+                        status: 1
+                    },
+                    {
+                        shopId: 8,
+                        shopName: "Apple store",
+                        ownerId: 1,
+                        email: "apple@icloud.com",
+                        telephone: 123456,
+                        status: 1
+                    },
+                    {
+                        shopId: 9,
+                        shopName: "Apple store",
+                        ownerId: 1,
+                        email: "apple@icloud.com",
+                        telephone: 123456,
+                        status: 1
+                    }
+                ];
+                if (result.data.length == 0) {
+                    $noResult.text("You haven't collected one shop yet.");
+                    $noResult.css('display', 'block');
+                    return;
+                }
+                for (var i = 0; i < result.data.length; i++) {
+                    var shopItem = createShopItem(result.data[i]);
+                    $adGoods.append(shopItem);
+                }
+            }
+        } else if (result.status == 300) {
+            location.href = loginUrl;
+        }*/
+        tipsAlert("Server error!");
+        $adGoods = null;
+    });
 }
 
 function createGoodsItem(data) {
@@ -448,7 +447,7 @@ var addToCart = (function(){
             var status = result.status;
             if(status==200){
                 setCart(result.userInformation[0].cartNum);
-                showSpinner("Add success")
+                showSpinner("Add successful")
             } else if(status==300){
                 location.href = loginUrl;
             } else if (status==600){
@@ -469,7 +468,7 @@ var addToCart = (function(){
              var status = result.status;
              if(status==200){
              setCart(result.num);
-             showSpinner("Add success")
+             showSpinner("Add successful")
              } else if(status==300){
              location.href = loginUrl;
              } else {
@@ -500,11 +499,8 @@ var remove = (function(){
                 }
                 var status = result.status;
                 if (status == 200) {
-                    showSpinner("Deleted", {
-                        callback: function () {
-                            location.reload();
-                        }
-                    });
+                    $goods.remove();
+                    showSpinner("Deleted");
                 } else if (status == 300) {
                     location.href = loginUrl;
                 } else {
@@ -521,11 +517,8 @@ var remove = (function(){
                 };
                 var status = result.status;
                 if (status == 200) {
-                    showSpinner("Deleted", {
-                        callback: function () {
-                            location.reload();
-                        }
-                    });
+                 $goods.remove();
+                 showSpinner("Deleted");
                 } else if (status == 300) {
                     location.href = loginUrl;
                 } else {

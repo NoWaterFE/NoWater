@@ -203,7 +203,7 @@ var getApplyItem = (function(){
                 loading.remove();
                 loading = null;
             }
-            result = {
+            /*result = {
                 status: 200,
                 data: [
                     {
@@ -227,7 +227,7 @@ var getApplyItem = (function(){
                 }
             } else if(status==300) {
                 location.href = loginUrl;
-            }
+            }*/
         });
     }
 })();
@@ -285,11 +285,7 @@ var operate = (function(){
             var status = result.status;
             if(status==200){
                 $applyItem.remove();
-                showSpinner("Success!", {
-                    "callback": function () {
-                        location.reload();
-                    }
-                });
+                showSpinner("Successful!");
             } else if(status==300){
                 location.href = loginUrl
             }
@@ -305,11 +301,7 @@ var operate = (function(){
             var status = result.status;
             if(status==200){
                 $applyItem.remove();
-                showSpinner("Success!", {
-                    "callback": function () {
-                        location.reload();
-                    }
-                });
+                showSpinner("Successful!");
             } else if(status==300){
                 location.href = loginUrl
             }*/

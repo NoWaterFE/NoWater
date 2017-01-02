@@ -244,7 +244,7 @@ var getShopItem = (function(){
                 loading.remove();
                 loading = null;
             }
-            result = {
+            /*result = {
                 status: 200,
                 data: [
                     {
@@ -275,7 +275,7 @@ var getShopItem = (function(){
                 }
             } else if(status==300) {
                 location.href = loginUrl;
-            }
+            }*/
         });
     }
 })();
@@ -340,11 +340,7 @@ var addToBlackList = (function(){
             var status = result.status;
             if(status==200){
                 $shopItem.remove();
-                showSpinner("Add Success!", {
-                    "callback": function () {
-                        location.reload();
-                    }
-                });
+                showSpinner("Add Successful!");
             } else if(status==300){
                 location.href = loginUrl;
             } else if(status==400){
@@ -372,11 +368,7 @@ var addToBlackList = (function(){
             var status = result.status;
             if(status==200){
                 $shopItem.remove();
-                showSpinner("Add Success!", {
-                    "callback": function () {
-                        location.reload();
-                    }
-                });
+                showSpinner("Add Successful!");
             } else if(status==300){
                 location.href = loginUrl;
             } else if(status==400){
@@ -417,11 +409,7 @@ var removeBlack = (function(){
             var status = result.status;
             if(status==200){
                 $shopItem.remove();
-                showSpinner("Success!", {
-                    "callback": function () {
-                        location.reload();
-                    }
-                });
+                showSpinner("Successful!");
             } else if(status==300){
                 location.href = loginUrl;
             } else if(status==400){
@@ -449,11 +437,7 @@ var removeBlack = (function(){
             var status = result.status;
             if(status==200){
                 $shopItem.remove();
-                showSpinner("Success!", {
-                    "callback": function () {
-                        location.reload();
-                    }
-                });
+                showSpinner("Successful!");
             } else if(status==300){
                 location.href = loginUrl;
             } else if(status==400){
@@ -494,11 +478,7 @@ var deleteCustomer = (function(){
             var status = result.status;
             if(status==200){
                 $shopItem.remove();
-                showSpinner("Delete Success!", {
-                    "callback": function () {
-                        location.reload();
-                    }
-                });
+                showSpinner("Delete Success!");
             } else if(status==300){
                 location.href = loginUrl;
             } else if(status==400){
@@ -520,11 +500,7 @@ var deleteCustomer = (function(){
             var status = result.status;
             if(status==200){
                 $shopItem.remove();
-                showSpinner("Delete Success!", {
-                    "callback": function () {
-                        location.reload();
-                    }
-                });
+                showSpinner("Delete Success!");
             } else if(status==300){
                 location.href = loginUrl;
             } else if(status==400){

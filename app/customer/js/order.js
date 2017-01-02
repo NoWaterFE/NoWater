@@ -2,7 +2,7 @@
 (function () {
     //获取登录信息可能不需要
     $.ajax({
-        method: "get",
+        method: "post",
         url: "/proxy/customer/isLogin",
         dataType: "json"
     }).done(function (result) {
@@ -326,8 +326,8 @@ var postOrder = (function(){
                 loading.remove();
                 loading = null;
             }
-            //tipsAlert("server error!");
-            result = {
+            tipsAlert("server error!");
+            /*result = {
                 status: 200,
                 data: [
                     {
@@ -371,7 +371,7 @@ var postOrder = (function(){
                 location.href = loginUrl;
             } else {
                 tipsAlert("server error!");
-            }
+            }*/
         });
     };
 })();
@@ -409,7 +409,7 @@ var confirmR = (function(){
             }
             var status = result.status;
             if(status==200){
-                showSpinner("Success!", {
+                showSpinner("Successful!", {
                     "callback": function () {
                         location.reload();
                     }
@@ -434,7 +434,7 @@ var confirmR = (function(){
              };
              var status = result.status;
              if(status==200){
-             showSpinner("Add Success!", {
+             showSpinner("Add Successful!", {
              "callback": function () {
              location.reload();
              }
@@ -479,7 +479,7 @@ var orderCancel = (function(){
             }
             var status = result.status;
             if(status==200){
-                showSpinner("Success!", {
+                showSpinner("Canceled!", {
                     "callback": function () {
                         location.reload();
                     }
@@ -675,7 +675,7 @@ $commentForm.on("submit", function (e) {
                 callback: function () {
                     location.reload()
                 }
-            })
+            });
         } else {
             tipsAlert("Server error!");
         }

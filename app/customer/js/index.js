@@ -3,7 +3,7 @@ var $adStore = $("#adStore"),
 // 首页广告请求
 (function () {
     var getStoreAd = $.ajax({
-        method: "get",
+        method: "post",
         url: "/proxy/customer/shop/ad",
         dataType: "json"
     });
