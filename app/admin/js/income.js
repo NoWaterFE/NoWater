@@ -3,7 +3,8 @@ var $logoutBtn = $("#logoutBtn");
 $logoutBtn.click(function () {
     $.ajax({
         method: "get",
-        url: "/proxy/admin/logout"
+        url: "/proxy/admin/logout",
+        cache: false
     }).done(function(){
         delCookie("admin_token");
         location.href = "login.html";
@@ -215,7 +216,8 @@ var $commissionDiv = $("#commissionDiv");
 function getCommission() {
     $.ajax({
         method: "get",
-        url: "/proxy/admin/commission/show"
+        url: "/proxy/admin/commission/show",
+        cache: false
     }).done(function (result) {
         var status = result.status;
         if(status == 200) {

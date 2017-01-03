@@ -3,7 +3,8 @@ var $logoutBtn = $("#logoutBtn");
 $logoutBtn.click(function () {
     $.ajax({
         method: "get",
-        url: "/proxy/admin/logout"
+        url: "/proxy/admin/logout",
+        cache: false
     }).done(function(){
         delCookie("admin_token");
         location.href = "login.html";
@@ -196,7 +197,8 @@ var postShow = (function(){
         $.ajax({
             method: "get",
             url: "/proxy/admin/shop/ad/list",
-            dataType: "json"
+            dataType: "json",
+            cache: false
         }).done(function(result){
             if(loading){
                 loading.remove();
@@ -420,7 +422,8 @@ var $limitTime = $("#limitTime"),
 function getLimitTime() {
     $.ajax({
         method: "get",
-        url: "/proxy/admin/apply/limit/time/show"
+        url: "/proxy/admin/apply/limit/time/show",
+        cache: false
     }).done(function (result) {
         var status = result.status;
         if(status == 200) {
@@ -454,7 +457,8 @@ getLimitTime();
 function getShowTime() {
     $.ajax({
         method: "get",
-        url: "/proxy/admin/ad/time/show"
+        url: "/proxy/admin/ad/time/show",
+        cache: false
     }).done(function (result) {
         var status = result.status;
         if(status == 200) {

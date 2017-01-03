@@ -8,8 +8,8 @@ $.ajax({
         location.href="login.html?redirectUrl="+encodeURIComponent(location.href);
     }
 }).fail(function (result) {
-    /*alert("server error");
-    location.href = "../customer/index.html";*/
+    alert("server error");
+    location.href = "../customer/index.html";
     /*result = {
         status: 200,
         data: [{

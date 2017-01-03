@@ -3,7 +3,8 @@ var $logoutBtn = $("#logoutBtn");
 $logoutBtn.click(function () {
     $.ajax({
         method: "get",
-        url: "/proxy/admin/loginout"
+        url: "/proxy/admin/loginout",
+        cache: false
     }).done(function(){
         delCookie("admin_token");
         location.href = "login.html";
@@ -102,7 +103,8 @@ var getPayItem = (function(){
             method: "get",
             url: "/proxy/",
             dataType: "json",
-            data: reqData
+            data: reqData,
+            cache: false
         }).done(function(result){
 
         }).fail(function(result){
