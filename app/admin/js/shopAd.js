@@ -139,7 +139,8 @@ function　createShowItem(data){
         '<div class="cancel">' +
         'Cancel bidding' +
         '</div> ';
-    var approve = '<div class="approve">APPROVE</div>';
+    var approve = '<div class="approve">APPROVE</div>' +
+        '<div class="reject">REJECT</div>';
 
     var operate = "";
     if(data.status==1){
@@ -151,7 +152,7 @@ function　createShowItem(data){
         data.statusText = "Bidding success";
     } else if(data.status==10){
         data.statusText = "Closed";
-    } else if(data.status==-2){
+    } else if(data.status==11){
         data.statusText = "Bidding failure";
     }
     var shop = data.shop;
@@ -308,13 +309,13 @@ var postShow = (function(){
 
 var approveAd = (function () {
     var loading = null;
-    return function () {
+    return function (isApprove) {
         if(loading) return;
         var _this = $(this),
             $showItem = _this.parents(".showItem"),
             info = $showItem.data("info"),
             orderId = info.orderId,
-            reqData = "orderId="+orderId;
+            reqData = "orderId="+orderId+"&isApprove="+isApprove;
         loading = showLoading(_this.parent());
         $.ajax({
             method: "post",
@@ -327,8 +328,12 @@ var approveAd = (function () {
             }
             var status = result.status;
             if (status == 200) {
-                $showItem.remove();
-                showSpinner("Successful!");
+                showSpinner("Successful!", {
+                    callback: function () {
+                        location.reload();
+                    },
+                    timeout: 1000
+                });
             } else if (status == 300) {
                 location.href = loginUrl;
             } else if (status == 400) {
@@ -338,11 +343,11 @@ var approveAd = (function () {
                     }
                 });
             } else if (status == 500){
-                tipsAlert("Failure, there is no ad slots left", function () {
+                tipsAlert("Fail, there is no ad slots left", function () {
                     location.reload();
                 });
             } else if (status == 600) {
-                tipsAlert("Failure, you must approve after the deadline!");
+                tipsAlert("Fail, you must operate after the deadline!");
             }
         }).fail(function(result){
             tipsAlert("server error");
@@ -355,8 +360,11 @@ var approveAd = (function () {
             };
             var status = result.status;
             if (status == 200) {
-                $showItem.remove();
-                showSpinner("Successful!");
+                showSpinner("Successful!", {
+                    callback: function () {
+                        location.reload();
+                    }
+                });
             } else if (status == 300) {
                 location.href = loginUrl;
             } else if (status == 400) {
@@ -366,11 +374,11 @@ var approveAd = (function () {
                     }
                 });
             } else if (status == 500){
-                tipsAlert("Failure, there is no ad slots left", function () {
+                tipsAlert("Fail, there is no ad slots left", function () {
                     location.reload();
                 });
             } else if (status == 600) {
-                tipsAlert("Failure, you must approve after the deadline!");
+                tipsAlert("Fail, you must approve after the deadline!");
             }*/
         });
     };
@@ -388,7 +396,17 @@ $showList.on("click", ".more .showMore", function(e){
 $showList.on("click", ".showItem .approve", function () {
     var self = this;
     tipsConfirm("Are you sure want to approve the advertising applications?", function(){
-        approveAd.apply(self);
+        approveAd.call(self, 1);
+    }, {
+        "ok": "YES",
+        "cancel": "NO"
+    });
+});
+
+$showList.on("click", ".showItem .reject", function () {
+    var self = this;
+    tipsConfirm("Are you sure want to reject the advertising applications?", function(){
+        approveAd.call(self, 0);
     }, {
         "ok": "YES",
         "cancel": "NO"
@@ -397,7 +415,8 @@ $showList.on("click", ".showItem .approve", function () {
 
 postShow();
 
-var $limitTime = $("#limitTime");
+var $limitTime = $("#limitTime"),
+    $showTime = $("#showTime");
 function getLimitTime() {
     $.ajax({
         method: "get",
@@ -432,6 +451,41 @@ function getLimitTime() {
     })
 }
 getLimitTime();
+function getShowTime() {
+    $.ajax({
+        method: "get",
+        url: "/proxy/admin/ad/time/show"
+    }).done(function (result) {
+        var status = result.status;
+        if(status == 200) {
+            var showTime = result.changeAd;
+            $showTime.data("showTime", showTime).show()
+                .find(".time").text(showTime);
+        } else if(status == 300) {
+            location.href = loginUrl;
+        } else {
+            tipsAlert("Server error!");
+        }
+    }).fail(function (result) {
+        tipsAlert("Server error!");
+        /*result = {
+            "changeAd": "00:00:00",
+            "status": 200
+        };
+        var status = result.status;
+        if (status == 200) {
+            var showTime = result.changeAd;
+            $showTime.data("showTime", showTime).show()
+                .find(".time").text(showTime);
+        } else if (status == 300) {
+            location.href = loginUrl;
+        } else {
+            tipsAlert("Server error!");
+        }*/
+    })
+}
+
+getShowTime();
 
 $limitTime.on("click", ".edit", function () {
     var $limitPop = $(".limitPop"),
@@ -442,6 +496,16 @@ $limitTime.on("click", ".edit", function () {
         $limitPop.show().find("#applyLimitTime").val(limitTime);
     }
 });
+
+$showTime.on("click", ".edit", function () {
+    var $showPop = $(".showPop"),
+        showTime = $showTime.data("showTime");
+    if($showPop.length==0) {
+        createChangeEdit(showTime).appendTo($("body"));
+    } else {
+        $showPop.show().find("#changeAd").val(showTime);
+    }
+});
 function createEdit(time) {
     var $limit = $('<div class="limitPop">' +
         '<div class="shadow"></div>' +
@@ -450,7 +514,7 @@ function createEdit(time) {
         '<h2 class="title">Edit deadline</h2>' +
         '<div class="input-item applyLimitTime">' +
         '<label for="applyLimitTime" class="redStar">Deadline: </label>' +
-        '<input type="text" name="applyLimitTime" value="'+time+'" id="applyLimitTime" placeholder="Format: hh:mm:ss" maxlength="9">' +
+        '<input type="text" name="applyLimitTime" value="'+time+'" id="applyLimitTime" placeholder="Format: hh:mm:ss" maxlength="8">' +
         '<span class="tips"></span>' +
         '</div>' +
         '<div class="submit">' +
@@ -487,13 +551,13 @@ function createEdit(time) {
         var arr = applyLimitTime.split(":"),
             len = arr.length;
         if(len!=3) {
-            addError($applyLimitTime, "Error time format(hh:mm:ss)!");
+            addError($showTime, "Error time format,  The right time format: hh:mm:ss");
             return;
         }
         var num = /^\s*\d+\s*$/,
-            h = parseInt(arr[0]),
-            m = parseInt(arr[1]),
-            s = parseInt(arr[2]);
+            h = +arr[0],
+            m = +arr[1],
+            s = +arr[2];
         if( !num.test(arr[0]) || h>=24 || h<0 || arr[0].length >=3 ) {
             addError($applyLimitTime, "Error time!");
             return;
@@ -519,7 +583,118 @@ function createEdit(time) {
             var status = result.status;
             if(status==200) {
                 $limit.hide();
-                $limitTime.find(".time").text(applyLimitTime);
+                $limitTime.data("limitTime", applyLimitTime)
+                    .find(".time").text(applyLimitTime);
+                showSpinner("Edit Successful");
+            } else if(status==300){
+                location.href = loginUrl;
+            } else {
+                tipsAlert("Server error!");
+            }
+        }).fail(function (result) {
+            if (loading) loading.remove();
+            _this.data("submit", false);
+            tipsAlert("Server error!");
+            /*result = {
+             status: 200
+             };
+             var status = result.status;
+             if(status==200) {
+             $limit.hide();
+             $limitTime.data("limitTime", applyLimitTime)
+             .find(".time").text(applyLimitTime);
+             showSpinner("Edit Successful");
+             } else if(status==300){
+             location.href = loginUrl;
+             } else {
+             tipsAlert("Server error!");
+             }*/
+        });
+
+    });
+
+    return $limit;
+}
+
+function createChangeEdit(time) {
+    var $show = $('<div class="showPop">' +
+        '<div class="shadow"></div>' +
+        '<form class="showForm" id="showForm" novalidate>' +
+        '<i class="cancel close"></i>' +
+        '<h2 class="title">Edit Changing Time</h2>' +
+        '<div class="input-item changeAd">' +
+        '<label for="changeAd" class="redStar">Time:</label>' +
+        '<input type="text" name="changeAd" value="'+time+'" id="changeAd" placeholder="Format: hh:mm:ss" maxlength="8">' +
+        '<span class="tips"></span>' +
+        '</div>' +
+        '<div class="submit">' +
+        '<input type="submit" value="CONFIRM">' +
+        '<input type="button" value="CANCEL" class="cancel">' +
+        '</div>' +
+        '</form>' +
+        '</div>');
+
+    var $showForm = $show.find(".showForm");
+
+    $showForm.on("input", ".input-item input", function () {
+        var _this = $(this);
+        _this.parent().removeClass('error');
+    });
+
+    $showForm.on("click", ".cancel", function (e) {
+        var $delegateTarget = $(e.delegateTarget);
+        $delegateTarget[0].reset();
+        $delegateTarget.parent()
+            .hide();
+    });
+
+    $showForm.on("submit", function (e) {
+        var _this = $(this);
+        e.preventDefault();
+        if(_this.data("submit")) return;
+        var $changeAd = _this.find(".changeAd"),
+            changeAd = this.changeAd.value;
+        if (!changeAd) {
+            addError($changeAd, "Deadline can't be empty!");
+            return;
+        }
+        var arr = changeAd.split(":"),
+            len = arr.length;
+        if(len!=3) {
+            addError($changeAd, "Error time format,  The right time format: hh:mm:ss");
+            return;
+        }
+        var num = /^\s*\d+\s*$/,
+            h = +arr[0],
+            m = +arr[1],
+            s = +arr[2];
+        if( !num.test(arr[0]) || h>=24 || h<0 || arr[0].length >=3 ) {
+            addError($changeAd, "Error time!");
+            return;
+        }
+        if( !num.test(arr[1]) || m>=60 || m<0 || arr[1].length >=3 ) {
+            addError($changeAd, "Error time!");
+            return;
+        }
+        if( !num.test(arr[2]) || s>=60 || s<0 || arr[2].length >=3 ) {
+            addError($changeAd, "Error time!");
+            return;
+        }
+        var loading = showLoading(_this);
+        _this.data("submit", true);
+        $.ajax({
+            method: "post",
+            url: "/proxy/admin/ad/time/changing",
+            dataType: "json",
+            data: "changeAd="+h+":"+("0"+m).slice(-2)+":"+("0"+s).slice(-2)
+        }).done(function (result) {
+            if (loading) loading.remove();
+            _this.data("submit", false);
+            var status = result.status;
+            if(status==200) {
+                $show.hide();
+                $showTime.data("showTime", changeAd)
+                    .find(".time").text(changeAd);
                 showSpinner("Edit Successful");
             } else if(status==300){
                 location.href = loginUrl;
@@ -534,11 +709,12 @@ function createEdit(time) {
                 status: 200
             };
             var status = result.status;
-            if(status==200) {
-                $limit.hide();
-                $limitTime.find(".time").text(applyLimitTime);
+            if (status == 200) {
+                $show.hide();
+                $showTime.data("showTime", changeAd)
+                    .find(".time").text(changeAd);
                 showSpinner("Edit Successful");
-            } else if(status==300){
+            } else if (status == 300) {
                 location.href = loginUrl;
             } else {
                 tipsAlert("Server error!");
@@ -547,7 +723,7 @@ function createEdit(time) {
 
     });
 
-    return $limit;
+    return $show;
 }
 
 function createBigImage(imgUrl, rate){

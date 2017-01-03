@@ -155,7 +155,8 @@ function showInfo() {
     $.ajax({
         method: "get",
         url: "/proxy/customer/info/detail",
-        dataType: "json"
+        dataType: "json",
+        cache: false
     }).done(function (result) {
         var status = result.status;
         if(status == 200) {

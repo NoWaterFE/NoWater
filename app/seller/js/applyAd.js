@@ -21,6 +21,7 @@
             location.href = "../customer/index.html"
         });
     });
+    quickMenu.find(".seller-center a").attr("href", "../customer/store.html?shopId="+userInfo.shopId);
 })();
 
 
@@ -129,15 +130,23 @@ var $applyAd = $("#applyAd"),
 //请求广告信息
 $.ajax({
     method: "get",
-    url: "/proxy/shop-owner/current/apply"
+    url: "/proxy/shop-owner/current/apply",
+    cache: false
 }).done(function (result){
     var status = result.status,
         data = result.data[0];
     if(status==200){
-        if(result.allow==0) {
+        var allow = result.allow;
+        if(allow==0 || allow==-1) {
             $applyAd.find("input").addClass("disabled")
                 .prop("disabled", true);
+            var allowText = "It has over the deadline("+result.applyLimitTime+") of bidding ad space";
+            if(allow == -1) {
+                allowText = "You are bidding for tomorrow's shop ad space, please waiting for the result";
+            }
+            $applyAd.find(".allowText").text(allowText);
         }
+        $("#limitTime").find(".time").text(result.applyLimitTime);
         if(!data) return;
         var photo = data.photo;
         $applyAd[0].price.value=data.price.toFixed(2);
@@ -151,9 +160,10 @@ $.ajax({
 }).fail(function (result) {
     tipsAlert("Server error!");
     /*result = {
-        "allow": 1,
+        "allow": -1,
         "status": 200,
         "startId": -1,
+        applyLimitTime: "09:52:34",
         "data": [
             {
                 "orderId": 1,
@@ -169,11 +179,17 @@ $.ajax({
     var status = result.status,
         data = result.data[0];
     if(status==200){
-        if(!data) return;
-        if(result.allow==0) {
+        var allow = result.allow;
+        if(allow==0 || allow==-1) {
             $applyAd.find("input").addClass("disabled")
-            .prop("disabled", true);
+                .prop("disabled", true);
+            var allowText = "It has over the deadline("+result.applyLimitTime+") of bidding ad space";
+            if(allow == -1) {
+                allowText = "You are bidding for tomorrow's shop ad space, please wait for the result";
+            }
+            $applyAd.find(".allowText").text(allowText);
         }
+        if(!data) return;
         var photo = data.photo;
         $applyAd[0].price.value=data.price.toFixed(2);
         $applyAd.data("fileUrl", photo)

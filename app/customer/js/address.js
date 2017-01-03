@@ -220,7 +220,8 @@ var getAddressItem = (function(){
         $.ajax({
             method: "get",
             url: "/proxy/customer/address/list",
-            dataType: "json"
+            dataType: "json",
+            cache: false
         }).done(function(result){
             if (loading) {
                 loading.remove();

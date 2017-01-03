@@ -25,7 +25,8 @@ $.ajax({
     method: "get",
     url: "/proxy/customer/shop/info",
     dataType: "json",
-    data: sendShopId
+    data: sendShopId,
+    cache: false
 }).done(function (result) {
     if(result.status==200){
         var data = result.data,
@@ -444,7 +445,8 @@ function search() {
         method: "get",
         url: "/proxy/customer/product/search",
         dataType: "json",
-        data: sendData
+        data: sendData,
+        cache: false
     }).done(function (result) {
         if (result.status == 200) {
             startId = result.startId;
@@ -600,7 +602,8 @@ function getHomepage() {
     $.ajax({
         method: "get",
         url: "/proxy/customer/shop/homepage",
-        data: "shopId="+shopId
+        data: "shopId="+shopId,
+        cache: false
     }).done(function (result) {
         if (result.status == 200) {
             setText();
@@ -755,11 +758,15 @@ var addToFavo = (function(){
                 loading = null;
             }
             var status = result.status;
-            if(status==200 || status==400){
+            if(status==200){
                 showSpinner("Add successful");
             } else if(status==300){
                 location.href = loginUrl;
-            }else {
+            } else if(status==400){
+                showSpinner("Has been added before");
+            } else if(status==500) {
+                tipsAlert("Fail, the product has been off the shelf")
+            } else {
                 tipsAlert("server error!");
             }
         }).fail(function(result){
@@ -772,10 +779,14 @@ var addToFavo = (function(){
              status: 200
              };
              var status = result.status;
-             if (status == 200 || status == 400) {
+             if(status==200){
              showSpinner("Add successful");
-             } else if (status == 300) {
+             } else if(status==300){
              location.href = loginUrl;
+             } else if(status==400){
+             showSpinner("Has been added before");
+             } else if(status==500) {
+             tipsAlert("Fail, the product has been off the shelf")
              } else {
              tipsAlert("server error!");
              }*/

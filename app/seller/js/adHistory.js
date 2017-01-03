@@ -21,6 +21,7 @@
             location.href = "../customer/index.html"
         });
     });
+    quickMenu.find(".seller-center a").attr("href", "../customer/store.html?shopId="+userInfo.shopId);
 })();
 
 
@@ -145,7 +146,7 @@ function　createShowItem(data){
         data.statusText = "Bidding success";
     } else if(data.status==10){
         data.statusText = "Closed";
-    } else if(data.status==-2){
+    } else if(data.status==11){
         data.statusText = "Bidding failure";
     }
     return $('<tbody class="showItem"> ' +
@@ -188,7 +189,8 @@ var postShow = (function(){
             method: "get",
             url: "/proxy/shop-owner/shop/ad/list",
             dataType: "json",
-            data: reqData
+            data: reqData,
+            cache: false
         }).done(function(result){
             if(loading){
                 loading.remove();

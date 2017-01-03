@@ -3,7 +3,8 @@
 
 .main {
     padding: 20px 27px;
-    .limitTime {
+    .limitTime, .main_showTime {
+        float: right;
         display: none;
         padding: 10px 10px;
         background: #f5f5f5;
@@ -151,7 +152,7 @@
                                 text-decoration: underline;
                             }
                         }
-                        .approve {
+                        .approve, .reject {
                             color: #292d84;
                             line-height: 30px;
                             border: 1px solid #292d84;
@@ -210,7 +211,7 @@
     }
 }
 
-.limitPop {
+.limitPop, .showPop {
     position: fixed;
     left: 0;
     top: 0;
@@ -231,7 +232,7 @@
         line-height: 34px;
         color: #292d84;
     }
-    .limitForm {
+    .limitForm, .showForm {
         padding: 20px 60px;
         width: 500px;
         margin: 120px auto;

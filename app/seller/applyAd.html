@@ -19,7 +19,7 @@
         </div>
         <ul class="quick-menu" id="quickMenu">
             <li class="seller-center">
-                <a href="../customer/store.html" target="_blank">
+                <a href="javascript:" target="_blank">
                     <i></i><span>MY SHOP</span>
                 </a>
             </li>
@@ -86,6 +86,10 @@
     </div>
     <div class="page">
         <form id="applyAd" class="applyAd" novalidate>
+            <div class="limitTime" id="limitTime">
+                <span class="text">Deadline of bidding for AD space:</span>
+                <span class="time"></span>
+            </div>
             <h2 class="title">Bidding for tomorrow's shop ad space</h2>
             <div class="input-item amount">
                 <label for="amount" class="redStar">Bidding Price(HK$):</label>
@@ -107,12 +111,13 @@
             <div class="submit">
                 <input type="submit" value="Bid Now">
             </div>
+            <div class="allowText"></div>
         </form>
     </div>
 </div>
 <footer>
     <div class="footer">
-        © Copyright NoWaterFE
+        © Copyright NoWaterFE (nowater_project@sina.com)
     </div>
 </footer>
 <script type="text/javascript" src="js/applyAd.js"></script>

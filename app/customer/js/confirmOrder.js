@@ -339,9 +339,15 @@ var submitOrder = (function(){
             }
             var status = result.status;
             if(status==200){
-                location.href = "pay.html?orderIdList="+orderIdList+"&sumPrice="+sumPrice;
+                location.href = "pay.html?orderIdList=" + orderIdList + "&sumPrice=" + result.sumPrice;
             } else if(status==300) {
                 location.href = loginUrl;
+            } else if(status==400) {
+                tipsAlert("The order has been submitted, please do not resubmit!");
+            } else if(status==2400) {
+                tipsAlert("There is a product off the shelf");
+            } else if(status==2500) {
+                tipsAlert("There is a product that has not enough stock");
             } else {
                 tipsAlert("server error!");
             }
@@ -352,13 +358,20 @@ var submitOrder = (function(){
             }
             tipsAlert("server error!");
             /*result = {
-                status: 200
+                status: 200,
+                sumPrice: 233
             };
             var status = result.status;
             if (status == 200) {
-                location.href = "pay.html?orderIdList=" + orderIdList + "&sumPrice=" + sumPrice;
+                location.href = "pay.html?orderIdList=" + orderIdList + "&sumPrice=" + result.sumPrice;
             } else if (status == 300) {
                 location.href = loginUrl;
+            } else if(status==400) {
+                tipsAlert("The order has been submitted, please do not resubmit!");
+            } else if(status==2400) {
+                tipsAlert("There is a product off the shelf");
+            } else if(status==2500) {
+                tipsAlert("There is a product that has not enough stock");
             } else {
                 tipsAlert("server error!");
             }*/
@@ -399,7 +412,8 @@ function getAddress() {
     $.ajax({
         method: "get",
         url: "/proxy/customer/address/list",
-        dataType: "json"
+        dataType: "json",
+        cache: false
     }).done(function(result){
         if(loading) loading.remove();
         var status = result.status;

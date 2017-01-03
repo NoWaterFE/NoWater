@@ -210,7 +210,8 @@ var postCart = (function(){
             method: "get",
             url: "/proxy/customer/cart/list",
             dataType: "json",
-            data: reqData
+            data: reqData,
+            cache: false
         }).done(function(result){
             if(loading){
                 loading.remove();
@@ -252,6 +253,7 @@ var postCart = (function(){
                         num: 4,
                         startId: 2,
                         product: {
+                            isDel: 1,
                             productId: 10,
                             productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
                             photo: [
@@ -273,6 +275,7 @@ var postCart = (function(){
                         targetId: 12,
                         num: 4,
                         startId: 2,
+                        isDel: 0,
                         product: {
                             productId: 10,
                             productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
@@ -296,6 +299,7 @@ var postCart = (function(){
                         num: 4,
                         startId: 2,
                         product: {
+                            isDel: 1,
                             productId: 10,
                             productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
                             photo: [
@@ -317,6 +321,7 @@ var postCart = (function(){
                         targetId: 12,
                         num: 4,
                         startId: 2,
+                        isDel: 0,
                         product: {
                             productId: 10,
                             productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
@@ -339,6 +344,7 @@ var postCart = (function(){
                         targetId: 12,
                         num: 4,
                         startId: 2,
+                        isDel: 0,
                         product: {
                             productId: 10,
                             productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
@@ -361,6 +367,7 @@ var postCart = (function(){
                         targetId: 12,
                         num: 4,
                         startId: 2,
+                        isDel: 0,
                         product: {
                             productId: 10,
                             productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
@@ -383,6 +390,7 @@ var postCart = (function(){
                         targetId: 12,
                         num: 4,
                         startId: 2,
+                        isDel: 0,
                         product: {
                             productId: 10,
                             productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
@@ -405,6 +413,7 @@ var postCart = (function(){
                         targetId: 12,
                         num: 4,
                         startId: 2,
+                        isDel: 0,
                         product: {
                             productId: 10,
                             productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
@@ -427,6 +436,7 @@ var postCart = (function(){
                         targetId: 12,
                         num: 4,
                         startId: 2,
+                        isDel: 0,
                         product: {
                             productId: 10,
                             productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
@@ -449,6 +459,7 @@ var postCart = (function(){
                         targetId: 12,
                         num: 4,
                         startId: 2,
+                        isDel: 0,
                         product: {
                             productId: 10,
                             productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
@@ -471,6 +482,7 @@ var postCart = (function(){
                         targetId: 12,
                         num: 4,
                         startId: 2,
+                        isDel: 0,
                         product: {
                             productId: 10,
                             productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
@@ -493,6 +505,7 @@ var postCart = (function(){
                         targetId: 12,
                         num: 4,
                         startId: 2,
+                        isDel: 0,
                         product: {
                             productId: 10,
                             productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
@@ -515,6 +528,7 @@ var postCart = (function(){
                         targetId: 12,
                         num: 4,
                         startId: 2,
+                        isDel: 0,
                         product: {
                             productId: 10,
                             productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
@@ -537,6 +551,7 @@ var postCart = (function(){
                         targetId: 12,
                         num: 4,
                         startId: 2,
+                        isDel: 0,
                         product: {
                             productId: 10,
                             productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
@@ -559,6 +574,7 @@ var postCart = (function(){
                         targetId: 12,
                         num: 4,
                         startId: 2,
+                        isDel: 0,
                         product: {
                             productId: 10,
                             productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
@@ -581,6 +597,7 @@ var postCart = (function(){
                         targetId: 12,
                         num: 4,
                         startId: 2,
+                        isDel: 0,
                         product: {
                             productId: 10,
                             productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
@@ -630,7 +647,12 @@ function　createCartItem(data){
         stock = product.quantityStock,
         num = data.num,
         price = product.price,
-        sumPrice = num * price;
+        sumPrice = num * price,
+        isDel = product.isDel,
+        stockText = '<span class="stockText">Pieces <span class="stockSpan">'+stock+'</span> available</span> ';
+    if(isDel) {
+        stockText = '<span class="stockText" style="color: red; font-size: 13px; margin-left: -4px;">Off the shelf</span> ';
+    }
     var cartData = '<tr class="cartData"> ' +
         '<td class="select"><input type="checkbox"></td> ' +
         '<td class="product"> ' +
@@ -645,7 +667,7 @@ function　createCartItem(data){
         '<span class="minus"></span> ' +
         '<input type="text" name="num" value="'+num+'" class="num"> ' +
         '<span class="plus"></span> <br>' +
-        '<span class="stockText">Pieces <span class="stockSpan">'+stock+'</span> available</span> ' +
+            stockText +
         '<input type="hidden" name="stock" class="stock" value="'+stock+'"> ' +
         '</div>' +
         '</td> ' +
@@ -661,7 +683,7 @@ function　createCartItem(data){
         '<tr class="cartHeader"> ' +
         '<td colspan="6"> ' +
         '<span class="shopName"> SHOP: ' +
-        '<a href="store.html?shopId='+data.targetId+'" target="_blank">'+shop.shopName+'</a> ' +
+        '<a href="store.html?shopId='+shop.shopId+'" target="_blank">'+shop.shopName+'</a> ' +
         '</span> ' +
         '</td> ' +
         '</tr> ' +
@@ -699,8 +721,9 @@ function checkState($num, first){
         val = $num.data("val"),
         info = $cartItem.data("info"),
         product = info.product,
-        price = parseInt(product.price);
-    if(stock==0) {
+        price = parseInt(product.price),
+        isDel = product.isDel;
+    if(stock==0 || isDel=="1") {
         $cartItem.find("input").attr("disabled", true).end()
             .find(".minus").addClass("disabled").end()
             .find(".plus").addClass("disabled");
@@ -920,6 +943,10 @@ var buy = (function(){
                 location.href = "confirmOrder.html?orderIdList="+decodeURIComponent(JSON.stringify(result.orderIdList));
             } else if(status==300){
                 location.href = loginUrl;
+            } else if(status==2400) {
+                tipsAlert("There is a product off the shelf");
+            } else if(status==2500) {
+                tipsAlert("There is a product that has not enough stock");
             } else {
                 tipsAlert("server error!");
             }
@@ -930,7 +957,7 @@ var buy = (function(){
                 loading = null;
             }
             /*result = {
-                status: 200,
+                status: 2400,
                 orderIdList: [1]
             };
             var status = result.status;
@@ -938,6 +965,10 @@ var buy = (function(){
                 location.href = "confirmOrder.html?orderIdList="+decodeURIComponent(JSON.stringify(result.orderIdList));
             } else if(status==300){
                 location.href = loginUrl;
+            } else if(status==2400) {
+                tipsAlert("There is a product off the shelf");
+            } else if(status==2500) {
+                tipsAlert("There is a product that has not enough stock");
             } else {
                 tipsAlert("server error!");
             }*/
@@ -1009,5 +1040,6 @@ $window.on("scroll resize", function(){
         $optionBox.css("left", $cartList.offset().left - $window.scrollLeft());
     } else {
         $optionBox.removeClass("fixed");
+        $optionBox.css("left", 0);
     }
 });

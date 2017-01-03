@@ -2,7 +2,8 @@ $.ajax({
     method: "get",
     url: "/proxy/shop-owner/status",
     dataType: "json",
-    async: false
+    async: false,
+    cache: false
 }).done(function (result) {
     var msg = "";
     if(result.status==200) {

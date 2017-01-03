@@ -292,7 +292,8 @@ var postOrder = (function(){
             method: "get",
             url: "/proxy/order/detail",
             dataType: "json",
-            data: reqData
+            data: reqData,
+            cache: false
         }).done(function(result){
             if(loading){
                 loading.remove();

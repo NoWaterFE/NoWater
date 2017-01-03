@@ -198,6 +198,7 @@
             color: #333;
             padding: 16px 0 10px;
             min-height: 3em;
+            word-wrap: break-word;
         }
         .price {
             font-size: 32px;
@@ -341,6 +342,7 @@
             }
             .comment {
                 float: left;
+                width: 900px;
                 .star {
                     height: 14px;
                     position: relative;
@@ -388,6 +390,7 @@
                     line-height: 20px;
                     font-size: 14px;
                     margin: 8px 0;
+                    word-wrap: break-word;
                 }
                 .time {
                     font-size: 12px;

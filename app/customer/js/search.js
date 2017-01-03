@@ -1,8 +1,9 @@
 var value = "Results for ",
     keyWord = GetQueryString("keyWord"),
     $noResult = $("#noResult"),
-    $showMore = $("#showMore");
-if (!keyWord) {
+    $showMore = $("#showMore"),
+    classId = GetQueryString("pt");
+if (!keyWord && !classId) {
     $noResult.show();
 }
 var startId = 0;
@@ -123,14 +124,14 @@ var getResult = (function () {
         var $adGoods = $("#adGoods");
         var count = 30;
         var sendData = "keyWord=" + keyWord + "&count=" + count + "&startId=" + startId;
-        var classId = GetQueryString("pt");
         if (classId) {
             sendData = "classId=" + classId + "&count=" + count +"&startId=" + startId;
             $.ajax({
                 method: "get",
                 url: "/proxy/customer/class/product",
                 dataType: "json",
-                data: sendData
+                data: sendData,
+                cache: false
             }).done(function (result) {
                 if(loading) {
                     loading.remove();
@@ -531,6 +532,8 @@ var addToCart = (function(){
                 showSpinner("Add successful")
             } else if(status==300){
                 location.href = loginUrl;
+            } else if(status==500) {
+                tipsAlert("Fail, the product has been off the shelf")
             } else if (status==600){
                 tipsAlert("Sorry, the stock of the product is not enough!");
             } else {
@@ -548,17 +551,20 @@ var addToCart = (function(){
              };
              var status = result.status;
              if(status==200){
-             setCart(result.num);
+             setCart(result.userInformation[0].cartNum);
              showSpinner("Add successful")
              } else if(status==300){
              location.href = loginUrl;
+             } else if(status==500) {
+             tipsAlert("Fail, the product has been off the shelf")
+             } else if (status==600){
+             tipsAlert("Sorry, the stock of the product is not enough!");
              } else {
              tipsAlert("server error!");
              }*/
         });
     };
 })();
-
 var addToFavo = (function(){
     var loading = null;
     return function(e){
@@ -577,11 +583,15 @@ var addToFavo = (function(){
                 loading = null;
             }
             var status = result.status;
-            if(status==200 || status==400){
+            if(status==200){
                 showSpinner("Add successful");
             } else if(status==300){
                 location.href = loginUrl;
-            }else {
+            } else if(status==400){
+                showSpinner("Has been added before");
+            } else if(status==500) {
+                tipsAlert("Fail, the product has been off the shelf")
+            } else {
                 tipsAlert("server error!");
             }
         }).fail(function(result){
@@ -590,17 +600,21 @@ var addToFavo = (function(){
                 loading.remove();
                 loading = null;
             }
-            /*result = {
-             status: 200
-             };
-             var status = result.status;
-             if (status == 200 || status == 400) {
-             showSpinner("Add successful");
-             } else if (status == 300) {
-             location.href = loginUrl;
-             } else {
-             tipsAlert("server error!");
-             }*/
+            result = {
+                status: 200
+            };
+            var status = result.status;
+            if(status==200){
+                showSpinner("Add successful");
+            } else if(status==300){
+                location.href = loginUrl;
+            } else if(status==400){
+                showSpinner("Has been added before");
+            } else if(status==500) {
+                tipsAlert("Fail, the product has been off the shelf")
+            } else {
+                tipsAlert("server error!");
+            }
         });
     };
 })();

@@ -197,7 +197,7 @@ var getShopItem = (function(){
         startId = 0;
     return function (cStatus, param) {
         if(loading) return ;
-        var reqData = "count=20&shopType="+(1-2*cStatus);
+        var reqData = "count=10&shopType="+(1-2*cStatus);
         if(param){
             reqData +="&searchKey="+param.searchKey;
             loading = showLoading($shopForm);
@@ -233,7 +233,7 @@ var getShopItem = (function(){
                 }
                 startId = result.endId;
                 if(startId!=-1){
-                    $shopList.siblings(".more .showMore").removeClass("hidden");
+                    $shopList.siblings(".more").find(" .showMore").removeClass("hidden");
                 }
             } else if(status==300) {
                 location.href = loginUrl;
@@ -271,7 +271,7 @@ var getShopItem = (function(){
                 }
                 startId = result.endId;
                 if(startId!=-1){
-                    $shopList.siblings(".more .showMore").removeClass("hidden");
+             $shopList.siblings(".more").find(" .showMore").removeClass("hidden");
                 }
             } else if(status==300) {
                 location.href = loginUrl;
@@ -282,7 +282,9 @@ var getShopItem = (function(){
 
 getShopItem(cStatus);
 
-$shopList.on("click", ".more .showMore", function(){
+var $more = $shopList.siblings(".more").find(".showMore");
+
+$more.on("click", function(){
     var _this = $(this);
     _this.addClass("hidden");
     getShopItem(cStatus, param);

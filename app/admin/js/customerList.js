@@ -159,7 +159,7 @@ var getCustomerItem = (function(){
         startId = 0;
     return function (cStatus, param) {
         if(loading) return ;
-        var reqData = "count=20&customerType="+(1-2*cStatus);
+        var reqData = "count=10&customerType="+(1-2*cStatus);
         if(param){
             reqData +="&searchKey="+param.searchKey;
             loading = showLoading($customerForm);

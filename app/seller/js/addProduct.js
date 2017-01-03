@@ -21,6 +21,8 @@
             location.href = "../customer/index.html"
         });
     });
+
+    quickMenu.find(".seller-center a").attr("href", "../customer/store.html?shopId="+userInfo.shopId);
 })();
 
 function showLoading($relative) {

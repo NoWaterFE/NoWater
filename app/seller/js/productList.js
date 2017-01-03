@@ -21,6 +21,7 @@
             location.href = "../customer/index.html"
         });
     });
+    quickMenu.find(".seller-center a").attr("href", "../customer/store.html?shopId="+userInfo.shopId);
 })();
 
 var loginUrl = "../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
@@ -243,9 +244,9 @@ function createBid(productId) {
             } else if(status==300){
                 location.href = loginUrl;
             } else if(status==600) {
-                tipsAlert("Failure, it has been exceeded the specified deadline today.");
+                tipsAlert("Fail, it has been exceeded the specified deadline today.");
             } else if(status==700) {
-                tipsAlert("Failure, this product are biding for ad.");
+                tipsAlert("Fail, this product are biding for ad.");
             } else {
                 tipsAlert("Server error!");
             }
@@ -253,7 +254,7 @@ function createBid(productId) {
             if (loading) loading.remove();
             _this.data("submit", false);
             tipsAlert("Server error!");
-            result = {
+            /*result = {
                 status: 200,
                 orderId: 23
             };
@@ -266,12 +267,12 @@ function createBid(productId) {
             } else if(status==300){
                 location.href = loginUrl;
             } else if(status==600) {
-                tipsAlert("Failure, it has been exceeded the specified deadline today.");
+                tipsAlert("Fail, it has been exceeded the specified deadline today.");
             } else if(status==700) {
-                tipsAlert("Failure, this product are biding for ad.");
+                tipsAlert("Fail, this product are biding for ad.");
             } else {
                 tipsAlert("Server error!");
-            }
+            }*/
         });
 
     });
@@ -383,7 +384,7 @@ $productList.on("click", ".addToHomepage", (function () {
                 } else if(status == 300) {
                     location.href = loginUrl;
                 } else if(status == 600) {
-                    tipsAlert("The product has been added to homepage, and can't be added again!");
+                    tipsAlert("The product has been added to homepage and can't be added again!");
                 } else {
                     showSpinner("Unknown error!", {
                         callback: function () {
@@ -406,7 +407,7 @@ $productList.on("click", ".addToHomepage", (function () {
                 } else if(status == 300) {
                     location.href = loginUrl;
                 } else if(status == 600) {
-                    tipsAlert("The product has been added to homepage, and can't add again!");
+                    tipsAlert("The product has been added to homepage and can't add again!");
                 } else {
                     showSpinner("Unknown error!", {
                         callback: function () {

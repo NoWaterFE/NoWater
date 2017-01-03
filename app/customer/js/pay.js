@@ -242,6 +242,8 @@ var confirmPay = (function(){
                 });
             } else if(status==300){
                 location.href = loginUrl;
+            } else if(status==400){
+                tipsAlert("You have payed the order!");
             } else {
                 tipsAlert("SERVER ERROR!");
             }
@@ -263,7 +265,9 @@ var confirmPay = (function(){
                 });
             } else if(status==300){
                 location.href = loginUrl;
-            } else {
+            } else if(status==400){
+             tipsAlert("You have payed the order!");
+             } else {
                 tipsAlert("SERVER ERROR!");
             }*/
         });

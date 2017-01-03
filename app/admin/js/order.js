@@ -204,7 +204,7 @@ var postOrder = (function(){
         startId = 0;
     return function (param) {
         if(loading) return ;
-        var reqData = "count=20";
+        var reqData = "count=10";
         if(param) {
             loading = showLoading($orderForm);
             var timeFilter = param.timeFilter || 0;
@@ -368,6 +368,8 @@ $orderForm.on("submit", (function(){
                 searchKey: searchKey
             });
         }
+        $orderList.find(".more .showMore")
+            .addClass("hidden");
         postOrder(param);
     };
 })());

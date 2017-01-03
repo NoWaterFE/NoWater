@@ -21,6 +21,7 @@
             location.href = "../customer/index.html"
         });
     });
+    quickMenu.find(".seller-center a").attr("href", "../customer/store.html?shopId="+userInfo.shopId);
 })();
 
 
@@ -145,7 +146,7 @@ function　createShowItem(data){
         data.statusText = "Bidding success";
     } else if(data.status==10){
         data.statusText = "Closed";
-    } else if(data.status==-2){
+    } else if(data.status==11){
         data.statusText = "Bidding failure";
     }
     var product = data.product;

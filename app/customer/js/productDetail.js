@@ -485,6 +485,8 @@ var addToCart = (function(){
                 showSpinner("Add successful");
             } else if(status==300){
                 location.href = loginUrl;
+            } else if(status==500) {
+                tipsAlert("Fail, the product has been off the shelf")
             } else if (status==600){
                 tipsAlert("Sorry, the stock of the product is not enough!");
             } else {
@@ -504,7 +506,9 @@ var addToCart = (function(){
             if(status==200){
                 setCart(result.num);
                 showSpinner("Add successful");
-            } else if(status==300){
+            } else if(status==500) {
+             tipsAlert("Fail, the product has been off the shelf")
+             } else if(status==300){
                 location.href = loginUrl;
             } else {
                 tipsAlert("server error!");
@@ -536,11 +540,15 @@ var addToFavo = (function(){
                 loading = null;
             }
             var status = result.status;
-            if(status==200 || status==400){
+            if(status==200){
                 showSpinner("Add successful");
             } else if(status==300){
                 location.href = loginUrl;
-            }else {
+            } else if(status==400){
+                showSpinner("Has been added before");
+            } else if(status==500) {
+                tipsAlert("Fail, the product has been off the shelf")
+            } else {
                 tipsAlert("server error!");
             }
         }).fail(function(result){
@@ -553,13 +561,17 @@ var addToFavo = (function(){
                 status: 200
             };
             var status = result.status;
-            if(status==200 || status==400){
-                showSpinner("Add successful");
-            } else if(status==300){
-                location.href = loginUrl;
-            } else {
-                tipsAlert("server error!");
-            }*/
+             if(status==200){
+             showSpinner("Add successful");
+             } else if(status==300){
+             location.href = loginUrl;
+             } else if(status==400){
+             showSpinner("Has been added before");
+             } else if(status==500) {
+             tipsAlert("Fail, the product has been off the shelf")
+             } else {
+             tipsAlert("server error!");
+             }*/
         });
     };
 })();
@@ -569,8 +581,8 @@ var buy = (function(){
         var info = $productForm.data("info");
         var $num = $productForm.find('.num'),
             $stock = $productForm.find(".stock"),
-            num = $num.val(),
-            stock = $stock.val();
+            num = +$num.val(),
+            stock = +$stock.val();
         if(num>stock || stock==0){
             tipsAlert("Sorry, stock is not enough!");
             return;
@@ -592,6 +604,14 @@ var buy = (function(){
                 location.href = "confirmOrder.html?orderIdList="+decodeURIComponent(JSON.stringify(result.orderIdList));
             } else if(status==300){
                 location.href = loginUrl;
+            } else if(status==2400) {
+                tipsAlert("The product is off the shelf", function () {
+                    location.reload();
+                });
+            } else if(status==2500) {
+                tipsAlert("The product has not enough stock", function () {
+                    location.reload();
+                });
             } else {
                 tipsAlert("server error!");
             }
@@ -602,7 +622,7 @@ var buy = (function(){
                 loading = null;
             }
             /*result = {
-                status: 200,
+                status: 2500,
                 data: {
                     orderId: 1
                 }
@@ -612,6 +632,14 @@ var buy = (function(){
                 location.href = "confirmOrder.html?orderId="+result.data.orderId;
             } else if(status==300){
                 location.href = loginUrl;
+            } else if(status==2400) {
+                tipsAlert("The product is off the shelf", function () {
+                    location.reload();
+                });
+            } else if(status==2500) {
+                tipsAlert("The product has not enough stock", function () {
+                    location.reload();
+                });
             } else {
                 tipsAlert("server error!");
             }*/

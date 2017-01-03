@@ -73,7 +73,8 @@ var $adStore = $("#adStore"),
     $.ajax({
         method: "get",
         url: "/proxy/customer/product/ad",
-        dataType: "json"
+        dataType: "json",
+        cache: false
     }).done(function (result) {
         if(result.status==200){
             var len  = result.data.length;
@@ -226,7 +227,7 @@ function createSpot(len) {
 (function () {
     //获取登录信息可能不需要
     $.ajax({
-        method: "get",
+        method: "post",
         url: "/proxy/customer/isLogin",
         dataType: "json"
     }).done(function (result) {
@@ -406,6 +407,8 @@ var addToCart = (function(){
                 showSpinner("Add successful")
             } else if(status==300){
                 location.href = loginUrl;
+            } else if(status==500) {
+                tipsAlert("Fail, the product has been off the shelf")
             } else if (status==600){
                 tipsAlert("Sorry, the stock of the product is not enough!");
             } else {
@@ -423,10 +426,14 @@ var addToCart = (function(){
             };
             var status = result.status;
             if(status==200){
-                setCart(result.num);
+                setCart(result.userInformation[0].cartNum);
                 showSpinner("Add successful")
             } else if(status==300){
                 location.href = loginUrl;
+            } else if(status==500) {
+                tipsAlert("Fail, the product has been off the shelf")
+            } else if (status==600){
+                tipsAlert("Sorry, the stock of the product is not enough!");
             } else {
                 tipsAlert("server error!");
             }*/
@@ -451,11 +458,15 @@ var addToFavo = (function(){
                 loading = null;
             }
             var status = result.status;
-            if(status==200 || status==400){
+            if(status==200){
                 showSpinner("Add successful");
             } else if(status==300){
                 location.href = loginUrl;
-            }else {
+            } else if(status==400){
+                showSpinner("Has been added before");
+            } else if(status==500) {
+                tipsAlert("Fail, the product has been off the shelf")
+            } else {
                 tipsAlert("server error!");
             }
         }).fail(function(result){
@@ -464,17 +475,21 @@ var addToFavo = (function(){
                 loading.remove();
                 loading = null;
             }
-            /*result = {
+            result = {
                 status: 200
             };
             var status = result.status;
-            if (status == 200 || status == 400) {
+            if(status==200){
                 showSpinner("Add successful");
-            } else if (status == 300) {
+            } else if(status==300){
                 location.href = loginUrl;
+            } else if(status==400){
+                showSpinner("Has been added before");
+            } else if(status==500) {
+                tipsAlert("Fail, the product has been off the shelf")
             } else {
                 tipsAlert("server error!");
-            }*/
+            }
         });
     };
 })();
