@@ -92,8 +92,8 @@ $applyForm.on("submit", function (e) {
         }).fail(function(result){
             if (loading) loading.remove();
             _this.data("submit", false);
-            //tipsAlert("server error");
-            result = {
+            tipsAlert("server error");
+            /*result = {
                 status: 200
             };
             if(result.status==200){
@@ -103,7 +103,7 @@ $applyForm.on("submit", function (e) {
                 location.href="../customer/login.html?redirectUrl="+encodeURIComponent(location.href);
             } else {
                 tipsAlert("upload file fail");
-            }
+            }*/
         });
     }
 });
@@ -250,14 +250,15 @@ quickMenu.on("click", ".logout", function () {
 
 
 function showLoading($relative) {
-    var $tips = $relative.siblings(".loadingImg");
+    var $tips = $relative.find(".loadingImg");
     if ($tips.length > 0) $tips.remove();
     $tips = $("<div class='loadingImg'></div>");
-    $tips.appendTo($relative.parent())
+    if($relative.css("position")=="static") $relative.css('position', "relative");
+    $tips.appendTo($relative)
         .ready(function () {
             $tips.css({
-                "top": $relative.offset().top + $relative.outerHeight() / 2,
-                "left": $relative.offset().left + $relative.outerWidth() / 2,
+                "top": $relative.outerHeight() / 2,
+                "left": $relative.outerWidth() / 2,
                 "margin-left": -$tips.outerWidth() / 2,
                 "margin-top": -$tips.outerHeight() / 2,
                 "visibility": "visible"

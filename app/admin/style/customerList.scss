@@ -29,6 +29,29 @@
         }
     }
 
+    .filter {
+        margin: 14px 0;
+        .inputItems {
+            float: left;
+        }
+        .search {
+            input {
+                float: left;
+                height: 20px;
+                font-size: 14px;
+                padding: 2px 4px;
+                border: 1px solid #bfbfbf;
+            }
+            .searchBtn {
+                width: 40px;
+                height: 26px;
+                background: url(../imgs/head_icon/search.png) no-repeat center;
+                margin-left: -1px;
+                font-size: 0;
+                cursor: pointer;
+            }
+        }
+    }
     .customerList {
         margin: 20px 0;
         .customerTable {

@@ -1,5 +1,5 @@
 $.ajax({
-    method: "get",
+    method: "post",
     url: "/proxy/admin/status",
     dataType: "json",
     async: false

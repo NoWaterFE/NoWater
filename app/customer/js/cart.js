@@ -1,8 +1,8 @@
-// header添加事件
+// header添加事件 (有点不同，注意购物车数)
 (function () {
     //获取登录信息可能不需要
     $.ajax({
-        method: "get",
+        method: "post",
         url: "/proxy/customer/isLogin",
         dataType: "json"
     }).done(function (result) {
@@ -14,19 +14,20 @@
         }
     }).fail(function (result) {
         /*console.log(result.statusText);
-        result = {
-            status: 200,
-            userInformation: [{
-                name: "gdh",
-                cartNum: 33
-            }]
-        };
-        if(result.status==200){
-            var userInfo = result.userInformation[0];
-            var quickMenu = $("#quickMenu");
-            quickMenu.find(".accountOperate").toggleClass("active");
-            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
-        }*/
+         result = {
+         status: 200,
+         userInformation: [{
+         name: "gdh",
+         cartNum: 33
+         }]
+         };
+         if(result.status==200){
+         var userInfo = result.userInformation[0];
+         var quickMenu = $("#quickMenu");
+         quickMenu.find(".accountOperate").toggleClass("active");
+         setCart(userInfo.cartNum);
+         }
+         }*/
     });
 
     //headMenu添加事件
@@ -70,20 +71,16 @@
             url: "/proxy/customer/loginout",
         }).done(function(){
             delCookie("token");
-            location.reload();
+            location.href = "index.html";
         }).fail(function () {
             delCookie("token");
-            location.reload();
+            location.href = "index.html";
         });
     });
 
     var $searchForm = $("#searchForm");
     $searchForm.on("submit", function(e){
-        if (e && e.preventDefault) {
-            e.preventDefault();
-        } else {
-            e.returnValue = false;
-        }
+        e.preventDefault();
         var keyWord = this.keyWord.value;
         if(keyWord!=""){
             location.href = "search.html?keyWord="+ encodeURIComponent(keyWord);
@@ -93,24 +90,22 @@
         $searchForm.trigger("submit");
     });
 
-    window.setCart = function(num){
+    window.setCart = function (num) {
         var cart = quickMenu.find(".my-cart .count"),
             $count = $(".cartMain").find(".count");
-        if(num > 99) {
+        if (num > 99) {
             cart.text("99+");
             $count.text("99+");
         } else {
             cart.text(num);
             $count.text(num);
-
         }
     }
-
 })();
 
 
 function showLoading($relative) {
-    var $tips = $relative.siblings(".loadingImg");
+    var $tips = $relative.find(".loadingImg");
     if ($tips.length > 0) $tips.remove();
     $tips = $("<div class='loadingImg'></div>");
     if($relative.css("position")=="static") $relative.css('position', "relative");
@@ -246,8 +241,8 @@ var postCart = (function(){
                 loading.remove();
                 loading = null;
             }
-            //tipsAlert("server error!");
-            result = {
+            tipsAlert("server error!");
+            /*result = {
                 status: 200,
                 startId: -1,
                 data: [
@@ -624,7 +619,7 @@ var postCart = (function(){
                 location.href = loginUrl;
             } else {
                 tipsAlert("server error!");
-            }
+            }*/
         });
     };
 })();
@@ -875,10 +870,10 @@ $cartList.on("click", ".allCart", function(){
     var _this = $(this),
         $allCart = $cartList.find(".allCart");
     if(_this.prop("checked")){
-        calculateSum(1)
+        calculateSum(1);
         $allCart.prop("checked", true);
     } else {
-        calculateSum(2)
+        calculateSum(2);
         $allCart.prop("checked", false);
     }
 });
@@ -967,11 +962,11 @@ var deleteCart = (function () {
             var status = result.status;
             if(status==200){
                 $cartItem.remove();
-                showSpinner("Success", {
-                    callback: function(){
-                        location.reload();
-                    }
-                })
+                setTimeout(function(){
+                    $(window).trigger("scroll");
+                });
+                calculateSum();
+                showSpinner("Successful")
             } else if(status==300){
                 location.href = loginUrl;
             } else {
@@ -982,23 +977,23 @@ var deleteCart = (function () {
                 loading.remove();
                 loading = null;
             }
-            //tipsAlert("Server error!");
-            result = {
+            tipsAlert("Server error!");
+            /*result = {
                 status: 200
             };
             var status = result.status;
             if(status==200){
                 $cartItem.remove();
-                showSpinner("Success", {
-                    callback: function(){
-                        location.reload();
-                    }
-                })
+                 setTimeout(function(){
+                 $(window).trigger("scroll");
+                 });
+                calculateSum();
+                showSpinner("Successful")
             } else if(status==300){
                 location.href = loginUrl;
             } else {
                 tipsAlert("Server error!");
-            }
+            }*/
         });
     };
 })();
@@ -1011,8 +1006,8 @@ $window.on("scroll resize", function(){
         $checkoutBox = $cartList.find(".checkoutBox");
     if($checkoutBox.height()+$checkoutBox.offset().top >$window.scrollTop()+$window.height()){
         $optionBox.addClass("fixed");
+        $optionBox.css("left", $cartList.offset().left - $window.scrollLeft());
     } else {
         $optionBox.removeClass("fixed");
     }
-    $optionBox.css("left", $cartList.offset().left - $window.scrollLeft());
 });

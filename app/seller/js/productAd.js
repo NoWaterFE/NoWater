@@ -25,7 +25,7 @@
 
 
 function showLoading($relative) {
-    var $tips = $relative.siblings(".loadingImg");
+    var $tips = $relative.find(".loadingImg");
     if ($tips.length > 0) $tips.remove();
     $tips = $("<div class='loadingImg'></div>");
     if($relative.css("position")=="static") $relative.css('position', "relative");
@@ -222,7 +222,7 @@ var postShow = (function(){
                 loading = null;
             }
             tipsAlert("server error!");
-            result = {
+            /*result = {
                 status: 200,
                 startId: -1,
                 data: [
@@ -324,7 +324,7 @@ var postShow = (function(){
                 location.href = loginUrl;
             } else {
                 tipsAlert("server error!");
-            }
+            }*/
         });
     };
 })();
@@ -362,7 +362,7 @@ var orderCancel = (function(){
             }
             var status = result.status;
             if(status==200){
-                showSpinner("Success!", {
+                showSpinner("Canceled!", {
                     "callback": function () {
                         location.reload();
                     }
@@ -382,12 +382,12 @@ var orderCancel = (function(){
                 loading.remove();
                 loading = null;
             }
-            result = {
+            /*result = {
                 status: 200
             };
             var status = result.status;
             if(status==200){
-                showSpinner("Success!", {
+                showSpinner("Canceled!", {
                     "callback": function () {
                         location.reload();
                     }
@@ -400,7 +400,7 @@ var orderCancel = (function(){
                         location.reload();
                     }
                 });
-            }
+            }*/
         });
     }
 })();

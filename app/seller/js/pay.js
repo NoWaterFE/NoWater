@@ -25,7 +25,7 @@
 
 
 function showLoading($relative) {
-    var $tips = $relative.siblings(".loadingImg");
+    var $tips = $relative.find(".loadingImg");
     if ($tips.length > 0) $tips.remove();
     $tips = $("<div class='loadingImg'></div>");
     if($relative.css("position")=="static") $relative.css('position', "relative");
@@ -149,7 +149,7 @@ var confirmPay = (function(){
             }
             var status = result.status;
             if(status==200){
-                showSpinner("Success", {
+                showSpinner("Successful", {
                     callback: function() {
                         if(adType=="1")
                             location.href = "adHistory.html";
@@ -169,12 +169,12 @@ var confirmPay = (function(){
                 loading = null;
             }
             tipsAlert("server error!");
-            result = {
+            /*result = {
                 status: 200
             };
             var status = result.status;
             if(status==200){
-                showSpinner("Success", {
+                showSpinner("Successful", {
                     callback: function() {
                         if(adType=="1")
                             location.href = "adHistory.html";
@@ -187,7 +187,7 @@ var confirmPay = (function(){
                 location.href = loginUrl;
             } else {
                 tipsAlert("SERVER ERROR!");
-            }
+            }*/
         });
     }
 })();

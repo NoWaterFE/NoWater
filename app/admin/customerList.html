@@ -19,6 +19,7 @@
         <li class="navList"><a href="applyList.html">Shop Application List</a></li>
         <li class="navList"><a href="shopAd.html">AD Management</a></li>
         <li class="navList"><a href="order.html">All Orders</a></li>
+        <li class="navList"><a href="income.html">Income & Commission</a></li>
     </ul>
 </div>
 <div class="content">
@@ -43,11 +44,16 @@
             <li><a href="customerList.html" class="customerTab">Customer List</a></li>
             <li><a href="customerList.html?status=1" class="customerTab">BlackList</a></li>
         </ul>
-        <!--<div class="bar">
-            <div class="search">
-                <input type="text">
-            </div>
-        </div>-->
+        <div class="filter" id="customerFilter">
+            <form class="customerForm">
+                <div class="search clearfix">
+                    <div class="inputItems clearfix">
+                        <input type="text" name="search" class="searchInput" maxlength="40" placeholder="By ID or username">
+                        <input type="submit" class="searchBtn">
+                    </div>
+                </div>
+            </form>
+        </div>
         <div class="customerList" id="customerList">
             <table class="customerTable">
                 <colgroup>

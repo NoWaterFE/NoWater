@@ -7,5 +7,58 @@
         border: 1px solid #E0E0E0;
         padding: 40px;
         border-radius: 4px;
+        overflow: hidden;
+        .title {
+            border-bottom: 1px solid #E0E0E0;
+            font-size: 24px;
+            line-height: 34px;
+            color: #292d84;
+        }
+        .filter {
+            margin: 14px 0;
+            .timeSub {
+                .searchBtn {
+                    background: #292d84;
+                    border: none;
+                    color: #fff;
+                    border-radius: 4px;
+                    padding: 6px 10px;
+                    cursor: pointer;
+                }
+            }
+            .time {
+                margin: 15px 0;
+                font-size: 14px;
+            }
+            .timeSelect {
+                height: 26px;
+                font-size: 14px;
+                border: 1px solid #bfbfbf;
+                float: left;
+                padding-left: 4px;
+            }
+            .detailTime {
+                margin-left: 10px;
+                font-size: 13px;
+                display: none;
+                float: left;
+            }
+            .selectTime {
+                width: 120px;
+                height: 20px;
+                font-size: 14px;
+                padding: 2px 4px;
+                border: 1px solid #bfbfbf;
+            }
+        }
+        .income {
+            margin: 40px 0;
+            font-size: 20px;
+            color: #666;
+            .num {
+                color: red;
+                padding-left: 10px;
+            }
+        }
     }
 }

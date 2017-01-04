@@ -14,49 +14,62 @@
         }
         .productList {
             margin-top: 20px;
+            colgroup {
+                .col1 {
+                    width: 6%;
+                }
+                .col2 {
+                    width: 10%;
+                }
+                .col3 {
+                    width: 20%;
+                }
+                .col4 {
+                    width: 20%;
+                }
+                .col5 {
+                    width: 9%;
+                }
+                .col6 {
+                    width: 7%;
+                }
+                .col7 {
+                    width: 12%;
+                }
+                .col8 {
+                    width: 14%;
+                }
+
+            }
             .productTitle {
                 border: 1px solid #eee;
                 th {
                     //border: 1px solid #eee;
                     padding: 6px;
+                    font-size: 14px;
                     text-align: center;
-                    font-size: 13px;
-                    box-sizing: border-box;
-                }
-                .id {
-                    width: 93px;
-                }
-                .image {
-                    width: 103px;
-                }
-                .name {
-                    width: 212px;
-                    text-align: left;
                 }
                 .categories {
-                    width: 158px;
                     text-align: left;
                 }
                 .price {
-                    width: 132px;
                     text-align: right;
                 }
                 .stock {
-                    width: 112px;
+                    text-align: right;
                 }
                 .operate {
-                    width: 92px;
                     text-align: left;
                 }
             }
             .productItem {
                 border: 1px solid #eee;
+                font-size: 14px;
                 td {
                     //border: 1px solid #eee;
                     padding: 6px;
                 }
                 .productId {
-                    width: 80px;
                     text-align: center;
                 }
                 .productImg {
@@ -68,32 +81,29 @@
                         height: 100%;
                     }
                 }
-                .productName {
-                    width: 200px;
-                    font-size: 14px;
-                }
                 .class {
-                    width: 146px;
-                    font-size: 14px;
+                    color: #666;
                 }
                 .price {
-                    width: 120px;
                     text-align: right;
                     font-size: 16px;
                     color: red;
                 }
                 .stock {
-                    width: 100px;
+                    text-align: right;
+                }
+                .date {
                     text-align: center;
+                    color: #666;
                 }
                 .operate {
-                    width: 80px;
                     input {
                         border: none;
                         background: #fff;
                         cursor: pointer;
                         display: block;
                         color: #292d84;
+                        padding: 0;
                         &:hover {
                             color: blue;
                         }
@@ -103,7 +113,6 @@
                     }
                 }
                 .off {
-                    width: 80px;
                     color: #aaa;
                 }
             }

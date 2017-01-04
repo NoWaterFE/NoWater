@@ -1,65 +1,70 @@
 var loginForm = $("#loginForm");
-loginForm.on("submit", function (e) {
-    var _this = $(this); 
-    e = window.event || e;
-    if (e && e.preventDefault) {
+loginForm.on("submit", (function() {
+    var tips = null;
+    return function (e) {
+        var _this = $(this);
         e.preventDefault();
-    } else {
-        e.returnValue = false;
+        if(tips) return;
+
+        _this.find(".login").text("");
+        var name = this.name.value,
+            password = this.password.value; //username & password;
+        if (!name) {
+            _this.find(".login").text("User name can't be empty!");
+            return;
+        }
+        if (!password) {
+            _this.find(".login").text("Password can't be empty!");
+            return;
+        }
+        var data = "name=" + name + "&password=" + $.md5(password);
+
+        tips = showLoading(_this);
+
+        $.ajax({
+            type: "post",
+            url: "/proxy/customer/login",
+            dataType: "json",
+            data: data
+        }).done(function (result) {
+            if (tips) {
+                tips.remove();
+                tips = null;
+            }
+            if (result.status == 300) {
+                _this.find(".login").text("No user or wrong password.");
+            } else if (result.status == 200) {
+                _this.find(".login").text("Login successfully.");
+                var url = getUrlParam("redirectUrl");
+                if (url) {
+                    location.href = decodeURIComponent(url+"");
+                } else {
+                    location.href = "index.html";
+                }
+            }
+        }).fail(function (result) {
+            if (tips) {
+                tips.remove();
+                tips = null;
+            }
+            tipsAlert("Server error!");
+            //  result = {
+            //      status: 200
+            //  };
+            // if(result.status==300){
+            //     _this.find(".login").text("No user or wrong password.");
+            // } else if(result.status==200){
+            //     _this.find(".login").text("Login successfully.");
+            //     var url = getUrlParam("redirectUrl");
+            //     if(url) {
+            //      location.href = url;
+            //     } else {
+            //      location.href = "index.html";
+            //     }
+            // }
+        });
     }
-
-    _this.find(".login").text("");
-    var name = this.name.value, 
-        password = this.password.value; //username & password;
-    if(!name){
-        _this.find(".login").text("User name can't be empty!");
-        return;
-    }
-    if(!password){
-        _this.find(".login").text("Password can't be empty!");
-        return;
-    }
-    var data = "name=" + name + "&password=" + $.md5(password);
-
-    var tips = showLoading(_this);
-
-    $.ajax({
-        type: "post",
-        url: "/proxy/customer/login",
-        dataType: "json",
-        data: data     //序列化
-    }).done(function(result){
-        if(tips) tips.remove();
-        if(result.status==300){
-           _this.find(".login").text("No user or wrong password.");
-       } else if(result.status==200){
-           _this.find(".login").text("Login successfully.");
-           var url = getUrlParam("redirectUrl");
-           if(url) {
-            location.href = decodeURIComponent(url);
-           } else {
-            location.href = "index.html";
-           }
-       }
-    }).fail(function(result) {
-        if(tips) tips.remove();
-       //  result = {
-       //      status: 200
-       //  };
-       // if(result.status==300){
-       //     _this.find(".login").text("No user or wrong password.");
-       // } else if(result.status==200){
-       //     _this.find(".login").text("Login successfully.");
-       //     var url = getUrlParam("redirectUrl");
-       //     if(url) {
-       //      location.href = url;
-       //     } else {
-       //      location.href = "index.html";
-       //     }
-       // }
-    });
-
-});
+})());
 
 function getUrlParam(name) {
    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
@@ -81,6 +86,24 @@ function showLoading($relative) {
             });
         });
     return $tips;
+}
+
+function tipsAlert(msg, callback){
+    var $alert = $(".tipsAlert");
+    if ($alert.length > 0) $alert.remove();
+    $alert = $("<div class='tipsAlert'></div>");
+    var $shadow = $("<div class='shadow'></div>");
+    var $content = $("<div class='content'></div>");
+    var $msg = $("<div class='msg'>"+ msg +"</div>");
+    var $btn = $("<div class='btn'>OK</div>");
+    $btn.on("click", function () {
+        $(this).parents(".tipsAlert").remove();
+        if(callback) callback();
+    });
+    $content.append($msg).append($btn);
+    $alert.append($shadow);
+    $alert.append($content);
+    $alert.appendTo($("body"));
 }
 
 $(window).on("scroll", function(){

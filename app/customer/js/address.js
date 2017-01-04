@@ -1,3 +1,4 @@
+var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
 // header添加事件
 (function () {
     //获取登录信息可能不需要
@@ -14,19 +15,19 @@
         }
     }).fail(function (result) {
         /*console.log(result.statusText);
-         result = {
-         status: 200,
-         userInformation: [{
-         name: "gdh",
-         cartNum: 33
-         }]
-         };
-         if (result.status == 200) {
-         var userInfo = result.userInformation[0];
-         var quickMenu = $("#quickMenu");
-         quickMenu.find(".accountOperate").toggleClass("active");
-         quickMenu.find(".my-cart .count").text(userInfo.cartNum);
-         }*/
+        result = {
+            status: 200,
+            userInformation: [{
+                name: "gdh",
+                cartNum: 33
+            }]
+        };
+        if (result.status == 200) {
+            var userInfo = result.userInformation[0];
+            var quickMenu = $("#quickMenu");
+            quickMenu.find(".accountOperate").toggleClass("active");
+            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+        }*/
     });
 
     //headMenu添加事件
@@ -99,7 +100,6 @@
     }
 
 })();
-
 
 function showLoading($relative) {
     var $tips = $relative.find(".loadingImg");
@@ -188,290 +188,197 @@ function showSpinner(msg, config){
     }, def.timeout);
 }
 
-function getUrlParam(name) {
-    var reg = new RegExp("(^|&)" + name + "=([^&]*)(&|$)"); //构造一个含有目标参数的正则表达式对象
-    var r = window.location.search.substr(1).match(reg); //匹配目标参数
-    if (r != null) return decodeURIComponent(r[2]); return null; //返回参数值
+function addError(item, msg){
+    item.addClass("error")
+        .find("input")
+        .focus()
+        .end()
+        .find(".tips")
+        .text(msg);
 }
 
-function　createOrderItem(data){
-    var product = data.product,
-        shop = product.shop;
-    var orderData = '<tr class="orderData"> ' +
-        '<td class="product"> ' +
-        '<a href="productDetail.html?id='+product.productId+'" target="_blank" class="clearfix productLink"> ' +
-        '<img src="'+product.photo[0]+'"> ' +
-        '<span class="productName">'+product.productName+'</span> ' +
-        '</a> ' +
+function createAddressList(info) {
+    var operate = '<span class="modify">modify</span> ' +
+            '<span class="del">delete</span> ';
+    return $('<tr class="addressItem"> ' +
+        '<td class="firstName">'+info.firstName+'</td> ' +
+        '<td class="lastName">'+info.lastName+'</td> ' +
+        '<td class="tel">'+info.telephone+'</td> ' +
+        '<td class="address">'+info.address1+' ' + info.address2+' ' + info.address3+'</td> ' +
+        '<td class="postCode">'+info.postCode+'</td> ' +
+        '<td class="operate"> ' +
+        operate +
         '</td> ' +
-        '<td class="price">HK$'+product.price.toFixed(2)+'</td> ' +
-        '<td class="amount">'+data.num+'</td> ' +
-        '<td class="totalPrice">' +
-        'HK$'+data.sumPrice.toFixed(2) +
-        '</td>' +
-        '</tr> ';
-    return $('<tbody class="orderItem"> ' +
-        '<tr class="mr20"></tr> ' +
-        '<tr class="orderHeader"> ' +
-        '<td colspan="6"> ' +
-        '<span class="shopName"> SHOP: ' +
-        '<a href="store.html?shopId='+shop.shopId+'" target="_blank">'+shop.shopName+'</a> ' +
-        '</span> ' +
-        '</td> ' +
-        '</tr> ' +
-        orderData +
-        '</tbody>')
+        '</tr>').data("info", info);
 }
 
-var $orderList = $("#orderList"),
-    $orderSubmit = $orderList.find(".orderSubmit"),
-    orderIdList = getUrlParam("orderIdList"),
-    sumPrice = 0;
-(function(){
-    $.ajax({
-        method: "post",
-        url: "/proxy/order/detail",
-        data: "orderIdList="+orderIdList+"&status=-3"
-    }).done(function (result) {
-        var status = result.status;
-        if(status==200){
-            var data = result.data,
-                len = data.length,
-                $orderTable = $orderList.find('.orderTable');
-            for(var i=0; i<len; i++){
-                $orderTable.append(createOrderItem(data[i]));
-                sumPrice += data[i].sumPrice;
-            }
-            var $orderSubmit = $orderList.find(".orderSubmit");
-            $orderSubmit.show()
-                .find('.price').text(sumPrice.toFixed(2));
-        } else if(status==300) {
-            location.href = loginUrl;
-        } else {
-            tipsAlert("server error!");
-        }
-    }).fail(function (result) {
-        tipsAlert("server error!");
-        /*result = {
-            status: 200,
-            data: [
-                {
-                    orderId: "2662774641999118",
-                    sumPrice: 999.99,
-                    address: "Dhgan, 18789427353, HongkongIsland(HK) Chai Wan Wanli",
-                    num: 3,
-                    product: {
-                        shop: {
-                            shopId: 1,
-                            shopName: "MONEYBACK REWARD"
-                        },
-                        photo: [
-                            "imgs/product03a.jpg"
-                        ],
-                        productId: 1,
-                        productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                        price: 333.33
-                    }
-                },
-                {
-                    orderId: "2662774641999118",
-                    sumPrice: 999.99,
-                    address: "Dhgan, 18789427353, HongkongIsland(HK) Chai Wan Wanli",
-                    num: 3,
-                    product: {
-                        shop: {
-                            shopId: 1,
-                            shopName: "MONEYBACK REWARD"
-                        },
-                        photo: [
-                            "imgs/product03a.jpg"
-                        ],
-                        productId: 1,
-                        productName: "UPSIZE 3D PUZZLE ANIMALS 3D PUZZLE - WILD LIFE",
-                        price: 333.33
-                    }
-                }
-            ]
-        };
-        var status = result.status;
-        if(status==200){
-            var data = result.data,
-                len = data.length,
-                $orderTable = $orderList.find('.orderTable');
-            for(var i=0; i<len; i++){
-                $orderTable.append(createOrderItem(data[i]));
-                sumPrice += data[i].sumPrice;
-            }
-            var $orderSubmit = $orderList.find(".orderSubmit");
-            $orderSubmit.show()
-                .find('.price').text(sumPrice.toFixed(2));
-        } else if(status==300) {
-            location.href = loginUrl;
-        } else {
-            tipsAlert("server error!");
-        }*/
-    });
-}());
-
-var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
-
-var submitOrder = (function(){
+var getAddressItem = (function(){
     var loading = null;
-    return function(){
-        if(loading) return;
-        var addressId = $addressList.find("input[name='addressId']:checked").val();
-        if(!addressId) {
-            tipsAlert("Please add address", function () {
-                $(window).scrollTop(0);
-            });
-            return;
-        }
-        loading = showLoading($orderSubmit.find(".orderOperate"));
-        var data = "orderIdList="+orderIdList+"&addressId="+addressId;
+    return function () {
+        if(loading) return ;
+        loading = showLoading($(".more"));
         $.ajax({
-            method: "post",
-            url: "/proxy/order/confirm",
-            data: data
+            method: "get",
+            url: "/proxy/customer/address/list",
+            dataType: "json"
         }).done(function(result){
-            if(loading) {
+            if (loading) {
                 loading.remove();
                 loading = null;
             }
             var status = result.status;
             if(status==200){
-                location.href = "pay.html?orderIdList="+orderIdList+"&sumPrice="+sumPrice;
-            } else if(status==300) {
+                var data = result.data,
+                    len = data.length;
+                var $tbody = $addressList.find(".addressTable tbody");
+                for(var i=0; i<len; i++) {
+                    $tbody.append(createAddressList(data[i]));
+                }
+            } else if(status==300){
                 location.href = loginUrl;
-            } else {
-                tipsAlert("server error!");
             }
         }).fail(function(result){
-            if(loading) {
+            tipsAlert("server error");
+            if (loading) {
                 loading.remove();
                 loading = null;
             }
-            tipsAlert("server error!");
             /*result = {
-                status: 200
+                status: 200,
+                data: [
+                    {
+                        "lastName": "jk",
+                        "address3": "//",
+                        "address2": "Aberdeen",
+                        "address1": "HongkongIsland(HK)",
+                        "telephone": "69237498",
+                        "userId": 1,
+                        "addressId": 1,
+                        "firstName": "g",
+                        "isDefault": 1,
+                        "postCode": "7238947",
+                        "isDel": 0
+                    },
+                    {
+                        "lastName": "jk23",
+                        "address3": "//",
+                        "address2": "Aberdeen",
+                        "address1": "HongkongIsland(HK)",
+                        "telephone": "692317498",
+                        "userId": 1,
+                        "addressId": 2,
+                        "firstName": "g",
+                        "isDefault": 1,
+                        "postCode": "23438947",
+                        "isDel": 0
+                    }
+                ]
             };
             var status = result.status;
-            if (status == 200) {
-                location.href = "pay.html?orderIdList=" + orderIdList + "&sumPrice=" + sumPrice;
-            } else if (status == 300) {
+            if(status==200){
+                var data = result.data,
+                    len = data.length;
+                var $tbody = $addressList.find(".addressTable tbody");
+                for(var i=0; i<len; i++) {
+                    $tbody.append(createAddressList(data[i]));
+                }
+            } else if(status==300){
                 location.href = loginUrl;
-            } else {
-                tipsAlert("server error!");
             }*/
         });
-    };
+    }
 })();
 
-$orderSubmit.on("click", ".confirmBtn", submitOrder);
-
+getAddressItem();
 
 var $addressList = $("#addressList");
 
-function  createAddressItem (data, first){
-    if(first==0) {
-        first = "active";
-    } else {
-        first = "";
-    }
-    var $addressItem =  $('<li class="addressItem '+first+'"> ' +
-        '<label for="addressId'+data.addressId+'"> ' +
-        '<input type="radio" id="addressId'+data.addressId+'" class="addressId" value="'+data.addressId+'" name="addressId" '+(first ? "checked" : "")+'> ' +
-        '<span class="text">'+data.firstName+' '+data.lastName+'; ' +
-        data.telephone+'; ' +
-        data.address1+' '+data.address2+' '+data.address3+'; ' +
-        data.postCode +
-        '</span> ' +
-        '</label> ' +
-        '</li>');
-    if(first) {
-        $orderSubmit.find('.address')
-            .text($addressItem.find(".text").text());
-    }
-    return $addressItem;
-}
-
-function getAddress() {
-    var loading = showLoading($addressList.siblings(".addAddress"));
-    $.ajax({
-        method: "get",
-        url: "/proxy/customer/address/list",
-        dataType: "json"
-    }).done(function(result){
-        if(loading) loading.remove();
-        var status = result.status;
-        if (status == 200) {
-            var data = result.data,
-                len = data.length;
-            $addressList.empty();
-            for(var i=0; i<len; i++){
-                $addressList.append(createAddressItem(data[i], i));
+var deleteAddress = (function(){
+    var loading = null;
+    return function (_this) {
+        var $addressItem = _this.parents(".addressItem"),
+            info = $addressItem.data("info"),
+            addressId = info.addressId,
+            reqData = "addressId="+addressId;
+        if(loading) return ;
+        loading = showLoading(_this.parent());
+        $.ajax({
+            method: "post",
+            url: "/proxy/customer/address/deleting",
+            dataType: "json",
+            data: reqData
+        }).done(function(result){
+            if (loading) {
+                loading.remove();
+                loading = null;
             }
-        } else if (status == 300) {
-            location.href = loginUrl;
-        }
-    }).fail(function(result){
-        tipsAlert("server error");
-        /*if(loading) loading.remove();
-        result = {
-            status: 200,
-            data: [
-                {
-                    "lastName": "jk",
-                    "address3": "//",
-                    "address2": "Aberdeen",
-                    "address1": "HongkongIsland(HK)",
-                    "telephone": "69237498",
-                    "userId": 1,
-                    "addressId": 1,
-                    "firstName": "g",
-                    "isDefault": 1,
-                    "postCode": "7238947",
-                    "isDel": 0
-                },
-                {
-                    "lastName": "jk23",
-                    "address3": "//",
-                    "address2": "Aberdeen",
-                    "address1": "HongkongIsland(HK)",
-                    "telephone": "692317498",
-                    "userId": 1,
-                    "addressId": 2,
-                    "firstName": "g",
-                    "isDefault": 1,
-                    "postCode": "23438947",
-                    "isDel": 0
-                }
-            ]
-        };
-        var status = result.status;
-        if (status == 200) {
-            var data = result.data,
-                len = data.length;
-            $addressList.empty();
-            for(var i=0; i<len; i++){
-                $addressList.append(createAddressItem(data[i], i));
+            var status = result.status;
+            if (status == 200) {
+                $addressItem.remove();
+                showSpinner("Deleted!");
+            } else if (status == 300) {
+                location.href = loginUrl;
+            } else if (status == 400) {
+                showSpinner("Unknown error!", {
+                    "callback": function () {
+                        location.reload();
+                    }
+                });
             }
-        } else if (status == 300) {
-            location.href = loginUrl;
-        }*/
-    });
-}
-getAddress();
+        }).fail(function(result){
+            tipsAlert("server error");
+            if (loading) {
+                loading.remove();
+                loading = null;
+            }
+            /*result = {
+             status: 200
+             };
+             var status = result.status;
+             if (status == 200) {
+             $addressItem.remove();
+             showSpinner("Deleted!");
+             } else if (status == 300) {
+             location.href = loginUrl;
+             } else if (status == 400) {
+             showSpinner("Unknown error!", {
+             "callback": function () {
+             location.reload();
+             }
+             });
+             }*/
+        });
+    }
+})();
 
-$addressList.on("change", ".addressId", function (e) {
-    var _this = $(this),
-        $addressItem = _this.parents(".addressItem");
-    $addressItem.addClass("active")
-        .siblings()
-        .removeClass("active");
-    $orderSubmit.find('.address')
-        .text(_this.siblings(".text").text());
+$addressList.on("click", ".modify", function () {
+    var $addressItem = $(this).parents(".addressItem");
+    var $modifyPop = $(".modifyPop"),
+        $modifyAddress = $modifyPop.find(".modifyAddress"),
+        info = $addressItem.data("info");
+    $modifyAddress[0].addressId.value = info.addressId;
+    $modifyAddress[0].firstName.value = info.firstName;
+    $modifyAddress[0].lastName.value = info.lastName;
+    $modifyAddress[0].telephone.value = info.telephone;
+    $modifyAddress[0].postCode.value = info.postCode;
+    $modifyAddress[0].address3.value = info.address3;
+    $modifyAddress[0].address1.value = info.address1;
+    change(1);
+    $modifyAddress[0].address2.value = info.address2;
+    $modifyPop.find(".title")
+        .text("Modify Address")
+        .end().show();
 });
 
+$addressList.on("click", ".addressItem .del", function(e){
+    var _this = $(this);
+    tipsConfirm("Are you sure want to delete the address?", function(){
+        deleteAddress(_this);
+    }, {
+        "ok": "YES",
+        "cancel": "NO"
+    });
+});
 
 var $modifyAddress = $("#modifyAddress");
 function Dsy(){
@@ -525,15 +432,6 @@ _init_area();
 
 var telReg = /^\d{8}$/;
 
-function addError(item, msg){
-    item.addClass("error")
-        .find("input")
-        .focus()
-        .end()
-        .find(".tips")
-        .text(msg);
-}
-
 $modifyAddress.on("input", ".input-item input", function () {
     var _this = $(this);
     _this.parent().removeClass('error');
@@ -563,8 +461,6 @@ $modifyAddress.on("submit", (function(){
             firstName = this.firstName.value,
             lastName = this.lastName.value,
             postCode = this.postCode.value,
-            address1 = this.address1.value;	//address from input
-            address2 = this.address2.value;	//address from input
             address3 = this.address3.value;	//address from input
         if(!firstName) {
             addError($firstName, "First name can't be empty!");
@@ -590,7 +486,7 @@ $modifyAddress.on("submit", (function(){
             addError($address, "Address can't be empty!");
             return;
         }
-        var sendData = _this.serialize();
+        var sendData = _this.serialize().replace(/^addressId=&/, "");
         loading = showLoading($(this));
         $.ajax({
             type: "post",
@@ -602,12 +498,13 @@ $modifyAddress.on("submit", (function(){
                 loading.remove();
                 loading = null;
             }
-            var status = result.status;
-            if (status == 200) {
-                _this.parent().hide();
-                showSpinner("Successful.");
-                getAddress();
-            } else if (status == 300) {
+            if (result.status == 200) {
+                showSpinner("Successful.", {
+                    callback: function () {
+                        location.reload();
+                    }
+                });
+            } else if (result.status == 300) {
                 location.href = loginUrl;
             } else {
                 tipsAlert("Server error!");
@@ -623,9 +520,11 @@ $modifyAddress.on("submit", (function(){
             };
             var status = result.status;
             if (status == 200) {
-                _this.parent().hide();
-                showSpinner("Successful.");
-                getAddress();
+                showSpinner("Successful.", {
+                    callback: function () {
+                        location.reload();
+                    }
+                });
             } else if (status == 300) {
                 location.href = loginUrl;
             } else {

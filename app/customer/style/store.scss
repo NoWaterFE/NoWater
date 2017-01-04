@@ -10,6 +10,8 @@
     .shopName {
       width: 600px;
       font-size: 20px;
+      height: 30px;
+      line-height: 30px;
       color: #292d84;
       white-space: nowrap;
       text-overflow: ellipsis;
@@ -18,7 +20,32 @@
     .detail {
       font-size: 13px;
       color: darkgrey;
-      margin-top: 8px;
+      width: 240px;
+      line-height: 16px;
+      &>div {
+        white-space: nowrap;
+        text-overflow: ellipsis;
+        overflow: hidden;
+      }
+      float: left;
+    }
+    .addToFavo {
+      display: none;
+      float: left;
+      margin-top: -2px;
+      margin-left: 6px;
+      font-size: 14px;
+      cursor: pointer;
+      border: 1px solid rgb(225, 113, 0);
+      color: rgb(225, 113, 0);
+      padding: 0 10px;
+      line-height: 30px;
+      border-radius: 6px;
+      vertical-align: middle;
+      &:hover {
+        background-color: rgb(225, 113, 0);
+        color: #fff;
+      }
     }
   }
   .storeSearch {
@@ -63,7 +90,7 @@
     cursor: pointer;
     span {
       display: block;
-      font-size: 12px;
+      font-size: 13px;
       text-align: left;
       line-height: 30px;
       margin-left: 12px;
@@ -93,11 +120,28 @@
       }
     }
   }
+  .homepage {
+    float: left;
+    margin-left: 2px;
+    width: 100px;
+    line-height: 30px;
+    cursor: pointer;
+    text-align: center;
+    font-size: 13px;
+    a {
+      color: #fff;
+      display: block;
+      line-height: 30px;
+    }
+    &:hover {
+      background-color: darkblue;
+    }
+  }
 }
 
 .content {
-  min-height: 400px;
-  margin: 0 auto;
+  min-height: 440px;
+  margin: 40px auto;
   width: 1200px;
 }
 

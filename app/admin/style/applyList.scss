@@ -26,6 +26,7 @@
                 img {
                     height: 100%;
                     vertical-align: middle;
+                    cursor: pointer;
                 }
             }
             .info {
@@ -55,35 +56,7 @@
                 }
             }
         }
-        .more {
-            text-align: center;
-            margin-top: 10px;
-            height: 40px;
-            position: relative;
-            .showMore{
-                cursor: pointer;
-                display: inline-block;
-                padding: 10px 40px;
-                font-size: 14px;
-                text-align: center;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                &.hidden {
-                    display: none;
-                }
-                .down {
-                    border: 1px solid #000;
-                    border-top-color: transparent;
-                    border-right-color: transparent;
-                    width: 10px;
-                    height: 10px;
-                    display: inline-block;
-                    transform: rotate(-45deg) translate(6px, 2px);
-                }
-            }
-        }
     }
-
     .more {
         text-align: center;
         margin-top: 10px;

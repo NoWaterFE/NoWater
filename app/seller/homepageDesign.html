@@ -17,6 +17,11 @@
             </a>
         </div>
         <ul class="quick-menu" id="quickMenu">
+            <li class="seller-center">
+                <a href="../customer/store.html" target="_blank">
+                    <i></i><span>MY SHOP</span>
+                </a>
+            </li>
             <li class="account">
                 <a href="javascript:;">
                     <i></i><span>ACCOUNT</span>
@@ -53,7 +58,7 @@
                         <a href="adHistory.html">Advertising History</a>
                     </li>
                     <li class="navList">
-                        <a href="homepageDesign.html">Homepage Design</a>
+                        <a href="homepageDesign.html">Homepage Product</a>
                     </li>
                 </ul>
             </li>
@@ -79,48 +84,39 @@
         </ul>
     </div>
     <div class="page">
-        <form class="homepageDesign" novalidate>
-            <h2 class="title">Homepage Design</h2>
-            <ul>
-                <li>
-                    <div>AREA 1</div>
-                    <table>
-                        <tbody>
-                        <tr>
-                            <td>
-                                <select name="productId">
-                                    <option value="1">1</option>
-                                    <option value="2">2</option>
-                                    <option value="3">3</option>
-                                    <option value="4">4</option>
-                                </select>
-                            </td>
-                            <td>
-                                <div class="img">
-                                    <span>choose or modify product picture</span>
-                                    <input type="file" name="img">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="adImgPreview">
-                                    <img src="" alt="">
-                                </div>
-                            </td>
-                            <td>
-                                <div class="operate">
-                                    <input type="button" value="set">
-                                    <input type="button" value="confirm">
-                                    <input type="button" value="modify">
-                                    <input type="button" value="cancel">
-                                    <input type="button" value="clear">
-                                </div>
-                            </td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </li>
-            </ul>
-        </form>
+        <h2 class="title">Homepage Product List</h2>
+        <div class="productList" id="productList">
+            <table>
+                <colgroup>
+                    <col class="col1">
+                    <col class="col2">
+                    <col class="col3">
+                    <col class="col4">
+                    <col class="col5">
+                    <col class="col6">
+                    <col class="col7">
+                    <col class="col8">
+                </colgroup>
+                <tbody>
+                <tr class="productTitle">
+                    <th class="id">ID</th>
+                    <th class="image">Image</th>
+                    <th class="name">Name</th>
+                    <th class="categories">Categories</th>
+                    <th class="price">Price(HK$)</th>
+                    <th class="stock">Stock</th>
+                    <th class="date">Date</th>
+                    <th class="operate">Operate</th>
+                </tr>
+                </tbody>
+            </table>
+            <div class="more">
+                <div class="showMore hidden">
+                    <span>SHOW MORE</span>
+                    <span class="down"></span>
+                </div>
+            </div>
+        </div>
     </div>
 </div>
 <footer>

@@ -4,8 +4,9 @@
 
 .content {
   min-height: 400px;
+  width: 1200px;
+  margin: 0 auto;
   .favMain {
-    width: 1200px;
     margin: 40px auto;
     border-bottom: 2px solid #aaa;
     .favTab {
@@ -27,7 +28,6 @@
 }
 
 .ad-goods {
-  width: 1200px;
   margin: 40px auto;
   .goods-item {
     float: left;
@@ -35,7 +35,7 @@
     padding: 9px;
     display: block;
     border-radius: 5px;
-    border: 1px solid #f1f1f1;
+    border: 1px solid #eee;
     margin-bottom: 10px;
     &:hover {
       border: 1px solid #aaa;
@@ -116,44 +116,44 @@
     }
   }
   .shop-item {
-    float: left;
+    margin: 14px 30px;
     width: 800px;
-    padding: 9px;
-    display: block;
+    padding: 10px 160px 10px 40px;
     border-radius: 5px;
-    border: 1px solid #f1f1f1;
-    margin-bottom: 10px;
-    cursor: pointer;
+    border: 1px solid #eee;
+    position: relative;
     &:hover {
-      border: 1px solid #aaa;
+      border: 1px solid #ccc;
     }
     .shop-name {
-      margin-left: 40px;
       font-size: 20px;
-      position: relative;
-      top: 5px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      a {
+        color: #292d84;
+        &:hover {
+          text-decoration: underline;
+        }
+      }
     }
     .detail {
       margin-top: 20px;
-      margin-left: 40px;
       font-size: 15px;
       color: darkgrey;
       line-height: 20px;
-      float: left;
     }
-    .removeShop {
-      margin-top: 15px;
-      margin-right: 40px;
-      text-align: center;
-      float: right;
-      button {
-        background-color: #292d84;
-        color: white;
-        width: 100px;
-        height: 30px;
-        border: none;
-        border-radius: 4px;
-      }
+    .remove {
+      background: url(../imgs/del.png) center no-repeat;
+      background-size: contain;
+      display: inline-block;
+      cursor: pointer;
+      position: absolute;
+      right: 24px;
+      top: 50%;
+      margin-top: -16px;
+      width: 32px;
+      height: 32px;
     }
   }
 }

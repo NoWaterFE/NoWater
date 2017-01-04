@@ -1,6 +1,6 @@
 var userInfo=null;
 $.ajax({
-    method: "get",
+    method: "post",
     url: "/proxy/customer/isLogin",
     dataType: "json",
     async: false

@@ -4,12 +4,14 @@ $(function () {
        header.css("left", -_this.scrollLeft());
     });
 
-    var login = $("#login");
+    var login = $("#login"),
+		tips = null;
 
 	login.on("submit", function (e) {
 	    var _this = $(this);
 		e.preventDefault();
-	 
+		if(tips) return;
+
 	    var warnInfo=_this.find("span").eq(0);
 	    var name = $('#idmName').val();
 	    var pwd = $("#idmPsd").val();
@@ -20,14 +22,18 @@ $(function () {
 	  	}else if(pwd == ''){
             warnInfo.text('Password can\'t be empty!');
 	    }else{
-            var tips = showLoading(_this);
+            tips = showLoading(_this);
 	  	    $.ajax({
 		        type: "post",
 		        url: "/proxy/admin/login",
 		        data: "name="+name+"&password="+$.md5(pwd),
 		        dataType: "json"
 	    }).done(function (result) {
-	    	if(tips) tips.remove();
+	    	if(tips){
+                tips.remove();
+                tips = null;
+			}
+
 		    if(result.status == 200){
 		   	    var url = getUrlParam("redirectUrl");
 		   	    if(url){
@@ -37,9 +43,12 @@ $(function () {
 		   	    }
 		    }else if(result.status == 300){
 			    warnInfo.text('username or password error!');
-		    };
+		    }
 	    }).fail(function (result) {
-	    	if(tips) tips.remove();
+			if(tips){
+				tips.remove();
+				tips = null;
+			}
 	    	warnInfo.text('Server or anothers error!');
 	    });
 	  }

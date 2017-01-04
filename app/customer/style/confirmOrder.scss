@@ -9,6 +9,47 @@
         font-size: 18px;
         line-height: 34px;
     }
+    .addressDiv {
+        padding: 20px;
+    }
+    .addressList {
+        color: #666;
+        .addressItem {
+            line-height: 32px;
+            border: 1px solid transparent;
+            cursor: pointer;
+            font-size: 14px;
+            margin: 4px 0;
+            &.active {
+                border-color: #f40;
+                background: #fff0e8;
+            }
+            &:hover {
+                background: #fff0e8;
+            }
+            label {
+                display: block;
+                padding: 0 20px;
+                cursor: pointer;
+            }
+            input[type=radio]{
+                height: 16px;
+                width: 16px;
+                vertical-align: -16%;
+            }
+        }
+    }
+    .addAddress {
+        color: #e17100;
+        border: 1px solid #e17100;
+        background: #fff;
+        display: inline-block;
+        text-align: center;
+        cursor: pointer;
+        border-radius: 6px;
+        padding: 6px;
+        margin: 14px 0;
+    }
     .orderList {
         margin: 20px 0;
         color: #3c3c3c;
@@ -172,6 +213,105 @@
                     cursor: pointer;
                 }
             }
+        }
+    }
+}
+
+.redStar {
+    position: relative;
+    &:before {
+        content: "*";
+        color: red;
+        position: absolute;
+        left: -0.8em;
+    }
+}
+
+.modifyPop {
+    position: fixed;
+    left: 0;
+    top: 0;
+    right: 0;
+    bottom: 0;
+    z-index: 10000;
+    display: none;
+    .shadow {
+        position: absolute;
+        left: 0;
+        top: 0;
+        right: 0;
+        bottom: 0;
+        background: rgba(0, 0, 0, 0.5);
+    }
+    .modifyAddress {
+        padding: 20px 20px 20px 100px;
+        width: 686px;
+        margin: 20px auto;
+        background: #fff;
+        position: relative;
+        border-radius: 4px;
+        .close {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            right: 10px;
+            top: 5px;
+            cursor: pointer;
+            background-image: url(../imgs/close.png);
+            &:hover {
+                background-image: url(../imgs/close_hover.png);
+            }
+        }
+    }
+    .title {
+        border-bottom: 1px solid #E0E0E0;
+        font-size: 24px;
+        line-height: 34px;
+        color: #292d84;
+    }
+    .input-item {
+        margin: 20px 0;
+        label {
+            display: inline-block;
+            width: 120px;
+            font-size: 14px;
+        }
+        input {
+            width: 230px;
+            height: 30px;
+            font-size: 14px;
+            padding: 0 5px;
+            border: 1px solid #aaa;
+        }
+        select {
+            height: 30px;
+            width: 240px;
+        }
+        .tips {
+            font-size: 14px;
+            color: red;
+            display: none;
+        }
+        &.error {
+            input {
+                border-color: red;
+            }
+            .tips {
+                display: inline-block;
+            }
+        }
+    }
+    .submit {
+        padding-left: 180px;
+        margin-top: 40px;
+        input {
+            width: 120px;
+            height: 40px;
+            border: none;
+            cursor: pointer;
+            border-radius: 5px;
+            background: #292d84;
+            color: #fff;
         }
     }
 }

@@ -2,11 +2,11 @@
 (function () {
     //获取登录信息可能不需要
     $.ajax({
-        method: "get",
+        method: "post",
         url: "/proxy/customer/isLogin",
         dataType: "json"
     }).done(function (result) {
-        if (result.status == 200) {
+        if(result.status==200){
             var userInfo = result.userInformation[0];
             var quickMenu = $("#quickMenu");
             quickMenu.find(".accountOperate").toggleClass("active");
@@ -14,19 +14,19 @@
         }
     }).fail(function (result) {
         /*console.log(result.statusText);
-        result = {
-            status: 200,
-            userInformation: [{
-                name: "gdh",
-                cartNum: 33
-            }]
-        };
-        if (result.status == 200) {
-            var userInfo = result.userInformation[0];
-            var quickMenu = $("#quickMenu");
-            quickMenu.find(".accountOperate").toggleClass("active");
-            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
-        }*/
+         result = {
+         status: 200,
+         userInformation: [{
+         name: "gdh",
+         cartNum: 33
+         }]
+         };
+         if (result.status == 200) {
+         var userInfo = result.userInformation[0];
+         var quickMenu = $("#quickMenu");
+         quickMenu.find(".accountOperate").toggleClass("active");
+         quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+         }*/
     });
 
     //headMenu添加事件
@@ -70,20 +70,16 @@
             url: "/proxy/customer/loginout",
         }).done(function(){
             delCookie("token");
-            location.reload();
+            location.href = "index.html";
         }).fail(function () {
             delCookie("token");
-            location.reload();
+            location.href = "index.html";
         });
     });
 
     var $searchForm = $("#searchForm");
     $searchForm.on("submit", function(e){
-        if (e && e.preventDefault) {
-            e.preventDefault();
-        } else {
-            e.returnValue = false;
-        }
+        e.preventDefault();
         var keyWord = this.keyWord.value;
         if(keyWord!=""){
             location.href = "search.html?keyWord="+ encodeURIComponent(keyWord);
@@ -93,12 +89,21 @@
         $searchForm.trigger("submit");
     });
 
+    window.setCart = function(num){
+        var cart = quickMenu.find(".my-cart .count");
+        if(num > 99) {
+            cart.text("99+");
+        } else {
+            cart.text(num);
+        }
+    }
+
 })();
 
 var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
 
 function showLoading($relative) {
-    var $tips = $relative.siblings(".loadingImg");
+    var $tips = $relative.find(".loadingImg");
     if ($tips.length > 0) $tips.remove();
     $tips = $("<div class='loadingImg'></div>");
     if($relative.css("position")=="static") $relative.css('position', "relative");
@@ -321,8 +326,8 @@ var postOrder = (function(){
                 loading.remove();
                 loading = null;
             }
-            //tipsAlert("server error!");
-            result = {
+            tipsAlert("server error!");
+            /*result = {
                 status: 200,
                 data: [
                     {
@@ -366,7 +371,7 @@ var postOrder = (function(){
                 location.href = loginUrl;
             } else {
                 tipsAlert("server error!");
-            }
+            }*/
         });
     };
 })();
@@ -404,7 +409,7 @@ var confirmR = (function(){
             }
             var status = result.status;
             if(status==200){
-                showSpinner("Success!", {
+                showSpinner("Successful!", {
                     "callback": function () {
                         location.reload();
                     }
@@ -429,7 +434,7 @@ var confirmR = (function(){
              };
              var status = result.status;
              if(status==200){
-             showSpinner("Add Success!", {
+             showSpinner("Add Successful!", {
              "callback": function () {
              location.reload();
              }
@@ -474,7 +479,7 @@ var orderCancel = (function(){
             }
             var status = result.status;
             if(status==200){
-                showSpinner("Success!", {
+                showSpinner("Canceled!", {
                     "callback": function () {
                         location.reload();
                     }
@@ -666,11 +671,11 @@ $commentForm.on("submit", function (e) {
         _this.data("submit", false);
         var status = result.status;
         if(status==200){
-            showSpinner("Comment success", {
+            showSpinner("Commented", {
                 callback: function () {
                     location.reload()
                 }
-            })
+            });
         } else {
             tipsAlert("Server error!");
         }
@@ -683,7 +688,7 @@ $commentForm.on("submit", function (e) {
         };
         var status = result.status;
         if(status==200){
-            showSpinner("Comment success", {
+            showSpinner("Commented", {
                 callback: function () {
                     location.reload()
                 }

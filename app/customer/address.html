@@ -6,7 +6,7 @@
     <title>PARKnSHOP</title>
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
     <link rel="icon" type="image/x-icon" href="../favicon.ico" >
-    <link rel="stylesheet" type="text/css" href="style/confirmOrder.css">
+    <link rel="stylesheet" type="text/css" href="style/address.css">
     <script type="text/javascript" src="js/jquery-3.1.1.min.js"></script>
 </head>
 
@@ -73,47 +73,40 @@
         </ul>
     </div>
 </header>
-<div class="content">
+<div class="content clearfix">
     <!--页面写在这-->
-    <div class="confirmOrder">
-        <h2 class="title">Confirm Address Information</h2>
-        <div class="addressDiv">
-            <ul class="addressList" id="addressList">
-            </ul>
-            <div class="addAddress">Add new address</div>
-        </div>
-        <h2 class="title">Confirm Order Information</h2>
-        <div class="orderList clearfix" id="orderList">
-            <table class="orderTable">
+    <div class="nav">
+        <h3 class="title">My Account</h3>
+        <ul>
+            <li class="category"><a href="userCenter.html">Personal Details</a></li>
+            <li class="category active"><a href="address.html">Delivery address</a></li>
+            <li class="category"><a href="changePassword.html">Change Password</a></li>
+        </ul>
+    </div>
+    <div class="page">
+        <h2 class="title">Deliver Address</h2>
+        <div class="addAddress">Add new address</div>
+        <div class="addressList" id="addressList">
+            <table class="addressTable">
                 <colgroup>
                     <col class="col1">
                     <col class="col2">
                     <col class="col3">
                     <col class="col4">
+                    <col class="col5">
+                    <col class="col6">
                 </colgroup>
-                <tbody class="orderTh">
-                <tr>
-                    <th>Product</th>
-                    <th>Price</th>
-                    <th>Quantity</th>
-                    <th class="totalPrice">Total Price</th>
+                <tbody>
+                <tr class="addressTh">
+                    <th class="firstName">First Name</th>
+                    <th class="lastName">Last Name</th>
+                    <th class="tel">Telephone</th>
+                    <th class="address">Address</th>
+                    <th class="postCode">Postcode</th>
+                    <th class="operate">Operate</th>
                 </tr>
                 </tbody>
             </table>
-            <div class="orderSubmit">
-                <div class="amount">
-                    <span class="key">Amount:</span>
-                    <span class="hk">HK$</span>
-                    <span class="price"></span>
-                </div>
-                <div class="receiver">
-                    <span class="key">Receiver: </span>
-                    <span class="address"></span>
-                </div>
-                <div class="orderOperate">
-                    <a href="javascript:" class="confirmBtn">Submit Order</a>
-                </div>
-            </div>
             <div class="more">
                 <div class="showMore hidden">
                     <span>SHOW MORE</span>
@@ -133,7 +126,7 @@
     <form id="modifyAddress" class="modifyAddress" novalidate>
         <input type="hidden" name="addressId">
         <i class="cancel close"></i>
-        <h2 class="title"></h2>
+        <h2 class="title">Modify address</h2>
         <div class="input-item firstName">
             <label for="firstName" class="redStar">First Name</label>
             <input type="text" name="firstName" id="firstName" placeholder="First name" maxlength="30" >
@@ -172,7 +165,7 @@
         </div>
     </form>
 </div>
-<script type="text/javascript" src="js/confirmOrder.js"></script>
+<script type="text/javascript" src="js/address.js"></script>
 </body>
 
 </html>

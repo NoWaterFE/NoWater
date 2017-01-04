@@ -19,6 +19,7 @@
         <li class="navList"><a href="applyList.html">Shop Application List</a></li>
         <li class="navList"><a href="shopAd.html">AD Management</a></li>
         <li class="navList"><a href="order.html">All Orders</a></li>
+        <li class="navList"><a href="income.html">Income & Commission</a></li>
     </ul>
 </div>
 <div class="content">
@@ -42,34 +43,19 @@
             <li><a href="shopList.html" class="shopTab">Shop List</a></li>
             <li><a href="shopList.html?status=1" class="shopTab">BlackList</a></li>
         </ul>
-        <!--<div class="bar">
-            <div class="search">
-                <input type="text">
-            </div>
-        </div>-->
-        <div class="shopList" id="shopList">
-            <table class="shopTable">
-                <colgroup>
-                    <col class="col1">
-                    <col class="col2">
-                    <col class="col3">
-                    <col class="col4">
-                    <col class="col5">
-                    <col class="col6">
-                    <col class="col7">
-                    <col class="col8">
-                </colgroup>
-                <tbody>
-                <tr class="shopTh">
-                    <th class="id">ID</th>
-                    <th class="name">Shop Name</th>
-                    <th class="ownerId">Owner ID</th>
-                    <th class="tel">Telephone</th>
-                    <th class="address">Email</th>
-                    <th class="operate">Operate</th>
-                </tr>
-                </tbody>
-            </table>
+        <div class="filter" id="shopFilter">
+            <form class="shopForm">
+                <div class="search clearfix">
+                    <div class="inputItems clearfix">
+                        <input type="text" name="search" class="searchInput" maxlength="40" placeholder="By shop ID or shop name">
+                        <input type="submit" class="searchBtn">
+                    </div>
+                </div>
+            </form>
+        </div>
+        <div>
+            <ul class="shopList" id="shopList">
+            </ul>
             <div class="more">
                 <div class="showMore hidden">
                     <span>SHOW MORE</span>

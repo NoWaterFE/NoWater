@@ -1,15 +1,23 @@
-var host="http://123.206.100.98:16120";
 var value = "Products about ";
 var data;
-var shopId = GetQueryString("shopId");
+var shopId = GetQueryString("shopId"),
+    classId = GetQueryString("classId"),
+    keyWord = GetQueryString("keyWord");
 var className = ["ALL", "TV & Home Theater", "Computers & Tablets", "Cell Phones",
     "Cameras & Camcorders", "Audio", "Car Electronics & GPS",
     "Video, Games, Movies & Music", "Health, Fitness & Sports", "Home & Offic"];
 var startId = 0;
 var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
 
-$("#showMoreButton").click(getResult);
-if (!GetQueryString("shopId")) {
+var $adGoods = $("#adGoods"),
+    $noResult = $("#noResult");
+
+var $showMoreButton = $("#showMoreButton");
+$showMoreButton.click(function(){
+    $(this).addClass("hidden");
+    getResult();
+});
+if (!shopId) {
     location.href = "store.html?shopId="+ 1;
 }
 var sendShopId = "shopId=" + shopId;
@@ -21,11 +29,19 @@ $.ajax({
 }).done(function (result) {
     if(result.status==200){
         var data = result.data,
+            shopName = data.shopName,
+            tel = data.telephone,
+            email = data.email,
             classId = 0,
             menuList = "",
             $menuList = $("#menuList");
-        $("#shopName").text(data.shopName);
-        $("#detail").html("Telephone: " + data.telephone + "<br>" + "E-mail: " +data.email);
+        $("#shopName").text(shopName).attr("title", shopName);
+        $("#detail").find(".tel").html("Telephone: " + tel ).attr("title", tel)
+            .end()
+            .find(".email").html("E-mail: " +email).attr("title", email)
+            .end()
+            .siblings(".addToFavo").show();
+        $('#homepage').attr("href", "store.html?shopId="+data.shopId);
         for (var i=0; i<data.classList.length; i++) {
             classId = data.classList[i];
             menuList = '<li data-pt="' + classId +' ">' +className[classId] + '</li>';
@@ -33,55 +49,50 @@ $.ajax({
         }
     }
 }).fail(function(result) {
-    result = {
+    /*result = {
         status: 200,
         data: {
-            shopId: 1,
+            shopId: 2,
             shopName: "Apple store",
             ownerId: 1,
             email: "apple@icloud.com",
             telephone: "123456",
             classList: [
-                {
-                    classId: 1,
-                    className: "Video, Games, Movies & Music"
-                },
-                {
-                    classId: 2,
-                    className: "iPod"
-                },
-                {
-                    classId: 3,
-                    className: "macBook"
-                },
-                {
-                    classId: 4,
-                    className: "Watch"
-                },
-                {
-                    classId: 5,
-                    className: "iPhone"
-                }
+                1, 2, 3, 4
             ]
         }
 
     };
     if(result.status==200){
-        var data = result.data;
-        $("#shopName").text(data.shopName);
-        $("#detail").html("Telephone: " + data.telephone + "<br>" + "E-mail: " +data.email);
+        var data = result.data,
+            shopName = data.shopName,
+            tel = data.telephone,
+            email = data.email,
+            classId = 0,
+            menuList = "",
+            $menuList = $("#menuList");
+        $("#shopName").text(shopName).attr("title", shopName);
+        $("#detail").find(".tel").html("Telephone: " + tel ).attr("title", tel)
+            .end()
+            .find(".email").html("E-mail: " +email).attr("title", email)
+            .end()
+            .siblings(".addToFavo").show();
+        $('#homepage').attr("href", "store.html?shopId="+data.shopId);
         for (var i=0; i<data.classList.length; i++) {
-            var menuList = '<li data-pt="' + data.classList[i].classId +' ">' + data.classList[i].className + '</li>';
-            $("#menuList").append(menuList);
+            classId = data.classList[i];
+            menuList = '<li data-pt="' + classId +' ">' +className[classId] + '</li>';
+            $menuList.append(menuList);
         }
-    }
+    }*/
 });
 
 function getResult(){
-    if (!GetQueryString("keyWord")) {
+    if (classId) {
         getClass();
-    } else {
+    } else if(keyWord){
         search();
+    } else {
+        getHomepage();
     }
 }
 
@@ -100,7 +111,7 @@ getResult();
 (function () {
     //获取登录信息可能不需要
     $.ajax({
-        method: "get",
+        method: "post",
         url: "/proxy/customer/isLogin",
         dataType: "json"
     }).done(function (result) {
@@ -112,19 +123,19 @@ getResult();
         }
     }).fail(function (result) {
         /*console.log(result.statusText);
-        result = {
-            status: 200,
-            userInformation: [{
-                name: "gdh",
-                cartNum: 33
-            }]
-        };
-        if(result.status==200){
-            var userInfo = result.userInformation[0];
-            var quickMenu = $("#quickMenu");
-            quickMenu.find(".accountOperate").toggleClass("active");
-            quickMenu.find(".my-cart .count").text(userInfo.cartNum);
-        }*/
+         result = {
+         status: 200,
+         userInformation: [{
+         name: "gdh",
+         cartNum: 33
+         }]
+         };
+         if (result.status == 200) {
+         var userInfo = result.userInformation[0];
+         var quickMenu = $("#quickMenu");
+         quickMenu.find(".accountOperate").toggleClass("active");
+         quickMenu.find(".my-cart .count").text(userInfo.cartNum);
+         }*/
     });
 
     //headMenu添加事件
@@ -164,24 +175,20 @@ getResult();
     quickMenu.on("click", ".logout", function () {
         var _this = $(this);
         $.ajax({
-            type: "post",
+            method: "post",
             url: "/proxy/customer/loginout",
         }).done(function(){
             delCookie("token");
-            location.reload();
+            location.href = "index.html";
         }).fail(function () {
             delCookie("token");
-            location.reload();
+            location.href = "index.html";
         });
     });
 
     var $searchForm = $("#searchForm");
     $searchForm.on("submit", function(e){
-        if (e && e.preventDefault) {
-            e.preventDefault();
-        } else {
-            e.returnValue = false;
-        }
+        e.preventDefault();
         var keyWord = this.keyWord.value;
         if(keyWord!=""){
             location.href = "search.html?keyWord="+ encodeURIComponent(keyWord);
@@ -235,7 +242,7 @@ function setText() {
         $("#tips").text(value+"\'"+keyWord+"\'");
         $("#keyWordInStore").val(keyWord);
     } else {
-        $("#tips").text("ALL PRODUCTS");
+        $("#tips").text("Home");
     }
 }
 
@@ -248,12 +255,9 @@ function GetQueryString(name) {
 }
 
 function getClass() {
-    var $adGoods = $("#adGoods");
-    var $noResult = $("#noResult");
-    var classId = GetQueryString("classId");
-    if (!shopId) { shopId = 0; }
-    if (!classId) { classId = 0; }
-    var count = 40;
+    if (!shopId) { shopId = 1; }
+    if (!classId) { classId = 1; }
+    var count = 30;
     var sendData = "shopId=" + shopId + "&classId=" + classId + "&count=" + count +"&startId=" + startId;
 
     $.ajax({
@@ -265,6 +269,11 @@ function getClass() {
         if(result.status==200 || result.status==300){
             startId = result.startId;
             setText();
+            if (result.data.length == 0) {
+                $noResult.text("No product found,please try another key words.");
+                $noResult.css('display','block');
+                return;
+            }
             if(startId != -1) {
                 $("#showMore").css('display','block');
             } else {
@@ -289,10 +298,9 @@ function getClass() {
             $noResult.css('display','block');
             return;
         }
-        $adGoods = null;
-    })
-        .fail(function(result){
-            result = {
+    }).fail(function(result){
+        tipsAlert("Server error!");
+            /*result = {
                 status: 200,
                 actualCount: 10,
                 startId: 2,
@@ -425,16 +433,12 @@ function getClass() {
                 $noResult.text("No class found,please try another class name.");
                 $noResult.css('display','block');
                 return;
-            }
-            $adGoods = null;
+            }*/
         });
 }
 
 function search() {
-    var keyWord = GetQueryString("keyWord");
-    var $adGoods = $("#adGoods");
-    var $noResult = $("#noResult");
-    var count = 40;
+    var count = 30;
     var sendData = "keyWord=" + keyWord + "&count=" + count + "&startId=" + startId + "&shopId=" + shopId;
     $.ajax({
         method: "get",
@@ -456,14 +460,12 @@ function search() {
                 $adGoods.append(goodItem);
             }
 
-            if (startId != -1) {
-                $("#showMore").css('display','block');
-            } else {
+            if (startId == -1) {
                 $("#showMore").css('display','none');
             }
         }
-        $adGoods = null;
     }).fail(function (result) {
+        tipsAlert("Server error!");
         /*result = {
             status: 200,
             actualCount: 10,
@@ -591,15 +593,74 @@ function search() {
                 $("#showMore").css('display','none');
             }
         }*/
-        $adGoods = null;
+    });
+}
+
+function getHomepage() {
+    $.ajax({
+        method: "get",
+        url: "/proxy/customer/shop/homepage",
+        data: "shopId="+shopId
+    }).done(function (result) {
+        if (result.status == 200) {
+            setText();
+            if (result.data.length == 0) {
+                $noResult.text("No result");
+                $noResult.css('display','block');
+                return;
+            }
+
+            for (var i = 0; i < result.data.length; i++) {
+                var goodItem = createGoodsItem(result.data[i]);
+                $adGoods.append(goodItem);
+            }
+
+            $("#showMore").css('display','none');
+        }
+    }).fail(function (result) {
+        tipsAlert("Server error!");
+        /*result = {
+            status: 200,
+            data: [
+                {
+                    "classId": 5,
+                    "productId": 4,
+                    "quantityStock": 8,
+                    "price": 890,
+                    "num": 0,
+                    "updateTime": "2016-12-29 17:26:11",
+                    "shopId": 1,
+                    "isDel": 0,
+                    "productName": "beat",
+                    "photo": [
+                        "http://koprvhdix117-10038234.file.myqcloud.com/ac64205e-15d5-47c8-8de7-215a3284ddf3.jpg"
+                    ]
+                }
+            ]
+        };
+        if (result.status == 200) {
+            setText();
+            if (result.data.length == 0) {
+                $noResult.text("No product found,please try another key words.");
+                $noResult.css('display','block');
+                return;
+            }
+
+            for (var i = 0; i < result.data.length; i++) {
+                var goodItem = createGoodsItem(result.data[i]);
+                $adGoods.append(goodItem);
+            }
+            $("#showMore").css('display','none');
+        }*/
     });
 }
 
 function createGoodsItem(data) {
+    var photo = data.photoUrl || data.photo;
     return $('<li class="goods-item"> ' +
         '<a class="item-detail" href="productDetail.html?id='+data.productId+'"> ' +
         '<div class="item-image"> ' +
-        '<img src="'+data.photoUrl[0]+'"> ' +
+        '<img src="'+photo[0]+'"> ' +
         '</div> ' +
         '<div class="item-name"> ' +
         data.productName +
@@ -639,7 +700,7 @@ var addToCart = (function(){
             var status = result.status;
             if(status==200){
                 setCart(result.userInformation[0].cartNum);
-                showSpinner("Add success")
+                showSpinner("Add successful")
             } else if(status==300){
                 location.href = loginUrl;
             } else if (status==600){
@@ -660,7 +721,7 @@ var addToCart = (function(){
              var status = result.status;
              if(status==200){
              setCart(result.num);
-             showSpinner("Add success")
+             showSpinner("Add successful")
              } else if(status==300){
              location.href = loginUrl;
              } else {
@@ -673,11 +734,17 @@ var addToCart = (function(){
 var addToFavo = (function(){
     var loading = null;
     return function(e){
-        var _this = $(this);
         if(loading) return;
-        var $goods = _this.parents(".goods-item");
-        loading = showLoading($goods);
-        var data = "id="+$goods.data("productId")+"&type=2";
+        var _this = $(this),
+            data = null;
+        if(_this.hasClass("shop")){
+            data = "id="+shopId+"&type=1";
+            loading = showLoading($storeHeader);
+        } else {
+            var $goods = _this.parents(".goods-item");
+            loading = showLoading($goods);
+            data = "id="+$goods.data("productId")+"&type=2";
+        }
         $.ajax({
             method: "post",
             url: "/proxy/customer/favorite/adding",
@@ -689,7 +756,7 @@ var addToFavo = (function(){
             }
             var status = result.status;
             if(status==200 || status==400){
-                showSpinner("Add success");
+                showSpinner("Add successful");
             } else if(status==300){
                 location.href = loginUrl;
             }else {
@@ -706,7 +773,7 @@ var addToFavo = (function(){
              };
              var status = result.status;
              if (status == 200 || status == 400) {
-             showSpinner("Add success");
+             showSpinner("Add successful");
              } else if (status == 300) {
              location.href = loginUrl;
              } else {
@@ -717,9 +784,12 @@ var addToFavo = (function(){
 })();
 
 // 添加到购物车
-$("#adGoods").on("click", ".goods-item .add-to-cart", addToCart);
+$adGoods.on("click", ".goods-item .add-to-cart", addToCart);
 // 添加到收藏
-$("#adGoods").on("click", ".goods-item .add-to-favorites", addToFavo);
+$adGoods.on("click", ".goods-item .add-to-favorites", addToFavo);
+
+var $storeHeader = $("#storeHeader");
+$storeHeader.on("click", ".addToFavo", addToFavo);
 
 function showSpinner(msg, config){
     var $spinner = $(".spinner");
@@ -749,7 +819,7 @@ function showSpinner(msg, config){
 }
 
 function showLoading($relative) {
-    var $tips = $relative.siblings(".loadingImg");
+    var $tips = $relative.find(".loadingImg");
     if ($tips.length > 0) $tips.remove();
     $tips = $("<div class='loadingImg'></div>");
     if($relative.css("position")=="static") $relative.css('position', "relative");

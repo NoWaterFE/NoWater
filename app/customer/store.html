@@ -3,7 +3,7 @@
 
 <head>
     <meta charset="UTF-8">
-    <title>store</title>
+    <title>Store | PARKnSHOP</title>
     <link rel="shortcut icon" type="image/x-icon" href="../favicon.ico" >
     <link rel="icon" type="image/x-icon" href="../favicon.ico" >
     <link rel="stylesheet" type="text/css" href="style/store.css">
@@ -61,7 +61,7 @@
                 </ul>
             </li>
             <li class="favorites">
-                <a href="favourite.html">
+                <a href="favorites.html">
                     <i></i><span>FAVORITES</span>
                 </a>
             </li>
@@ -77,24 +77,33 @@
 <div class="content">
     <div class="storeHeader" id="storeHeader">
         <div class="storeInfo" id="storeInfo">
-            <div class="shopName" id="shopName"></div>
-
-            <div class="detail" id="detail"></div>
+            <div class="shopName" id="shopName">
+            </div>
+            <div class="detail" id="detail">
+                <div class="tel"></div>
+                <div class="email"></div>
+            </div>
+            <span class="addToFavo shop">Add to Favorites</span>
         </div>
 
         <div class="storeSearch" id="storeSearch">
             <input type="text" name="keyWordInStore" id="keyWordInStore" placeholder="Search goods in this store" onkeypress="enter()">
-            <span name="searchInStore" id="searchInStore"></span>
+            <span id="searchInStore"></span>
         </div>
 
     </div>
 
     <div class="storeMenu" id="storeMenu">
         <div class="menuBar" id="menuBar">
-            <span>ALL CATEGORIES</span>
+            <span>Product Categories</span>
             <ul class="menuList" id="menuList">
-                <li data-pt="0">ALL PRODUCTS</li>
+                <li data-pt="0">All Categories</li>
             </ul>
+        </div>
+        <div class="homepage">
+            <a href="store.html" id="homepage">
+                Home
+            </a>
         </div>
     </div>
 

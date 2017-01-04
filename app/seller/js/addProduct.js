@@ -23,10 +23,8 @@
     });
 })();
 
-//showLoading($("#addProduct"));
-
 function showLoading($relative) {
-    var $tips = $relative.siblings(".loadingImg");
+    var $tips = $relative.find(".loadingImg");
     if ($tips.length > 0) $tips.remove();
     $tips = $("<div class='loadingImg'></div>");
     if($relative.css("position")=="static") $relative.css('position', "relative");
@@ -261,7 +259,7 @@ $addProduct.on("submit", function (e) {
                 _this.data("submit", false);
                 var status = result.status;
                 if(status == 200){
-                    showSpinner("add product success");
+                    showSpinner("Add successful");
                     imagesArray.length = 0;
                     _this[0].reset();
                     _this.find(".imagesPreview")

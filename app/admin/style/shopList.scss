@@ -28,57 +28,58 @@
             }
         }
     }
-
+    .filter {
+        margin: 14px 0;
+        .inputItems {
+            float: left;
+        }
+        .search {
+            input {
+                float: left;
+                height: 20px;
+                font-size: 14px;
+                padding: 2px 4px;
+                border: 1px solid #bfbfbf;
+            }
+            .searchBtn {
+                width: 40px;
+                height: 26px;
+                background: url(../imgs/head_icon/search.png) no-repeat center;
+                margin-left: -1px;
+                font-size: 0;
+                cursor: pointer;
+            }
+        }
+    }
     .shopList {
         margin: 20px 0;
-        .shopTable {
-            width: 100%;
-            colgroup {
-                .col1 {
-                    width: 13%;
-                }
-                .col2 {
-                    width: 28%;
-                }
-                .col3 {
-                    width: 13%;
-                }
-                .col4 {
-                    width: 13%;
-                }
-                .col5 {
-                    width: 19%;
-                }
-                .col6 {
-                    width: 14%;
+        .shopItem {
+            border: 1px solid #e5e5e5;
+            padding: 20px;
+            margin: 10px auto;
+            .photo {
+                float: left;
+                width: 140px;
+                height: 140px;
+                margin-right: 20px;
+                line-height: 140px;
+                font-size: 0;
+                text-align: center;
+                img {
+                    height: 100%;
+                    vertical-align: middle;
+                    cursor: pointer;
                 }
             }
-            tr {
-                border: 1px solid #e5e5e5;
-            }
-            .shopTh {
-                th {
-                    text-align: center;
-                    background: #f5f5f5;
-                    padding: 5px 10px;
-                }
-                .name {
-                    text-align: left;
+            .info {
+                float: left;
+                max-width: 600px;
+                .infoItem {
+                    line-height: 30px;
                 }
             }
-            .shopItem {
-                font-size: 14px;
-                &:nth-child(even){
-                    background: #fff;
-                }
-                td {
-                    padding: 10px 10px;
-                    text-align: center;
-                    word-wrap: break-word;
-                }
-                .name {
-                    text-align: left;
-                }
+            .operate {
+                float: right;
                 .blackList, .del, .removeBlack {
                     user-select: none;
                     cursor: pointer;
@@ -97,35 +98,7 @@
                 }
             }
         }
-        .more {
-            text-align: center;
-            margin-top: 10px;
-            height: 40px;
-            position: relative;
-            .showMore{
-                cursor: pointer;
-                display: inline-block;
-                padding: 10px 40px;
-                font-size: 14px;
-                text-align: center;
-                border: 1px solid #ddd;
-                border-radius: 4px;
-                &.hidden {
-                    display: none;
-                }
-                .down {
-                    border: 1px solid #000;
-                    border-top-color: transparent;
-                    border-right-color: transparent;
-                    width: 10px;
-                    height: 10px;
-                    display: inline-block;
-                    transform: rotate(-45deg) translate(6px, 2px);
-                }
-            }
-        }
     }
-
     .more {
         text-align: center;
         margin-top: 10px;

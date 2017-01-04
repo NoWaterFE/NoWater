@@ -20,7 +20,7 @@ function delCookie(name){
 }
 
 function showLoading($relative) {
-    var $tips = $relative.siblings(".loadingImg");
+    var $tips = $relative.find(".loadingImg");
     if ($tips.length > 0) $tips.remove();
     $tips = $("<div class='loadingImg'></div>");
     if($relative.css("position")=="static") $relative.css('position', "relative");
@@ -174,8 +174,7 @@ var loginUrl = "login.html?redirectUrl="+encodeURIComponent(location.href);
 
 
 var getApplyItem = (function(){
-    var loading = null,
-        startId = 0;
+    var loading = null;
     return function () {
         if(loading) return ;
         loading = showLoading($(".more"));
@@ -211,6 +210,7 @@ var getApplyItem = (function(){
                         applyId: 10,
                         applyName: "dhgan yoyoo",
                         telephone: "238409324",
+                        shopId: 1,
                         ownerId: 1,
                         email: "nowater@nowater.com",
                         status: 1,
@@ -285,11 +285,7 @@ var operate = (function(){
             var status = result.status;
             if(status==200){
                 $applyItem.remove();
-                showSpinner("Success!", {
-                    "callback": function () {
-                        location.reload();
-                    }
-                });
+                showSpinner("Successful!");
             } else if(status==300){
                 location.href = loginUrl
             }
@@ -305,14 +301,57 @@ var operate = (function(){
             var status = result.status;
             if(status==200){
                 $applyItem.remove();
-                showSpinner("Success!", {
-                    "callback": function () {
-                        location.reload();
-                    }
-                });
+                showSpinner("Successful!");
             } else if(status==300){
                 location.href = loginUrl
             }*/
         });
     }
 })();
+
+function createBigImage(imgUrl, rate){
+    var $bigImage = $(".imagePop");
+    if($bigImage.length==0){
+        $bigImage = $('<div class="imagePop">' +
+            '<div class="shadow"></div> ' +
+            '<div class="bigImage"> ' +
+            '<img > ' +
+            '<div class="close"></div> ' +
+            '</div> ' +
+            '</div>');
+    }
+    $bigImage.find('img').attr("src", imgUrl);
+    $bigImage.on("click", ".close", function () {
+        $bigImage.hide();
+    });
+    var img = new Image(),
+        $img = $bigImage.find('.bigImage');
+    img.src = imgUrl;
+    img.onload = function () {
+        var imgW=img.naturalWidth;
+        var imgH=img.naturalHeight;
+        if(rate) {
+            $img.css({
+                "width": 1200,
+                "height": 400
+            });
+        } else {
+            if(imgW/imgH >=3){
+                $img.css({
+                    "width": 1200,
+                    "height": imgH/imgW * 1200
+                });
+            } else {
+                $img.css({
+                    "width": imgW/imgH * 400,
+                    "height": 400
+                });
+            }
+        }
+        $bigImage.appendTo($("body")).show();
+    };
+}
+
+$applyList.on("click", ".applyItem .photo img", function () {
+    createBigImage(this.src);
+});
